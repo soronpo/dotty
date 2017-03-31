@@ -91,7 +91,7 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="hide">
-    <li><a href="../../../../../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../../../../../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../../../../../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../../../../../.././docs/contributing/workflow.html">Workflow</a></li>
+    <li><a href="../../../../../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../../../../../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../../../../../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../../../../../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../../../../../.././docs/contributing/testing.html">Testing</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
@@ -6044,71 +6044,6 @@ String
             </script>
         </div><!-- end member -->
         
-        <div id="is(flags)" class="member ">
-            <div class="member-title">
-                <span class="expand-button " onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        is
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                flags:
-                            </span>
-                            FlagSet
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-is(flags)">
-                    <p>Does this flag set have a non-empty intersection with the given flag set?
-This means that both the kind flags and the carrier bits have non-empty inter...</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-is(flags)">
-                    <p>Does this flag set have a non-empty intersection with the given flag set?
-This means that both the kind flags and the carrier bits have non-empty intersection.</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
         <div id="is(flags,butNot)" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
@@ -6166,6 +6101,71 @@ and at the same time contain none of the flags in the <code>butNot</code> set?</
                 <div class="member-body-long" id ="long-body-is(flags,butNot)">
                     <p>Does this flag set have a non-empty intersection with the given flag set,
 and at the same time contain none of the flags in the <code>butNot</code> set?</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="is(flags)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        is
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                flags:
+                            </span>
+                            FlagConjunction
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Boolean</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-is(flags)">
+                    <p>Does this flag set have all of the flags in given flag conjunction?
+Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-is(flags)">
+                    <p>Does this flag set have all of the flags in given flag conjunction?
+Pre: The intersection of the typeflags of both sets must be non-empty.</p>
 
                 </div>
             </div>
@@ -6259,7 +6259,7 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
         
         <div id="is(flags)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6283,7 +6283,7 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                             <span class="no-left">
                                 flags:
                             </span>
-                            FlagConjunction
+                            FlagSet
                             
                         
                     <span class="no-left">)</span>
@@ -6299,13 +6299,13 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-is(flags)">
-                    <p>Does this flag set have all of the flags in given flag conjunction?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+                    <p>Does this flag set have a non-empty intersection with the given flag set?
+This means that both the kind flags and the carrier bits have non-empty inter...</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-is(flags)">
-                    <p>Does this flag set have all of the flags in given flag conjunction?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+                    <p>Does this flag set have a non-empty intersection with the given flag set?
+This means that both the kind flags and the carrier bits have non-empty intersection.</p>
 
                 </div>
             </div>

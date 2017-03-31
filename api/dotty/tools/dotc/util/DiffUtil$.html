@@ -91,7 +91,7 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="hide">
-    <li><a href="../../../../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../../../../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../../../../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../../../../.././docs/contributing/workflow.html">Workflow</a></li>
+    <li><a href="../../../../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../../../../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../../../../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../../../../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../../../../.././docs/contributing/testing.html">Testing</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
@@ -6236,6 +6236,75 @@ Patch
                     
                 </div>
                 <div class="member-body-long" id ="long-body-mkColoredCodeDiff(code,lastCode,printDiffDel)">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="mkColoredLineDiff(expected,actual)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mkColoredLineDiff(expected,actual)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        mkColoredLineDiff
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                expected:
+                            </span>
+                            String
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                actual:
+                            </span>
+                            String
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: String</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-mkColoredLineDiff(expected,actual)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-mkColoredLineDiff(expected,actual)">
                     
                 </div>
             </div>
