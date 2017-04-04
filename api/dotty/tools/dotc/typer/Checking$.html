@@ -6011,16 +6011,29 @@ and that the instance conforms to the self type of the created class.</p>
                 <div class="member-body-short" id="short-body-checkNoPrivateLeaks(sym,pos)(ctx)">
                     <p>Check the type signature of the symbol <code>M</code> defined by <code>tree</code> does not refer
 to a private type or value which is invisible at a point where <code>M</code> is still
-visibl...
+visibl...</p>
+<p>
+</p>
+<p>
 </p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-checkNoPrivateLeaks(sym,pos)(ctx)">
                     <p>Check the type signature of the symbol <code>M</code> defined by <code>tree</code> does not refer
 to a private type or value which is invisible at a point where <code>M</code> is still
-visible. As an exception, we allow references to type aliases if the underlying
-type of the alias is not a leak. So type aliases are transparent as far as
-leak testing is concerned.</p>
+visible.</p>
+<p>As an exception, we allow references to type aliases if the underlying
+type of the alias is not a leak, and if <code>sym</code> is not a type. The rationale
+for this is that the inferred type of a term symbol might contain leaky
+aliases which should be removed (see leak-inferred.scala for an example),
+but a type symbol definition will not contain leaky aliases unless the
+user wrote them, so we can ask the user to change his definition. The more
+practical reason for not transforming types is that <code>checkNoPrivateLeaks</code>
+can force a lot of denotations, and this restriction means that we never
+need to run <code>TypeAssigner#avoidPrivateLeaks</code> on type symbols when
+unpickling, which avoids some issues related to forcing order.</p>
+<p>See i997.scala for negative tests, and i1130.scala for a case where it
+matters that we transform leaky aliases away.</p>
 
                 </div>
             </div>
