@@ -909,6 +909,21 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity  with-companion ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">O</a>
+                        
+                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                </li>
+                
+            
+                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
@@ -1105,16 +1120,6 @@
                         <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">T</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">TypeOps</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">T</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
                 </li>
                 
             
@@ -6715,7 +6720,7 @@ all types which are not value type...
                     <p>Form a normalized conjunction of two types.
 Note: For certain types, <code>&amp;</code> is distributed inside the type. This holds for
 all types which are not value types (e.g. TypeBounds, ClassInfo,
-ExprType, MethodType, PolyType). Also, when forming an <code>&amp;</code>,
+ExprType, LambdaType). Also, when forming an <code>&amp;</code>,
 instantiated TypeVars are dereferenced and annotations are stripped.
 Finally, refined types with the same refined name are
 opportunistically merged.</p>
@@ -6787,7 +6792,7 @@ all types which are not value type...
                     <p>Form a normalized conjunction of two types.
 Note: For certain types, <code>&amp;</code> is distributed inside the type. This holds for
 all types which are not value types (e.g. TypeBounds, ClassInfo,
-ExprType, MethodType, PolyType). Also, when forming an <code>&amp;</code>,
+ExprType, LambdaType). Also, when forming an <code>&amp;</code>,
 instantiated TypeVars are dereferenced and annotations are stripped.
 Finally, refined types with the same refined name are
 opportunistically merged.</p>
@@ -8357,7 +8362,7 @@ Type
                             </span>
                             List
 <span class="no-left no-right">[</span>
-TypeParamInfo
+ParamInfo
 <span class="no-left">]</span>
                             
                         
@@ -8908,9 +8913,9 @@ Type
             </script>
         </div><!-- end member -->
         
-        <div id="matchingParams(formals1,formals2,isJava1,isJava2)" class="member ">
+        <div id="matchingParams(lam1,lam2)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'matchingParams(formals1,formals2,isJava1,isJava2)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'matchingParams(lam1,lam2)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -8932,39 +8937,17 @@ Type
                         
                         
                             <span class="no-left">
-                                formals1:
+                                lam1:
                             </span>
-                            List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
+                            MethodOrPoly
                             
                                 <span class="no-left">, </span>
                             
                         
                             <span class="">
-                                formals2:
+                                lam2:
                             </span>
-                            List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                isJava1:
-                            </span>
-                            Boolean
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                isJava2:
-                            </span>
-                            Boolean
+                            MethodOrPoly
                             
                         
                     <span class="no-left">)</span>
@@ -8979,85 +8962,14 @@ Type
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-matchingParams(formals1,formals2,isJava1,isJava2)">
-                    <p>Are <code>syms1</code> and <code>syms2</code> parameter lists with pairwise equivalent types?</p>
+                <div class="member-body-short" id="short-body-matchingParams(lam1,lam2)">
+                    <p>Do lambda types <code>lam1</code> and <code>lam2</code> have parameters that have the same types
+and the same implicit status? (after renaming one set to the other)</p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-matchingParams(formals1,formals2,isJava1,isJava2)">
-                    <p>Are <code>syms1</code> and <code>syms2</code> parameter lists with pairwise equivalent types?</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="matchingTypeParams(poly1,poly2)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'matchingTypeParams(poly1,poly2)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        matchingTypeParams
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                poly1:
-                            </span>
-                            PolyType
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                poly2:
-                            </span>
-                            PolyType
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-matchingTypeParams(poly1,poly2)">
-                    <p>Do generic types <code>poly1</code> and <code>poly2</code> have type parameters that
-have the same bounds (after renaming one set to the other)?</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-matchingTypeParams(poly1,poly2)">
-                    <p>Do generic types <code>poly1</code> and <code>poly2</code> have type parameters that
-have the same bounds (after renaming one set to the other)?</p>
+                <div class="member-body-long" id ="long-body-matchingParams(lam1,lam2)">
+                    <p>Do lambda types <code>lam1</code> and <code>lam2</code> have parameters that have the same types
+and the same implicit status? (after renaming one set to the other)</p>
 
                 </div>
             </div>
@@ -9871,7 +9783,7 @@ all types which are not value type...
                     <p>Form a normalized conjunction of two types.
 Note: For certain types, <code>|</code> is distributed inside the type. This holds for
 all types which are not value types (e.g. TypeBounds, ClassInfo,
-ExprType, MethodType, PolyType). Also, when forming an <code>|</code>,
+ExprType, LambdaType). Also, when forming an <code>|</code>,
 instantiated TypeVars are dereferenced and annotations are stripped.</p>
 <p>Sometimes, the disjunction of two types cannot be formed because
 the types are in conflict of each other. (@see <code>andType</code> for an enumeration
@@ -9933,7 +9845,7 @@ all types which are not value type...
                     <p>Form a normalized conjunction of two types.
 Note: For certain types, <code>|</code> is distributed inside the type. This holds for
 all types which are not value types (e.g. TypeBounds, ClassInfo,
-ExprType, MethodType, PolyType). Also, when forming an <code>|</code>,
+ExprType, LambdaType). Also, when forming an <code>|</code>,
 instantiated TypeVars are dereferenced and annotations are stripped.</p>
 <p>Sometimes, the disjunction of two types cannot be formed because
 the types are in conflict of each other. (@see <code>andType</code> for an enumeration

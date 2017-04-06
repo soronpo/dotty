@@ -909,6 +909,21 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity  with-companion ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">O</a>
+                        
+                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                </li>
+                
+            
+                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
@@ -1105,16 +1120,6 @@
                         <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">T</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">TypeOps</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">T</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
                 </li>
                 
             
@@ -5516,9 +5521,9 @@ Constraint handlers update the current constraint as a side effect.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="comparedPolyTypes" class="member protected">
+        <div id="comparedTypeLambdas" class="member protected">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedPolyTypes');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedTypeLambdas');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5530,7 +5535,7 @@ Constraint handlers update the current constraint as a side effect.</p>
                 </span>
                 <span class="member-name ">
                     
-                        comparedPolyTypes
+                        comparedTypeLambdas
                     
                 </span>
 
@@ -5541,19 +5546,19 @@ Constraint handlers update the current constraint as a side effect.</p>
                 
                 <span class="no-left">: Set
 <span class="no-left no-right">[</span>
-PolyType
+TypeLambda
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-comparedPolyTypes">
-                    <p>We are currently comparing polytypes. Used as a flag for
+                <div class="member-body-short" id="short-body-comparedTypeLambdas">
+                    <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-comparedPolyTypes">
-                    <p>We are currently comparing polytypes. Used as a flag for
+                <div class="member-body-long" id ="long-body-comparedTypeLambdas">
+                    <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
 
                 </div>
@@ -5799,7 +5804,7 @@ See note in TypeComparer#distributeAnd.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -5947,7 +5952,7 @@ way isSubType is organized.</p>
                             <span class="no-left">
                                 p1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -5955,7 +5960,7 @@ way isSubType is organized.</p>
                             <span class="">
                                 p2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6016,7 +6021,7 @@ way isSubType is organized.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6085,7 +6090,7 @@ way isSubType is organized.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6136,9 +6141,9 @@ way isSubType is organized.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="addToConstraint(pt,tvars)" class="member ">
+        <div id="addToConstraint(tl,tvars)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addToConstraint(pt,tvars)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addToConstraint(tl,tvars)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6160,9 +6165,9 @@ way isSubType is organized.</p>
                         
                         
                             <span class="no-left">
-                                pt:
+                                tl:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                                 <span class="no-left">, </span>
                             
@@ -6188,13 +6193,13 @@ TypeVar
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-addToConstraint(pt,tvars)">
-                    <p>Add polytype <code>pt</code>, possibly with type variables <code>tvars</code>, to current constraint
+                <div class="member-body-short" id="short-body-addToConstraint(tl,tvars)">
+                    <p>Add type lambda <code>tl</code>, possibly with type variables <code>tvars</code>, to current constraint
 and propagate all bounds.</p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-addToConstraint(pt,tvars)">
-                    <p>Add polytype <code>pt</code>, possibly with type variables <code>tvars</code>, to current constraint
+                <div class="member-body-long" id ="long-body-addToConstraint(tl,tvars)">
+                    <p>Add type lambda <code>tl</code>, possibly with type variables <code>tvars</code>, to current constraint
 and propagate all bounds.</p>
 
                 </div>
@@ -6238,7 +6243,7 @@ and propagate all bounds.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6307,7 +6312,7 @@ and propagate all bounds.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6387,7 +6392,7 @@ The constraint is left unchanged.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6450,7 +6455,7 @@ The constraint is left unchanged.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6561,9 +6566,9 @@ The constraint is left unchanged.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="comparedPolyTypes_=(x$1)" class="member protected">
+        <div id="comparedTypeLambdas_=(x$1)" class="member protected">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedPolyTypes_=(x$1)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedTypeLambdas_=(x$1)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6575,7 +6580,7 @@ The constraint is left unchanged.</p>
                 </span>
                 <span class="member-name ">
                     
-                        comparedPolyTypes_=
+                        comparedTypeLambdas_=
                     
                 </span>
 
@@ -6589,7 +6594,7 @@ The constraint is left unchanged.</p>
                             </span>
                             Set
 <span class="no-left no-right">[</span>
-PolyType
+TypeLambda
 <span class="no-left">]</span>
                             
                         
@@ -6605,13 +6610,13 @@ PolyType
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-comparedPolyTypes_=(x$1)">
-                    <p>We are currently comparing polytypes. Used as a flag for
+                <div class="member-body-short" id="short-body-comparedTypeLambdas_=(x$1)">
+                    <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-comparedPolyTypes_=(x$1)">
-                    <p>We are currently comparing polytypes. Used as a flag for
+                <div class="member-body-long" id ="long-body-comparedTypeLambdas_=(x$1)">
+                    <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
 
                 </div>
@@ -6787,7 +6792,7 @@ See note in TypeComparer#distributeAnd.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7270,7 +7275,7 @@ constraint are a solution to the constraint.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7454,7 +7459,7 @@ narrowing it with further bounds.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7525,7 +7530,7 @@ narrowing it with further bounds.</p>
                             <span class="no-left">
                                 p1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7533,7 +7538,7 @@ narrowing it with further bounds.</p>
                             <span class="">
                                 p2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>

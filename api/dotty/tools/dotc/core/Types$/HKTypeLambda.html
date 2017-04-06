@@ -909,6 +909,21 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity  with-companion ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">O</a>
+                        
+                        <a class="letter-anchor trait" href="../../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                </li>
+                
+            
+                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
@@ -1105,16 +1120,6 @@
                         <a class="letter-anchor trait" href="../../../../../.././api/dotty/tools/dotc/core/TypeOps.html">T</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/TypeOps.html">TypeOps</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor trait" href="../../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">T</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
                 </li>
                 
             
@@ -5420,7 +5425,7 @@
         </button>
         
 <script>
-    document.title = "Dotty API - PolyTypeTree"
+    document.title = "Dotty API - HKTypeLambda"
 </script>
 
 <div id="entity-container">
@@ -5432,22 +5437,10 @@
             
         </span>
         <span id="entity-kind">
-            case class
+            class
         </span>
         <span id="entity-name">
-            PolyTypeTree
-        </span>
-        
-        <span id="entity-type-params">
-            <span class="no-left">[</span>
-            
-            <span class="no-left">
-                
-                    -T
-                
-            </span>
-            
-            <span class="no-left">]</span>
+            HKTypeLambda
         </span>
         
         
@@ -5456,12 +5449,12 @@
             
             <span class="keyword">extends</span>
             
-            <span class="entity-super-type">Tree</span>
+            <span class="entity-super-type">HKLambda</span>
             
             
             <span class="keyword">with</span>
             
-            <span class="entity-super-type">TypTree</span>
+            <span class="entity-super-type">TypeLambda</span>
             
         </div>
         
@@ -5469,7 +5462,10 @@
 
     
     <div id="entity-body" class="entity-section">
-        <p>[typeparams] -&gt; tpt</p>
+        <p>A type lambda of the form <code>[X_0 B_0, ..., X_n B_n] =&gt; T</code>
+Variances are encoded in parameter names. A name starting with <code>+</code>
+designates a covariant parameter, a name starting with <code>-</code> designates
+a contravariant parameter, and every other name designates a non-variant parameter.</p>
 
     </div>
     
@@ -5483,31 +5479,44 @@
             
             <div class="member">
                 <div class="member-title">
-                    <span class="member-name">PolyTypeTree</span>
+                    <span class="member-name">HKTypeLambda</span>
                     <span class="no-left">(</span>
                         
                         
                             <span class="no-left">
-                                tparams:
+                                paramNames:
                             </span>
                             List
 <span class="no-left no-right">[</span>
-TypeDef
-<span class="no-left no-right">[</span>
-T
+TypeName
 <span class="no-left">]</span>
+                            
+                        
+                    <span class="no-left">)</span>
+                </div>
+            </div>
+            
+            <div class="member">
+                <div class="member-title">
+                    <span class="member-name">HKTypeLambda</span>
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                paramInfosExp:
+                            </span>
+                            HKTypeLambda<span class="right-arrow"> =&gt; </span>List
+<span class="no-left no-right">[</span>
+TypeBounds
 <span class="no-left">]</span>
                             
                                 <span class="no-left">, </span>
                             
                         
                             <span class="">
-                                body:
+                                resultTypeExp:
                             </span>
-                            Tree
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
+                            HKTypeLambda<span class="right-arrow"> =&gt; </span>Type
                             
                         
                     <span class="no-left">)</span>
@@ -5523,9 +5532,9 @@ T
 
     <div id="entity-members" class="entity-section ">
         
-        <div id="ThisTree" class="member ">
+        <div id="This" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ThisTree');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'This');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5537,29 +5546,18 @@ T
                 </span>
                 <span class="member-name ">
                     
-                        ThisTree
+                        This
                     
                 </span>
 
                 
 
                 
-                
-                    
-                        <span class="no-left">[</span>
-                    
-                    
-                        <span class="no-left">-T</span>
-                        <span class="no-left">]</span>
-                    
                 
                 
                 <span class="type-alias">
                     <span class="equals"> = </span>
-                    PolyTypeTree
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
+                    HKTypeLambda
                 </span>
                 
                 
@@ -5568,13 +5566,11 @@ T
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-ThisTree">
-                    <p>The type  constructor at the root of the tree</p>
-
+                <div class="member-body-short" id="short-body-This">
+                    
                 </div>
-                <div class="member-body-long" id ="long-body-ThisTree">
-                    <p>The type  constructor at the root of the tree</p>
-
+                <div class="member-body-long" id ="long-body-This">
+                    
                 </div>
             </div>
             <script>
@@ -5590,9 +5586,9 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="body" class="member ">
+        <div id="paramInfos" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'body');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramInfos');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5604,7 +5600,7 @@ T
                 </span>
                 <span class="member-name ">
                     
-                        body
+                        paramInfos
                     
                 </span>
 
@@ -5613,18 +5609,18 @@ T
                 
 
                 
-                <span class="no-left">: Tree
+                <span class="no-left">: List
 <span class="no-left no-right">[</span>
-T
+TypeBounds
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-body">
+                <div class="member-body-short" id="short-body-paramInfos">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-body">
+                <div class="member-body-long" id ="long-body-paramInfos">
                     
                 </div>
             </div>
@@ -5641,9 +5637,60 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="tparams" class="member ">
+        <div id="paramInfosExp" class="member private">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'tparams');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramInfosExp');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    private
+                </span>
+                <span class="member-kind">
+                    val
+                </span>
+                <span class="member-name ">
+                    
+                        paramInfosExp
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: HKTypeLambda<span class="right-arrow"> =&gt; </span>List
+<span class="no-left no-right">[</span>
+TypeBounds
+<span class="no-left">]</span></span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-paramInfosExp">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-paramInfosExp">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="paramNames" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramNames');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5655,7 +5702,7 @@ T
                 </span>
                 <span class="member-name ">
                     
-                        tparams
+                        paramNames
                     
                 </span>
 
@@ -5666,19 +5713,16 @@ T
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-TypeDef
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
+TypeName
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-tparams">
+                <div class="member-body-short" id="short-body-paramNames">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-tparams">
+                <div class="member-body-long" id ="long-body-paramNames">
                     
                 </div>
             </div>
@@ -5695,9 +5739,9 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="_1" class="member ">
+        <div id="resType" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, '_1');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'resType');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5705,11 +5749,11 @@ T
                     
                 </span>
                 <span class="member-kind">
-                    def
+                    val
                 </span>
                 <span class="member-name ">
                     
-                        _1
+                        resType
                     
                 </span>
 
@@ -5718,15 +5762,15 @@ T
                 
 
                 
-                <span class="no-left">: T1</span>
+                <span class="no-left">: Type</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-_1">
+                <div class="member-body-short" id="short-body-resType">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-_1">
+                <div class="member-body-long" id ="long-body-resType">
                     
                 </div>
             </div>
@@ -5743,21 +5787,21 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="_2" class="member ">
+        <div id="resultTypeExp" class="member private">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, '_2');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'resultTypeExp');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    private
                 </span>
                 <span class="member-kind">
-                    def
+                    val
                 </span>
                 <span class="member-name ">
                     
-                        _2
+                        resultTypeExp
                     
                 </span>
 
@@ -5766,15 +5810,15 @@ T
                 
 
                 
-                <span class="no-left">: T2</span>
+                <span class="no-left">: HKTypeLambda<span class="right-arrow"> =&gt; </span>Type</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-_2">
+                <div class="member-body-short" id="short-body-resultTypeExp">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-_2">
+                <div class="member-body-long" id ="long-body-resultTypeExp">
                     
                 </div>
             </div>
@@ -5791,9 +5835,9 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="copy(tparams,body)" class="member ">
+        <div id="companion" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy(tparams,body)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'companion');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -5805,111 +5849,27 @@ T
                 </span>
                 <span class="member-name ">
                     
-                        copy
+                        companion
                     
                 </span>
 
                 
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                tparams:
-                            </span>
-                            List
-<span class="no-left no-right">[</span>
-TypeDef
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
-<span class="no-left">]</span>
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                body:
-                            </span>
-                            Tree
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
 
                 
 
                 
-                <span class="no-left">: PolyTypeTree
+                <span class="no-left">: LambdaTypeCompanion
 <span class="no-left no-right">[</span>
-T
+ThisName<span class="">, </span>PInfo<span class="">, </span>This
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-copy(tparams,body)">
+                <div class="member-body-short" id="short-body-companion">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-copy(tparams,body)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="copy$default$1" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy$default$1');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        copy$default$1
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: List
-<span class="no-left no-right">[</span>
-TypeDef
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
-<span class="no-left">]</span></span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-copy$default$1">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-copy$default$1">
+                <div class="member-body-long" id ="long-body-companion">
                     
                 </div>
             </div>
@@ -5926,21 +5886,21 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="copy$default$2" class="member ">
+        <div id="prefixString" class="member protected">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy$default$2');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'prefixString');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    protected
                 </span>
                 <span class="member-kind">
                     def
                 </span>
                 <span class="member-name ">
                     
-                        copy$default$2
+                        prefixString
                     
                 </span>
 
@@ -5949,18 +5909,15 @@ T
                 
 
                 
-                <span class="no-left">: Tree
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span></span>
+                <span class="no-left">: String</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-copy$default$2">
+                <div class="member-body-short" id="short-body-prefixString">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-copy$default$2">
+                <div class="member-body-long" id ="long-body-prefixString">
                     
                 </div>
             </div>

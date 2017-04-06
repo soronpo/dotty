@@ -909,6 +909,21 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity  with-companion ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">O</a>
+                        
+                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                </li>
+                
+            
+                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
@@ -1105,16 +1120,6 @@
                         <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">T</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">TypeOps</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">T</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
                 </li>
                 
             
@@ -5857,7 +5862,7 @@ TypeVar
                             <span class="no-left">
                                 poly:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                                 <span class="no-left">, </span>
                             
@@ -5946,7 +5951,7 @@ entries for all type parameters of <code>poly</code>.</p>
                             <span class="no-left">
                                 param1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -5954,7 +5959,7 @@ entries for all type parameters of <code>poly</code>.</p>
                             <span class="">
                                 param2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6057,11 +6062,11 @@ non-parameter bounds are left alone.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-checkClosed()(ctx)">
-                    <p>Check that constraint only refers to PolyParams bound by itself</p>
+                    <p>Check that constraint only refers to TypeParamRefs bound by itself</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-checkClosed()(ctx)">
-                    <p>Check that constraint only refers to PolyParams bound by itself</p>
+                    <p>Check that constraint only refers to TypeParamRefs bound by itself</p>
 
                 </div>
             </div>
@@ -6174,7 +6179,7 @@ non-parameter bounds are left alone.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6248,7 +6253,7 @@ non-parameter bounds are left alone.</p>
                             <span class="no-left">
                                 pt:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                         
                     <span class="no-left">)</span>
@@ -6311,7 +6316,7 @@ non-parameter bounds are left alone.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6457,7 +6462,7 @@ non-parameter bounds are left alone.</p>
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -6473,6 +6478,59 @@ tp &lt;: Q  implies  P &lt;: Q      and...</p>
                     <p>The list of parameters P such that, for a fresh type parameter Q:</p>
 <p>Q &lt;: tp  implies  Q &lt;: P      and isUpper = true, or
 tp &lt;: Q  implies  P &lt;: Q      and isUpper = false</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="domainLambdas" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'domainLambdas');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        domainLambdas
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: List
+<span class="no-left no-right">[</span>
+TypeLambda
+<span class="no-left">]</span></span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-domainLambdas">
+                    <p>The type lambdas constrained by this constraint</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-domainLambdas">
+                    <p>The type lambdas constrained by this constraint</p>
 
                 </div>
             </div>
@@ -6514,71 +6572,18 @@ tp &lt;: Q  implies  P &lt;: Q      and isUpper = false</p>
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-domainParams">
-                    <p>The polytype parameters constrained by this constraint</p>
+                    <p>The type lambda parameters constrained by this constraint</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-domainParams">
-                    <p>The polytype parameters constrained by this constraint</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="domainPolys" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'domainPolys');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        domainPolys
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: List
-<span class="no-left no-right">[</span>
-PolyType
-<span class="no-left">]</span></span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-domainPolys">
-                    <p>The polytypes constrained by this constraint</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-domainPolys">
-                    <p>The polytypes constrained by this constraint</p>
+                    <p>The type lambda parameters constrained by this constraint</p>
 
                 </div>
             </div>
@@ -6621,7 +6626,7 @@ PolyType
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6684,7 +6689,7 @@ PolyType
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6692,7 +6697,7 @@ PolyType
                             <span class="">
                                 butNot:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6704,7 +6709,7 @@ PolyType
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -6758,7 +6763,7 @@ PolyParam
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -6766,7 +6771,7 @@ PolyParam
                             <span class="">
                                 butNot:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -6778,7 +6783,7 @@ PolyParam
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -6832,7 +6837,7 @@ PolyParam
                             <span class="no-left">
                                 p:
                             </span>
-                            PolyParam<span class="right-arrow"> =&gt; </span>Boolean
+                            TypeParamRef<span class="right-arrow"> =&gt; </span>Boolean
                             
                         
                     <span class="no-left">)</span>
@@ -6895,7 +6900,7 @@ PolyParam
                             <span class="no-left">
                                 p:
                             </span>
-                            <span>(</span>PolyType<span>, </span>Int<span>) =&gt; </span>Unit
+                            <span>(</span>TypeLambda<span>, </span>Int<span>) =&gt; </span>Unit
                             
                         
                     <span class="no-left">)</span>
@@ -7021,7 +7026,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7097,7 +7102,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7173,7 +7178,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7249,7 +7254,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                             <span class="no-left">
                                 poly:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                         
                     <span class="no-left">)</span>
@@ -7390,7 +7395,7 @@ dependent parameters.</p>
                             <span class="no-left">
                                 param1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7398,7 +7403,7 @@ dependent parameters.</p>
                             <span class="">
                                 param2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7461,7 +7466,7 @@ dependent parameters.</p>
                             <span class="no-left">
                                 pt:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                         
                     <span class="no-left">)</span>
@@ -7528,7 +7533,7 @@ which have their <code>inst</code> fields set.</p>
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7540,7 +7545,7 @@ which have their <code>inst</code> fields set.</p>
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -7594,7 +7599,7 @@ PolyParam
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7606,7 +7611,7 @@ PolyParam
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -7658,7 +7663,7 @@ PolyParam
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7670,7 +7675,7 @@ PolyParam
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->
@@ -7786,7 +7791,7 @@ TypeVar
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -7863,7 +7868,7 @@ are not contained in the return bounds.</p>
                             </span>
                             ListBuffer
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span>
                             
                                 <span class="no-left">, </span>
@@ -7958,7 +7963,7 @@ A top or bottom type if type consists only of dependent parameters.</p>
                             <span class="">
                                 param1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -7966,7 +7971,7 @@ A top or bottom type if type consists only of dependent parameters.</p>
                             <span class="">
                                 param2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -8110,7 +8115,7 @@ Type
                             <span class="no-left">
                                 pt:
                             </span>
-                            PolyType
+                            TypeLambda
                             
                         
                     <span class="no-left">)</span>
@@ -8186,7 +8191,7 @@ Type
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -8316,7 +8321,7 @@ that are not top-level are not affected.</p>
                             </span>
                             ListBuffer
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span>
                             
                                 <span class="no-left">, </span>
@@ -8623,7 +8628,7 @@ Type
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -8688,7 +8693,7 @@ NoType, if <code>param</code> is not in constrained or is not paired with a type
                             <span class="no-left">
                                 p1:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -8696,7 +8701,7 @@ NoType, if <code>param</code> is not in constrained or is not paired with a type
                             <span class="">
                                 p2:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -8835,7 +8840,7 @@ TypeVar
                             <span class="">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -8917,7 +8922,7 @@ TypeVar
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                                 <span class="no-left">, </span>
                             
@@ -9013,7 +9018,7 @@ the entry for parameter <code>param</code> to <code>tp</code>.
                             <span class="no-left">
                                 param:
                             </span>
-                            PolyParam
+                            TypeParamRef
                             
                         
                     <span class="no-left">)</span>
@@ -9025,7 +9030,7 @@ the entry for parameter <code>param</code> to <code>tp</code>.
                 
                 <span class="no-left">: List
 <span class="no-left no-right">[</span>
-PolyParam
+TypeParamRef
 <span class="no-left">]</span></span>
                 
             </div><!-- end member-title -->

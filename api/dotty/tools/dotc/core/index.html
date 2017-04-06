@@ -909,6 +909,21 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity  with-companion ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">O</a>
+                        
+                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                </li>
+                
+            
+                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
@@ -1105,16 +1120,6 @@
                         <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">T</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeOps.html">TypeOps</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">T</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
                 </li>
                 
             
@@ -5905,10 +5910,10 @@
                     <p>Constraint over undetermined type parameters. Constraints are built
 over values of the following types:</p>
 <ul>
-<li>PolyType    A constraint constrains the type parameters of a set of PolyTypes</li>
-<li>PolyParam   The parameters of the constrained polytypes</li>
-<li>TypeVar     Every constrained parameter might be associated with a TypeVar
-that has the PolyParam as origin.</li>
+<li>TypeLambda    A constraint constrains the type parameters of a set of TypeLambdas</li>
+<li>TypeParamRef  The parameters of the constrained type lambdas</li>
+<li>TypeVar       Every constrained parameter might be associated with a TypeVar
+that has the TypeParamRef as origin.</li>
 </ul>
 
                 </div>
@@ -5916,10 +5921,10 @@ that has the PolyParam as origin.</li>
                     <p>Constraint over undetermined type parameters. Constraints are built
 over values of the following types:</p>
 <ul>
-<li>PolyType    A constraint constrains the type parameters of a set of PolyTypes</li>
-<li>PolyParam   The parameters of the constrained polytypes</li>
-<li>TypeVar     Every constrained parameter might be associated with a TypeVar
-that has the PolyParam as origin.</li>
+<li>TypeLambda    A constraint constrains the type parameters of a set of TypeLambdas</li>
+<li>TypeParamRef  The parameters of the constrained type lambdas</li>
+<li>TypeVar       Every constrained parameter might be associated with a TypeVar
+that has the TypeParamRef as origin.</li>
 </ul>
 
                 </div>
@@ -6890,6 +6895,102 @@ reflect parameter orderings.</p>
                 </div>
                 <div class="member-body-long" id ="long-body-OrderingConstraint$">
                     
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="ParamInfo$" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ParamInfo$');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    final
+                </span>
+                <span class="member-kind">
+                    object
+                </span>
+                <span class="member-name ">
+                    
+                        <a href="../../../../.././api/dotty/tools/dotc/core/ParamInfo$.html">ParamInfo</a>
+                    
+                </span>
+
+                
+
+                
+
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-ParamInfo$">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-ParamInfo$">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="ParamInfo" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ParamInfo');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    trait
+                </span>
+                <span class="member-name ">
+                    
+                        <a href="../../../../.././api/dotty/tools/dotc/core/ParamInfo.html">ParamInfo</a>
+                    
+                </span>
+
+                
+
+                
+
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-ParamInfo">
+                    <p>A common super trait of Symbol and LambdaParam.
+Used to capture the attributes of type parameters which can be implemented as either.</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-ParamInfo">
+                    <p>A common super trait of Symbol and LambdaParam.
+Used to capture the attributes of type parameters which can be implemented as either.</p>
+
                 </div>
             </div>
             <script>
@@ -8029,7 +8130,7 @@ NoType
 NoPrefix
 WildcardType
 ErrorType</p>
-<p>only for isInstanceOf, asInstanceOf: PolyType, PolyParam, TypeBounds</p>
+<p>only for isInstanceOf, asInstanceOf: PolyType, TypeParamRef, TypeBounds</p>
 
                 </div>
             </div>
@@ -8123,56 +8224,6 @@ ErrorType</p>
                 </div>
                 <div class="member-body-long" id ="long-body-TypeOps">
                     
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="TypeParamInfo" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TypeParamInfo');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    trait
-                </span>
-                <span class="member-name ">
-                    
-                        <a href="../../../../.././api/dotty/tools/dotc/core/TypeParamInfo.html">TypeParamInfo</a>
-                    
-                </span>
-
-                
-
-                
-
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-TypeParamInfo">
-                    <p>A common super trait of Symbol and LambdaParam.
-Used to capture the attributes of type parameters which can be implemented as either.</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-TypeParamInfo">
-                    <p>A common super trait of Symbol and LambdaParam.
-Used to capture the attributes of type parameters which can be implemented as either.</p>
-
                 </div>
             </div>
             <script>
