@@ -5434,7 +5434,7 @@
             
         </span>
         <span id="entity-modifiers">
-            
+            final
         </span>
         <span id="entity-kind">
             class
@@ -5977,7 +5977,7 @@ It overrides ClassDenotation to take account of package objects when looking for
         
         <div id="computeNPMembersNamed(name,inherited)(ctx)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'computeNPMembersNamed(name,inherited)(ctx)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'computeNPMembersNamed(name,inherited)(ctx)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6038,11 +6038,25 @@ It overrides ClassDenotation to take account of package objects when looking for
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-computeNPMembersNamed(name,inherited)(ctx)">
-                    <p>Look first for members in package; if none are found look in package object</p>
+                    <p>Looks in both the package object and the package for members. The precise algorithm
+is as follows:</p>
+<p>If this is the scala package look in the package firs...
+</p>
+<p>
+</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-computeNPMembersNamed(name,inherited)(ctx)">
-                    <p>Look first for members in package; if none are found look in package object</p>
+                    <p>Looks in both the package object and the package for members. The precise algorithm
+is as follows:</p>
+<p>If this is the scala package look in the package first, and if nothing is found
+there, look in the package object second. Otherwise, look in the package object
+first, and if nothing is found there, in the package second.</p>
+<p>The reason for the special treatment of the scala package is that if we
+complete it too early, we freeze its superclass Any, so that no members can
+be entered in it. As a consequence, there should be no entry in the scala package
+object that hides a class or object in the scala package of the same name, because
+the behavior would then be unintuitive for such members.</p>
 
                 </div>
             </div>
@@ -6187,6 +6201,92 @@ Name
                 </div>
                 <div class="member-body-long" id ="long-body-packageObj(ctx)">
                     <p>The package object in this class, of one exists</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="proceedWithEnter(sym,mscope)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'proceedWithEnter(sym,mscope)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    override
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        proceedWithEnter
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                sym:
+                            </span>
+                            Symbol
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                mscope:
+                            </span>
+                            MutableScope
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Boolean</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-proceedWithEnter(sym,mscope)(ctx)">
+                    <p>If another symbol with the same name is entered, unlink it,
+and, if symbol is a package object, invalidate the packageObj cache.</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-proceedWithEnter(sym,mscope)(ctx)">
+                    <p>If another symbol with the same name is entered, unlink it,
+and, if symbol is a package object, invalidate the packageObj cache.</p>
 
                 </div>
             </div>
