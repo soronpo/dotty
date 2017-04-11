@@ -5417,6 +5417,80 @@
 
     <div id="entity-members" class="entity-section ">
         
+        <div id="canProductMatch(tp)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'canProductMatch(tp)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        canProductMatch
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                tp:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Boolean</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-canProductMatch(tp)(ctx)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-canProductMatch(tp)(ctx)">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="extractorMember(tp,name)(ctx)" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'extractorMember(tp,name)(ctx)');">[+]</span>
@@ -5987,15 +6061,89 @@ parameterless <code>isDefined</code> member of result type <code>Boolean</code>.
             <div class="member-body">
                 <div class="member-body-short" id="short-body-isProductMatch(tp,numArgs)(ctx)">
                     <p>Does <code>tp</code> fit the &quot;product match&quot; conditions as an unapply result type
-for a pattern with <code>numArgs</code> subpatterns&gt;
-This is the case of <code>tp</code> is a subtype of the...<numArgs></p>
+for a pattern with <code>numArgs</code> subpatterns?
+This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</code></p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-isProductMatch(tp,numArgs)(ctx)">
                     <p>Does <code>tp</code> fit the &quot;product match&quot; conditions as an unapply result type
-for a pattern with <code>numArgs</code> subpatterns&gt;
-This is the case of <code>tp</code> is a subtype of the Product<numArgs> class.</p>
+for a pattern with <code>numArgs</code> subpatterns?
+This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</code> where <code>N == numArgs</code>.</p>
 
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="productArity(tp)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productArity(tp)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        productArity
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                tp:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Int</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-productArity(tp)(ctx)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-productArity(tp)(ctx)">
+                    
                 </div>
             </div>
             <script>
