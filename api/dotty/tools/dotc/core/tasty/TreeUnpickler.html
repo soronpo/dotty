@@ -877,6 +877,16 @@
                 <li class="index-entity ">
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/NameKinds$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/NameKinds$.html">NameKinds</a>
+                </li>
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/NameOps$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/NameOps$.html">NameOps</a>
@@ -1281,21 +1291,6 @@
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/tasty/TastyFormat$.html">TastyFormat</a>
                 </li>
-                
-            
-                
-                <li class="index-entity  with-companion ">
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/tasty/TastyName$.html">O</a>
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/core/tasty/TastyName.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/tasty/TastyName.html">TastyName</a>
-                </li>
-                
-            
-                
                 
             
                 
@@ -3614,18 +3609,18 @@
                 
             
                 
-                
-            
-                
                 <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
                         
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/util/FreshNameCreator$.html">O</a>
                         
-                        <a class="letter-anchor trait" href="../../../../../.././api/dotty/tools/dotc/util/FreshNameCreator.html">T</a>
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/util/FreshNameCreator.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/util/FreshNameCreator.html">FreshNameCreator</a>
                 </li>
+                
+            
+                
                 
             
                 
@@ -5435,9 +5430,9 @@
                             
                         
                             <span class="">
-                                tastyName:
+                                nameAtRef:
                             </span>
-                            Table
+                            NameRef<span class="right-arrow"> =&gt; </span>TermName
                             
                                 <span class="no-left">, </span>
                             
@@ -5639,6 +5634,54 @@ Such forward references are rare.</p>
                     
                 </div>
                 <div class="member-body-long" id ="long-body-TreeReader">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="nameAtRef" class="member private">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'nameAtRef');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    private
+                </span>
+                <span class="member-kind">
+                    val
+                </span>
+                <span class="member-name ">
+                    
+                        nameAtRef
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: NameRef<span class="right-arrow"> =&gt; </span>TermName</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-nameAtRef">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-nameAtRef">
                     
                 </div>
             </div>
@@ -5952,54 +5995,6 @@ Addr<span class="">, </span>Symbol
                 <div class="member-body-long" id ="long-body-symAtAddr">
                     <p>A map from addresses of definition entries to the symbols they define</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="tastyName" class="member private">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'tastyName');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    private
-                </span>
-                <span class="member-kind">
-                    val
-                </span>
-                <span class="member-name ">
-                    
-                        tastyName
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Table</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-tastyName">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-tastyName">
-                    
                 </div>
             </div>
             <script>
@@ -6461,189 +6456,6 @@ is a subset of <code>roots.map(_.symbol)</code>.</p>
                     <p>The root symbols that are defined in this Tasty file. This
 is a subset of <code>roots.map(_.symbol)</code>.</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toTermName(tname)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toTermName(tname)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toTermName
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                tname:
-                            </span>
-                            TastyName
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: TermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toTermName(tname)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-toTermName(tname)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toTermName(ref)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toTermName(ref)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toTermName
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                ref:
-                            </span>
-                            NameRef
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: TermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toTermName(ref)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-toTermName(ref)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toTypeName(ref)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toTypeName(ref)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toTypeName
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                ref:
-                            </span>
-                            NameRef
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: TypeName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toTypeName(ref)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-toTypeName(ref)">
-                    
                 </div>
             </div>
             <script>
