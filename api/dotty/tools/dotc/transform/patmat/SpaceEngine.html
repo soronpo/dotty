@@ -3489,13 +3489,18 @@
                 
             
                 
-                <li class="index-entity ">
+                <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/patmat/SpaceEngine$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/patmat/SpaceEngine.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/patmat/SpaceEngine.html">SpaceEngine</a>
                 </li>
+                
+            
+                
                 
             
                 
@@ -6517,6 +6522,156 @@ Space
 <p>A &lt;: X :&gt; Y                M { type T = A }        ~~&gt;  M { type T &lt;: X :&gt; Y }</p>
 <p>A &lt;: X :&gt; Y  B &lt;: U :&gt; V   M { type T &lt;: A :&gt; B }  ~~&gt;  M { type T &lt;: X :&gt; V }</p>
 <p>A = X  B = Y               M { type T &lt;: A :&gt; B }  ~~&gt;  M { type T &lt;: X :&gt; Y }</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="implementability(tp)" class="member private">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'implementability(tp)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    private
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        implementability
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                tp:
+                            </span>
+                            <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Implementability</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-implementability(tp)">
+                    <p>Checks if it's possible to create a trait/class which is a subtype of <code>tp</code>.</p>
+<ul>
+<li>doesn't handle member collisions (will not declare a type unimplementable because of one)</li>
+<li>expects that neither Any nor Object reach it
+(this is currently true due to both isSubType and and/or type simplification)</li>
+</ul>
+<p>See [[intersectUnrelatedAtomicTypes]].</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-implementability(tp)">
+                    <p>Checks if it's possible to create a trait/class which is a subtype of <code>tp</code>.</p>
+<ul>
+<li>doesn't handle member collisions (will not declare a type unimplementable because of one)</li>
+<li>expects that neither Any nor Object reach it
+(this is currently true due to both isSubType and and/or type simplification)</li>
+</ul>
+<p>See [[intersectUnrelatedAtomicTypes]].</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="intersectUnrelatedAtomicTypes(tp1,tp2)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'intersectUnrelatedAtomicTypes(tp1,tp2)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    override
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        intersectUnrelatedAtomicTypes
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                tp1:
+                            </span>
+                            <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                tp2:
+                            </span>
+                            <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Space</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-intersectUnrelatedAtomicTypes(tp1,tp2)">
+                    <p>Return a space containing the values of both types.</p>
+<p>The types should be atomic (non-decomposable) and unrelated (neither
+should be a subtype of the othe...</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-intersectUnrelatedAtomicTypes(tp1,tp2)">
+                    <p>Return a space containing the values of both types.</p>
+<p>The types should be atomic (non-decomposable) and unrelated (neither
+should be a subtype of the other).</p>
 
                 </div>
             </div>
