@@ -7581,15 +7581,15 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                 <div class="member-body-short" id="short-body-normalize(tp,pt)(ctx)">
                     <p>The normalized form of a type
 - unwraps polymorphic types, tracking their parameters in the current constraint
-- skips implicit parameters; if result ty...
+- skips implicit parameters of methods an...
 </p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-normalize(tp,pt)(ctx)">
                     <p>The normalized form of a type
 - unwraps polymorphic types, tracking their parameters in the current constraint
-- skips implicit parameters; if result type depends on implicit parameter,
-replace with Wildcard.
+- skips implicit parameters of methods and functions;
+if result type depends on implicit parameter, replace with fresh type dependent parameter.
 - converts non-dependent method types to the corresponding function types
 - dereferences parameterless method types
 - dereferences nullary method types provided the corresponding function type
