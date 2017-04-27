@@ -5719,7 +5719,7 @@
     <h2><a href="#build-setup" id="build-setup">Build setup</a></h2>
 <ol>
 <li>
-<p>Run <code>sbt eclipse</code></p>
+<p>Run <code>sbt ;managedSources;eclipse</code></p>
 </li>
 <li>It is recommended to change the default output folder (in <code>Properties &gt; java build path &gt; Source</code>) to <code>dotty/classes</code> instead of <code>dotty/bin</code> because
 <code>dotty/bin</code> is reserved for shell scripts.</li>
@@ -5734,8 +5734,6 @@
 that it contains a <code>CLASSPATH</code> variable which reflects the current
 <code>CLASSPATH</code>.</li>
 </ol>
-<p>In order for compilation errors related to <code>ENUM</code> to be resolved, make sure
-that scala-reflect 2.11.5 is on the classpath.</p>
 <h2><a href="#running-the-compiler-main-class-from-eclipse" id="running-the-compiler-main-class-from-eclipse">Running the compiler Main class from Eclipse</a></h2>
 <ol>
 <li>Navigate to <code>dotty.tools.dotc.Main</code></li>
