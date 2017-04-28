@@ -6267,6 +6267,62 @@ This rule is contentious because it cuts the constraint set.</p>
             </script>
         </div><!-- end member -->
         
+        <div id="checkBackendNames" class="member ">
+            <div class="member-title">
+                <span class="expand-button " onclick="toggleMemberBody(this, 'checkBackendNames');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    final
+                </span>
+                <span class="member-kind">
+                    val
+                </span>
+                <span class="member-name ">
+                    
+                        checkBackendNames
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: false</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-checkBackendNames">
+                    <p>Check that Name#toString is not called directly from backend by analyzing
+the stack trace of each toString call on names. This is very expensive,
+so not...
+</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-checkBackendNames">
+                    <p>Check that Name#toString is not called directly from backend by analyzing
+the stack trace of each toString call on names. This is very expensive,
+so not suitable for continuous testing. But it can be used to find a problem
+when running a specific test.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="checkCacheMembersNamed" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkCacheMembersNamed');">[+]</span>
