@@ -2732,6 +2732,16 @@
                 <li class="index-entity ">
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">ByNameClosures</a>
+                </li>
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CapturedVars.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CapturedVars.html">CapturedVars</a>
@@ -2995,6 +3005,16 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">Getters</a>
+                </li>
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/HoistSuperArgs.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/HoistSuperArgs.html">HoistSuperArgs</a>
                 </li>
                 
             
@@ -3326,6 +3346,16 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/TransformByNameApply.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TransformByNameApply.html">TransformByNameApply</a>
+                </li>
                 
             
                 
@@ -5918,6 +5948,68 @@ them not-private.</p>
             </script>
         </div><!-- end member -->
         
+        <div id="ByNameClosures" class="member ">
+            <div class="member-title">
+                <span class="expand-button " onclick="toggleMemberBody(this, 'ByNameClosures');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    class
+                </span>
+                <span class="member-name ">
+                    
+                        <a href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">ByNameClosures</a>
+                    
+                </span>
+
+                
+
+                
+
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-ByNameClosures">
+                    <p>This phase translates arguments to call-by-name parameters, using the rules</p>
+<pre><code>x           ==&gt;    x                   if x is a =&gt; parameter
+e.apply()   ==&gt;    &lt;cbn-arg&gt;(e)       if e is pure
+e           ==&gt;    &lt;cbn-arg&gt;(() =&gt; e) for all other arguments
+</code></pre>
+<p>where</p>
+<p><cbn-arg>: [T](() =&gt; T): T</p>
+<p>is a synthetic method defined in Definitions. Erasure w...<cbn-arg></p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-ByNameClosures">
+                    <p>This phase translates arguments to call-by-name parameters, using the rules</p>
+<pre><code>x           ==&gt;    x                   if x is a =&gt; parameter
+e.apply()   ==&gt;    &lt;cbn-arg&gt;(e)       if e is pure
+e           ==&gt;    &lt;cbn-arg&gt;(() =&gt; e) for all other arguments
+</code></pre>
+<p>where</p>
+<p><cbn-arg>: [T](() =&gt; T): T</p>
+<p>is a synthetic method defined in Definitions. Erasure will later strip the <cbn-arg> wrappers.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="CapturedVars" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CapturedVars');">[+]</span>
@@ -6421,24 +6513,14 @@ the expression intiializing the lazy val depends only on the root context, but n
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-ElimByName">
-                    <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of function parameters, and replaces them by
+                    <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of method parameter references, and replaces them b
 nullary function types.  More precisely:</p>
-<p>For the types of par...</p>
-<pre><code>=&gt; T        ==&gt;    () =&gt; T
+<p>For the types...</p>
+<pre><code>   =&gt; T       ==&gt;    () =&gt; T
 </code></pre>
-<p>
-</p>
-<pre><code>x           ==&gt;    x.apply()   if x is a parameter that had type =&gt; T
-</code></pre>
-<p>
-</p>
-<pre><code>e.apply()   ==&gt;    e           if e.apply() is an argument to a call-by-name parameter
-expr        ==&gt;    () =&gt; expr  if other expr is an argument to a call-by-name parameter
-</code></pre>
-<p>
-</p>
-<p>[T]</p>
 <p></p>
+<pre><code>   x          ==&gt;    x()
+</code></pre>
 <p>
 </p>
 <p>
@@ -6448,26 +6530,14 @@ expr        ==&gt;    () =&gt; expr  if other expr is an argument to a call-by-n
 
                 </div>
                 <div class="member-body-long" id ="long-body-ElimByName">
-                    <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of function parameters, and replaces them by
+                    <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of method parameter references, and replaces them b
 nullary function types.  More precisely:</p>
 <p>For the types of parameter symbols:</p>
-<pre><code>=&gt; T        ==&gt;    () =&gt; T
+<pre><code>   =&gt; T       ==&gt;    () =&gt; T
 </code></pre>
-<p>Note that <code>=&gt; T</code> types are not eliminated in MethodTypes. This is done later at erasure.
-Terms are rewritten as follows:</p>
-<pre><code>x           ==&gt;    x.apply()   if x is a parameter that had type =&gt; T
+<p>For cbn parameter values</p>
+<pre><code>   x          ==&gt;    x()
 </code></pre>
-<p>Arguments to call-by-name parameters are translated as follows. First, the argument is
-rewritten by the rules</p>
-<pre><code>e.apply()   ==&gt;    e           if e.apply() is an argument to a call-by-name parameter
-expr        ==&gt;    () =&gt; expr  if other expr is an argument to a call-by-name parameter
-</code></pre>
-<p>This makes the argument compatible with a parameter type of () =&gt; T, which will be the
-formal parameter type at erasure. But to be -Ycheckable until then, any argument
-ARG rewritten by the rules above is again wrapped in an application DummyApply(ARG)
-where</p>
-<p>DummyApply: [T](() =&gt; T): T</p>
-<p>is a synthetic method defined in Definitions. Erasure will later strip these DummyApply wrappers.</p>
 <p>Note: This scheme to have inconsistent types between method types (whose formal types are still
 ExprTypes and parameter valdefs (which are now FunctionTypes) is not pretty. There are two
 other options which have been abandoned or not yet pursued.</p>
@@ -7583,6 +7653,79 @@ instanceD.getClass    -&gt; instanceD.getClass</p>
 <p>p.x = e
 --&gt;  p.x_=(e)</p>
 <p>No fields are generated yet. This is done later in phase Memoize.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="HoistSuperArgs" class="member ">
+            <div class="member-title">
+                <span class="expand-button " onclick="toggleMemberBody(this, 'HoistSuperArgs');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    class
+                </span>
+                <span class="member-name ">
+                    
+                        <a href="../../../../.././api/dotty/tools/dotc/transform/HoistSuperArgs.html">HoistSuperArgs</a>
+                    
+                </span>
+
+                
+
+                
+
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-HoistSuperArgs">
+                    <p>This phase hoists complex arguments of supercalls and this-calls out of the enclosing class.
+Example:</p>
+<pre><code>class B(y: Int) extends A({ def f(x: Int) = x * x; f(y)})
+</code></pre>
+<p>is translated to</p>
+<pre><code>class B(y: Int) extends A(B#B$superArg$1(this.y)) {
+  private &lt;static&gt; def B$superArg$1(y: Int): Int = {
+    def f(x: Int): Int = x.*(x); f(y)
+  }
+}
+</code></pre>
+<p>An argument is complex if it conta...
+</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-HoistSuperArgs">
+                    <p>This phase hoists complex arguments of supercalls and this-calls out of the enclosing class.
+Example:</p>
+<pre><code>class B(y: Int) extends A({ def f(x: Int) = x * x; f(y)})
+</code></pre>
+<p>is translated to</p>
+<pre><code>class B(y: Int) extends A(B#B$superArg$1(this.y)) {
+  private &lt;static&gt; def B$superArg$1(y: Int): Int = {
+    def f(x: Int): Int = x.*(x); f(y)
+  }
+}
+</code></pre>
+<p>An argument is complex if it contains a method or template definition, a this or a new,
+or it contains an identifier which needs a <code>this</code> prefix to be accessed. This is the case
+if the identifer neither a global reference nor a reference to a parameter of the enclosing class.</p>
 
                 </div>
             </div>
@@ -9756,6 +9899,56 @@ def hashCode(): Int</p>
                 </div>
                 <div class="member-body-long" id ="long-body-TailRec$">
                     
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="TransformByNameApply" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TransformByNameApply');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    abstract
+                </span>
+                <span class="member-kind">
+                    class
+                </span>
+                <span class="member-name ">
+                    
+                        <a href="../../../../.././api/dotty/tools/dotc/transform/TransformByNameApply.html">TransformByNameApply</a>
+                    
+                </span>
+
+                
+
+                
+
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-TransformByNameApply">
+                    <p>Abstract base class of ByNameClosures and ElimByName, factoring out the
+common functionality to transform arguments of by-name parameters.</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-TransformByNameApply">
+                    <p>Abstract base class of ByNameClosures and ElimByName, factoring out the
+common functionality to transform arguments of by-name parameters.</p>
+
                 </div>
             </div>
             <script>

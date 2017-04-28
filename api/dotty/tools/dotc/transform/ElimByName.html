@@ -2732,6 +2732,16 @@
                 <li class="index-entity ">
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">ByNameClosures</a>
+                </li>
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CapturedVars.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CapturedVars.html">CapturedVars</a>
@@ -2995,6 +3005,16 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">Getters</a>
+                </li>
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/HoistSuperArgs.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/HoistSuperArgs.html">HoistSuperArgs</a>
                 </li>
                 
             
@@ -3326,6 +3346,16 @@
                 
             
                 
+                
+            
+                
+                <li class="index-entity ">
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/TransformByNameApply.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TransformByNameApply.html">TransformByNameApply</a>
+                </li>
                 
             
                 
@@ -5744,7 +5774,7 @@
             
             <span class="keyword">extends</span>
             
-            <span class="entity-super-type">MiniPhaseTransform</span>
+            <span class="entity-super-type">TransformByNameApply</span>
             
             
             <span class="keyword">with</span>
@@ -5757,26 +5787,14 @@
 
     
     <div id="entity-body" class="entity-section">
-        <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of function parameters, and replaces them by
+        <p>This phase eliminates ExprTypes <code>=&gt; T</code> as types of method parameter references, and replaces them b
 nullary function types.  More precisely:</p>
 <p>For the types of parameter symbols:</p>
-<pre><code>=&gt; T        ==&gt;    () =&gt; T
+<pre><code>   =&gt; T       ==&gt;    () =&gt; T
 </code></pre>
-<p>Note that <code>=&gt; T</code> types are not eliminated in MethodTypes. This is done later at erasure.
-Terms are rewritten as follows:</p>
-<pre><code>x           ==&gt;    x.apply()   if x is a parameter that had type =&gt; T
+<p>For cbn parameter values</p>
+<pre><code>   x          ==&gt;    x()
 </code></pre>
-<p>Arguments to call-by-name parameters are translated as follows. First, the argument is
-rewritten by the rules</p>
-<pre><code>e.apply()   ==&gt;    e           if e.apply() is an argument to a call-by-name parameter
-expr        ==&gt;    () =&gt; expr  if other expr is an argument to a call-by-name parameter
-</code></pre>
-<p>This makes the argument compatible with a parameter type of () =&gt; T, which will be the
-formal parameter type at erasure. But to be -Ycheckable until then, any argument
-ARG rewritten by the rules above is again wrapped in an application DummyApply(ARG)
-where</p>
-<p>DummyApply: [T](() =&gt; T): T</p>
-<p>is a synthetic method defined in Definitions. Erasure will later strip these DummyApply wrappers.</p>
 <p>Note: This scheme to have inconsistent types between method types (whose formal types are still
 ExprTypes and parameter valdefs (which are now FunctionTypes) is not pretty. There are two
 other options which have been abandoned or not yet pursued.</p>
@@ -5899,82 +5917,6 @@ tried yet.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="exprBecomesFunction(symd)(ctx)" class="member private">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'exprBecomesFunction(symd)(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    private
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        exprBecomesFunction
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                symd:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/SymDenotations$/SymDenotation.html">SymDenotation</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-exprBecomesFunction(symd)(ctx)">
-                    <p>If denotation had an ExprType before, it now gets a function type</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-exprBecomesFunction(symd)(ctx)">
-                    <p>If denotation had an ExprType before, it now gets a function type</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
         <div id="mayChange(sym)(ctx)" class="member ">
             <div class="member-title">
                 <span class="expand-button " onclick="toggleMemberBody(this, 'mayChange(sym)(ctx)');">[+]</span>
@@ -6039,82 +5981,6 @@ can save ti...</p>
                     <p>Denotations with a symbol where <code>mayChange</code> is false are guaranteed to be
 unaffected by this transform, so <code>transformInfo</code> need not be run. This
 can save time, and more importantly, can help avoid forcing symbol completers.</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="originalDenotation(tree)(ctx)" class="member private">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'originalDenotation(tree)(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    private
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        originalDenotation
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                tree:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/SymDenotations$/SymDenotation.html">SymDenotation</a></span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-originalDenotation(tree)(ctx)">
-                    <p>The info of the tree's symbol at phase Nullarify (i.e. before transformation)</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-originalDenotation(tree)(ctx)">
-                    <p>The info of the tree's symbol at phase Nullarify (i.e. before transformation)</p>
 
                 </div>
             </div>
@@ -6228,88 +6094,6 @@ before this phase starts</p>
                     <p>List of names of phases that should have finished their processing of all compilation units
 before this phase starts</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="transformApply(tree)(ctx,info)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'transformApply(tree)(ctx,info)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    override
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        transformApply
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                tree:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Apply">Apply</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                info:
-                            </span>
-                            TransformerInfo
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-transformApply(tree)(ctx,info)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-transformApply(tree)(ctx,info)">
-                    
                 </div>
             </div>
             <script>
