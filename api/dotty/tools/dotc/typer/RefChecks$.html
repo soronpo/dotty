@@ -3359,13 +3359,18 @@
                 
             
                 
-                <li class="index-entity ">
+                <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">TreeChecker</a>
                 </li>
+                
+            
+                
                 
             
                 
@@ -6529,6 +6534,92 @@ and required classes.</p>
                 </div>
                 <div class="member-body-long" id ="long-body-checkUndesiredProperties(sym,pos)(ctx)">
                     
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="upwardsThisType(cls)(ctx)" class="member private">
+            <div class="member-title">
+                <span class="expand-button " onclick="toggleMemberBody(this, 'upwardsThisType(cls)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    private
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        upwardsThisType
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                cls:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a></span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-upwardsThisType(cls)(ctx)">
+                    <p>The this-type of <code>cls</code> which should be used when looking at the types of
+inherited members. If <code>cls</code> has a non-trivial self type, this returns a skolem
+with...
+</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-upwardsThisType(cls)(ctx)">
+                    <p>The this-type of <code>cls</code> which should be used when looking at the types of
+inherited members. If <code>cls</code> has a non-trivial self type, this returns a skolem
+with the class type instead of the <code>this-type</code> of the class as usual.
+This is done because otherwise we want to understand inherited infos
+as they are written, whereas with the this-type they could be
+more special. A test where this makes a difference is pos/i1401.scala.
+This one used to succeed only if forwarding parameters is on.
+(Forwarding tends to hide problems by binding parameter names).</p>
+
                 </div>
             </div>
             <script>

@@ -3359,13 +3359,18 @@
                 
             
                 
-                <li class="index-entity ">
+                <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">TreeChecker</a>
                 </li>
+                
+            
+                
                 
             
                 
@@ -5993,6 +5998,87 @@
             </script>
         </div><!-- end member -->
         
+        <div id="allBaseTypeArgs(cls)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'allBaseTypeArgs(cls)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        allBaseTypeArgs
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                cls:
+                            </span>
+                            ClassSymbol
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: List
+<span class="no-left no-right">[</span>
+Symbol
+<span class="no-left">]</span></span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-allBaseTypeArgs(cls)(ctx)">
+                    <p>Used only for debugging: All BaseTypeArg definitions in
+<code>cls</code> and all its base classes.</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-allBaseTypeArgs(cls)(ctx)">
+                    <p>Used only for debugging: All BaseTypeArg definitions in
+<code>cls</code> and all its base classes.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="asSeenFrom(tp,pre,cls)" class="member ">
             <div class="member-title">
                 <span class="expand-button " onclick="toggleMemberBody(this, 'asSeenFrom(tp,pre,cls)');">[+]</span>
@@ -6577,9 +6663,9 @@ the prefix &quot;dotty.language.&quot;.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="forwardRef(argSym,from,to,cls,decls)" class="member ">
+        <div id="forwardParamBindings(parentRefs,paramBindings,cls,decls)(ctx)" class="member ">
             <div class="member-title">
-                <span class="expand-button " onclick="toggleMemberBody(this, 'forwardRef(argSym,from,to,cls,decls)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'forwardParamBindings(parentRefs,paramBindings,cls,decls)(ctx)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6591,7 +6677,7 @@ the prefix &quot;dotty.language.&quot;.</p>
                 </span>
                 <span class="member-name ">
                     
-                        forwardRef
+                        forwardParamBindings
                     
                 </span>
 
@@ -6601,25 +6687,23 @@ the prefix &quot;dotty.language.&quot;.</p>
                         
                         
                             <span class="no-left">
-                                argSym:
+                                parentRefs:
                             </span>
-                            Symbol
+                            List
+<span class="no-left no-right">[</span>
+TypeRef
+<span class="no-left">]</span>
                             
                                 <span class="no-left">, </span>
                             
                         
                             <span class="">
-                                from:
+                                paramBindings:
                             </span>
-                            Symbol
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                to:
-                            </span>
-                            TypeBounds
+                            SimpleMap
+<span class="no-left no-right">[</span>
+TypeName<span class="">, </span>Type
+<span class="no-left">]</span>
                             
                                 <span class="no-left">, </span>
                             
@@ -6640,6 +6724,19 @@ the prefix &quot;dotty.language.&quot;.</p>
                         
                     <span class="no-left">)</span>
                     
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
                 
 
                 
@@ -6650,22 +6747,26 @@ the prefix &quot;dotty.language.&quot;.</p>
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-forwardRef(argSym,from,to,cls,decls)">
-                    <p>If we have member definitions</p>
-<p>type argSym v= from
-type from v= to</p>
-<p>where the variances of both alias are the same, then enter a new definition</p>
-<p>type argSym...</p>
+                <div class="member-body-short" id="short-body-forwardParamBindings(parentRefs,paramBindings,cls,decls)(ctx)">
+                    <p>Forward parameter bindings in baseclasses to argument types of
+class <code>cls</code> if possible.
+If there have member definitions</p>
+<p>type param v= middle
+type middle v=...</p>
+<p></p>
+<p></p>
 <p></p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-forwardRef(argSym,from,to,cls,decls)">
-                    <p>If we have member definitions</p>
-<p>type argSym v= from
-type from v= to</p>
+                <div class="member-body-long" id ="long-body-forwardParamBindings(parentRefs,paramBindings,cls,decls)(ctx)">
+                    <p>Forward parameter bindings in baseclasses to argument types of
+class <code>cls</code> if possible.
+If there have member definitions</p>
+<p>type param v= middle
+type middle v= to</p>
 <p>where the variances of both alias are the same, then enter a new definition</p>
-<p>type argSym v= to</p>
-<p>unless a definition for <code>argSym</code> already exists in the current scope.</p>
+<p>type param v= to</p>
+<p>If multiple forwarders would be generated, join their <code>to</code> types with an <code>&amp;</code>.</p>
 
                 </div>
             </div>

@@ -3359,13 +3359,18 @@
                 
             
                 
-                <li class="index-entity ">
+                <li class="index-entity  with-companion ">
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/TreeChecker$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/TreeChecker.html">TreeChecker</a>
                 </li>
+                
+            
+                
                 
             
                 
@@ -12112,6 +12117,61 @@ of this run.</p>
             </script>
         </div><!-- end member -->
         
+        <div id="invalidateBaseTypeRefCache()" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'invalidateBaseTypeRefCache()');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        invalidateBaseTypeRefCache
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Unit</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-invalidateBaseTypeRefCache()">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-invalidateBaseTypeRefCache()">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="invalidateInheritedInfo()" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'invalidateInheritedInfo()');">[+]</span>
@@ -12195,7 +12255,7 @@ of this run.</p>
                             <span class="no-left">
                                 fs:
                             </span>
-                            FlagSet
+                            FlagConjunction
                             
                         
                     <span class="no-left">)</span>
@@ -12224,11 +12284,183 @@ of this run.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-is(fs)(ctx)">
-                    <p>Has this denotation one of the flags in <code>fs</code> set?</p>
+                    <p>Has this denotation all of the flags in <code>fs</code> set?</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-is(fs)(ctx)">
-                    <p>Has this denotation one of the flags in <code>fs</code> set?</p>
+                    <p>Has this denotation all of the flags in <code>fs</code> set?</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="is(fs,butNot)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        is
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                fs:
+                            </span>
+                            FlagConjunction
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                butNot:
+                            </span>
+                            FlagSet
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Boolean</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-is(fs,butNot)(ctx)">
+                    <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
+                    <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="is(fs,butNot)(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        is
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                fs:
+                            </span>
+                            FlagSet
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                butNot:
+                            </span>
+                            FlagSet
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Boolean</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-is(fs,butNot)(ctx)">
+                    <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
+                    <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
 
                 </div>
             </div>
@@ -12271,7 +12503,7 @@ of this run.</p>
                             <span class="no-left">
                                 fs:
                             </span>
-                            FlagConjunction
+                            FlagSet
                             
                         
                     <span class="no-left">)</span>
@@ -12300,183 +12532,11 @@ of this run.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-is(fs)(ctx)">
-                    <p>Has this denotation all of the flags in <code>fs</code> set?</p>
+                    <p>Has this denotation one of the flags in <code>fs</code> set?</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-is(fs)(ctx)">
-                    <p>Has this denotation all of the flags in <code>fs</code> set?</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="is(fs,butNot)(ctx)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        is
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                fs:
-                            </span>
-                            FlagConjunction
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                butNot:
-                            </span>
-                            FlagSet
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            Context
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-is(fs,butNot)(ctx)">
-                    <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
-                    <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="is(fs,butNot)(ctx)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        is
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                fs:
-                            </span>
-                            FlagSet
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                butNot:
-                            </span>
-                            FlagSet
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            Context
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-is(fs,butNot)(ctx)">
-                    <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
-                    <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
+                    <p>Has this denotation one of the flags in <code>fs</code> set?</p>
 
                 </div>
             </div>
@@ -19762,6 +19822,69 @@ as seen from subclasses.</p>
             </script>
         </div><!-- end member -->
         
+        <div id="showSummary(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        showSummary
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: String</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-showSummary(ctx)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-showSummary(ctx)">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="showSummary(depth)(ctx)" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(depth)(ctx)');">[+]</span>
@@ -19827,69 +19950,6 @@ Config.summarizeDepth.</p>
 Recursion depth is limited to some smallish value. Default is
 Config.summarizeDepth.</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="showSummary(ctx)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        showSummary
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            Context
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: String</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-showSummary(ctx)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-showSummary(ctx)">
-                    
                 </div>
             </div>
             <script>
