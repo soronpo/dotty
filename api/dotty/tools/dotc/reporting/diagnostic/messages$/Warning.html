@@ -5821,11 +5821,11 @@
         
     </div>
 
-    <h1 class="section empty">
+    <h1 class="section ">
         Members
     </h1>
 
-    <div id="entity-members" class="entity-section empty">
+    <div id="entity-members" class="entity-section ">
         
         <div id="msgFn" class="member private">
             <div class="member-title">
@@ -5907,6 +5907,54 @@
                     
                 </div>
                 <div class="member-body-long" id ="long-body-pos">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="toError" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toError');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        toError
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: Error</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-toError">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-toError">
                     
                 </div>
             </div>
