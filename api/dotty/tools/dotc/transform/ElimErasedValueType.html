@@ -2732,16 +2732,6 @@
                 <li class="index-entity ">
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Bridges.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Bridges.html">Bridges</a>
-                </li>
-                
-            
-                
-                <li class="index-entity ">
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ByNameClosures.html">ByNameClosures</a>
@@ -5804,10 +5794,7 @@
     <div id="entity-body" class="entity-section">
         <p>This phase erases ErasedValueType to their underlying type.
 It also removes the synthetic cast methods u2evt$ and evt2u$ which are
-no longer needed afterwards.
-Finally, it checks that we don't introduce &quot;double definitions&quot; of pairs
-of methods that now have the same signature but were not considered matching
-before erasure.</p>
+no longer needed afterwards.</p>
 
     </div>
     
@@ -5837,88 +5824,6 @@ before erasure.</p>
     </h1>
 
     <div id="entity-members" class="entity-section ">
-        
-        <div id="checkNoClashes(root)(ctx)" class="member private">
-            <div class="member-title">
-                <span class="expand-button " onclick="toggleMemberBody(this, 'checkNoClashes(root)(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    private
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        checkNoClashes
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                root:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Unit</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-checkNoClashes(root)(ctx)">
-                    <p>Check that we don't have pairs of methods that override each other after
-this phase, yet do not have matching types before erasure.
-The before erasure t...
-</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-checkNoClashes(root)(ctx)">
-                    <p>Check that we don't have pairs of methods that override each other after
-this phase, yet do not have matching types before erasure.
-The before erasure test is performed after phase elimRepeated, so we
-do not need to special case pairs of <code>T* / Seq[T]</code> parameters.</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
         
         <div id="elimEVT(tp)(ctx)" class="member ">
             <div class="member-title">
@@ -6662,88 +6567,6 @@ Nothing<span class="bounds"> &lt;: </span><a href="../../../../.././api/dotty/to
                     
                 </div>
                 <div class="member-body-long" id ="long-body-transformSelect(tree)(ctx,info)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="transformTypeDef(tree)(ctx,info)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'transformTypeDef(tree)(ctx,info)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    override
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        transformTypeDef
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                tree:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#TypeDef">TypeDef</a>
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                info:
-                            </span>
-                            TransformerInfo
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-transformTypeDef(tree)(ctx,info)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-transformTypeDef(tree)(ctx,info)">
                     
                 </div>
             </div>
