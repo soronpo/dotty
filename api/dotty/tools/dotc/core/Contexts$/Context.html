@@ -5920,6 +5920,18 @@ classes (which should be short-lived).</li>
                     <span class="no-left">(</span>
                         
                         
+                    <span class="no-left">)</span>
+                </div>
+            </div>
+            
+        
+            
+            <div class="member">
+                <div class="member-title">
+                    <span class="member-name">Context</span>
+                    <span class="no-left">(</span>
+                        
+                        
                             <span class="no-left">
                                 c:
                             </span>
@@ -5937,6 +5949,12 @@ classes (which should be short-lived).</li>
                     <span class="member-name">Context</span>
                     <span class="no-left">(</span>
                         
+                        
+                            <span class="no-left">
+                                c:
+                            </span>
+                            Context
+                            
                         
                     <span class="no-left">)</span>
                 </div>
@@ -5952,24 +5970,6 @@ classes (which should be short-lived).</li>
                         
                             <span class="no-left">
                                 ctx:
-                            </span>
-                            Context
-                            
-                        
-                    <span class="no-left">)</span>
-                </div>
-            </div>
-            
-        
-            
-            <div class="member">
-                <div class="member-title">
-                    <span class="member-name">Context</span>
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                c:
                             </span>
                             Context
                             
@@ -12878,6 +12878,71 @@ Any
             </script>
         </div><!-- end member -->
         
+        <div id="nameString(name)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'nameString(name)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        nameString
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                name:
+                            </span>
+                            Name
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: String</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-nameString(name)">
+                    <p>The name, possibley with with namespace suffix if debugNames is set:
+/L for local names, /V for other term names, /T for type names</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-nameString(name)">
+                    <p>The name, possibley with with namespace suffix if debugNames is set:
+/L for local names, /V for other term names, /T for type names</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
         <div id="nameString(sym)" class="member ">
             <div class="member-title">
                 <span class="expand-button " onclick="toggleMemberBody(this, 'nameString(sym)');">[+]</span>
@@ -12933,71 +12998,6 @@ If !settings.debug, the original name where
 expansions of operators are translated back to operator symbol.
 E.g. $eq =&gt; =.
 If settings.uniqid, adds id.</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="nameString(name)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'nameString(name)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        nameString
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                name:
-                            </span>
-                            Name
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: String</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-nameString(name)">
-                    <p>The name, possibley with with namespace suffix if debugNames is set:
-/L for local names, /V for other term names, /T for type names</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-nameString(name)">
-                    <p>The name, possibley with with namespace suffix if debugNames is set:
-/L for local names, /V for other term names, /T for type names</p>
 
                 </div>
             </div>
@@ -16473,9 +16473,9 @@ It has</p>
             </script>
         </div><!-- end member -->
         
-        <div id="toText(const)" class="member ">
+        <div id="toText(result)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(const)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(result)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -16497,9 +16497,9 @@ It has</p>
                         
                         
                             <span class="no-left">
-                                const:
+                                result:
                             </span>
-                            Constant
+                            SearchResult
                             
                         
                     <span class="no-left">)</span>
@@ -16514,12 +16514,141 @@ It has</p>
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-toText(const)">
-                    <p>Textual representation of constant</p>
+                <div class="member-body-short" id="short-body-toText(result)">
+                    <p>Textual representation of implicit search result</p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-toText(const)">
-                    <p>Textual representation of constant</p>
+                <div class="member-body-long" id ="long-body-toText(result)">
+                    <p>Textual representation of implicit search result</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="toText(tree)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(tree)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        toText
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                tree:
+                            </span>
+                            <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Tree.html">Tree</a>
+<span class="no-left no-right">[</span>
+T
+<span class="no-left">]</span>
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Text</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-toText(tree)">
+                    <p>Textual representation of tree</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-toText(tree)">
+                    <p>Textual representation of tree</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="toText(result)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(result)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        toText
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                result:
+                            </span>
+                            ImportInfo
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: Text</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-toText(result)">
+                    <p>Textual representation of info relating to an import clause</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-toText(result)">
+                    <p>Textual representation of info relating to an import clause</p>
 
                 </div>
             </div>
@@ -16601,9 +16730,9 @@ If hasMeaninglessName is true, uses the owner's name to disambiguate identity.</
             </script>
         </div><!-- end member -->
         
-        <div id="toText(result)" class="member ">
+        <div id="toText(const)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(result)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(const)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -16625,9 +16754,9 @@ If hasMeaninglessName is true, uses the owner's name to disambiguate identity.</
                         
                         
                             <span class="no-left">
-                                result:
+                                const:
                             </span>
-                            SearchResult
+                            Constant
                             
                         
                     <span class="no-left">)</span>
@@ -16642,138 +16771,12 @@ If hasMeaninglessName is true, uses the owner's name to disambiguate identity.</
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-toText(result)">
-                    <p>Textual representation of implicit search result</p>
+                <div class="member-body-short" id="short-body-toText(const)">
+                    <p>Textual representation of constant</p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-toText(result)">
-                    <p>Textual representation of implicit search result</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toText(result)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(result)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toText
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                result:
-                            </span>
-                            ImportInfo
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Text</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toText(result)">
-                    <p>Textual representation of info relating to an import clause</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-toText(result)">
-                    <p>Textual representation of info relating to an import clause</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toText(annot)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(annot)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toText
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                annot:
-                            </span>
-                            Annotation
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Text</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toText(annot)">
-                    <p>Textual representation of annotation</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-toText(annot)">
-                    <p>Textual representation of annotation</p>
+                <div class="member-body-long" id ="long-body-toText(const)">
+                    <p>Textual representation of constant</p>
 
                 </div>
             </div>
@@ -16979,9 +16982,9 @@ If hasMeaninglessName is true, uses the owner's name to disambiguate identity.</
             </script>
         </div><!-- end member -->
         
-        <div id="toText(tree)" class="member ">
+        <div id="toText(annot)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(tree)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(annot)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -17003,12 +17006,9 @@ If hasMeaninglessName is true, uses the owner's name to disambiguate identity.</
                         
                         
                             <span class="no-left">
-                                tree:
+                                annot:
                             </span>
-                            <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Tree.html">Tree</a>
-<span class="no-left no-right">[</span>
-T
-<span class="no-left">]</span>
+                            Annotation
                             
                         
                     <span class="no-left">)</span>
@@ -17023,12 +17023,12 @@ T
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-toText(tree)">
-                    <p>Textual representation of tree</p>
+                <div class="member-body-short" id="short-body-toText(annot)">
+                    <p>Textual representation of annotation</p>
 
                 </div>
-                <div class="member-body-long" id ="long-body-toText(tree)">
-                    <p>Textual representation of tree</p>
+                <div class="member-body-long" id ="long-body-toText(annot)">
+                    <p>Textual representation of annotation</p>
 
                 </div>
             </div>

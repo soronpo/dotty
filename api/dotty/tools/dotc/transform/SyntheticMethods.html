@@ -5789,20 +5789,21 @@
     
     <div id="entity-body" class="entity-section">
         <p>Synthetic method implementations for case classes, case objects,
-and value classes.
-Selectively added to case classes/objects, unless a non-default
+and value classes.</p>
+<p>Selectively added to case classes/objects, unless a non-default
 implementation already exists:
 def equals(other: Any): Boolean
 def hashCode(): Int
 def canEqual(other: Any): Boolean
 def toString(): String
+def productElement(i: Int): Any
 def productArity: Int
-def productPrefix: String
-Special handling:
+def productPrefix: String</p>
+<p>Special handling:
 protected def readResolve(): AnyRef</p>
 <p>Selectively added to value classes, unless a non-default
-implementation already exists:</p>
-<p>def equals(other: Any): Boolean
+implementation already exists:
+def equals(other: Any): Boolean
 def hashCode(): Int</p>
 
     </div>
