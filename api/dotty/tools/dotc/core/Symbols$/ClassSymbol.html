@@ -5861,7 +5861,7 @@
                             
                         
                             <span class="">
-                                initName:
+                                name:
                             </span>
                             Name
                             
@@ -11345,21 +11345,14 @@ Should be used only for printing.</p>
             <div class="member-body">
                 <div class="member-body-short" id="short-body-fullNameSeparated(kind)(ctx)">
                     <p>The encoded full path name of this denotation, where outer names and inner names
-are separated by <code>separator</code> strings.
-Never translates expansions of oper...
+are separated by <code>separator</code> strings as indicated by the given name kind...
 </p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-fullNameSeparated(kind)(ctx)">
                     <p>The encoded full path name of this denotation, where outer names and inner names
-are separated by <code>separator</code> strings.
-Never translates expansions of operators back to operator symbol.
-Drops package objects. Represents each term in the owner chain by a simple <code>~</code>.
-(Note: scalac uses nothing to represent terms, which can cause name clashes
-between same-named definitions in different enclosing methods. Before this commit
-we used `$' but this can cause ambiguities with the class separator '$').
-A separator &quot;&quot; means &quot;flat name&quot;; the real separator in this case is &quot;$&quot; and
-enclosing packages do not form part of the name.</p>
+are separated by <code>separator</code> strings as indicated by the given name kind.
+Drops package objects. Represents each term in the owner chain by a simple <code>_$</code>.</p>
 
                 </div>
             </div>
@@ -17154,119 +17147,6 @@ accessed via prefix <code>pre</code>?</p>
             </script>
         </div><!-- end member -->
         
-        <div id="name" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'name');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        name
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Name</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-name">
-                    <p>The name of the symbol</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-name">
-                    <p>The name of the symbol</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="name_=(n)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'name_=(n)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        name_=
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Name
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Unit</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-name_=(n)">
-                    <p>Update the name; only called when unpickling top-level classes</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-name_=(n)">
-                    <p>Update the name; only called when unpickling top-level classes</p>
-
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
         <div id="namedType(ctx)" class="member ">
             <div class="member-title">
                 <span class="expand-button " onclick="toggleMemberBody(this, 'namedType(ctx)');">[+]</span>
@@ -19832,69 +19712,6 @@ as seen from subclasses.</p>
             </script>
         </div><!-- end member -->
         
-        <div id="showSummary(ctx)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        showSummary
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        <span class="no-left keyword">implicit</span>
-                        
-                        
-                            <span class="no-left">
-                                ctx:
-                            </span>
-                            Context
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: String</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-showSummary(ctx)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-showSummary(ctx)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
         <div id="showSummary(depth)(ctx)" class="member ">
             <div class="member-title">
                 <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(depth)(ctx)');">[+]</span>
@@ -19960,6 +19777,69 @@ Config.summarizeDepth.</p>
 Recursion depth is limited to some smallish value. Default is
 Config.summarizeDepth.</p>
 
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="showSummary(ctx)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        showSummary
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        <span class="no-left keyword">implicit</span>
+                        
+                        
+                            <span class="no-left">
+                                ctx:
+                            </span>
+                            Context
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: String</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-showSummary(ctx)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-showSummary(ctx)">
+                    
                 </div>
             </div>
             <script>

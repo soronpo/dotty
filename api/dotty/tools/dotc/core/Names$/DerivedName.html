@@ -5765,7 +5765,7 @@
         </button>
         
 <script>
-    document.title = "Dotty API - SimpleTermName"
+    document.title = "Dotty API - DerivedName"
 </script>
 
 <div id="entity-container">
@@ -5774,13 +5774,13 @@
             
         </span>
         <span id="entity-modifiers">
-            
+            final
         </span>
         <span id="entity-kind">
-            class
+            case class
         </span>
         <span id="entity-name">
-            SimpleTermName
+            DerivedName
         </span>
         
         
@@ -5791,10 +5791,21 @@
             
             <span class="entity-super-type">TermName</span>
             
+            
+            <span class="keyword">with</span>
+            
+            <span class="entity-super-type">Product</span>
+            
         </div>
         
     </div>
 
+    
+    <div id="entity-body" class="entity-section">
+        <p>A term name that's derived from an <code>underlying</code> name and that
+adds <code>info</code> to it.</p>
+
+    </div>
     
 
     <h1 class="section ">
@@ -5806,30 +5817,22 @@
             
             <div class="member">
                 <div class="member-title">
-                    <span class="member-name">SimpleTermName</span>
+                    <span class="member-name">DerivedName</span>
                     <span class="no-left">(</span>
                         
                         
                             <span class="no-left">
-                                start:
+                                underlying:
                             </span>
-                            Int
+                            TermName
                             
                                 <span class="no-left">, </span>
                             
                         
                             <span class="">
-                                length:
+                                info:
                             </span>
-                            Int
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                next:
-                            </span>
-                            SimpleTermName
+                            NameInfo
                             
                         
                     <span class="no-left">)</span>
@@ -5845,21 +5848,21 @@
 
     <div id="entity-members" class="entity-section ">
         
-        <div id="length" class="member ">
+        <div id="info" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'length');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'info');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     val
                 </span>
                 <span class="member-name ">
                     
-                        length
+                        info
                     
                 </span>
 
@@ -5868,15 +5871,15 @@
                 
 
                 
-                <span class="no-left">: Int</span>
+                <span class="no-left">: NameInfo</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-length">
+                <div class="member-body-short" id="short-body-info">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-length">
+                <div class="member-body-long" id ="long-body-info">
                     
                 </div>
             </div>
@@ -5893,69 +5896,21 @@
             </script>
         </div><!-- end member -->
         
-        <div id="next" class="member ">
+        <div id="underlying" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'next');">[+]</span>
-                <span class="member-annotations">
-                    @sharable 
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    var
-                </span>
-                <span class="member-name ">
-                    
-                        next
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-next">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-next">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="start" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'start');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'underlying');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     val
                 </span>
                 <span class="member-name ">
                     
-                        start
+                        underlying
                     
                 </span>
 
@@ -5964,15 +5919,15 @@
                 
 
                 
-                <span class="no-left">: Int</span>
+                <span class="no-left">: TermName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-start">
+                <div class="member-body-short" id="short-body-underlying">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-start">
+                <div class="member-body-long" id ="long-body-underlying">
                     
                 </div>
             </div>
@@ -5989,9 +5944,9 @@
             </script>
         </div><!-- end member -->
         
-        <div id="apply(n)" class="member ">
+        <div id="_1" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'apply(n)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, '_1');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6003,37 +5958,72 @@
                 </span>
                 <span class="member-name ">
                     
-                        apply
+                        _1
                     
                 </span>
 
                 
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
 
                 
 
                 
-                <span class="no-left">: Char</span>
+                <span class="no-left">: TermName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-apply(n)">
+                <div class="member-body-short" id="short-body-_1">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-apply(n)">
+                <div class="member-body-long" id ="long-body-_1">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="_2" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, '_2');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        _2
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: NameInfo</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-_2">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-_2">
                     
                 </div>
             </div>
@@ -6057,7 +6047,7 @@
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6073,16 +6063,18 @@
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-asSimpleName">
-                    
+                    <p>This name downcasted to a simple term name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-asSimpleName">
-                    
+                    <p>This name downcasted to a simple term name</p>
+
                 </div>
             </div>
             <script>
@@ -6100,12 +6092,12 @@
         
         <div id="collect(f)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'collect(f)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'collect(f)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6146,9 +6138,84 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-collect(f)">
-                    
+                    <p>If partial function <code>f</code> is defined for some part of this name, apply it
+in a Some, otherwise None.
+Stops at derived names whose kind has <code>definesNewName =...</code></p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-collect(f)">
+                    <p>If partial function <code>f</code> is defined for some part of this name, apply it
+in a Some, otherwise None.
+Stops at derived names whose kind has <code>definesNewName = true</code>.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="copy(underlying,info)" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy(underlying,info)');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        copy
+                    
+                </span>
+
+                
+                    
+                    <span class="no-left">(</span>
+                        
+                        
+                            <span class="no-left">
+                                underlying:
+                            </span>
+                            TermName
+                            
+                                <span class="no-left">, </span>
+                            
+                        
+                            <span class="">
+                                info:
+                            </span>
+                            NameInfo
+                            
+                        
+                    <span class="no-left">)</span>
+                    
+                
+
+                
+
+                
+                <span class="no-left">: DerivedName</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-copy(underlying,info)">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-copy(underlying,info)">
                     
                 </div>
             </div>
@@ -6165,9 +6232,9 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="contains(ch)" class="member ">
+        <div id="copy$default$1" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'contains(ch)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy$default$1');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -6179,37 +6246,72 @@ T
                 </span>
                 <span class="member-name ">
                     
-                        contains
+                        copy$default$1
                     
                 </span>
 
                 
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                ch:
-                            </span>
-                            Char
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
 
                 
 
                 
-                <span class="no-left">: Boolean</span>
+                <span class="no-left">: TermName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-contains(ch)">
+                <div class="member-body-short" id="short-body-copy$default$1">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-contains(ch)">
+                <div class="member-body-long" id ="long-body-copy$default$1">
+                    
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="copy$default$2" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'copy$default$2');">[+]</span>
+                <span class="member-annotations">
+                    
+                </span>
+                <span class="member-modifiers">
+                    
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        copy$default$2
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: NameInfo</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-copy$default$2">
+                    
+                </div>
+                <div class="member-body-long" id ="long-body-copy$default$2">
                     
                 </div>
             </div>
@@ -6233,7 +6335,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6255,10 +6357,14 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-debugString">
-                    
+                    <p>A string showing the internal structure of this name. By contrast, <code>toString</code>
+shows the name after conversion to a simple name.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-debugString">
-                    
+                    <p>A string showing the internal structure of this name. By contrast, <code>toString</code>
+shows the name after conversion to a simple name.</p>
+
                 </div>
             </div>
             <script>
@@ -6281,7 +6387,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6297,140 +6403,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-decode">
-                    <p>Replace $op_name's by corresponding operator symbols.</p>
+                    <p>Replace operator expansions by corresponding operator symbols.</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-decode">
-                    <p>Replace $op_name's by corresponding operator symbols.</p>
+                    <p>Replace operator expansions by corresponding operator symbols.</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="drop(n)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'drop(n)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        drop
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-drop(n)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-drop(n)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="dropRight(n)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'dropRight(n)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        dropRight
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-dropRight(n)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-dropRight(n)">
-                    
                 </div>
             </div>
             <script>
@@ -6453,7 +6437,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6469,140 +6453,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-encode">
-                    <p>Replace operator symbols by corresponding $op_name's.</p>
+                    <p>Replace operator symbols by corresponding operator expansions</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-encode">
-                    <p>Replace operator symbols by corresponding $op_name's.</p>
+                    <p>Replace operator symbols by corresponding operator expansions</p>
 
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="endsWith(str)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'endsWith(str)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    override
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        endsWith
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                str:
-                            </span>
-                            String
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-endsWith(str)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-endsWith(str)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="exists(p)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'exists(p)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        exists
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                p:
-                            </span>
-                            Char<span class="right-arrow"> =&gt; </span>Boolean
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-exists(p)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-exists(p)">
-                    
                 </div>
             </div>
             <script>
@@ -6625,7 +6487,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6641,173 +6503,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-firstPart">
-                    
+                    <p>The first part of this (possible qualified) name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-firstPart">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
+                    <p>The first part of this (possible qualified) name</p>
 
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="forall(p)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'forall(p)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        forall
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                p:
-                            </span>
-                            Char<span class="right-arrow"> =&gt; </span>Boolean
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-forall(p)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-forall(p)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="hashCode" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hashCode');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    override
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        hashCode
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Int</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-hashCode">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-hashCode">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="head" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'head');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        head
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Char</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-head">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-head">
-                    
                 </div>
             </div>
             <script>
@@ -6830,7 +6537,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6852,284 +6559,12 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-isEmpty">
-                    
+                    <p>Is this name empty?</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-isEmpty">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
+                    <p>Is this name empty?</p>
 
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="isSimple" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSimple');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        isSimple
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-isSimple">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-isSimple">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="last" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'last');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        last
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Char</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-last">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-last">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="lastIndexOf(ch,start)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastIndexOf(ch,start)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        lastIndexOf
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                ch:
-                            </span>
-                            Char
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                start:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Int</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-lastIndexOf(ch,start)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-lastIndexOf(ch,start)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="lastIndexOf$default$2" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastIndexOf$default$2');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        lastIndexOf$default$2
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Int</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-lastIndexOf$default$2">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-lastIndexOf$default$2">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="lastIndexOfSlice(str)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastIndexOfSlice(str)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        lastIndexOfSlice
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                str:
-                            </span>
-                            String
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Int</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-lastIndexOfSlice(str)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-lastIndexOfSlice(str)">
-                    
                 </div>
             </div>
             <script>
@@ -7152,7 +6587,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7168,16 +6603,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-lastPart">
-                    
+                    <p>The last part of this (possible qualified) name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-lastPart">
-                    
+                    <p>The last part of this (possible qualified) name</p>
+
                 </div>
             </div>
             <script>
@@ -7193,21 +6630,21 @@ T
             </script>
         </div><!-- end member -->
         
-        <div id="mangled" class="member ">
+        <div id="mangle" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mangled');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mangle');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override final
                 </span>
                 <span class="member-kind">
                     def
                 </span>
                 <span class="member-name ">
                     
-                        mangled
+                        mangle
                     
                 </span>
 
@@ -7216,15 +6653,15 @@ T
                 
 
                 
-                <span class="no-left">: Name</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-mangled">
+                <div class="member-body-short" id="short-body-mangle">
                     
                 </div>
-                <div class="member-body-long" id ="long-body-mangled">
+                <div class="member-body-long" id ="long-body-mangle">
                     
                 </div>
             </div>
@@ -7248,7 +6685,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7267,7 +6704,7 @@ T
                             <span class="no-left">
                                 f:
                             </span>
-                            SimpleTermName<span class="right-arrow"> =&gt; </span>SimpleTermName
+                            SimpleName<span class="right-arrow"> =&gt; </span>SimpleName
                             
                         
                     <span class="no-left">)</span>
@@ -7283,10 +6720,12 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-mapLast(f)">
-                    
+                    <p>Apply <code>f</code> to last simple term name making up this name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-mapLast(f)">
-                    
+                    <p>Apply <code>f</code> to last simple term name making up this name</p>
+
                 </div>
             </div>
             <script>
@@ -7309,7 +6748,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7328,7 +6767,7 @@ T
                             <span class="no-left">
                                 f:
                             </span>
-                            SimpleTermName<span class="right-arrow"> =&gt; </span>SimpleTermName
+                            SimpleName<span class="right-arrow"> =&gt; </span>SimpleName
                             
                         
                     <span class="no-left">)</span>
@@ -7344,140 +6783,12 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-mapParts(f)">
-                    
+                    <p>Apply <code>f</code> to all simple term names making up this name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-mapParts(f)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
+                    <p>Apply <code>f</code> to all simple term names making up this name</p>
 
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="next_=(x$1)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'next_=(x$1)');">[+]</span>
-                <span class="member-annotations">
-                    @sharable 
-                </span>
-                <span class="member-modifiers">
-                    <accessor>
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        next_=
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                x$1:
-                            </span>
-                            SimpleTermName
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: Unit</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-next_=(x$1)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-next_=(x$1)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="replace(from,to)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'replace(from,to)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    override
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        replace
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                from:
-                            </span>
-                            Char
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                to:
-                            </span>
-                            Char
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-replace(from,to)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-replace(from,to)">
-                    
                 </div>
             </div>
             <script>
@@ -7495,12 +6806,12 @@ T
         
         <div id="rewrite(f)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'rewrite(f)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'rewrite(f)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7538,10 +6849,18 @@ Name<span class="">, </span>Name
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-rewrite(f)">
-                    
+                    <p>Apply rewrite rule given by <code>f</code> to some part of this name, skipping and rewrapping
+other decorators.
+Stops at derived names whose kind has <code>definesNewName...</code>
+</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-rewrite(f)">
-                    
+                    <p>Apply rewrite rule given by <code>f</code> to some part of this name, skipping and rewrapping
+other decorators.
+Stops at derived names whose kind has <code>definesNewName = true</code>.
+If <code>f</code> does not apply to any part, return name unchanged.</p>
+
                 </div>
             </div>
             <script>
@@ -7557,78 +6876,9 @@ Name<span class="">, </span>Name
             </script>
         </div><!-- end member -->
         
-        <div id="slice(from,until)" class="member ">
+        <div id="split" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'slice(from,until)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        slice
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                from:
-                            </span>
-                            Int
-                            
-                                <span class="no-left">, </span>
-                            
-                        
-                            <span class="">
-                                until:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-slice(from,until)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-slice(from,until)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="startsWith(str)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'startsWith(str)');">[+]</span>
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'split');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
@@ -7640,160 +6890,31 @@ Name<span class="">, </span>Name
                 </span>
                 <span class="member-name ">
                     
-                        startsWith
+                        split
                     
                 </span>
 
                 
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                str:
-                            </span>
-                            String
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
 
                 
 
                 
-                <span class="no-left">: Boolean</span>
+                <span class="no-left">: <span class="no-right">(</span>
+TermName<span>, </span>TermName<span>, </span>String
+<span class="no-left">)</span></span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
-                <div class="member-body-short" id="short-body-startsWith(str)">
-                    
+                <div class="member-body-short" id="short-body-split">
+                    <p>If this a qualified name, split it into underlyng, last part, and separator
+Otherwise return an empty name, the name itself, and &quot;&quot;)</p>
+
                 </div>
-                <div class="member-body-long" id ="long-body-startsWith(str)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
+                <div class="member-body-long" id ="long-body-split">
+                    <p>If this a qualified name, split it into underlyng, last part, and separator
+Otherwise return an empty name, the name itself, and &quot;&quot;)</p>
 
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="take(n)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'take(n)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        take
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-take(n)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-take(n)">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="takeRight(n)" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'takeRight(n)');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        takeRight
-                    
-                </span>
-
-                
-                    
-                    <span class="no-left">(</span>
-                        
-                        
-                            <span class="no-left">
-                                n:
-                            </span>
-                            Int
-                            
-                        
-                    <span class="no-left">)</span>
-                    
-                
-
-                
-
-                
-                <span class="no-left">: SimpleTermName</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-takeRight(n)">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-takeRight(n)">
-                    
                 </div>
             </div>
             <script>
@@ -7816,7 +6937,7 @@ Name<span class="">, </span>Name
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7832,16 +6953,18 @@ Name<span class="">, </span>Name
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-toSimpleName">
-                    
+                    <p>This name converted to a simple term name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-toSimpleName">
-                    
+                    <p>This name converted to a simple term name</p>
+
                 </div>
             </div>
             <script>
@@ -7890,58 +7013,6 @@ Name<span class="">, </span>Name
                 </div>
                 <div class="member-body-long" id ="long-body-toString">
                     
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
-
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="toStringOK" class="member private">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toStringOK');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    private
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        toStringOK
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-toStringOK">
-                    <p>It's OK to take a toString if the stacktrace does not occur a method
-in GenBCode or it also contains one of the whitelisted methods below.</p>
-
-                </div>
-                <div class="member-body-long" id ="long-body-toStringOK">
-                    <p>It's OK to take a toString if the stacktrace does not occur a method
-in GenBCode or it also contains one of the whitelisted methods below.</p>
-
                 </div>
             </div>
             <script>

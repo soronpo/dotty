@@ -5774,7 +5774,7 @@
             
         </span>
         <span id="entity-modifiers">
-            
+            final
         </span>
         <span id="entity-kind">
             class
@@ -5942,7 +5942,7 @@
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -5958,16 +5958,18 @@
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-asSimpleName">
-                    
+                    <p>This name downcasted to a simple term name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-asSimpleName">
-                    
+                    <p>This name downcasted to a simple term name</p>
+
                 </div>
             </div>
             <script>
@@ -5990,7 +5992,7 @@
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6040,7 +6042,7 @@
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6085,12 +6087,12 @@
         
         <div id="collect(f)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'collect(f)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'collect(f)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6131,10 +6133,16 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-collect(f)">
-                    
+                    <p>If partial function <code>f</code> is defined for some part of this name, apply it
+in a Some, otherwise None.
+Stops at derived names whose kind has <code>definesNewName =...</code></p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-collect(f)">
-                    
+                    <p>If partial function <code>f</code> is defined for some part of this name, apply it
+in a Some, otherwise None.
+Stops at derived names whose kind has <code>definesNewName = true</code>.</p>
+
                 </div>
             </div>
             <script>
@@ -6179,10 +6187,14 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-debugString">
-                    
+                    <p>A string showing the internal structure of this name. By contrast, <code>toString</code>
+shows the name after conversion to a simple name.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-debugString">
-                    
+                    <p>A string showing the internal structure of this name. By contrast, <code>toString</code>
+shows the name after conversion to a simple name.</p>
+
                 </div>
             </div>
             <script>
@@ -6205,7 +6217,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6221,17 +6233,17 @@ T
                 
 
                 
-                <span class="no-left">: Name</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-decode">
-                    <p>Replace $op_name's by corresponding operator symbols.</p>
+                    <p>Replace operator expansions by corresponding operator symbols.</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-decode">
-                    <p>Replace $op_name's by corresponding operator symbols.</p>
+                    <p>Replace operator expansions by corresponding operator symbols.</p>
 
                 </div>
             </div>
@@ -6255,7 +6267,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6290,10 +6302,14 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-derived(info)">
-                    
+                    <p>A derived name consisting of this name and the added info, unless it is
+already present in this name.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-derived(info)">
-                    
+                    <p>A derived name consisting of this name and the added info, unless it is
+already present in this name.</p>
+
                 </div>
             </div>
             <script>
@@ -6316,7 +6332,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6332,17 +6348,17 @@ T
                 
 
                 
-                <span class="no-left">: Name</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-encode">
-                    <p>Replace operator symbols by corresponding $op_name's.</p>
+                    <p>Replace operator symbols by corresponding operator expansions</p>
 
                 </div>
                 <div class="member-body-long" id ="long-body-encode">
-                    <p>Replace operator symbols by corresponding $op_name's.</p>
+                    <p>Replace operator symbols by corresponding operator expansions</p>
 
                 </div>
             </div>
@@ -6366,7 +6382,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6401,10 +6417,14 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-exclude(kind)">
-                    
+                    <p>This name without any info of the given <code>kind</code>. Excepted, as always,
+is the underlying name part of a qualified name.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-exclude(kind)">
-                    
+                    <p>This name without any info of the given <code>kind</code>. Excepted, as always,
+is the underlying name part of a qualified name.</p>
+
                 </div>
             </div>
             <script>
@@ -6427,7 +6447,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6443,16 +6463,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-firstPart">
-                    
+                    <p>The first part of this (possible qualified) name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-firstPart">
-                    
+                    <p>The first part of this (possible qualified) name</p>
+
                 </div>
             </div>
             <script>
@@ -6475,7 +6497,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6510,10 +6532,14 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-is(kind)">
-                    
+                    <p>Does this name contain an info of the given kind? Excepted, as always,
+is the underlying name part of a qualified name.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-is(kind)">
-                    
+                    <p>Does this name contain an info of the given kind? Excepted, as always,
+is the underlying name part of a qualified name.</p>
+
                 </div>
             </div>
             <script>
@@ -6536,7 +6562,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6558,58 +6584,12 @@ T
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-isEmpty">
-                    
+                    <p>Is this name empty?</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-isEmpty">
-                    
-                </div>
-            </div>
-            <script>
-                function toggleMemberBody(span, sig) {
-                    var shortBody = document.getElementById("short-body-" + sig);
-                    var longBody = document.getElementById("long-body-" + sig);
+                    <p>Is this name empty?</p>
 
-                    shortBody.classList.toggle("toggled")
-                    longBody.classList.toggle("toggled")
-
-                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                }
-            </script>
-        </div><!-- end member -->
-        
-        <div id="isSimple" class="member ">
-            <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSimple');">[+]</span>
-                <span class="member-annotations">
-                    
-                </span>
-                <span class="member-modifiers">
-                    
-                </span>
-                <span class="member-kind">
-                    def
-                </span>
-                <span class="member-name ">
-                    
-                        isSimple
-                    
-                </span>
-
-                
-
-                
-
-                
-                <span class="no-left">: Boolean</span>
-                
-            </div><!-- end member-title -->
-
-            <div class="member-body">
-                <div class="member-body-short" id="short-body-isSimple">
-                    
-                </div>
-                <div class="member-body-long" id ="long-body-isSimple">
-                    
                 </div>
             </div>
             <script>
@@ -6632,7 +6612,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6682,7 +6662,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6732,7 +6712,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6748,16 +6728,18 @@ T
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-lastPart">
-                    
+                    <p>The last part of this (possible qualified) name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-lastPart">
-                    
+                    <p>The last part of this (possible qualified) name</p>
+
                 </div>
             </div>
             <script>
@@ -6780,7 +6762,7 @@ T
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6845,7 +6827,7 @@ with same characters as given <code>name</code>.</p>
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6861,16 +6843,70 @@ with same characters as given <code>name</code>.</p>
                 
 
                 
-                <span class="no-left">: Name</span>
+                <span class="no-left">: ThisName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-mangled">
-                    
+                    <p>This name converted to a simple term name and in addition
+with all symbolic operator characters expanded.</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-mangled">
+                    <p>This name converted to a simple term name and in addition
+with all symbolic operator characters expanded.</p>
+
+                </div>
+            </div>
+            <script>
+                function toggleMemberBody(span, sig) {
+                    var shortBody = document.getElementById("short-body-" + sig);
+                    var longBody = document.getElementById("long-body-" + sig);
+
+                    shortBody.classList.toggle("toggled")
+                    longBody.classList.toggle("toggled")
+
+                    span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                }
+            </script>
+        </div><!-- end member -->
+        
+        <div id="mangledString" class="member ">
+            <div class="member-title">
+                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mangledString');">[+]</span>
+                <span class="member-annotations">
                     
+                </span>
+                <span class="member-modifiers">
+                    override
+                </span>
+                <span class="member-kind">
+                    def
+                </span>
+                <span class="member-name ">
+                    
+                        mangledString
+                    
+                </span>
+
+                
+
+                
+
+                
+                <span class="no-left">: String</span>
+                
+            </div><!-- end member-title -->
+
+            <div class="member-body">
+                <div class="member-body-short" id="short-body-mangledString">
+                    <p>Convert to string after mangling</p>
+
+                </div>
+                <div class="member-body-long" id ="long-body-mangledString">
+                    <p>Convert to string after mangling</p>
+
                 </div>
             </div>
             <script>
@@ -6893,7 +6929,7 @@ with same characters as given <code>name</code>.</p>
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6912,7 +6948,7 @@ with same characters as given <code>name</code>.</p>
                             <span class="no-left">
                                 f:
                             </span>
-                            SimpleTermName<span class="right-arrow"> =&gt; </span>SimpleTermName
+                            SimpleName<span class="right-arrow"> =&gt; </span>SimpleName
                             
                         
                     <span class="no-left">)</span>
@@ -6928,10 +6964,12 @@ with same characters as given <code>name</code>.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-mapLast(f)">
-                    
+                    <p>Apply <code>f</code> to last simple term name making up this name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-mapLast(f)">
-                    
+                    <p>Apply <code>f</code> to last simple term name making up this name</p>
+
                 </div>
             </div>
             <script>
@@ -6954,7 +6992,7 @@ with same characters as given <code>name</code>.</p>
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -6973,7 +7011,7 @@ with same characters as given <code>name</code>.</p>
                             <span class="no-left">
                                 f:
                             </span>
-                            SimpleTermName<span class="right-arrow"> =&gt; </span>SimpleTermName
+                            SimpleName<span class="right-arrow"> =&gt; </span>SimpleName
                             
                         
                     <span class="no-left">)</span>
@@ -6989,10 +7027,12 @@ with same characters as given <code>name</code>.</p>
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-mapParts(f)">
-                    
+                    <p>Apply <code>f</code> to all simple term names making up this name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-mapParts(f)">
-                    
+                    <p>Apply <code>f</code> to all simple term names making up this name</p>
+
                 </div>
             </div>
             <script>
@@ -7010,12 +7050,12 @@ with same characters as given <code>name</code>.</p>
         
         <div id="rewrite(f)" class="member ">
             <div class="member-title">
-                <span class="expand-button invisible" onclick="toggleMemberBody(this, 'rewrite(f)');">[+]</span>
+                <span class="expand-button " onclick="toggleMemberBody(this, 'rewrite(f)');">[+]</span>
                 <span class="member-annotations">
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7053,10 +7093,18 @@ Name<span class="">, </span>Name
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-rewrite(f)">
-                    
+                    <p>Apply rewrite rule given by <code>f</code> to some part of this name, skipping and rewrapping
+other decorators.
+Stops at derived names whose kind has <code>definesNewName...</code>
+</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-rewrite(f)">
-                    
+                    <p>Apply rewrite rule given by <code>f</code> to some part of this name, skipping and rewrapping
+other decorators.
+Stops at derived names whose kind has <code>definesNewName = true</code>.
+If <code>f</code> does not apply to any part, return name unchanged.</p>
+
                 </div>
             </div>
             <script>
@@ -7079,7 +7127,7 @@ Name<span class="">, </span>Name
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
@@ -7095,16 +7143,18 @@ Name<span class="">, </span>Name
                 
 
                 
-                <span class="no-left">: SimpleTermName</span>
+                <span class="no-left">: SimpleName</span>
                 
             </div><!-- end member-title -->
 
             <div class="member-body">
                 <div class="member-body-short" id="short-body-toSimpleName">
-                    
+                    <p>This name converted to a simple term name</p>
+
                 </div>
                 <div class="member-body-long" id ="long-body-toSimpleName">
-                    
+                    <p>This name converted to a simple term name</p>
+
                 </div>
             </div>
             <script>
@@ -7175,7 +7225,7 @@ Name<span class="">, </span>Name
                     
                 </span>
                 <span class="member-modifiers">
-                    
+                    override
                 </span>
                 <span class="member-kind">
                     def
