@@ -87,12 +87,17 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
 <ul id="Internals" class="hide">
     <li><a href="../.././docs/internals/backend.html">Backend</a></li><li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a></li><li><a href="../.././docs/internals/classpaths.html">Classpaths</a></li><li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a></li><li><a href="../.././docs/internals/contexts.html">Contexts</a></li><li><a href="../.././docs/internals/dotc-scalac.html">Dotc vs Scalac</a></li><li><a href="../.././docs/internals/higher-kinded-v2.html">Higher-Kinded Types</a></li><li><a href="../.././docs/internals/overall-structure.html">Overall Structure</a></li><li><a href="../.././docs/internals/periods.html">Periods</a></li><li><a href="../.././docs/internals/syntax.html">Syntax</a></li><li><a href="../.././docs/internals/type-system.html">Type System</a></li>
+</ul></li>
+    
+    <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Resources");child.classList.toggle("show");child.classList.toggle("hide");})();'>Resources</a>
+<ul id="Resources" class="hide">
+    <li><a href="../.././docs/resources/talks.html">Talks</a></li>
 </ul></li>
     
 </ul>
@@ -5866,38 +5871,32 @@
         
 <h1 id="doc-page-title">Getting Started</h1>
 <div id="doc-page-container">
-    <h2><a href="#talks-on-dotty" id="talks-on-dotty">Talks on Dotty</a></h2>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=GHzWqJKFCk4">Scala's Road Ahead</a> by Martin Odersky <a href="http://www.slideshare.net/Odersky/scala-days-nyc-2016">[slides]</a></li>
-<li><a href="https://www.youtube.com/watch?v=WxyyJyB_Ssc">Compilers are Databases</a> by Martin Odersky <a href="http://www.slideshare.net/Odersky/compilers-are-databases">[slides]</a></li>
-<li><a href="https://www.youtube.com/watch?v=aftdOFuVU1o">Dotty: Exploring the future of Scala</a> by Dmitry Petrashko <a href="https://d-d.me/scalaworld2015/#/">[slides]</a>. This talk includes details about the design of mini-phases and denotations.</li>
-<li><a href="https://www.youtube.com/watch?v=xCeI1ArdXM4">Making your Scala applications smaller and faster with the Dotty linker</a> by Dmitry Petrashko <a href="https://d-d.me/scaladays2015/#/">[slides]</a></li>
-<li><a href="https://www.youtube.com/watch?v=wCFbYu7xEJA">Dotty: what is it and how it works</a> by Guillaume Martres <a href="http://guillaume.martres.me/talks/dotty-tutorial/#/">[slides]</a></li>
-<li><a href="https://www.youtube.com/watch?v=0OOYGeZLHs4">Hacking on Dotty: A live demo</a> by Guillaume Martres <a href="http://guillaume.martres.me/talks/dotty-live-demo/">[slides]</a></li>
-<li><a href="https://vimeo.com/165928176">AutoSpecialization in Dotty</a> by Dmitry Petrashko <a href="https://d-d.me/talks/flatmap2016/#/">[slides]</a></li>
-<li><a href="https://www.youtube.com/watch?v=YIQjfCKDR5A">Dotty and types: the story so far</a> by Guillaume Martres <a href="http://guillaume.martres.me/talks/typelevel-summit-oslo/">[slides]</a></li>
-</ul>
-<h2><a href="#requirements" id="requirements">Requirements</a></h2>
-<p>Make sure that you are using Java 8 or later, the output of <code>java -version</code>
+    <h2><a href="#requirements" id="requirements">Requirements</a></h2>
+<p>Make sure that you are using Java 8 or later. The output of <code>java -version</code>
 should contain <code>1.8</code>.</p>
 <h2><a href="#compiling-and-running" id="compiling-and-running">Compiling and Running</a></h2>
 <p>Start by cloning the repository:</p>
 <pre><code class="language-bash">$ git clone --recursive https://github.com/lampepfl/dotty.git
 $ cd dotty
-$ sbt managedSources ## Needed for IDE import to succeed
+$ sbt managedSources # Needed for IDE import to succeed
 </code></pre>
 <p>Dotty provides a standard sbt build: compiling, running and starting a repl can
-all be done from within sbt using</p>
+all be done from within sbt:</p>
 <pre><code class="language-bash">$ sbt
 &gt; dotc tests/pos/HelloWorld.scala
 &gt; dotr HelloWorld
 hello world
 </code></pre>
-<p>there is also a bash script that can be used in the same way:</p>
-<pre><code class="language-bash"># Compile code using Dotty
-./bin/dotc tests/pos/HelloWorld.scala
+<p>There are also bash scripts that can be used in the same way. Assuming that you have cloned the Dotty repo locally, append
+the following line on your <code>.bash_profile</code>:</p>
+<pre><code class="language-shell">$ export PATH=$HOME/dotty/bin:$PATH
+</code></pre>
+<p>and you will be able to run the corresponding commands directly from your console:</p>
+<pre><code class="language-shell"># Compile code using Dotty
+$ dotc tests/pos/HelloWorld.scala
+
 # Run it with the proper classpath
-./bin/dotr HelloWorld
+$ dotr HelloWorld
 </code></pre>
 <h2><a href="#starting-a-repl" id="starting-a-repl">Starting a REPL</a></h2>
 <pre><code class="language-bash">$ sbt
@@ -5908,7 +5907,7 @@ Type :help for more information.
 scala&gt;
 </code></pre>
 <p>or via bash:</p>
-<pre><code class="language-bash">$ ./bin/dotr
+<pre><code class="language-bash">$ dotr
 </code></pre>
 
 </div>

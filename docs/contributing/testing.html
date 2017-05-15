@@ -87,12 +87,17 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
 <ul id="Internals" class="hide">
     <li><a href="../.././docs/internals/backend.html">Backend</a></li><li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a></li><li><a href="../.././docs/internals/classpaths.html">Classpaths</a></li><li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a></li><li><a href="../.././docs/internals/contexts.html">Contexts</a></li><li><a href="../.././docs/internals/dotc-scalac.html">Dotc vs Scalac</a></li><li><a href="../.././docs/internals/higher-kinded-v2.html">Higher-Kinded Types</a></li><li><a href="../.././docs/internals/overall-structure.html">Overall Structure</a></li><li><a href="../.././docs/internals/periods.html">Periods</a></li><li><a href="../.././docs/internals/syntax.html">Syntax</a></li><li><a href="../.././docs/internals/type-system.html">Type System</a></li>
+</ul></li>
+    
+    <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Resources");child.classList.toggle("show");child.classList.toggle("hide");})();'>Resources</a>
+<ul id="Resources" class="hide">
+    <li><a href="../.././docs/resources/talks.html">Talks</a></li>
 </ul></li>
     
 </ul>
@@ -5866,10 +5871,7 @@
         
 <h1 id="doc-page-title">Testing in Dotty</h1>
 <div id="doc-page-container">
-    <aside class="warning">
-This page should be updated as soon as scala-partest is removed
-</aside>
-<p>Running all tests in Dotty is as simple as:</p>
+    <p>Running all tests in Dotty is as simple as:</p>
 <pre><code class="language-bash">$ sbt test
 </code></pre>
 <p>There are currently several forms of tests in Dotty. These can be split into
@@ -5878,50 +5880,39 @@ two categories:</p>
 <p>These tests can be found in <code>&lt;sub-project&gt;/test</code> and are used to check
 functionality of specific parts of the codebase in isolation e.g: parsing,
 scanning and message errors.</p>
-<p>Running a single unit test class from sbt is as simple as:</p>
-<pre><code class="language-bash">&gt; testOnly absolute.path.to.TestClass
+<p>To run all tests in e.g., for the compiler test-suite you can write:</p>
+<pre><code class="language-bash">$ sbt
+&gt; dotty-compiler/test
 </code></pre>
-<p>You can further restrict the executed tests to a subset of <code>TestClass</code> methods
-as follows:</p>
-<pre><code class="language-bash">&gt; testOnly absolute.path.to.TestClass -- *methodName
+<p>To run a single test class you use <code>testOnly</code> and the fully qualified class name.
+For example:</p>
+<pre><code class="language-bash">&gt; testOnly dotty.tools.dotc.transform.TreeTransformerTest
+</code></pre>
+<p>The test command follows a regular expression-based syntax <code>testOnly * -- *</code>.
+The right-hand side picks a range of names for methods and the left-hand side picks a range of class names and their
+fully-qualified paths.</p>
+<p>Consequently, you can restrict the aforementioned executed test to a subset of methods by appending <code>-- *method_name</code>.
+The example below picks up all methods with the name <code>canOverwrite</code>:</p>
+<pre><code class="language-bash">&gt; testOnly dotty.tools.dotc.transform.TreeTransformerTest -- *canOverwrite
+</code></pre>
+<p>Additionally, you can run all tests named <code>method_name</code>, in any class, without providing a class name:</p>
+<pre><code class="language-bash">&gt; testOnly -- *canOverwrite
+</code></pre>
+<p>You can also run all paths of classes of a certain name:</p>
+<pre><code class="language-bash">&gt; testOnly *.TreeTransformerTest
 </code></pre>
 <h2><a href="#integration-tests" id="integration-tests">Integration tests</a></h2>
 <p>These tests are Scala source files expected to compile with Dotty (pos tests),
 along with their expected output (run tests) or errors (neg tests).</p>
-<p>All of these tests are contained in the <code>./tests/*</code> directories.</p>
-<h2><a href="#scala-partest" id="scala-partest">scala-partest</a></h2>
-<p>Historically these tests needed a structure which was generated by running the
-unit tests, and then that structure was in turn used by
-<a href="http://github.com/scala/scala-partest">scala-partest</a> to run compilation tests
-in parallel.</p>
-<p>This test suite can still be used (and is currently a part of the CI to check
-that it has the same outcome as the new test suite). It is invoked from sbt by
-running one of the following commands:</p>
-<pre><code class="language-bash">&gt; partest-only-no-bootstrap
-&gt; partest-only
-&gt; partest
-</code></pre>
-<ul>
-<li><code>partest-only-no-bootstrap</code> will only run the integration tests</li>
-<li><code>partest-only</code> will bootstrap the compiler and run the integration tests</li>
-<li><code>partest</code> will bootstrap the compiler, run the unit tests and then the
-integration tests</li>
-</ul>
-<h2><a href="#dotty-parallel-test-suite" id="dotty-parallel-test-suite">dotty parallel test suite</a></h2>
-<p>The new test suite will soon become the standard integration test runner. It
-has several advantages over the old implementation:</p>
-<ul>
-<li>integrates with JUnit, without the need for setup</li>
-<li>reuses the same VM for compilation</li>
-<li>allows filtering of tests</li>
-<li>runs much faster (almost 2x)</li>
-</ul>
+<p>All of these tests are contained in the <code>./tests/*</code> directories and can be run with the <code>vulpix</code> command.</p>
 <p>Currently to run these tests you need to invoke from sbt:</p>
-<pre><code class="language-bash">&gt; testOnly dotty.tools.dotc.CompilationTests
+<pre><code class="language-bash">$ sbt
+&gt; vulpix
 </code></pre>
-<p>This might be aliased in the future. It is also possible to run tests filtered
-by using:</p>
-<pre><code class="language-bash">&gt; vulpix i2147.scala
+<p>(which is effectively the same with <code>testOnly dotty.tools.dotc.CompilationTests</code>)</p>
+<p>It is also possible to run tests filtered, again from sbt:</p>
+<pre><code class="language-bash">$ sbt
+&gt; vulpix i2147.scala
 </code></pre>
 <p>This will run both the test <code>./tests/pos/i2147.scala</code> and
 <code>./tests/partest-test/i2147.scala</code> since both of these match the given string.

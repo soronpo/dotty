@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-        <title>Working with the backend</title>
+        <title>Working with the Backend</title>
 
         <link
             rel="stylesheet"
@@ -87,12 +87,17 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
 <ul id="Internals" class="hide">
     <li><a href="../.././docs/internals/backend.html">Backend</a></li><li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a></li><li><a href="../.././docs/internals/classpaths.html">Classpaths</a></li><li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a></li><li><a href="../.././docs/internals/contexts.html">Contexts</a></li><li><a href="../.././docs/internals/dotc-scalac.html">Dotc vs Scalac</a></li><li><a href="../.././docs/internals/higher-kinded-v2.html">Higher-Kinded Types</a></li><li><a href="../.././docs/internals/overall-structure.html">Overall Structure</a></li><li><a href="../.././docs/internals/periods.html">Periods</a></li><li><a href="../.././docs/internals/syntax.html">Syntax</a></li><li><a href="../.././docs/internals/type-system.html">Type System</a></li>
+</ul></li>
+    
+    <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Resources");child.classList.toggle("show");child.classList.toggle("hide");})();'>Resources</a>
+<ul id="Resources" class="hide">
+    <li><a href="../.././docs/resources/talks.html">Talks</a></li>
 </ul></li>
     
 </ul>
@@ -5864,48 +5869,55 @@
             <span class="icon-bar"></span>
         </button>
         
-<h1 id="doc-page-title">Working with the backend</h1>
+<h1 id="doc-page-title">Working with the Backend</h1>
 <div id="doc-page-container">
     <p>The compiler backend is based on a fork of the Scala 2.11 <code>GenBCode</code> backend and
-lives at <a href="https://github.com/lampepfl/scala/tree/sharing-backend">https://github.com/lampepfl/scala/tree/sharing-backend</a>. The dotty
-source tree contains a git submodule in the directory
+lives at</p>
+<blockquote>
+<p><a href="https://github.com/lampepfl/scala/tree/sharing-backend">https://github.com/lampepfl/scala/tree/sharing-backend</a>.</p>
+</blockquote>
+<p>The dotty source tree contains a git submodule in the directory
 <a href="https://github.com/lampepfl/dotty/tree/master/scala-backend">scala-backend</a>
 that points to this fork. We do not compile every file in this submodule,
 instead we add the subset of files we need to the dotty-compiler project in the
 sbt build.</p>
 <p>The most important thing to know when working with git submodules is that
 their content is not automatically updated when you do <code>git checkout</code> or <code>git pull</code>, instead everytime you switch branch, you need to do:</p>
-<pre><code class="language-shell">git submodule update --init
+<pre><code class="language-shell">$ git submodule update --init
 </code></pre>
 <h2><a href="#environment-setup" id="environment-setup">Environment setup</a></h2>
 <ol>
-<li>Set the following git configuration options to make working with submodules
-easier, see the <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Book</a>
+<li>Set the following git configuration options to make working with submodules easier,
+see the <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Book</a>
 for more information:</li>
 </ol>
-<pre><code class="language-shell">git config --global diff.submodule log
-git config --global status.submodulesummary 1
-git config --global push.recurseSubmodules check
+<pre><code class="language-shell">$ git config --global diff.submodule log
+$ git config --global status.submodulesummary 1
+$ git config --global push.recurseSubmodules check
 </code></pre>
 <ol>
-<li>Fork <a href="https://github.com/lampepfl/scala">https://github.com/lampepfl/scala</a> (in the following commands,
-<code>dotty-staging/scala</code> is used as a placeholder for your
-own fork).</li>
-<li>
-<pre><code class="language-shell">cd scala-backend
-git remote add scala-staging git@github.com:dotty-staging/scala.git
-cd ..
-</code></pre>
-</li>
+<li>Fork scala from github</li>
 </ol>
+<blockquote>
+<p><a href="https://github.com/lampepfl/scala">https://github.com/lampepfl/scala</a></p>
+</blockquote>
+<p>(in the following commands, <code>dotty-staging/scala</code> is used as a placeholder for your own fork).</p>
+<ol>
+<li>Add the new remote to track the upstream branch</li>
+</ol>
+<pre><code class="language-shell">$ cd scala-backend
+$ git remote add scala-staging git@github.com:dotty-staging/scala.git
+$ cd ..
+</code></pre>
 <h2><a href="#workflow-when-changing-to-the-backend" id="workflow-when-changing-to-the-backend">Workflow when changing to the backend</a></h2>
-<pre><code class="language-shell">cd scala-backend
-git checkout -b my-feature-branch
-# Make some changes ...
+<pre><code class="language-shell">$ cd scala-backend
+$ git checkout -b my-feature-branch
 
-git push -u scala-backend
+# Make some changes ...
+$ git push -u scala-backend
+
 # Open a PR against https://github.com/lampepfl/scala/tree/sharing-backend
-cd ..
+$ cd ..
 </code></pre>
 <p>Once your PR has been merged into the backend, you'll need to make another PR
 against dotty itself to update the backend, the following commands should be run

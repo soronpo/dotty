@@ -87,12 +87,17 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
 <ul id="Internals" class="hide">
     <li><a href="../.././docs/internals/backend.html">Backend</a></li><li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a></li><li><a href="../.././docs/internals/classpaths.html">Classpaths</a></li><li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a></li><li><a href="../.././docs/internals/contexts.html">Contexts</a></li><li><a href="../.././docs/internals/dotc-scalac.html">Dotc vs Scalac</a></li><li><a href="../.././docs/internals/higher-kinded-v2.html">Higher-Kinded Types</a></li><li><a href="../.././docs/internals/overall-structure.html">Overall Structure</a></li><li><a href="../.././docs/internals/periods.html">Periods</a></li><li><a href="../.././docs/internals/syntax.html">Syntax</a></li><li><a href="../.././docs/internals/type-system.html">Type System</a></li>
+</ul></li>
+    
+    <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Resources");child.classList.toggle("show");child.classList.toggle("hide");})();'>Resources</a>
+<ul id="Resources" class="hide">
+    <li><a href="../.././docs/resources/talks.html">Talks</a></li>
 </ul></li>
     
 </ul>
@@ -5866,31 +5871,45 @@
         
 <h1 id="doc-page-title">Building Dotty with Intellij IDEA</h1>
 <div id="doc-page-container">
-    <p>Dotty compiler support is available in the <a href="https://confluence.jetbrains.com/display/SCA/Scala+Plugin+Nightly">Scala plugin nightly</a> starting
-from 2.2.39. You need to install <a href="https://www.jetbrains.com/idea/nextversion/">IDEA 2016.1</a> to try it.</p>
-<h2><a href="#to-create-a-new-project-with-dotty" id="to-create-a-new-project-with-dotty">To create a new project with Dotty</a></h2>
-<ol>
-<li>Open New Project dialog and select <code>Scala</code> &gt; <code>Dotty</code></li>
-<li>Proceed as usual and don't forget to create or select Dotty SDK.</li>
-</ol>
-<h2><a href="#to-compile-an-existing-scala-project-with-dotty" id="to-compile-an-existing-scala-project-with-dotty">To compile an existing Scala project with Dotty</a></h2>
-<ol>
-<li>Create a new Dotty SDK:
-<code>Project Structure</code> &gt; <code>Global libraries</code> &gt; <code>New Global Library</code> &gt; <code>Dotty SDK</code></li>
-<li>Replace Scala SDK with Dotty SDK in:
-<code>Project Structure</code> &gt; <code>Modules</code> &gt; <code>Dependencies</code></li>
-</ol>
-<p>Java 1.8 should be used as the Project/Module SDK. You also need to enable the
-Scala Compile Server to use Dotty compiler.</p>
-<h2><a href="#notes" id="notes">Notes</a></h2>
-<ul>
-<li>Dotty support is experimental, many features including code highlighting and
-worksheet are not ready yet.</li>
-<li>You can download the latest version of Dotty without creating a new Dotty SDK
-with the <code>Update snapshot</code> button in the Dotty SDK library settings.</li>
-<li>Please report any problems to the <a href="https://youtrack.jetbrains.com/issues/SCL">IntelliJ Scala issue tracker</a> or write
-to the <a href="https://gitter.im/JetBrains/intellij-scala">IntelliJ Scala gitter</a></li>
-</ul>
+    <h2><a href="#setup" id="setup">Setup</a></h2>
+<p>You can setup IntelliJ <a href="https://www.jetbrains.com/idea/nextversion">IDEA &gt;= 2016.1</a> to run Dotty.</p>
+<p>Assuming you have cloned dotty's repository from Github (and run <code>sbt managedSources</code> as described in <a href="getting-started.html">Getting Started</a>),
+you can now proceed with importing it to IDEA by selecting the
+corresponding option from the startup menu. Navigate on the corresponding directory and select it. Next, you need
+to select the model of the import and as the screenshot shows, select SBT.</p>
+<p><img src="../../images/idea/idea-import.png" alt="" title="Import Dotty in IDEA" /></p>
+<p>Next, you select the version of the JDK that this project relies on and verify that you have selected 1.8 (assuming
+its installed on your local machine). Otherwise, specify it by pressing <em>New</em>.</p>
+<p><img src="../../images/idea/idea-sdk.png" alt="" title="Select the JDK" /></p>
+<p>On the final window we must select which modules we can import. Here, we are presented with the full list of SBT projects
+that are defined in Dotty. You can either select all (expect performance degradation by IDEA if you select all) or
+select only the <code>dotty</code> module. In order to do that, unselect all modules and select on <code>dotty</code>. IDEA, then, automatically
+selects all the necessary dependencies and you press OK.</p>
+<p><img src="../../images/idea/idea-sbt.png" alt="" title="Select modules to import" /></p>
+<h2><a href="#runningdebugging" id="runningdebugging">Running/Debugging</a></h2>
+<p>To run the compiler you can do it either as an sbt command or via debugging the compiler.
+For the first option you can fire up sbt from the <code>Terminal</code> window of IDEA or you can do it externally.
+For example, to run a test you can write with or without flags:</p>
+<pre><code class="language-shell">dotc tests/pos/Arrays.scala
+</code></pre>
+<p>If you are interested in debugging the compiler you can enable the necessary agent on the JVM.
+This is done in two steps. For the first step you need to pass the
+necessary flag to the running VM. For convenience, this is already in comments on the <code>Build.scala</code> file under the
+<code>project</code> directory. The string you need to uncomment is the following:</p>
+<blockquote>
+<p><code>&quot;-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005&quot;</code></p>
+</blockquote>
+<p>Uncomment the line and reload the project file with the <code>reload</code> command on sbt.
+Now, each time you run <code>dotc</code> the compiler listens at the designated address and waits the agent to connect.
+For, the second step you need to create a configuration for Debug through IDEA:</p>
+<blockquote>
+<p>Run &gt; Edit Configurations &gt; Add New Configuration &gt; (select) Remote</p>
+</blockquote>
+<p><img src="../../images/idea/idea-debug.png" alt="" title="Create a Debug Configuration" /></p>
+<p>Now every time you run <code>dotc</code> you can set your breakpoints and hit the <code>Debug dotty-debug</code> button (since we used that name for
+the sample configuration above). The default data on the configuration match the enabled agent on the VM so, probably,
+you will not need to change anything else.</p>
+<p>To contribute to dotty please follow the <a href="https://github.com/lampepfl/dotty/blob/master/CONTRIBUTING.html">Dotty Developer Guidelines</a>.</p>
 
 </div>
     </div>
