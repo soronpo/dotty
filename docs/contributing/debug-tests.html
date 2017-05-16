@@ -87,7 +87,7 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.html">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
@@ -5897,10 +5897,10 @@
 <pre><code class="language-shell">$ dotc tests/debug/while.scala
 </code></pre>
 <p>Second, run the compiled class with debugging enabled (suppose the main class is <code>Test</code>):</p>
-<pre><code class="language-shell">dotr -d Test
+<pre><code class="language-shell">$ dotr -d Test
 </code></pre>
 <p>Third, start JDB:</p>
-<pre><code>jdb -attach 5005 -sourcepath tests/debug/
+<pre><code>$ jdb -attach 5005 -sourcepath tests/debug/
 </code></pre>
 <p>You can run <code>help</code> for commands that supported by JDB.</p>
 <h2><a href="#debug-automatically-with-expect" id="debug-automatically-with-expect">Debug Automatically with Expect</a></h2>
@@ -5939,10 +5939,10 @@ val y = 5
 </code></pre>
 <h3><a href="#3-run-the-test" id="3-run-the-test">3. Run the Test</a></h3>
 <p>First, compile the file <code>tests/debug/while.scala</code>:</p>
-<pre><code>bin/dotc tests/debug/while.scala
+<pre><code>$ dotc tests/debug/while.scala
 </code></pre>
 <p>Second, run the compiled class with debugging enabled:</p>
-<pre><code>bin/dotr -d Test
+<pre><code>$ dotr -d Test
 </code></pre>
 <p>Finally, run the expect script:</p>
 <pre><code>expect robot

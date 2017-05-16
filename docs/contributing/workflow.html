@@ -87,7 +87,7 @@
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Contributing");child.classList.toggle("show");child.classList.toggle("hide");})();'>Contributing</a>
 <ul id="Contributing" class="show">
-    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.md">Working with the Backend</a></li>
+    <li><a href="../.././docs/contributing/getting-started.html">Getting Started</a></li><li><a href="../.././docs/contributing/workflow.html">Workflow</a></li><li><a href="../.././docs/contributing/eclipse.html">Eclipse</a></li><li><a href="../.././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></li><li><a href="../.././docs/contributing/testing.html">Testing</a></li><li><a href="../.././docs/contributing/backend.html">Working with the Backend</a></li>
 </ul></li>
     
     <li><a class="toggle-children" onclick='(function(){var child=document.getElementById("Internals");child.classList.toggle("show");child.classList.toggle("hide");})();'>Internals</a>
@@ -5895,23 +5895,24 @@ This document details common workflow patterns when working with Dotty before us
 &gt; dotc &lt;OPTIONS&gt; &lt;FILE&gt;
 </code></pre>
 <p>or from terminal:</p>
-<pre><code class="language-bash">$ ./bin/dotc &lt;OPTIONS&gt; &lt;FILE&gt;
+<pre><code class="language-bash">$ dotc &lt;OPTIONS&gt; &lt;FILE&gt;
 </code></pre>
 <p>Here are some useful debugging <code>&lt;OPTIONS&gt;</code>:</p>
 <ul>
 <li><code>-Xprint:PHASE1,PHASE2,...</code> or <code>-Xprint:all</code>: prints the <code>AST</code> after each
-specified phase. Phase names can be found by searching
-<code>compiler/src/dotty/tools/dotc/transform/</code> for <code>phaseName</code>.</li>
+specified phase. Phase names can be found by examining the
+<code>dotty.tools.dotc.transform.*</code> classes for their <code>phaseName</code> field e.g., <code>-Xprint:erasure</code>.
+You can discover all phases in the <code>dotty.tools.dotc.Compiler</code> class</li>
 <li><code>-Ylog:PHASE1,PHASE2,...</code> or <code>-Ylog:all</code>: enables <code>ctx.log(&quot;&quot;)</code> logging for
 the specified phase.</li>
 <li><code>-Ycheck:all</code> verifies the consistency of <code>AST</code> nodes between phases, in
 particular checks that types do not change. Some phases currently can't be
 <code>Ycheck</code>ed, therefore in the tests we run:
 <code>-Ycheck:tailrec,resolveSuper,mixin,restoreScopes,labelDef</code>.</li>
+<li>the last frontier of debugging (before actual debugging) is the range of logging capabilities that
+can be enabled through the <code>dotty.tools.dotc.config.Printers</code> object. Change any of the desired printer from <code>noPrinter</code> to
+<code>default</code> and this will give you the full logging capability of the compiler.</li>
 </ul>
-<p>More powerful logging capabilities can be enabled by changing some <code>noPrinter</code> to
-<code>new Printer</code> in <code>compiler/src/dotty/tools/dotc/config/Printers.scala</code>. This enables the
-<code>subtyping.println(&quot;&quot;)</code> and <code>ctx.traceIndented(&quot;&quot;, subtyping)</code> style logging.</p>
 <h2><a href="#inspecting-trees-with-type-stealer" id="inspecting-trees-with-type-stealer">Inspecting Trees with Type Stealer</a></h2>
 <p>There is no power mode for the REPL yet, but you can inspect types with the
 type stealer:</p>
@@ -5931,7 +5932,6 @@ u: dotty.tools.dotc.core.Types.Type = TypeBounds(TypeRef(ThisType(TypeRef(NoPref
 <p>Many objects in the dotc compiler implement a <code>Showable</code> trait (e.g. <code>Tree</code>,
 <code>Symbol</code>, <code>Type</code>). These objects may be prettyprinted using the <code>.show</code>
 method</p>
-<p>To contribute to dotty please follow the <a href="https://github.com/lampepfl/dotty/blob/master/CONTRIBUTING.html">Dotty Developer Guidelines</a>.</p>
 
 </div>
     </div>
