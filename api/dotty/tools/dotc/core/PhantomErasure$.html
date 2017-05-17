@@ -5915,15 +5915,12 @@
     <div id="entity-body" class="entity-section">
         <p>Phantom erasure erases (minimal erasure):</p>
 <ul>
-<li>Parameters/arguments are erased to BoxedUnit. The next step will remove the parameters
+<li>Parameters/arguments are erased to ErasedPhantom. The next step will remove the parameters
 from the method definitions and calls (implemented in branch implement-phantom-types-part-2).</li>
-<li>Definitions of <code>def</code>, <code>val</code>, <code>lazy val</code> and <code>var</code> returning a phantom type to return a BoxedUnit. Where fields
-with BoxedUnit type are not memoized (see transform/Memoize.scala).</li>
-<li>Calls to Phantom.assume become calls to BoxedUnit. Intended to be optimized away by local optimizations.</li>
+<li>Definitions of <code>def</code>, <code>val</code>, <code>lazy val</code> and <code>var</code> returning a phantom type to return a ErasedPhantom. Where fields
+with ErasedPhantom type are not memoized (see transform/Memoize.scala).</li>
+<li>Calls to Phantom.assume become calls to ErasedPhantom.UNIT. Intended to be optimized away by local optimizations.</li>
 </ul>
-<p>BoxedUnit is used as it fits perfectly and homogeneously in all locations where phantoms can be found.
-Additionally some of the optimizations that can be performed on phantom types can also be directly implemented
-on all boxed units.</p>
 
     </div>
     
