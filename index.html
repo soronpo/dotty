@@ -7,6 +7,8 @@
 
         <title>Dotty</title>
 
+        <link rel="icon" type="image/png" href="./images/favicon.png">
+
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <link
@@ -382,6 +384,13 @@
                     </a>
                     Olivier Blanvillain
                 </div>
+
+                <div class="contributor">
+                    <a href="http://github.com/biboudis">
+                        <img src="./images/aggelos.png">
+                    </a>
+                    Aggelos Biboudis
+                </div>
             </div>
         </div>
 
@@ -417,6 +426,10 @@
                 $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                 });
+
+                if (window.location.hash.length > 0) {
+                    window.scrollTo(0, $(window.location.hash).offset().top - 90);
+                }
             });
         </script>
     </body>
