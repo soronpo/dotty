@@ -6065,6 +6065,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@
                 
                 <div id="getDirectory(path)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getDirectory(path)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getDirectory(path)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6119,23 +6121,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getDirectory(path)">
-                            <p>Returns &quot;getDirectory(new File(path))&quot;.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-getDirectory(path)">
                             <p>Returns &quot;getDirectory(new File(path))&quot;.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6143,7 +6144,7 @@
                 
                 <div id="getDirectory(file)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'getDirectory(file)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getDirectory(file)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6182,12 +6183,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getDirectory(file)">
-                            <p>If the specified File exists and is either a directory or a
-readable zip or jar archive, returns an abstract directory
-backed by it. Otherwise, returns </p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-getDirectory(file)">
                             <p>If the specified File exists and is either a directory or a
 readable zip or jar archive, returns an abstract directory
@@ -6196,13 +6191,16 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6210,7 +6208,7 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                 
                 <div id="getFile(path)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getFile(path)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getFile(path)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6249,23 +6247,22 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getFile(path)">
-                            <p>Returns &quot;getFile(new File(path))&quot;.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-getFile(path)">
                             <p>Returns &quot;getFile(new File(path))&quot;.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6273,7 +6270,7 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                 
                 <div id="getFile(path)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getFile(path)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getFile(path)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6312,21 +6309,21 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getFile(path)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getFile(path)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6334,7 +6331,7 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                 
                 <div id="getFile(file)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getFile(file)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getFile(file)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6373,11 +6370,6 @@ backed by it. Otherwise, returns <code>null</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getFile(file)">
-                            <p>If the specified File exists and is a regular file, returns an
-abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-getFile(file)">
                             <p>If the specified File exists and is a regular file, returns an
 abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
@@ -6385,13 +6377,16 @@ abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6399,7 +6394,7 @@ abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
                 
                 <div id="getResources(url)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getResources(url)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getResources(url)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6438,21 +6433,21 @@ abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getResources(url)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getResources(url)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6460,7 +6455,7 @@ abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
                 
                 <div id="getURL(url)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'getURL(url)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getURL(url)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6499,12 +6494,6 @@ abstract regular file backed by it. Otherwise, returns <code>null</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getURL(url)">
-                            <p>If the specified URL exists and is a regular file or a directory, returns an
-abstract regular file or an abstract directory, respectively, backed by it...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-getURL(url)">
                             <p>If the specified URL exists and is a regular file or a directory, returns an
 abstract regular file or an abstract directory, respectively, backed by it.
@@ -6513,13 +6502,16 @@ Otherwise, returns <code>null</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

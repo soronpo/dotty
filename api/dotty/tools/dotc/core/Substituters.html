@@ -6065,6 +6065,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@
                 
                 <div id="SafeSubstMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SafeSubstMap');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SafeSubstMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6104,11 +6106,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SafeSubstMap">
-                            <p>A map for &quot;cycle safe substitutions&quot; which do not force the denotation
-of a TypeRef unless the name matches up with one of the substituted symbols.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SafeSubstMap">
                             <p>A map for &quot;cycle safe substitutions&quot; which do not force the denotation
 of a TypeRef unless the name matches up with one of the substituted symbols.</p>
@@ -6116,13 +6113,16 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6130,7 +6130,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="Subst1Map" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Subst1Map');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Subst1Map');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6154,21 +6154,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Subst1Map">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Subst1Map">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6176,7 +6176,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="Subst2Map" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Subst2Map');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Subst2Map');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6200,21 +6200,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Subst2Map">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Subst2Map">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6222,7 +6222,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstBindingMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstBindingMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstBindingMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6246,21 +6246,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstBindingMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstBindingMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6268,7 +6268,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstDealiasMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstDealiasMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstDealiasMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6292,21 +6292,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstDealiasMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstDealiasMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6314,7 +6314,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6338,21 +6338,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6360,7 +6360,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstParamMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstParamMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstParamMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6384,21 +6384,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstParamMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstParamMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6406,7 +6406,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstParamsMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstParamsMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstParamsMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6430,21 +6430,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstParamsMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstParamsMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6452,7 +6452,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstRecThisMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstRecThisMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstRecThisMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6476,21 +6476,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstRecThisMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstRecThisMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6498,7 +6498,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstSymMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstSymMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstSymMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6522,21 +6522,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstSymMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstSymMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6544,7 +6544,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="SubstThisMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SubstThisMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SubstThisMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6568,21 +6568,21 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SubstThisMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SubstThisMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6590,7 +6590,7 @@ of a TypeRef unless the name matches up with one of the substituted symbols.</p>
                 
                 <div id="existsStatic(syms)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'existsStatic(syms)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'existsStatic(syms)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6632,21 +6632,21 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-existsStatic(syms)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-existsStatic(syms)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6654,7 +6654,7 @@ Symbol
                 
                 <div id="subst(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'subst(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'subst(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6717,21 +6717,21 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-subst(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-subst(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6739,7 +6739,7 @@ Symbol
                 
                 <div id="subst(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'subst(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'subst(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6808,21 +6808,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-subst(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-subst(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6830,7 +6830,7 @@ Type
                 
                 <div id="subst1(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'subst1(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'subst1(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6893,21 +6893,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-subst1(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-subst1(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6915,7 +6915,7 @@ Type
                 
                 <div id="subst2(tp,from1,to1,from2,to2,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'subst2(tp,from1,to1,from2,to2,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'subst2(tp,from1,to1,from2,to2,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6994,21 +6994,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-subst2(tp,from1,to1,from2,to2,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-subst2(tp,from1,to1,from2,to2,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7016,7 +7016,7 @@ Type
                 
                 <div id="substDealias(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substDealias(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substDealias(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7085,21 +7085,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substDealias(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substDealias(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7107,7 +7107,7 @@ Type
                 
                 <div id="substParam(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substParam(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substParam(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7170,21 +7170,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substParam(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substParam(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7192,7 +7192,7 @@ Type
                 
                 <div id="substParams(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substParams(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substParams(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7258,21 +7258,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substParams(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substParams(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7280,7 +7280,7 @@ Type
                 
                 <div id="substRecThis(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substRecThis(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substRecThis(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7343,21 +7343,21 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substRecThis(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substRecThis(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7365,7 +7365,7 @@ Type
                 
                 <div id="substSym(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substSym(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substSym(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7434,21 +7434,21 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substSym(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substSym(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7456,7 +7456,7 @@ Symbol
                 
                 <div id="substThis(tp,from,to,theMap)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'substThis(tp,from,to,theMap)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'substThis(tp,from,to,theMap)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7519,21 +7519,21 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-substThis(tp,from,to,theMap)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-substThis(tp,from,to,theMap)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

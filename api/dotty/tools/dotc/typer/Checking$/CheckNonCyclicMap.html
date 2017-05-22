@@ -6074,6 +6074,7 @@ and that protects all F-bounded references by LazyRefs.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6126,6 +6127,7 @@ and that protects all F-bounded references by LazyRefs.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6133,7 +6135,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="ctx" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ctx');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ctx');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6159,21 +6161,21 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ctx">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ctx">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6181,7 +6183,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="cycleOK" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cycleOK');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'cycleOK');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6207,23 +6209,22 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cycleOK">
-                            <p>Are cycles allowed within currently checked type?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-cycleOK">
                             <p>Are cycles allowed within currently checked type?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6231,7 +6232,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="lastChecked" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastChecked');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lastChecked');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6257,23 +6258,22 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lastChecked">
-                            <p>The last type top-level type checked when a CyclicReference occurs.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lastChecked">
                             <p>The last type top-level type checked when a CyclicReference occurs.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6281,7 +6281,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="locked" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'locked');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'locked');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6310,23 +6310,22 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-locked">
-                            <p>Set of type references whose info is currently checked</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-locked">
                             <p>Set of type references whose info is currently checked</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6334,7 +6333,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="nestedCycleOK" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'nestedCycleOK');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nestedCycleOK');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6360,23 +6359,22 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-nestedCycleOK">
-                            <p>Are cycles allowed within nested refinedInfos of currently checked type?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-nestedCycleOK">
                             <p>Are cycles allowed within nested refinedInfos of currently checked type?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6384,7 +6382,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="reportErrors" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'reportErrors');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'reportErrors');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6410,21 +6408,21 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-reportErrors">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-reportErrors">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6432,7 +6430,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="sym" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'sym');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'sym');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6458,21 +6456,21 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-sym">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-sym">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6480,7 +6478,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="where" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'where');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'where');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6506,12 +6504,6 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-where">
-                            <p>A diagnostic output string that indicates the position of the last
-part of a type bounds checked by checkInfo. Possible choices:
-alias, lower bound, upp...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-where">
                             <p>A diagnostic output string that indicates the position of the last
 part of a type bounds checked by checkInfo. Possible choices:
@@ -6520,13 +6512,16 @@ alias, lower bound, upper bound.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6534,7 +6529,7 @@ alias, lower bound, upper bound.</p>
                 
                 <div id="apply(tp,cycleOK,nestedCycleOK)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'apply(tp,cycleOK,nestedCycleOK)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'apply(tp,cycleOK,nestedCycleOK)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6589,21 +6584,21 @@ alias, lower bound, upper bound.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-apply(tp,cycleOK,nestedCycleOK)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-apply(tp,cycleOK,nestedCycleOK)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6611,7 +6606,7 @@ alias, lower bound, upper bound.</p>
                 
                 <div id="apply(tp)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'apply(tp)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'apply(tp)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6650,21 +6645,21 @@ alias, lower bound, upper bound.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-apply(tp)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-apply(tp)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6672,7 +6667,7 @@ alias, lower bound, upper bound.</p>
                 
                 <div id="checkInfo(tp)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkInfo(tp)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkInfo(tp)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6711,11 +6706,6 @@ alias, lower bound, upper bound.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkInfo(tp)">
-                            <p>Check info <code>tp</code> for cycles. Throw CyclicReference for illegal cycles,
-break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkInfo(tp)">
                             <p>Check info <code>tp</code> for cycles. Throw CyclicReference for illegal cycles,
 break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
@@ -6723,13 +6713,16 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6737,7 +6730,7 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                 
                 <div id="cycleOK_=(x$1)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cycleOK_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'cycleOK_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6776,23 +6769,22 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cycleOK_=(x$1)">
-                            <p>Are cycles allowed within currently checked type?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-cycleOK_=(x$1)">
                             <p>Are cycles allowed within currently checked type?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6800,7 +6792,7 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                 
                 <div id="lastChecked_=(x$1)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastChecked_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lastChecked_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6839,23 +6831,22 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lastChecked_=(x$1)">
-                            <p>The last type top-level type checked when a CyclicReference occurs.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lastChecked_=(x$1)">
                             <p>The last type top-level type checked when a CyclicReference occurs.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6863,7 +6854,7 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                 
                 <div id="nestedCycleOK_=(x$1)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'nestedCycleOK_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nestedCycleOK_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6902,23 +6893,22 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-nestedCycleOK_=(x$1)">
-                            <p>Are cycles allowed within nested refinedInfos of currently checked type?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-nestedCycleOK_=(x$1)">
                             <p>Are cycles allowed within nested refinedInfos of currently checked type?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6926,7 +6916,7 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                 
                 <div id="where_=(x$1)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'where_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'where_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6965,12 +6955,6 @@ break direct cycle with a LazyRef for legal, F-bounded cycles.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-where_=(x$1)">
-                            <p>A diagnostic output string that indicates the position of the last
-part of a type bounds checked by checkInfo. Possible choices:
-alias, lower bound, upp...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-where_=(x$1)">
                             <p>A diagnostic output string that indicates the position of the last
 part of a type bounds checked by checkInfo. Possible choices:
@@ -6979,13 +6963,16 @@ alias, lower bound, upper bound.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

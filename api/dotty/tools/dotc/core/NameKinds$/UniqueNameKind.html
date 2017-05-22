@@ -6080,6 +6080,7 @@ a separator indicating the class of unique name, and a unique number.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6106,6 +6107,7 @@ a separator indicating the class of unique name, and a unique number.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6113,7 +6115,7 @@ a separator indicating the class of unique name, and a unique number.</p>
                 
                 <div id="separator" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'separator');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'separator');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6139,21 +6141,21 @@ a separator indicating the class of unique name, and a unique number.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-separator">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-separator">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6161,7 +6163,7 @@ a separator indicating the class of unique name, and a unique number.</p>
                 
                 <div id="definesNewName" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'definesNewName');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'definesNewName');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6187,11 +6189,6 @@ a separator indicating the class of unique name, and a unique number.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-definesNewName">
-                            <p>Does this kind define logically a new name? Tested by the <code>rewrite</code> and <code>collect</code>
-combinators of names.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-definesNewName">
                             <p>Does this kind define logically a new name? Tested by the <code>rewrite</code> and <code>collect</code>
 combinators of names.</p>
@@ -6199,13 +6196,16 @@ combinators of names.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6213,7 +6213,7 @@ combinators of names.</p>
                 
                 <div id="fresh(prefix)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fresh(prefix)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fresh(prefix)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6265,23 +6265,22 @@ combinators of names.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fresh(prefix)(ctx)">
-                            <p>Generate fresh unique name of this kind with given prefix name</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fresh(prefix)(ctx)">
                             <p>Generate fresh unique name of this kind with given prefix name</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6289,7 +6288,7 @@ combinators of names.</p>
                 
                 <div id="mkString(underlying,info)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mkString(underlying,info)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkString(underlying,info)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6336,11 +6335,6 @@ combinators of names.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-mkString(underlying,info)">
-                            <p>Turn a name of this kind consisting of an <code>underlying</code> prefix
-and the given <code>info</code> into a string.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-mkString(underlying,info)">
                             <p>Turn a name of this kind consisting of an <code>underlying</code> prefix
 and the given <code>info</code> into a string.</p>
@@ -6348,13 +6342,16 @@ and the given <code>info</code> into a string.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

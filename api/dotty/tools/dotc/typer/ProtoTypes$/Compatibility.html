@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6072,6 +6073,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6079,7 +6081,7 @@
                 
                 <div id="constrainResult(mt,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'constrainResult(mt,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'constrainResult(mt,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6139,11 +6141,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-constrainResult(mt,pt)(ctx)">
-                            <p>Check that the result type of the current method
-fits the given expected result type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-constrainResult(mt,pt)(ctx)">
                             <p>Check that the result type of the current method
 fits the given expected result type.</p>
@@ -6151,13 +6148,16 @@ fits the given expected result type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6165,7 +6165,7 @@ fits the given expected result type.</p>
                 
                 <div id="disregardProto(pt)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'disregardProto(pt)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'disregardProto(pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6217,21 +6217,21 @@ fits the given expected result type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-disregardProto(pt)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-disregardProto(pt)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6239,7 +6239,7 @@ fits the given expected result type.</p>
                 
                 <div id="isCompatible(tp,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isCompatible(tp,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isCompatible(tp,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6299,13 +6299,6 @@ fits the given expected result type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isCompatible(tp,pt)(ctx)">
-                            <p>A type <code>tp</code> is compatible with a type <code>pt</code> if one of the following holds:
-1. <code>tp</code> is a subtype of <code>pt</code>
-2. <code>pt</code> is by name parameter type, and <code>tp</code> is compatible wit...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isCompatible(tp,pt)(ctx)">
                             <p>A type <code>tp</code> is compatible with a type <code>pt</code> if one of the following holds:
 1. <code>tp</code> is a subtype of <code>pt</code>
@@ -6316,13 +6309,16 @@ fits the given expected result type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6330,7 +6326,7 @@ fits the given expected result type.</p>
                 
                 <div id="normalizedCompatible(tp,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'normalizedCompatible(tp,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'normalizedCompatible(tp,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6390,23 +6386,22 @@ fits the given expected result type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-normalizedCompatible(tp,pt)(ctx)">
-                            <p>Test compatibility after normalization in a fresh typerstate.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-normalizedCompatible(tp,pt)(ctx)">
                             <p>Test compatibility after normalization in a fresh typerstate.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6414,7 +6409,7 @@ fits the given expected result type.</p>
                 
                 <div id="viewExists(tp,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'viewExists(tp,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'viewExists(tp,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6474,23 +6469,22 @@ fits the given expected result type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-viewExists(tp,pt)(ctx)">
-                            <p>Is there an implicit conversion from <code>tp</code> to <code>pt</code>?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-viewExists(tp,pt)(ctx)">
                             <p>Is there an implicit conversion from <code>tp</code> to <code>pt</code>?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

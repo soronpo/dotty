@@ -6070,6 +6070,7 @@ Constraint handlers update the current constraint as a side effect.</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6078,6 +6079,7 @@ Constraint handlers update the current constraint as a side effect.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6085,7 +6087,7 @@ Constraint handlers update the current constraint as a side effect.</p>
                 
                 <div id="addConstraintInvocations" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addConstraintInvocations');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addConstraintInvocations');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6111,21 +6113,21 @@ Constraint handlers update the current constraint as a side effect.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addConstraintInvocations">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addConstraintInvocations">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6133,7 +6135,7 @@ Constraint handlers update the current constraint as a side effect.</p>
                 
                 <div id="comparedTypeLambdas" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedTypeLambdas');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'comparedTypeLambdas');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6162,11 +6164,6 @@ TypeLambda
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-comparedTypeLambdas">
-                            <p>We are currently comparing type lambdas. Used as a flag for
-optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-comparedTypeLambdas">
                             <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
@@ -6174,13 +6171,16 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6188,7 +6188,7 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                 
                 <div id="ctx" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ctx');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ctx');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6214,21 +6214,21 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ctx">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ctx">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6236,7 +6236,7 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                 
                 <div id="frozenConstraint" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'frozenConstraint');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'frozenConstraint');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6262,23 +6262,22 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-frozenConstraint">
-                            <p>If the constraint is frozen we cannot add new bounds to the constraint.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-frozenConstraint">
                             <p>If the constraint is frozen we cannot add new bounds to the constraint.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6286,7 +6285,7 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                 
                 <div id="homogenizeArgs" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'homogenizeArgs');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'homogenizeArgs');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6312,13 +6311,6 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-homogenizeArgs">
-                            <p>If set, align arguments <code>S1</code>, <code>S2</code>when taking the glb
-<code>T1 { X = S1 } &amp; T2 { X = S2 }</code> of a constraint upper bound for some type parameter.
-Aligning means comp...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-homogenizeArgs">
                             <p>If set, align arguments <code>S1</code>, <code>S2</code>when taking the glb
 <code>T1 { X = S1 } &amp; T2 { X = S2 }</code> of a constraint upper bound for some type parameter.
@@ -6328,13 +6320,16 @@ See note in TypeComparer#distributeAnd.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6342,7 +6337,7 @@ See note in TypeComparer#distributeAnd.</p>
                 
                 <div id="state" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'state');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'state');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6368,21 +6363,21 @@ See note in TypeComparer#distributeAnd.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-state">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-state">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6390,7 +6385,7 @@ See note in TypeComparer#distributeAnd.</p>
                 
                 <div id="addConstraint(param,bound,fromBelow)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'addConstraint(param,bound,fromBelow)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addConstraint(param,bound,fromBelow)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6445,13 +6440,6 @@ See note in TypeComparer#distributeAnd.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addConstraint(param,bound,fromBelow)">
-                            <p>Add constraint <code>param &lt;: bound</code> if <code>fromBelow</code> is false, <code>param &gt;: bound</code> otherwise.
-<code>bound</code> is assumed to be in normalized form, as specified in <code>firstTry</code> and
-<code>s...</code>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addConstraint(param,bound,fromBelow)">
                             <p>Add constraint <code>param &lt;: bound</code> if <code>fromBelow</code> is false, <code>param &gt;: bound</code> otherwise.
 <code>bound</code> is assumed to be in normalized form, as specified in <code>firstTry</code> and
@@ -6463,13 +6451,16 @@ way isSubType is organized.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6477,7 +6468,7 @@ way isSubType is organized.</p>
                 
                 <div id="addConstraintInvocations_=(x$1)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addConstraintInvocations_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addConstraintInvocations_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6516,21 +6507,21 @@ way isSubType is organized.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addConstraintInvocations_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addConstraintInvocations_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6538,7 +6529,7 @@ way isSubType is organized.</p>
                 
                 <div id="addLess(p1,p2)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addLess(p1,p2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addLess(p1,p2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6585,21 +6576,21 @@ way isSubType is organized.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addLess(p1,p2)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addLess(p1,p2)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6607,7 +6598,7 @@ way isSubType is organized.</p>
                 
                 <div id="addLowerBound(param,bound)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addLowerBound(param,bound)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addLowerBound(param,bound)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6654,21 +6645,21 @@ way isSubType is organized.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addLowerBound(param,bound)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addLowerBound(param,bound)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6676,7 +6667,7 @@ way isSubType is organized.</p>
                 
                 <div id="addOneBound(param,bound,isUpper)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addOneBound(param,bound,isUpper)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addOneBound(param,bound,isUpper)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6731,21 +6722,21 @@ way isSubType is organized.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addOneBound(param,bound,isUpper)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addOneBound(param,bound,isUpper)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6753,7 +6744,7 @@ way isSubType is organized.</p>
                 
                 <div id="addToConstraint(tl,tvars)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addToConstraint(tl,tvars)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addToConstraint(tl,tvars)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6803,11 +6794,6 @@ TypeVar
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addToConstraint(tl,tvars)">
-                            <p>Add type lambda <code>tl</code>, possibly with type variables <code>tvars</code>, to current constraint
-and propagate all bounds.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addToConstraint(tl,tvars)">
                             <p>Add type lambda <code>tl</code>, possibly with type variables <code>tvars</code>, to current constraint
 and propagate all bounds.</p>
@@ -6815,13 +6801,16 @@ and propagate all bounds.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6829,7 +6818,7 @@ and propagate all bounds.</p>
                 
                 <div id="addUpperBound(param,bound)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addUpperBound(param,bound)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addUpperBound(param,bound)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6876,21 +6865,21 @@ and propagate all bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addUpperBound(param,bound)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addUpperBound(param,bound)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6898,7 +6887,7 @@ and propagate all bounds.</p>
                 
                 <div id="approximation(param,fromBelow)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'approximation(param,fromBelow)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'approximation(param,fromBelow)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6945,13 +6934,6 @@ and propagate all bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-approximation(param,fromBelow)">
-                            <p>Solve constraint set for given type parameter <code>param</code>.
-If <code>fromBelow</code> is true the parameter is approximated by its lower bound,
-otherwise it is approximated...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-approximation(param,fromBelow)">
                             <p>Solve constraint set for given type parameter <code>param</code>.
 If <code>fromBelow</code> is true the parameter is approximated by its lower bound,
@@ -6964,13 +6946,16 @@ The constraint is left unchanged.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6978,7 +6963,7 @@ The constraint is left unchanged.</p>
                 
                 <div id="bounds(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'bounds(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'bounds(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7017,23 +7002,22 @@ The constraint is left unchanged.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-bounds(param)">
-                            <p>The current bounds of type parameter <code>param</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-bounds(param)">
                             <p>The current bounds of type parameter <code>param</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7041,7 +7025,7 @@ The constraint is left unchanged.</p>
                 
                 <div id="canConstrain(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'canConstrain(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'canConstrain(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7080,23 +7064,22 @@ The constraint is left unchanged.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-canConstrain(param)">
-                            <p>Can <code>param</code> be constrained with new bounds?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-canConstrain(param)">
                             <p>Can <code>param</code> be constrained with new bounds?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7104,7 +7087,7 @@ The constraint is left unchanged.</p>
                 
                 <div id="checkPropagated(msg)(result)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkPropagated(msg)(result)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkPropagated(msg)(result)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7154,23 +7137,22 @@ The constraint is left unchanged.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkPropagated(msg)(result)">
-                            <p>Check that constraint is fully propagated. See comment in Config.checkConstraintsPropagated</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkPropagated(msg)(result)">
                             <p>Check that constraint is fully propagated. See comment in Config.checkConstraintsPropagated</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7178,7 +7160,7 @@ The constraint is left unchanged.</p>
                 
                 <div id="comparedTypeLambdas_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'comparedTypeLambdas_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'comparedTypeLambdas_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7220,11 +7202,6 @@ TypeLambda
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-comparedTypeLambdas_=(x$1)">
-                            <p>We are currently comparing type lambdas. Used as a flag for
-optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-comparedTypeLambdas_=(x$1)">
                             <p>We are currently comparing type lambdas. Used as a flag for
 optimization: when <code>false</code>, no need to do an expensive <code>pruneLambdaParams</code></p>
@@ -7232,13 +7209,16 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7246,7 +7226,7 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                 
                 <div id="frozenConstraint_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'frozenConstraint_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'frozenConstraint_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7285,23 +7265,22 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-frozenConstraint_=(x$1)">
-                            <p>If the constraint is frozen we cannot add new bounds to the constraint.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-frozenConstraint_=(x$1)">
                             <p>If the constraint is frozen we cannot add new bounds to the constraint.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7309,7 +7288,7 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                 
                 <div id="homogenizeArgs_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'homogenizeArgs_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'homogenizeArgs_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7348,13 +7327,6 @@ optimization: when <code>false</code>, no need to do an expensive <code>pruneLam
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-homogenizeArgs_=(x$1)">
-                            <p>If set, align arguments <code>S1</code>, <code>S2</code>when taking the glb
-<code>T1 { X = S1 } &amp; T2 { X = S2 }</code> of a constraint upper bound for some type parameter.
-Aligning means comp...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-homogenizeArgs_=(x$1)">
                             <p>If set, align arguments <code>S1</code>, <code>S2</code>when taking the glb
 <code>T1 { X = S1 } &amp; T2 { X = S2 }</code> of a constraint upper bound for some type parameter.
@@ -7364,13 +7336,16 @@ See note in TypeComparer#distributeAnd.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7378,7 +7353,7 @@ See note in TypeComparer#distributeAnd.</p>
                 
                 <div id="instanceType(param,fromBelow)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'instanceType(param,fromBelow)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'instanceType(param,fromBelow)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7425,13 +7400,6 @@ See note in TypeComparer#distributeAnd.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-instanceType(param,fromBelow)">
-                            <p>The instance type of <code>param</code> in the current constraint (which contains <code>param</code>).
-If <code>fromBelow</code> is true, the instance type is the lub of the parameter's
-lower...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-instanceType(param,fromBelow)">
                             <p>The instance type of <code>param</code> in the current constraint (which contains <code>param</code>).
 If <code>fromBelow</code> is true, the instance type is the lub of the parameter's
@@ -7442,13 +7410,16 @@ is also a singleton type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7456,7 +7427,7 @@ is also a singleton type.</p>
                 
                 <div id="isSameType(tp1,tp2)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSameType(tp1,tp2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isSameType(tp1,tp2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7503,21 +7474,21 @@ is also a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSameType(tp1,tp2)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isSameType(tp1,tp2)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7525,7 +7496,7 @@ is also a singleton type.</p>
                 
                 <div id="isSameTypeWhenFrozen(tp1,tp2)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSameTypeWhenFrozen(tp1,tp2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isSameTypeWhenFrozen(tp1,tp2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7572,21 +7543,21 @@ is also a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSameTypeWhenFrozen(tp1,tp2)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isSameTypeWhenFrozen(tp1,tp2)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7594,7 +7565,7 @@ is also a singleton type.</p>
                 
                 <div id="isSatisfiable" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSatisfiable');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isSatisfiable');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7620,11 +7591,6 @@ is also a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSatisfiable">
-                            <p>Test whether the lower bounds of all parameters in this
-constraint are a solution to the constraint.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isSatisfiable">
                             <p>Test whether the lower bounds of all parameters in this
 constraint are a solution to the constraint.</p>
@@ -7632,13 +7598,16 @@ constraint are a solution to the constraint.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7646,7 +7615,7 @@ constraint are a solution to the constraint.</p>
                 
                 <div id="isSubType(tp1,tp2)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSubType(tp1,tp2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isSubType(tp1,tp2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7693,21 +7662,21 @@ constraint are a solution to the constraint.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSubType(tp1,tp2)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isSubType(tp1,tp2)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7715,7 +7684,7 @@ constraint are a solution to the constraint.</p>
                 
                 <div id="isSubType(tp1,tp2,whenFrozen)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSubType(tp1,tp2,whenFrozen)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isSubType(tp1,tp2,whenFrozen)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7770,21 +7739,21 @@ constraint are a solution to the constraint.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSubType(tp1,tp2,whenFrozen)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isSubType(tp1,tp2,whenFrozen)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7792,7 +7761,7 @@ constraint are a solution to the constraint.</p>
                 
                 <div id="isSubTypeWhenFrozen(tp1,tp2)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSubTypeWhenFrozen(tp1,tp2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isSubTypeWhenFrozen(tp1,tp2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7839,21 +7808,21 @@ constraint are a solution to the constraint.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSubTypeWhenFrozen(tp1,tp2)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isSubTypeWhenFrozen(tp1,tp2)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7861,7 +7830,7 @@ constraint are a solution to the constraint.</p>
                 
                 <div id="narrowedBound(param,bound,isUpper)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'narrowedBound(param,bound,isUpper)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'narrowedBound(param,bound,isUpper)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7929,11 +7898,6 @@ constraint are a solution to the constraint.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-narrowedBound(param,bound,isUpper)(ctx)">
-                            <p>Narrow one of the bounds of type parameter <code>param</code>
-If <code>isUpper</code> is true, ensure that <code>param &lt;:</code>bound<code>, otherwise ensure that</code>param &gt;: bound`.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-narrowedBound(param,bound,isUpper)(ctx)">
                             <p>Narrow one of the bounds of type parameter <code>param</code>
 If <code>isUpper</code> is true, ensure that <code>param &lt;:</code>bound<code>, otherwise ensure that</code>param &gt;: bound`.</p>
@@ -7941,13 +7905,16 @@ If <code>isUpper</code> is true, ensure that <code>param &lt;:</code>bound<code>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7955,7 +7922,7 @@ If <code>isUpper</code> is true, ensure that <code>param &lt;:</code>bound<code>
                 
                 <div id="subsumes(c1,c2,pre)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'subsumes(c1,c2,pre)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'subsumes(c1,c2,pre)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8010,15 +7977,6 @@ If <code>isUpper</code> is true, ensure that <code>param &lt;:</code>bound<code>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-subsumes(c1,c2,pre)">
-                            <p>Constraint <code>c1</code> subsumes constraint <code>c2</code>, if under <code>c2</code> as constraint we have
-for all poly params <code>p</code> defined in <code>c2</code> as <code>p &gt;: L2 &lt;: U2</code>:</p>
-<p>c1 defines p with bounds p...
-</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-subsumes(c1,c2,pre)">
                             <p>Constraint <code>c1</code> subsumes constraint <code>c2</code>, if under <code>c2</code> as constraint we have
 for all poly params <code>p</code> defined in <code>c2</code> as <code>p &gt;: L2 &lt;: U2</code>:</p>
@@ -8031,13 +7989,16 @@ narrowing it with further bounds.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8045,7 +8006,7 @@ narrowing it with further bounds.</p>
                 
                 <div id="tryInstantiate(param,tp)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'tryInstantiate(param,tp)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'tryInstantiate(param,tp)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8092,23 +8053,22 @@ narrowing it with further bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-tryInstantiate(param,tp)">
-                            <p>Instantiate <code>param</code> to <code>tp</code> if the constraint stays satisfiable</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-tryInstantiate(param,tp)">
                             <p>Instantiate <code>param</code> to <code>tp</code> if the constraint stays satisfiable</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8116,7 +8076,7 @@ narrowing it with further bounds.</p>
                 
                 <div id="unify(p1,p2)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unify(p1,p2)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unify(p1,p2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8163,23 +8123,22 @@ narrowing it with further bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unify(p1,p2)">
-                            <p>Make p2 = p1, transfer all bounds of p2 to p1</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-unify(p1,p2)">
                             <p>Make p2 = p1, transfer all bounds of p2 to p1</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

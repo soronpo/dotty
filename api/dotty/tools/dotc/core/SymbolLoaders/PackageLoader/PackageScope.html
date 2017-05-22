@@ -6078,6 +6078,7 @@ in three aspects:</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6098,6 +6099,7 @@ in three aspects:</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6105,7 +6107,7 @@ in three aspects:</p>
                 
                 <div id="ensureComplete()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ensureComplete()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ensureComplete()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6151,12 +6153,6 @@ in three aspects:</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ensureComplete()(ctx)">
-                            <p>Ensure that all elements of this scope have been entered.
-Overridden by SymbolLoaders.PackageLoader#PackageScope, where it
-makes sure that all names wit...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ensureComplete()(ctx)">
                             <p>Ensure that all elements of this scope have been entered.
 Overridden by SymbolLoaders.PackageLoader#PackageScope, where it
@@ -6165,13 +6161,16 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6179,7 +6178,7 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                 
                 <div id="lookupEntry(name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lookupEntry(name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lookupEntry(name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6231,23 +6230,22 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lookupEntry(name)(ctx)">
-                            <p>Lookup a symbol entry matching given name.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lookupEntry(name)(ctx)">
                             <p>Lookup a symbol entry matching given name.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6255,7 +6253,7 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                 
                 <div id="newScopeEntry(name,sym)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newScopeEntry(name,sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newScopeEntry(name,sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6315,23 +6313,22 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newScopeEntry(name,sym)(ctx)">
-                            <p>create and enter a scope entry with given name and symbol</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-newScopeEntry(name,sym)(ctx)">
                             <p>create and enter a scope entry with given name and symbol</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6339,7 +6336,7 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                 
                 <div id="newScopeLikeThis()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newScopeLikeThis()');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'newScopeLikeThis()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6372,21 +6369,21 @@ makes sure that all names with <code>$</code>'s have been added.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newScopeLikeThis()">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-newScopeLikeThis()">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

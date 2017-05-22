@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6072,6 +6073,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6079,7 +6081,7 @@
                 
                 <div id="evt2u(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'evt2u(d)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'evt2u(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6131,12 +6133,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-evt2u(d)(ctx)">
-                            <p>For a value class <code>d</code>, this returns the synthetic cast from ErasedValueType to the
-underlying type defined in the companion module. This method is added...
-[ExtensionMethods]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-evt2u(d)(ctx)">
                             <p>For a value class <code>d</code>, this returns the synthetic cast from ErasedValueType to the
 underlying type defined in the companion module. This method is added to the module
@@ -6145,13 +6141,16 @@ and further described in [[ExtensionMethods]].</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6159,7 +6158,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="isCyclic(cls)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isCyclic(cls)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isCyclic(cls)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6211,23 +6210,22 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isCyclic(cls)(ctx)">
-                            <p>Whether a value class wraps itself</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isCyclic(cls)(ctx)">
                             <p>Whether a value class wraps itself</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6235,7 +6233,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="isDerivedValueClass(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isDerivedValueClass(d)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isDerivedValueClass(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6287,21 +6285,21 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isDerivedValueClass(d)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isDerivedValueClass(d)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6309,7 +6307,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="isMethodWithExtension(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isMethodWithExtension(d)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isMethodWithExtension(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6361,21 +6359,21 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isMethodWithExtension(d)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isMethodWithExtension(d)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6383,7 +6381,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="u2evt(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'u2evt(d)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'u2evt(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6435,12 +6433,6 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-u2evt(d)(ctx)">
-                            <p>For a value class <code>d</code>, this returns the synthetic cast from the underlying type to
-ErasedValueType defined in the companion module. This method is added...
-[ExtensionMethods]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-u2evt(d)(ctx)">
                             <p>For a value class <code>d</code>, this returns the synthetic cast from the underlying type to
 ErasedValueType defined in the companion module. This method is added to the module
@@ -6449,13 +6441,16 @@ and further described in [[ExtensionMethods]].</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6463,7 +6458,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="underlyingOfValueClass(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'underlyingOfValueClass(d)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'underlyingOfValueClass(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6515,23 +6510,22 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-underlyingOfValueClass(d)(ctx)">
-                            <p>The unboxed type that underlies a derived value class</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-underlyingOfValueClass(d)(ctx)">
                             <p>The unboxed type that underlies a derived value class</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6539,7 +6533,7 @@ and further described in [[ExtensionMethods]].</p>
                 
                 <div id="valueClassUnbox(d)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'valueClassUnbox(d)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'valueClassUnbox(d)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6591,23 +6585,22 @@ and further described in [[ExtensionMethods]].</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-valueClassUnbox(d)(ctx)">
-                            <p>The member of a derived value class that unboxes it.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-valueClassUnbox(d)(ctx)">
                             <p>The member of a derived value class that unboxes it.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

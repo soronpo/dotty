@@ -6065,6 +6065,7 @@ easy-to-remember names</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@ easy-to-remember names</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@ easy-to-remember names</p>
                 
                 <div id="Ctrl$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Ctrl$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Ctrl$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6104,11 +6106,6 @@ easy-to-remember names</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Ctrl$">
-                            <p>Lets you easily pattern match on characters modified by ctrl,
-or convert a character into its ctrl-ed version</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Ctrl$">
                             <p>Lets you easily pattern match on characters modified by ctrl,
 or convert a character into its ctrl-ed version</p>
@@ -6116,13 +6113,16 @@ or convert a character into its ctrl-ed version</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6130,7 +6130,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltDown" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltDown');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltDown');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6156,21 +6156,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltDown">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltDown">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6178,7 +6178,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6204,21 +6204,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6226,7 +6226,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6252,21 +6252,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6274,7 +6274,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltShiftDown" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltShiftDown');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltShiftDown');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6300,21 +6300,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltShiftDown">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltShiftDown">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6322,7 +6322,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltShiftLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltShiftLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltShiftLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6348,21 +6348,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltShiftLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltShiftLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6370,7 +6370,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltShiftRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltShiftRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltShiftRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6396,21 +6396,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltShiftRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltShiftRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6418,7 +6418,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltShiftUp" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltShiftUp');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltShiftUp');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6444,21 +6444,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltShiftUp">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltShiftUp">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6466,7 +6466,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="AltUp" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AltUp');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AltUp');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6492,21 +6492,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AltUp">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AltUp">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6514,7 +6514,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Down" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Down');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Down');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6540,21 +6540,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Down">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Down">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6562,7 +6562,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="End" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'End');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'End');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6588,21 +6588,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-End">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-End">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6610,7 +6610,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="EndScreen" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'EndScreen');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'EndScreen');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6636,21 +6636,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-EndScreen">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-EndScreen">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6658,7 +6658,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltDown" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltDown');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltDown');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6684,21 +6684,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltDown">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltDown">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6706,7 +6706,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6732,21 +6732,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6754,7 +6754,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6780,21 +6780,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6802,7 +6802,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltShiftLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltShiftLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltShiftLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6828,21 +6828,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltShiftLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltShiftLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6850,7 +6850,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltShiftRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltShiftRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltShiftRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6876,21 +6876,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltShiftRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltShiftRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6898,7 +6898,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnAltUp" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnAltUp');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnAltUp');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6924,21 +6924,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnAltUp">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnAltUp">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6946,7 +6946,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnDown" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnDown');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnDown');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6972,21 +6972,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnDown">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnDown">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6994,7 +6994,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7020,21 +7020,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7042,7 +7042,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7068,21 +7068,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7090,7 +7090,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnShiftLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnShiftLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnShiftLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7116,21 +7116,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnShiftLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnShiftLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7138,7 +7138,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnShiftRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnShiftRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnShiftRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7164,21 +7164,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnShiftRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnShiftRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7186,7 +7186,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="FnUp" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FnUp');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FnUp');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7212,21 +7212,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FnUp">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FnUp">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7234,7 +7234,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Home" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Home');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Home');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7260,21 +7260,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Home">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Home">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7282,7 +7282,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="HomeScreen" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'HomeScreen');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'HomeScreen');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7308,21 +7308,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-HomeScreen">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-HomeScreen">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7330,7 +7330,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Left" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Left');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Left');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7356,21 +7356,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Left">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Left">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7378,7 +7378,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="LinuxCtrlLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinuxCtrlLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinuxCtrlLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7404,21 +7404,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinuxCtrlLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinuxCtrlLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7426,7 +7426,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="LinuxCtrlRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinuxCtrlRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinuxCtrlRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7452,21 +7452,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinuxCtrlRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinuxCtrlRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7474,7 +7474,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Right" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Right');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Right');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7500,21 +7500,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Right">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Right">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7522,7 +7522,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="ShiftDown" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ShiftDown');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ShiftDown');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7548,21 +7548,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ShiftDown">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ShiftDown">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7570,7 +7570,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="ShiftLeft" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ShiftLeft');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ShiftLeft');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7596,21 +7596,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ShiftLeft">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ShiftLeft">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7618,7 +7618,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="ShiftRight" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ShiftRight');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ShiftRight');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7644,21 +7644,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ShiftRight">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ShiftRight">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7666,7 +7666,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="ShiftUp" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ShiftUp');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ShiftUp');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7692,21 +7692,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ShiftUp">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ShiftUp">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7714,7 +7714,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Up" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Up');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Up');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7740,21 +7740,21 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Up">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Up">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7762,7 +7762,7 @@ or convert a character into its ctrl-ed version</p>
                 
                 <div id="Alt" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Alt');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Alt');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7788,23 +7788,22 @@ or convert a character into its ctrl-ed version</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Alt">
-                            <p>The string value you get when you hit the alt key</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Alt">
                             <p>The string value you get when you hit the alt key</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

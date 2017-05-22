@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6117,6 +6118,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6124,7 +6126,7 @@
                 
                 <div id="ConstantPool" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ConstantPool');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ConstantPool');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6148,21 +6150,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ConstantPool">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ConstantPool">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6170,7 +6172,7 @@
                 
                 <div id="InnerClassEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'InnerClassEntry');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'InnerClassEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6194,23 +6196,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-InnerClassEntry">
-                            <p>An entry in the InnerClasses attribute of this class file.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-InnerClassEntry">
                             <p>An entry in the InnerClasses attribute of this class file.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6218,7 +6219,7 @@
                 
                 <div id="InnerClassEntry$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'InnerClassEntry$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'InnerClassEntry$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6242,23 +6243,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-InnerClassEntry$">
-                            <p>An entry in the InnerClasses attribute of this class file.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-InnerClassEntry$">
                             <p>An entry in the InnerClasses attribute of this class file.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6266,7 +6266,7 @@
                 
                 <div id="innerClasses$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'innerClasses$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'innerClasses$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6290,21 +6290,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-innerClasses$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-innerClasses$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6312,7 +6312,7 @@
                 
                 <div id="classRoot" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'classRoot');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'classRoot');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6338,21 +6338,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classRoot">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-classRoot">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6360,7 +6360,7 @@
                 
                 <div id="classTParams" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'classTParams');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'classTParams');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6389,21 +6389,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classTParams">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-classTParams">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6411,7 +6411,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="classfile" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'classfile');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'classfile');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6437,21 +6437,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classfile">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-classfile">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6459,7 +6459,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="currentClassName" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'currentClassName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'currentClassName');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6485,21 +6485,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-currentClassName">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-currentClassName">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6507,7 +6507,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="ictx" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ictx');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ictx');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6533,21 +6533,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ictx">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ictx">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6555,7 +6555,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="in" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'in');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'in');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6581,21 +6581,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-in">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-in">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6603,7 +6603,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="instanceScope" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'instanceScope');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'instanceScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6629,21 +6629,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-instanceScope">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-instanceScope">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6651,7 +6651,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="memberCompleter" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'memberCompleter');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'memberCompleter');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6677,21 +6677,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-memberCompleter">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-memberCompleter">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6699,7 +6699,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="moduleRoot" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'moduleRoot');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'moduleRoot');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6725,21 +6725,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-moduleRoot">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-moduleRoot">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6747,7 +6747,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="pool" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'pool');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'pool');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6773,21 +6773,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-pool">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-pool">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6795,7 +6795,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="sawPrivateConstructor" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'sawPrivateConstructor');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'sawPrivateConstructor');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6821,21 +6821,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-sawPrivateConstructor">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-sawPrivateConstructor">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6843,7 +6843,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="staticModule" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'staticModule');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'staticModule');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6869,21 +6869,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-staticModule">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-staticModule">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6891,7 +6891,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="staticScope" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'staticScope');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'staticScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6917,21 +6917,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-staticScope">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-staticScope">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6939,7 +6939,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="addAnnotationConstructor(classInfo,tparams)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'addAnnotationConstructor(classInfo,tparams)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addAnnotationConstructor(classInfo,tparams)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7002,13 +7002,6 @@ TypeSymbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addAnnotationConstructor(classInfo,tparams)(ctx)">
-                            <p>Add synthetic constructor(s) and potentially also default getters which
-reflects the fields of the annotation with given <code>classInfo</code>.
-Annotations in Scala...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addAnnotationConstructor(classInfo,tparams)(ctx)">
                             <p>Add synthetic constructor(s) and potentially also default getters which
 reflects the fields of the annotation with given <code>classInfo</code>.
@@ -7020,13 +7013,16 @@ them only to signal that the corresponding parameter is optional.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7034,7 +7030,7 @@ them only to signal that the corresponding parameter is optional.</p>
                 
                 <div id="addEnclosingTParams()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addEnclosingTParams()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addEnclosingTParams()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7080,23 +7076,22 @@ them only to signal that the corresponding parameter is optional.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addEnclosingTParams()(ctx)">
-                            <p>Add type parameters of enclosing classes</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addEnclosingTParams()(ctx)">
                             <p>Add type parameters of enclosing classes</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7104,7 +7099,7 @@ them only to signal that the corresponding parameter is optional.</p>
                 
                 <div id="classNameToSymbol(name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'classNameToSymbol(name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'classNameToSymbol(name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7156,23 +7151,22 @@ them only to signal that the corresponding parameter is optional.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classNameToSymbol(name)(ctx)">
-                            <p>Return the class symbol of the given name.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-classNameToSymbol(name)(ctx)">
                             <p>Return the class symbol of the given name.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7180,7 +7174,7 @@ them only to signal that the corresponding parameter is optional.</p>
                 
                 <div id="classTParams_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'classTParams_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'classTParams_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7222,21 +7216,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classTParams_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-classTParams_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7244,7 +7238,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="currentClassName_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'currentClassName_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'currentClassName_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7283,21 +7277,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-currentClassName_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-currentClassName_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7305,7 +7299,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="currentIsTopLevel(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'currentIsTopLevel(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'currentIsTopLevel(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7346,21 +7340,21 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-currentIsTopLevel(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-currentIsTopLevel(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7368,7 +7362,7 @@ Name<span class="">, </span>Symbol
                 
                 <div id="enterOwnInnerClasses()(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterOwnInnerClasses()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterOwnInnerClasses()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7414,11 +7408,6 @@ Name<span class="">, </span>Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterOwnInnerClasses()(ctx)">
-                            <p>Enter own inner classes in the right scope. It needs the scopes to be set up,
-and implicitly current class' superclasses.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterOwnInnerClasses()(ctx)">
                             <p>Enter own inner classes in the right scope. It needs the scopes to be set up,
 and implicitly current class' superclasses.</p>
@@ -7426,13 +7415,16 @@ and implicitly current class' superclasses.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7440,7 +7432,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="getOwner(flags)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getOwner(flags)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getOwner(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7479,21 +7471,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getOwner(flags)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getOwner(flags)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7501,7 +7493,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="getScope(flags)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getScope(flags)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getScope(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7540,21 +7532,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getScope(flags)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getScope(flags)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7562,7 +7554,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="hasAnnotation(flags)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hasAnnotation(flags)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'hasAnnotation(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7601,21 +7593,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hasAnnotation(flags)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-hasAnnotation(flags)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7623,7 +7615,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="isPrivate(flags)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isPrivate(flags)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isPrivate(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7662,21 +7654,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isPrivate(flags)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isPrivate(flags)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7684,7 +7676,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="isStatic(flags)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isStatic(flags)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isStatic(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7723,21 +7715,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isStatic(flags)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isStatic(flags)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7745,7 +7737,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="mismatchError(className)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mismatchError(className)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'mismatchError(className)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7784,21 +7776,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-mismatchError(className)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-mismatchError(className)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7806,7 +7798,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="objToAny(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'objToAny(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'objToAny(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7858,23 +7850,22 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-objToAny(tp)(ctx)">
-                            <p>Map direct references to Object to references to Any</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-objToAny(tp)(ctx)">
                             <p>Map direct references to Object to references to Any</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7882,7 +7873,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="parseAnnotArg(skip)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseAnnotArg(skip)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseAnnotArg(skip)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7937,21 +7928,21 @@ and implicitly current class' superclasses.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseAnnotArg(skip)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseAnnotArg(skip)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7959,7 +7950,7 @@ and implicitly current class' superclasses.</p>
                 
                 <div id="parseAnnotation(attrNameIndex,skip)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseAnnotation(attrNameIndex,skip)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'parseAnnotation(attrNameIndex,skip)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8022,11 +8013,6 @@ Annotation
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseAnnotation(attrNameIndex,skip)(ctx)">
-                            <p>Parse and return a single annotation.  If it is malformed,
-return None.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-parseAnnotation(attrNameIndex,skip)(ctx)">
                             <p>Parse and return a single annotation.  If it is malformed,
 return None.</p>
@@ -8034,13 +8020,16 @@ return None.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8048,7 +8037,7 @@ return None.</p>
                 
                 <div id="parseAttributes(sym,symtype)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseAttributes(sym,symtype)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseAttributes(sym,symtype)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8108,21 +8097,21 @@ return None.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseAttributes(sym,symtype)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseAttributes(sym,symtype)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8130,7 +8119,7 @@ return None.</p>
                 
                 <div id="parseClass()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseClass()(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseClass()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8179,21 +8168,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseClass()(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseClass()(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8201,7 +8190,7 @@ Embedded
                 
                 <div id="parseHeader()" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseHeader()');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseHeader()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8234,21 +8223,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseHeader()">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseHeader()">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8256,7 +8245,7 @@ Embedded
                 
                 <div id="parseMember(method)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseMember(method)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseMember(method)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8308,21 +8297,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseMember(method)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseMember(method)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8330,7 +8319,7 @@ Embedded
                 
                 <div id="pool_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'pool_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'pool_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8369,21 +8358,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-pool_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-pool_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8391,7 +8380,7 @@ Embedded
                 
                 <div id="run()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'run()(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'run()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8440,21 +8429,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-run()(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-run()(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8462,7 +8451,7 @@ Embedded
                 
                 <div id="sawPrivateConstructor_=(x$1)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'sawPrivateConstructor_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'sawPrivateConstructor_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8501,21 +8490,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-sawPrivateConstructor_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-sawPrivateConstructor_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8523,7 +8512,7 @@ Embedded
                 
                 <div id="setPrivateWithin(denot,jflags)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'setPrivateWithin(denot,jflags)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'setPrivateWithin(denot,jflags)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8583,21 +8572,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-setPrivateWithin(denot,jflags)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-setPrivateWithin(denot,jflags)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8605,7 +8594,7 @@ Embedded
                 
                 <div id="sigToType(sig,owner)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'sigToType(sig,owner)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'sigToType(sig,owner)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8665,21 +8654,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-sigToType(sig,owner)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-sigToType(sig,owner)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8687,7 +8676,7 @@ Embedded
                 
                 <div id="skipAttributes()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'skipAttributes()');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'skipAttributes()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8720,21 +8709,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-skipAttributes()">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-skipAttributes()">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8742,7 +8731,7 @@ Embedded
                 
                 <div id="skipMembers()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'skipMembers()');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'skipMembers()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8775,21 +8764,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-skipMembers()">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-skipMembers()">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8797,7 +8786,7 @@ Embedded
                 
                 <div id="skipSuperclasses()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'skipSuperclasses()');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'skipSuperclasses()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8830,21 +8819,21 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-skipSuperclasses()">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-skipSuperclasses()">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8852,7 +8841,7 @@ Embedded
                 
                 <div id="unpickleOrParseInnerClasses()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unpickleOrParseInnerClasses()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unpickleOrParseInnerClasses()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8901,11 +8890,6 @@ Embedded
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unpickleOrParseInnerClasses()(ctx)">
-                            <p>Parse inner classes. Expects <code>in.bp</code> to point to the superclass entry.
-Restores the old <code>bp</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-unpickleOrParseInnerClasses()(ctx)">
                             <p>Parse inner classes. Expects <code>in.bp</code> to point to the superclass entry.
 Restores the old <code>bp</code>.</p>
@@ -8913,13 +8897,16 @@ Restores the old <code>bp</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

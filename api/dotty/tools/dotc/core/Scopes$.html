@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="EmptyScope$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'EmptyScope$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'EmptyScope$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,23 +6100,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-EmptyScope$">
-                            <p>The empty scope (immutable).</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-EmptyScope$">
                             <p>The empty scope (immutable).</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6122,7 +6123,7 @@
                 
                 <div id="ErrorScope" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ErrorScope');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ErrorScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6146,23 +6147,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ErrorScope">
-                            <p>A class for error scopes (mutable)</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ErrorScope">
                             <p>A class for error scopes (mutable)</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6170,7 +6170,7 @@
                 
                 <div id="MutableScope" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'MutableScope');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MutableScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6194,13 +6194,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MutableScope">
-                            <p>A subclass of Scope that defines methods for entering and
-unlinking entries.
-Note: constructor is protected to force everyone to use the factory methods...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MutableScope">
                             <p>A subclass of Scope that defines methods for entering and
 unlinking entries.
@@ -6211,13 +6204,16 @@ SynchronizedScope as mixin.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6225,7 +6221,7 @@ SynchronizedScope as mixin.</p>
                 
                 <div id="MutableScope$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'MutableScope$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MutableScope$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6249,13 +6245,6 @@ SynchronizedScope as mixin.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MutableScope$">
-                            <p>A subclass of Scope that defines methods for entering and
-unlinking entries.
-Note: constructor is protected to force everyone to use the factory methods...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MutableScope$">
                             <p>A subclass of Scope that defines methods for entering and
 unlinking entries.
@@ -6266,13 +6255,16 @@ SynchronizedScope as mixin.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6280,7 +6272,7 @@ SynchronizedScope as mixin.</p>
                 
                 <div id="Scope" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'Scope');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Scope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6304,13 +6296,6 @@ SynchronizedScope as mixin.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Scope">
-                            <p>A scope contains a set of symbols. It can be an extension
-of some outer scope, from which it inherits all symbols.
-This class does not have any methods...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Scope">
                             <p>A scope contains a set of symbols. It can be an extension
 of some outer scope, from which it inherits all symbols.
@@ -6321,13 +6306,16 @@ MutableScope.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6335,7 +6323,7 @@ MutableScope.</p>
                 
                 <div id="ScopeEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ScopeEntry');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ScopeEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6359,21 +6347,21 @@ MutableScope.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ScopeEntry">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ScopeEntry">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6381,7 +6369,7 @@ MutableScope.</p>
                 
                 <div id="SymbolSynthesizer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'SymbolSynthesizer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SymbolSynthesizer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6413,12 +6401,6 @@ MutableScope.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SymbolSynthesizer">
-                            <p>A function that optionally produces synthesized symbols with
-the given name in the given context. Returns <code>NoSymbol</code> if the
-no symbol should be synthesize...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SymbolSynthesizer">
                             <p>A function that optionally produces synthesized symbols with
 the given name in the given context. Returns <code>NoSymbol</code> if the
@@ -6427,13 +6409,16 @@ no symbol should be synthesized for the given name.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6441,7 +6426,7 @@ no symbol should be synthesized for the given name.</p>
                 
                 <div id="FillFactor" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FillFactor');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FillFactor');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6467,23 +6452,22 @@ no symbol should be synthesized for the given name.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FillFactor">
-                            <p>Maximal fill factor of hash table</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-FillFactor">
                             <p>Maximal fill factor of hash table</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6491,7 +6475,7 @@ no symbol should be synthesized for the given name.</p>
                 
                 <div id="MaxRecursions" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MaxRecursions');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MaxRecursions');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6517,11 +6501,6 @@ no symbol should be synthesized for the given name.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MaxRecursions">
-                            <p>The maximal permissible number of recursions when creating
-a hashtable</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MaxRecursions">
                             <p>The maximal permissible number of recursions when creating
 a hashtable</p>
@@ -6529,13 +6508,16 @@ a hashtable</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6543,7 +6525,7 @@ a hashtable</p>
                 
                 <div id="MinHashedScopeSize" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MinHashedScopeSize');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'MinHashedScopeSize');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6569,21 +6551,21 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MinHashedScopeSize">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-MinHashedScopeSize">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6591,7 +6573,7 @@ a hashtable</p>
                 
                 <div id="selectAll" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'selectAll');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'selectAll');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6617,21 +6599,21 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-selectAll">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-selectAll">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6639,7 +6621,7 @@ a hashtable</p>
                 
                 <div id="selectNonPrivate" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'selectNonPrivate');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'selectNonPrivate');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6665,21 +6647,21 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-selectNonPrivate">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-selectNonPrivate">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6687,7 +6669,7 @@ a hashtable</p>
                 
                 <div id="selectPrivate" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'selectPrivate');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'selectPrivate');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6713,21 +6695,21 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-selectPrivate">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-selectPrivate">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6735,7 +6717,7 @@ a hashtable</p>
                 
                 <div id="newNestedScope(outer)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newNestedScope(outer)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newNestedScope(outer)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6787,23 +6769,22 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newNestedScope(outer)(ctx)">
-                            <p>Create a new scope nested in another one with which it shares its elements</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-newNestedScope(outer)(ctx)">
                             <p>Create a new scope nested in another one with which it shares its elements</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6811,7 +6792,7 @@ a hashtable</p>
                 
                 <div id="newScope" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newScope');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6837,23 +6818,22 @@ a hashtable</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newScope">
-                            <p>Create a new scope</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-newScope">
                             <p>Create a new scope</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6861,7 +6841,7 @@ a hashtable</p>
                 
                 <div id="newScopeWith(elems)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newScopeWith(elems)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newScopeWith(elems)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6916,23 +6896,22 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newScopeWith(elems)(ctx)">
-                            <p>Create a new scope with given initial elements</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-newScopeWith(elems)(ctx)">
                             <p>Create a new scope with given initial elements</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6940,7 +6919,7 @@ Symbol
                 
                 <div id="scopeTransform(owner)(op)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'scopeTransform(owner)(op)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'scopeTransform(owner)(op)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6990,11 +6969,6 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-scopeTransform(owner)(op)">
-                            <p>Transform scope of members of <code>owner</code> using operation <code>op</code>
-This is overridden by the reflective compiler to avoid creating new scopes for packages</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-scopeTransform(owner)(op)">
                             <p>Transform scope of members of <code>owner</code> using operation <code>op</code>
 This is overridden by the reflective compiler to avoid creating new scopes for packages</p>
@@ -7002,13 +6976,16 @@ This is overridden by the reflective compiler to avoid creating new scopes for p
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

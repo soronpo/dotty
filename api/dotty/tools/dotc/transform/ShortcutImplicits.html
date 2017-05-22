@@ -6102,6 +6102,7 @@ keeping the same type and value arguments as they are found in <code>qual</code>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6122,6 +6123,7 @@ keeping the same type and value arguments as they are found in <code>qual</code>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6129,7 +6131,7 @@ keeping the same type and value arguments as they are found in <code>qual</code>
                 
                 <div id="Transform" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Transform');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Transform');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6153,21 +6155,21 @@ keeping the same type and value arguments as they are found in <code>qual</code>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Transform">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Transform">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6175,7 +6177,7 @@ keeping the same type and value arguments as they are found in <code>qual</code>
                 
                 <div id="specializeMonoTargets" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'specializeMonoTargets');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'specializeMonoTargets');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6201,13 +6203,6 @@ keeping the same type and value arguments as they are found in <code>qual</code>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-specializeMonoTargets">
-                            <p>If this option is true, we don't specialize symbols that are known to be only
-targets of monomorphic calls.
-The reason for this option is that benchmark...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-specializeMonoTargets">
                             <p>If this option is true, we don't specialize symbols that are known to be only
 targets of monomorphic calls.
@@ -6218,13 +6213,16 @@ well not duplicate the code. We need more experience to decide on the best setti
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6232,7 +6230,7 @@ well not duplicate the code. We need more experience to decide on the best setti
                 
                 <div id="treeTransform" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'treeTransform');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'treeTransform');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6258,21 +6256,21 @@ well not duplicate the code. We need more experience to decide on the best setti
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-treeTransform">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-treeTransform">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6280,7 +6278,7 @@ well not duplicate the code. We need more experience to decide on the best setti
                 
                 <div id="phaseName" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'phaseName');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phaseName');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6306,11 +6304,6 @@ well not duplicate the code. We need more experience to decide on the best setti
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-phaseName">
-                            <p>A name given to the <code>Phase</code> that can be used to debug the compiler. For
-instance, it is possible to print trees after a given phase using:</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-phaseName">
                             <p>A name given to the <code>Phase</code> that can be used to debug the compiler. For
 instance, it is possible to print trees after a given phase using:</p>
@@ -6320,13 +6313,16 @@ instance, it is possible to print trees after a given phase using:</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

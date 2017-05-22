@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6076,6 +6077,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6083,7 +6085,7 @@
                 
                 <div id="classSymbol(externalName)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'classSymbol(externalName)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'classSymbol(externalName)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6135,12 +6137,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-classSymbol(externalName)(ctx)">
-                            <p>Return the class symbol for <code>externalName</code>. It looks it up in its outer class.
-Forces all outer class symbols to be completed.</p>
-<p>If the given name is not an...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-classSymbol(externalName)(ctx)">
                             <p>Return the class symbol for <code>externalName</code>. It looks it up in its outer class.
 Forces all outer class symbols to be completed.</p>
@@ -6149,13 +6145,16 @@ Forces all outer class symbols to be completed.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6163,7 +6162,7 @@ Forces all outer class symbols to be completed.</p>
                 
                 <div id="topLevelClass(name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'topLevelClass(name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'topLevelClass(name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6215,11 +6214,6 @@ Forces all outer class symbols to be completed.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-topLevelClass(name)(ctx)">
-                            <p>Return the Symbol of the top level class enclosing <code>name</code>,
-or 'name's symbol if no entry found for <code>name</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-topLevelClass(name)(ctx)">
                             <p>Return the Symbol of the top level class enclosing <code>name</code>,
 or 'name's symbol if no entry found for <code>name</code>.</p>
@@ -6227,13 +6221,16 @@ or 'name's symbol if no entry found for <code>name</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

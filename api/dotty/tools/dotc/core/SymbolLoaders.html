@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6084,6 +6085,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6091,7 +6093,7 @@
                 
                 <div id="PackageLoader" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageLoader');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PackageLoader');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6115,23 +6117,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageLoader">
-                            <p>Load contents of a package</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageLoader">
                             <p>Load contents of a package</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6139,7 +6140,7 @@
                 
                 <div id="binaryOnly(owner,name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'binaryOnly(owner,name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'binaryOnly(owner,name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6199,13 +6200,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-binaryOnly(owner,name)(ctx)">
-                            <p>The package objects of scala and scala.reflect should always
-be loaded in binary if classfiles are available, even if sourcefiles
-are newer. Late-compil...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-binaryOnly(owner,name)(ctx)">
                             <p>The package objects of scala and scala.reflect should always
 be loaded in binary if classfiles are available, even if sourcefiles
@@ -6217,13 +6211,16 @@ have ReflectPackage defined.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6231,7 +6228,7 @@ have ReflectPackage defined.</p>
                 
                 <div id="enterClass(owner,name,completer,flags,scope)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterClass(owner,name,completer,flags,scope)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterClass(owner,name,completer,flags,scope)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6315,23 +6312,22 @@ have ReflectPackage defined.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterClass(owner,name,completer,flags,scope)(ctx)">
-                            <p>Enter class with given <code>name</code> into scope of <code>owner</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterClass(owner,name,completer,flags,scope)(ctx)">
                             <p>Enter class with given <code>name</code> into scope of <code>owner</code>.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6339,7 +6335,7 @@ have ReflectPackage defined.</p>
                 
                 <div id="enterClassAndModule(owner,name,completer,flags,scope)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterClassAndModule(owner,name,completer,flags,scope)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterClassAndModule(owner,name,completer,flags,scope)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6423,11 +6419,6 @@ have ReflectPackage defined.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterClassAndModule(owner,name,completer,flags,scope)(ctx)">
-                            <p>Enter class and module with given <code>name</code> into scope of <code>owner</code>
-and give them <code>completer</code> as type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterClassAndModule(owner,name,completer,flags,scope)(ctx)">
                             <p>Enter class and module with given <code>name</code> into scope of <code>owner</code>
 and give them <code>completer</code> as type.</p>
@@ -6435,13 +6426,16 @@ and give them <code>completer</code> as type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6449,7 +6443,7 @@ and give them <code>completer</code> as type.</p>
                 
                 <div id="enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6541,23 +6535,22 @@ and give them <code>completer</code> as type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)">
-                            <p>Enter module with given <code>name</code> into scope of <code>owner</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)">
                             <p>Enter module with given <code>name</code> into scope of <code>owner</code>.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6565,7 +6558,7 @@ and give them <code>completer</code> as type.</p>
                 
                 <div id="enterNew(owner,member,completer,scope)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterNew(owner,member,completer,scope)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'enterNew(owner,member,completer,scope)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6641,21 +6634,21 @@ and give them <code>completer</code> as type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterNew(owner,member,completer,scope)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-enterNew(owner,member,completer,scope)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6663,7 +6656,7 @@ and give them <code>completer</code> as type.</p>
                 
                 <div id="enterPackage(owner,pname,completer)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enterPackage(owner,pname,completer)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterPackage(owner,pname,completer)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6731,11 +6724,6 @@ and give them <code>completer</code> as type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterPackage(owner,pname,completer)(ctx)">
-                            <p>Enter package with given <code>name</code> into scope of <code>owner</code>
-and give them <code>completer</code> as type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterPackage(owner,pname,completer)(ctx)">
                             <p>Enter package with given <code>name</code> into scope of <code>owner</code>
 and give them <code>completer</code> as type.</p>
@@ -6743,13 +6731,16 @@ and give them <code>completer</code> as type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6757,7 +6748,7 @@ and give them <code>completer</code> as type.</p>
                 
                 <div id="enterToplevelsFromSource(owner,name,src,scope)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'enterToplevelsFromSource(owner,name,src,scope)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterToplevelsFromSource(owner,name,src,scope)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6833,13 +6824,6 @@ and give them <code>completer</code> as type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enterToplevelsFromSource(owner,name,src,scope)(ctx)">
-                            <p>In batch mode: Enter class and module with given <code>name</code> into scope of <code>owner</code>
-and give them a source completer for given <code>src</code> as type.
-In IDE mode: Find all...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enterToplevelsFromSource(owner,name,src,scope)(ctx)">
                             <p>In batch mode: Enter class and module with given <code>name</code> into scope of <code>owner</code>
 and give them a source completer for given <code>src</code> as type.
@@ -6850,13 +6834,16 @@ with source completer for given <code>src</code> as type.
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6864,7 +6851,7 @@ with source completer for given <code>src</code> as type.
                 
                 <div id="initializeFromClassPath(owner,classRep)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'initializeFromClassPath(owner,classRep)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'initializeFromClassPath(owner,classRep)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6924,23 +6911,22 @@ with source completer for given <code>src</code> as type.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-initializeFromClassPath(owner,classRep)(ctx)">
-                            <p>Initialize toplevel class and module symbols in <code>owner</code> from class path representation <code>classRep</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-initializeFromClassPath(owner,classRep)(ctx)">
                             <p>Initialize toplevel class and module symbols in <code>owner</code> from class path representation <code>classRep</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6948,7 +6934,7 @@ with source completer for given <code>src</code> as type.
                 
                 <div id="needCompile(bin,src)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'needCompile(bin,src)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'needCompile(bin,src)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6995,21 +6981,21 @@ with source completer for given <code>src</code> as type.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-needCompile(bin,src)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-needCompile(bin,src)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

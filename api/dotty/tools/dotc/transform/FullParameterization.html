@@ -6093,6 +6093,7 @@ to follow method parameters and translate to the following:</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6101,6 +6102,7 @@ to follow method parameters and translate to the following:</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6108,7 +6110,7 @@ to follow method parameters and translate to the following:</p>
                 
                 <div id="allInstanceTypeParams(originalDef,abstractOverClass)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'allInstanceTypeParams(originalDef,abstractOverClass)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'allInstanceTypeParams(originalDef,abstractOverClass)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6171,11 +6173,6 @@ to follow method parameters and translate to the following:</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-allInstanceTypeParams(originalDef,abstractOverClass)(ctx)">
-                            <p>The type parameters (skolems) of the method definition <code>originalDef</code>,
-followed by the class parameters of its enclosing class.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-allInstanceTypeParams(originalDef,abstractOverClass)(ctx)">
                             <p>The type parameters (skolems) of the method definition <code>originalDef</code>,
 followed by the class parameters of its enclosing class.</p>
@@ -6183,13 +6180,16 @@ followed by the class parameters of its enclosing class.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6197,7 +6197,7 @@ followed by the class parameters of its enclosing class.</p>
                 
                 <div id="forwarder(derived,originalDef,abstractOverClass,liftThisType)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'forwarder(derived,originalDef,abstractOverClass,liftThisType)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forwarder(derived,originalDef,abstractOverClass,liftThisType)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6273,11 +6273,6 @@ followed by the class parameters of its enclosing class.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-forwarder(derived,originalDef,abstractOverClass,liftThisType)(ctx)">
-                            <p>A forwarder expression which calls <code>derived</code>, passing along
-- if <code>abstractOverClass</code> the type parameters and enclosing class parameters of originalDef<code>, - t...</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-forwarder(derived,originalDef,abstractOverClass,liftThisType)(ctx)">
                             <p>A forwarder expression which calls <code>derived</code>, passing along
 - if <code>abstractOverClass</code> the type parameters and enclosing class parameters of originalDef<code>, - the</code>this<code>of the enclosing class, - the value parameters of the original method</code>originalDef`.</p>
@@ -6285,13 +6280,16 @@ followed by the class parameters of its enclosing class.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6299,7 +6297,7 @@ followed by the class parameters of its enclosing class.</p>
                 
                 <div id="fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6367,13 +6365,6 @@ followed by the class parameters of its enclosing class.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)">
-                            <p>Given an instance method definition <code>originalDef</code>, return a
-fully parameterized method definition derived from <code>originalDef</code>, which
-has <code>derived</code> as symbol an...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)">
                             <p>Given an instance method definition <code>originalDef</code>, return a
 fully parameterized method definition derived from <code>originalDef</code>, which
@@ -6385,13 +6376,16 @@ of class that contained original defDef</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6399,7 +6393,7 @@ of class that contained original defDef</p>
                 
                 <div id="fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6475,20 +6469,6 @@ of class that contained original defDef</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)">
-                            <p>Converts the type <code>info</code> of a member of class <code>clazz</code> to a method type that
-takes the <code>this</code> of the class and any type parameters of the class
-as additional p...</p>
-<p>[+A &lt;: AnyRef][A]
-[B &gt;: A][B]
-</p>
-<p></p>
-<p>
-[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef][A][B]
-</p>
-<p></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)">
                             <p>Converts the type <code>info</code> of a member of class <code>clazz</code> to a method type that
 takes the <code>this</code> of the class and any type parameters of the class
@@ -6505,13 +6485,16 @@ def extension$baz[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef]($this: Foo[
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6519,7 +6502,7 @@ def extension$baz[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef]($this: Foo[
                 
                 <div id="rewiredTarget(referenced,derived)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'rewiredTarget(referenced,derived)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'rewiredTarget(referenced,derived)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6579,12 +6562,6 @@ def extension$baz[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef]($this: Foo[
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-rewiredTarget(referenced,derived)(ctx)">
-                            <p>If references to original symbol <code>referenced</code> from within fully parameterized method
-<code>derived</code> should be rewired to some fully parameterized method, the re...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-rewiredTarget(referenced,derived)(ctx)">
                             <p>If references to original symbol <code>referenced</code> from within fully parameterized method
 <code>derived</code> should be rewired to some fully parameterized method, the rewiring target symbol,
@@ -6593,13 +6570,16 @@ otherwise NoSymbol.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6607,7 +6587,7 @@ otherwise NoSymbol.</p>
                 
                 <div id="rewiredTarget(tree,derived)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'rewiredTarget(tree,derived)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'rewiredTarget(tree,derived)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6667,15 +6647,6 @@ otherwise NoSymbol.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-rewiredTarget(tree,derived)(ctx)">
-                            <p>If references to some original symbol from given tree node within fully parameterized method
-<code>derived</code> should be rewired to some fully parameterized meth...
-</p>
-<pre><code>rewiredTarget(tree.symbol, derived)
-</code></pre>
-<p></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-rewiredTarget(tree,derived)(ctx)">
                             <p>If references to some original symbol from given tree node within fully parameterized method
 <code>derived</code> should be rewired to some fully parameterized method, the rewiring target symbol,
@@ -6687,13 +6658,16 @@ otherwise NoSymbol. By default implemented as</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

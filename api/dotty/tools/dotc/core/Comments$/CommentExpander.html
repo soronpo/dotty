@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6084,6 +6085,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6091,7 +6093,7 @@
                 
                 <div id="ExpansionLimitExceeded" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ExpansionLimitExceeded');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ExpansionLimitExceeded');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6115,21 +6117,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ExpansionLimitExceeded">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ExpansionLimitExceeded">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6137,7 +6139,7 @@
                 
                 <div id="cookedDocComments" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cookedDocComments');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'cookedDocComments');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6166,21 +6168,21 @@ Symbol<span class="">, </span>String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cookedDocComments">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-cookedDocComments">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6188,7 +6190,7 @@ Symbol<span class="">, </span>String
                 
                 <div id="defs" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'defs');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'defs');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6220,11 +6222,6 @@ String<span class="">, </span>String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-defs">
-                            <p>Maps symbols to the variable -&gt; replacement maps that are defined
-in their doc comments</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-defs">
                             <p>Maps symbols to the variable -&gt; replacement maps that are defined
 in their doc comments</p>
@@ -6232,13 +6229,16 @@ in their doc comments</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6246,7 +6246,7 @@ in their doc comments</p>
                 
                 <div id="allInheritedOverriddenSymbols(sym)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'allInheritedOverriddenSymbols(sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'allInheritedOverriddenSymbols(sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6301,12 +6301,6 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-allInheritedOverriddenSymbols(sym)(ctx)">
-                            <p>A version which doesn't consider self types, as a temporary measure:
-an infinite loop has broken out between superComment and cookedDocComment
-since r23...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-allInheritedOverriddenSymbols(sym)(ctx)">
                             <p>A version which doesn't consider self types, as a temporary measure:
 an infinite loop has broken out between superComment and cookedDocComment
@@ -6315,13 +6309,16 @@ since r23926.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6329,7 +6326,7 @@ since r23926.</p>
                 
                 <div id="cookedDocComment(sym,docStr)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'cookedDocComment(sym,docStr)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'cookedDocComment(sym,docStr)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6389,13 +6386,6 @@ since r23926.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cookedDocComment(sym,docStr)(ctx)">
-                            <p>The raw doc comment of symbol <code>sym</code>, minus usecase and define sections, augmented by
-missing sections of an inherited doc comment.
-If a symbol does not ha...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-cookedDocComment(sym,docStr)(ctx)">
                             <p>The raw doc comment of symbol <code>sym</code>, minus usecase and define sections, augmented by
 missing sections of an inherited doc comment.
@@ -6405,13 +6395,16 @@ the doc comment of the overridden version is copied instead.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6419,7 +6412,7 @@ the doc comment of the overridden version is copied instead.</p>
                 
                 <div id="defineVariables(sym)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'defineVariables(sym)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'defineVariables(sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6471,21 +6464,21 @@ the doc comment of the overridden version is copied instead.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-defineVariables(sym)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-defineVariables(sym)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6493,7 +6486,7 @@ the doc comment of the overridden version is copied instead.</p>
                 
                 <div id="defines(raw)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'defines(raw)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'defines(raw)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6535,21 +6528,21 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-defines(raw)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-defines(raw)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6557,7 +6550,7 @@ String
                 
                 <div id="docCommentPos(sym)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'docCommentPos(sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'docCommentPos(sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6609,12 +6602,6 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-docCommentPos(sym)(ctx)">
-                            <p>The position of the raw doc comment of symbol <code>sym</code>, or NoPosition if missing
-If a symbol does not have a doc comment but some overridden version of it d...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-docCommentPos(sym)(ctx)">
                             <p>The position of the raw doc comment of symbol <code>sym</code>, or NoPosition if missing
 If a symbol does not have a doc comment but some overridden version of it does,
@@ -6623,13 +6610,16 @@ the position of the doc comment of the overridden version is returned instead.</
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6637,7 +6627,7 @@ the position of the doc comment of the overridden version is returned instead.</
                 
                 <div id="expand(sym,site)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'expand(sym,site)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'expand(sym,site)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6697,21 +6687,21 @@ the position of the doc comment of the overridden version is returned instead.</
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expand(sym,site)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-expand(sym,site)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6719,7 +6709,7 @@ the position of the doc comment of the overridden version is returned instead.</
                 
                 <div id="expandInheritdoc(parent,child,sym)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'expandInheritdoc(parent,child,sym)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expandInheritdoc(parent,child,sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6774,15 +6764,6 @@ the position of the doc comment of the overridden version is returned instead.</
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expandInheritdoc(parent,child,sym)">
-                            <p>Expand inheritdoc tags
-- for the main comment we transform the inheritdoc into the super variable,
-and the variable expansion can expand it further
-- for...</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-expandInheritdoc(parent,child,sym)">
                             <p>Expand inheritdoc tags
 - for the main comment we transform the inheritdoc into the super variable,
@@ -6796,13 +6777,16 @@ impacts performance</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6810,7 +6794,7 @@ impacts performance</p>
                 
                 <div id="expandVariables(initialStr,sym,site)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'expandVariables(initialStr,sym,site)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'expandVariables(initialStr,sym,site)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6878,21 +6862,21 @@ impacts performance</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expandVariables(initialStr,sym,site)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-expandVariables(initialStr,sym,site)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6900,7 +6884,7 @@ impacts performance</p>
                 
                 <div id="expandedDocComment(sym,site,docStr)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'expandedDocComment(sym,site,docStr)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expandedDocComment(sym,site,docStr)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6968,23 +6952,22 @@ impacts performance</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expandedDocComment(sym,site,docStr)(ctx)">
-                            <p>The cooked doc comment of symbol <code>sym</code> after variable expansion, or &quot;&quot; if missing.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-expandedDocComment(sym,site,docStr)(ctx)">
                             <p>The cooked doc comment of symbol <code>sym</code> after variable expansion, or &quot;&quot; if missing.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6992,7 +6975,7 @@ impacts performance</p>
                 
                 <div id="isMovable(str,sec)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isMovable(str,sec)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isMovable(str,sec)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7041,21 +7024,21 @@ Int<span>, </span>Int
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isMovable(str,sec)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isMovable(str,sec)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7063,7 +7046,7 @@ Int<span>, </span>Int
                 
                 <div id="lookupVariable(vble,site)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lookupVariable(vble,site)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lookupVariable(vble,site)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7126,23 +7109,22 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lookupVariable(vble,site)(ctx)">
-                            <p>Lookup definition of variable.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lookupVariable(vble,site)(ctx)">
                             <p>Lookup definition of variable.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7150,7 +7132,7 @@ String
                 
                 <div id="merge(src,dst,sym,copyFirstPara)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'merge(src,dst,sym,copyFirstPara)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'merge(src,dst,sym,copyFirstPara)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7213,21 +7195,21 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-merge(src,dst,sym,copyFirstPara)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-merge(src,dst,sym,copyFirstPara)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7235,7 +7217,7 @@ String
                 
                 <div id="replaceInheritDocToInheritdoc(docStr)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'replaceInheritDocToInheritdoc(docStr)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'replaceInheritDocToInheritdoc(docStr)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7274,21 +7256,21 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-replaceInheritDocToInheritdoc(docStr)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-replaceInheritDocToInheritdoc(docStr)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7296,7 +7278,7 @@ String
                 
                 <div id="superComment(sym)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'superComment(sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'superComment(sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7351,23 +7333,22 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-superComment(sym)(ctx)">
-                            <p>The cooked doc comment of an overridden symbol</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-superComment(sym)(ctx)">
                             <p>The cooked doc comment of an overridden symbol</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7375,7 +7356,7 @@ String
                 
                 <div id="template(raw)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'template(raw)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'template(raw)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7414,21 +7395,21 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-template(raw)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-template(raw)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="CheckNonCyclicMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CheckNonCyclicMap');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'CheckNonCyclicMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,11 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CheckNonCyclicMap">
-                            <p>A type map which checks that the only cycles in a type are F-bounds
-and that protects all F-bounded references by LazyRefs.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-CheckNonCyclicMap">
                             <p>A type map which checks that the only cycles in a type are F-bounds
 and that protects all F-bounded references by LazyRefs.</p>
@@ -6110,13 +6107,16 @@ and that protects all F-bounded references by LazyRefs.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6124,7 +6124,7 @@ and that protects all F-bounded references by LazyRefs.</p>
                 
                 <div id="checkAppliedType(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkAppliedType(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkAppliedType(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6176,13 +6176,6 @@ and that protects all F-bounded references by LazyRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkAppliedType(tree)(ctx)">
-                            <p>Check applied type trees for well-formedness. This means
-- all arguments are within their corresponding bounds
-- if type is a higher-kinded application...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkAppliedType(tree)(ctx)">
                             <p>Check applied type trees for well-formedness. This means
 - all arguments are within their corresponding bounds
@@ -6194,13 +6187,16 @@ cannot handle those.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6208,7 +6204,7 @@ cannot handle those.</p>
                 
                 <div id="checkBounds(args,boundss,instantiate)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkBounds(args,boundss,instantiate)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkBounds(args,boundss,instantiate)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6285,12 +6281,6 @@ cannot handle those.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkBounds(args,boundss,instantiate)(ctx)">
-                            <p>A general checkBounds method that can be used for TypeApply nodes as
-well as for AppliedTypeTree nodes. Also checks that type arguments to
-*-type parame...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkBounds(args,boundss,instantiate)(ctx)">
                             <p>A general checkBounds method that can be used for TypeApply nodes as
 well as for AppliedTypeTree nodes. Also checks that type arguments to
@@ -6299,13 +6289,16 @@ well as for AppliedTypeTree nodes. Also checks that type arguments to
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6313,7 +6306,7 @@ well as for AppliedTypeTree nodes. Also checks that type arguments to
                 
                 <div id="checkBounds(args,tl)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkBounds(args,tl)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkBounds(args,tl)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6376,12 +6369,6 @@ well as for AppliedTypeTree nodes. Also checks that type arguments to
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkBounds(args,tl)(ctx)">
-                            <p>Check that type arguments <code>args</code> conform to corresponding bounds in <code>tl</code>
-Note: This does not check the bounds of AppliedTypeTrees. These
-are handled by meth...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkBounds(args,tl)(ctx)">
                             <p>Check that type arguments <code>args</code> conform to corresponding bounds in <code>tl</code>
 Note: This does not check the bounds of AppliedTypeTrees. These
@@ -6390,13 +6377,16 @@ are handled by method checkBounds in FirstTransform</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6404,7 +6394,7 @@ are handled by method checkBounds in FirstTransform</p>
                 
                 <div id="checkDerivedValueClass(clazz,stats)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkDerivedValueClass(clazz,stats)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkDerivedValueClass(clazz,stats)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6467,23 +6457,22 @@ are handled by method checkBounds in FirstTransform</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkDerivedValueClass(clazz,stats)(ctx)">
-                            <p>Verify classes extending AnyVal meet the requirements</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkDerivedValueClass(clazz,stats)(ctx)">
                             <p>Verify classes extending AnyVal meet the requirements</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6491,7 +6480,7 @@ are handled by method checkBounds in FirstTransform</p>
                 
                 <div id="checkInstantiable(tp,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkInstantiable(tp,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkInstantiable(tp,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6551,11 +6540,6 @@ are handled by method checkBounds in FirstTransform</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkInstantiable(tp,pos)(ctx)">
-                            <p>Check that <code>tp</code> refers to a nonAbstract class
-and that the instance conforms to the self type of the created class.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkInstantiable(tp,pos)(ctx)">
                             <p>Check that <code>tp</code> refers to a nonAbstract class
 and that the instance conforms to the self type of the created class.</p>
@@ -6563,13 +6547,16 @@ and that the instance conforms to the self type of the created class.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6577,7 +6564,7 @@ and that the instance conforms to the self type of the created class.</p>
                 
                 <div id="checkNoPrivateLeaks(sym,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkNoPrivateLeaks(sym,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNoPrivateLeaks(sym,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6637,16 +6624,6 @@ and that the instance conforms to the self type of the created class.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNoPrivateLeaks(sym,pos)(ctx)">
-                            <p>Check the type signature of the symbol <code>M</code> defined by <code>tree</code> does not refer
-to a private type or value which is invisible at a point where <code>M</code> is still
-visibl...</p>
-<p>
-</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNoPrivateLeaks(sym,pos)(ctx)">
                             <p>Check the type signature of the symbol <code>M</code> defined by <code>tree</code> does not refer
 to a private type or value which is invisible at a point where <code>M</code> is still
@@ -6667,13 +6644,16 @@ matters that we transform leaky aliases away.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6681,7 +6661,7 @@ matters that we transform leaky aliases away.</p>
                 
                 <div id="checkNonCyclic(sym,info,reportErrors)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNonCyclic(sym,info,reportErrors)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNonCyclic(sym,info,reportErrors)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6749,23 +6729,22 @@ matters that we transform leaky aliases away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNonCyclic(sym,info,reportErrors)(ctx)">
-                            <p>Check that <code>info</code> of symbol <code>sym</code> is not cyclic.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNonCyclic(sym,info,reportErrors)(ctx)">
                             <p>Check that <code>info</code> of symbol <code>sym</code> is not cyclic.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6773,7 +6752,7 @@ matters that we transform leaky aliases away.</p>
                 
                 <div id="checkRealizable(tp,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkRealizable(tp,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkRealizable(tp,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6833,23 +6812,22 @@ matters that we transform leaky aliases away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkRealizable(tp,pos)(ctx)">
-                            <p>Check that type <code>tp</code> is realizable.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkRealizable(tp,pos)(ctx)">
                             <p>Check that type <code>tp</code> is realizable.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6857,7 +6835,7 @@ matters that we transform leaky aliases away.</p>
                 
                 <div id="checkRefinementNonCyclic(refinement,refineCls,seen)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkRefinementNonCyclic(refinement,refineCls,seen)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkRefinementNonCyclic(refinement,refineCls,seen)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6928,13 +6906,6 @@ matters that we transform leaky aliases away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkRefinementNonCyclic(refinement,refineCls,seen)(ctx)">
-                            <p>Check that refinement satisfies the following two conditions
-1. No part of it refers to a symbol that's defined in the same refinement
-at a textually la...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkRefinementNonCyclic(refinement,refineCls,seen)(ctx)">
                             <p>Check that refinement satisfies the following two conditions
 1. No part of it refers to a symbol that's defined in the same refinement
@@ -6948,13 +6919,16 @@ deprecated warnings, not errors.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6962,7 +6936,7 @@ deprecated warnings, not errors.</p>
                 
                 <div id="checkWellFormed(sym)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkWellFormed(sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkWellFormed(sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7014,23 +6988,22 @@ deprecated warnings, not errors.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkWellFormed(sym)(ctx)">
-                            <p>Check that symbol's definition is well-formed.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkWellFormed(sym)(ctx)">
                             <p>Check that symbol's definition is well-formed.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

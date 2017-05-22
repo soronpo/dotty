@@ -6065,6 +6065,7 @@ that may be evaluated once.</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@ that may be evaluated once.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@ that may be evaluated once.</p>
                 
                 <div id="thunks" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'thunks');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'thunks');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6112,21 +6114,21 @@ Nothing<span class="bounds"> &lt;: </span>Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-thunks">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-thunks">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6134,7 +6136,7 @@ Nothing<span class="bounds"> &lt;: </span>Any
                 
                 <div id="forceThunks()" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'forceThunks()');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forceThunks()');">[+]</span>
                         <span class="member-annotations">
                             @tailrec 
                         </span>
@@ -6167,23 +6169,22 @@ Nothing<span class="bounds"> &lt;: </span>Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-forceThunks()">
-                            <p>Force all unevaluated thunks to prevent space leaks.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-forceThunks()">
                             <p>Force all unevaluated thunks to prevent space leaks.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6191,7 +6192,7 @@ Nothing<span class="bounds"> &lt;: </span>Any
                 
                 <div id="lzy(t)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lzy(t)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lzy(t)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6233,11 +6234,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lzy(t)">
-                            <p>Store the by-name parameter <code>s</code> in a <code>Lazy</code> container without evaluating it.
-It will be forced by the next call to <code>forceThunks()</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lzy(t)">
                             <p>Store the by-name parameter <code>s</code> in a <code>Lazy</code> container without evaluating it.
 It will be forced by the next call to <code>forceThunks()</code></p>
@@ -6245,13 +6241,16 @@ It will be forced by the next call to <code>forceThunks()</code></p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6259,7 +6258,7 @@ It will be forced by the next call to <code>forceThunks()</code></p>
                 
                 <div id="strict2lzy(t)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'strict2lzy(t)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'strict2lzy(t)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6301,13 +6300,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-strict2lzy(t)">
-                            <p>Store the parameter <code>s</code> in a <code>Lazy</code> container, since <code>s</code> is not by-name, there
-is nothing to force.</p>
-<p>TODO: Get rid of this method. It is only needed because so...
-<a href="https://github.com/sbt/zinc/issues/114">https://github.com/sbt/zinc/issues/114</a></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-strict2lzy(t)">
                             <p>Store the parameter <code>s</code> in a <code>Lazy</code> container, since <code>s</code> is not by-name, there
 is nothing to force.</p>
@@ -6318,13 +6310,16 @@ see <a href="https://github.com/sbt/zinc/issues/114">https://github.com/sbt/zinc
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

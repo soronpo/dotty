@@ -6065,6 +6065,7 @@ Used to capture the attributes of type parameters which can be implemented as ei
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@ Used to capture the attributes of type parameters which can be implemented as ei
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@ Used to capture the attributes of type parameters which can be implemented as ei
                 
                 <div id="ThisName" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ThisName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ThisName');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6112,21 +6114,21 @@ Used to capture the attributes of type parameters which can be implemented as ei
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ThisName">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ThisName">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6134,7 +6136,7 @@ Used to capture the attributes of type parameters which can be implemented as ei
                 
                 <div id="isTypeParam(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isTypeParam(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isTypeParam(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6175,11 +6177,6 @@ Used to capture the attributes of type parameters which can be implemented as ei
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isTypeParam(ctx)">
-                            <p>Is this the info of a type parameter? Will return <code>false</code> for symbols
-that are not type parameters.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isTypeParam(ctx)">
                             <p>Is this the info of a type parameter? Will return <code>false</code> for symbols
 that are not type parameters.</p>
@@ -6187,13 +6184,16 @@ that are not type parameters.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6201,7 +6201,7 @@ that are not type parameters.</p>
                 
                 <div id="paramInfo(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramInfo(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramInfo(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6242,23 +6242,22 @@ that are not type parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramInfo(ctx)">
-                            <p>The info of the type parameter</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramInfo(ctx)">
                             <p>The info of the type parameter</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6266,7 +6265,7 @@ that are not type parameters.</p>
                 
                 <div id="paramInfoAsSeenFrom(pre)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'paramInfoAsSeenFrom(pre)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramInfoAsSeenFrom(pre)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6318,13 +6317,6 @@ that are not type parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramInfoAsSeenFrom(pre)(ctx)">
-                            <p>The info of the type parameter as seen from a prefix type.
-For type parameter symbols, this is the <code>memberInfo</code> as seen from <code>prefix</code>.
-For type lambda param...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramInfoAsSeenFrom(pre)(ctx)">
                             <p>The info of the type parameter as seen from a prefix type.
 For type parameter symbols, this is the <code>memberInfo</code> as seen from <code>prefix</code>.
@@ -6334,13 +6326,16 @@ For type lambda parameters, it's the same as <code>paramInfos</code> as
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6348,7 +6343,7 @@ For type lambda parameters, it's the same as <code>paramInfos</code> as
                 
                 <div id="paramInfoOrCompleter(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramInfoOrCompleter(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramInfoOrCompleter(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6389,11 +6384,6 @@ For type lambda parameters, it's the same as <code>paramInfos</code> as
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramInfoOrCompleter(ctx)">
-                            <p>The parameter bounds, or the completer if the type parameter
-is an as-yet uncompleted symbol.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramInfoOrCompleter(ctx)">
                             <p>The parameter bounds, or the completer if the type parameter
 is an as-yet uncompleted symbol.</p>
@@ -6401,13 +6391,16 @@ is an as-yet uncompleted symbol.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6415,7 +6408,7 @@ is an as-yet uncompleted symbol.</p>
                 
                 <div id="paramName(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramName(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramName(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6456,23 +6449,22 @@ is an as-yet uncompleted symbol.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramName(ctx)">
-                            <p>The name of the type parameter</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramName(ctx)">
                             <p>The name of the type parameter</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6480,7 +6472,7 @@ is an as-yet uncompleted symbol.</p>
                 
                 <div id="paramRef(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramRef(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramRef(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6521,23 +6513,22 @@ is an as-yet uncompleted symbol.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramRef(ctx)">
-                            <p>A type that refers to the parameter</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramRef(ctx)">
                             <p>A type that refers to the parameter</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6545,7 +6536,7 @@ is an as-yet uncompleted symbol.</p>
                 
                 <div id="paramVariance(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramVariance(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramVariance(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6586,23 +6577,22 @@ is an as-yet uncompleted symbol.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramVariance(ctx)">
-                            <p>The variance of the type parameter</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramVariance(ctx)">
                             <p>The variance of the type parameter</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

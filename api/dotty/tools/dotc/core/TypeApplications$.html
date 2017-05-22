@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="AppliedType$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'AppliedType$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AppliedType$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,12 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AppliedType$">
-                            <p>Extractor for type application T[U_1, ..., U_n]. This is the refined type</p>
-<p>T { type p_1 v_1= U_1; ...; type p_n v_n= U_n }</p>
-<p>where v_i, p_i are the variances...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AppliedType$">
                             <p>Extractor for type application T[U_1, ..., U_n]. This is the refined type</p>
 <p>T { type p_1 v_1= U_1; ...; type p_n v_n= U_n }</p>
@@ -6112,13 +6108,16 @@
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6126,7 +6125,7 @@
                 
                 <div id="EtaExpansion$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'EtaExpansion$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'EtaExpansion$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6150,13 +6149,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-EtaExpansion$">
-                            <p>Extractor for</p>
-<p>[v1 X1: B1, ..., vn Xn: Bn] -&gt; C[X1, ..., Xn]</p>
-<p>where v1, ..., vn and B1, ..., Bn are the variances and bounds of the type parameters
-of the clas...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-EtaExpansion$">
                             <p>Extractor for</p>
 <p>[v1 X1: B1, ..., vn Xn: Bn] -&gt; C[X1, ..., Xn]</p>
@@ -6166,13 +6158,16 @@ of the class C.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6180,7 +6175,7 @@ of the class C.</p>
                 
                 <div id="Reducer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'Reducer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Reducer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6204,27 +6199,6 @@ of the class C.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Reducer">
-                            <p>A type map that tries to reduce (part of) the result type of the type lambda <code>tycon</code>
-with the given <code>args</code>(some of which are wildcard arguments represented...
-</p>
-<ol></ol>
-<p>
-</p>
-<pre><code>  { type A &gt;: L &lt;: U }
-</code></pre>
-<p>
-</p>
-<ol></ol>
-<p></p>
-<pre><code>  { type A &gt;: L &lt;: U }
-</code></pre>
-<p>
-</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Reducer">
                             <p>A type map that tries to reduce (part of) the result type of the type lambda <code>tycon</code>
 with the given <code>args</code>(some of which are wildcard arguments represented by type bounds).
@@ -6267,13 +6241,16 @@ produce a higher-kinded application with a type lambda as type constructor.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6281,7 +6258,7 @@ produce a higher-kinded application with a type lambda as type constructor.</p>
                 
                 <div id="TypeParamInfo" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TypeParamInfo');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'TypeParamInfo');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6316,21 +6293,21 @@ TypeName
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-TypeParamInfo">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-TypeParamInfo">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6338,7 +6315,7 @@ TypeName
                 
                 <div id="boundsToHi" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'boundsToHi');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'boundsToHi');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6364,23 +6341,22 @@ TypeName
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-boundsToHi">
-                            <p>If <code>tp</code> is a TypeBounds instance return its upper bound else return <code>tp</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-boundsToHi">
                             <p>If <code>tp</code> is a TypeBounds instance return its upper bound else return <code>tp</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6388,7 +6364,7 @@ TypeName
                 
                 <div id="boundsToLo" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'boundsToLo');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'boundsToLo');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6414,23 +6390,22 @@ TypeName
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-boundsToLo">
-                            <p>If <code>tp</code> is a TypeBounds instance return its lower bound else return <code>tp</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-boundsToLo">
                             <p>If <code>tp</code> is a TypeBounds instance return its lower bound else return <code>tp</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6438,7 +6413,7 @@ TypeName
                 
                 <div id="noBounds" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'noBounds');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'noBounds');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6464,23 +6439,22 @@ TypeName
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-noBounds">
-                            <p>Assert type is not a TypeBounds instance and return it unchanged</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-noBounds">
                             <p>Assert type is not a TypeBounds instance and return it unchanged</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6488,7 +6462,7 @@ TypeName
                 
                 <div id="EtaExpandIfHK(tparams,args)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'EtaExpandIfHK(tparams,args)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'EtaExpandIfHK(tparams,args)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6557,23 +6531,22 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-EtaExpandIfHK(tparams,args)(ctx)">
-                            <p>Adapt all arguments to possible higher-kinded type parameters using etaExpandIfHK</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-EtaExpandIfHK(tparams,args)(ctx)">
                             <p>Adapt all arguments to possible higher-kinded type parameters using etaExpandIfHK</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6581,7 +6554,7 @@ Type
                 
                 <div id="varianceConforms(v1,v2)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'varianceConforms(v1,v2)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'varianceConforms(v1,v2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6628,11 +6601,6 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-varianceConforms(v1,v2)">
-                            <p>Does variance <code>v1</code> conform to variance <code>v2</code>?
-This is the case if the variances are the same or <code>sym</code> is nonvariant.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-varianceConforms(v1,v2)">
                             <p>Does variance <code>v1</code> conform to variance <code>v2</code>?
 This is the case if the variances are the same or <code>sym</code> is nonvariant.</p>
@@ -6640,13 +6608,16 @@ This is the case if the variances are the same or <code>sym</code> is nonvariant
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6654,7 +6625,7 @@ This is the case if the variances are the same or <code>sym</code> is nonvariant
                 
                 <div id="varianceConforms(tparam1,tparam2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'varianceConforms(tparam1,tparam2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'varianceConforms(tparam1,tparam2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6714,23 +6685,22 @@ This is the case if the variances are the same or <code>sym</code> is nonvariant
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-varianceConforms(tparam1,tparam2)(ctx)">
-                            <p>Does the variance of type parameter <code>tparam1</code> conform to the variance of type parameter <code>tparam2</code>?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-varianceConforms(tparam1,tparam2)(ctx)">
                             <p>Does the variance of type parameter <code>tparam1</code> conform to the variance of type parameter <code>tparam2</code>?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6738,7 +6708,7 @@ This is the case if the variances are the same or <code>sym</code> is nonvariant
                 
                 <div id="variancesConform(tparams1,tparams2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'variancesConform(tparams1,tparams2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'variancesConform(tparams1,tparams2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6804,12 +6774,6 @@ TypeParamInfo
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-variancesConform(tparams1,tparams2)(ctx)">
-                            <p>Do the variances of type parameters <code>tparams1</code> conform to the variances
-of corresponding type parameters <code>tparams2</code>?
-This is only the case of <code>tparams1</code> and <code>t...</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-variancesConform(tparams1,tparams2)(ctx)">
                             <p>Do the variances of type parameters <code>tparams1</code> conform to the variances
 of corresponding type parameters <code>tparams2</code>?
@@ -6818,13 +6782,16 @@ This is only the case of <code>tparams1</code> and <code>tparams2</code> have th
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

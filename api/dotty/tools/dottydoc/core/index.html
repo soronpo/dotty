@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="AlternateConstructors" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AlternateConstructors');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AlternateConstructors');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,11 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AlternateConstructors">
-                            <p>This DocMiniPhase adds the alternate constructors, currently defined as
-methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AlternateConstructors">
                             <p>This DocMiniPhase adds the alternate constructors, currently defined as
 methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list</p>
@@ -6110,13 +6107,16 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6124,7 +6124,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="ContextDottydoc" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ContextDottydoc');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ContextDottydoc');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6148,21 +6148,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ContextDottydoc">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ContextDottydoc">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6170,7 +6170,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="Counters" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Counters');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Counters');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6194,21 +6194,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Counters">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Counters">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6216,7 +6216,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="Counters$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Counters$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Counters$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6240,21 +6240,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Counters$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Counters$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6262,7 +6262,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="DocASTPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DocASTPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DocASTPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6286,21 +6286,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DocASTPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DocASTPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6308,7 +6308,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="DocImplicitsPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DocImplicitsPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DocImplicitsPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6332,21 +6332,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DocImplicitsPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DocImplicitsPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6354,7 +6354,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="DocstringPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DocstringPhase');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'DocstringPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6378,23 +6378,22 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DocstringPhase">
-                            <p>Phase to add docstrings to the Dottydoc AST</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-DocstringPhase">
                             <p>Phase to add docstrings to the Dottydoc AST</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6402,7 +6401,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="LinkCompanions" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinkCompanions');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinkCompanions');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6426,21 +6425,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinkCompanions">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinkCompanions">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6448,7 +6447,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="LinkImplicitlyAddedTypes" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinkImplicitlyAddedTypes');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinkImplicitlyAddedTypes');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6472,21 +6471,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinkImplicitlyAddedTypes">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinkImplicitlyAddedTypes">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6494,7 +6493,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="LinkParamListTypes" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinkParamListTypes');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinkParamListTypes');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6518,21 +6517,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinkParamListTypes">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinkParamListTypes">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6540,7 +6539,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="LinkReturnTypes" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinkReturnTypes');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinkReturnTypes');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6564,21 +6563,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinkReturnTypes">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinkReturnTypes">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6586,7 +6585,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="LinkSuperTypes" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LinkSuperTypes');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LinkSuperTypes');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6610,21 +6609,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LinkSuperTypes">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LinkSuperTypes">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6632,7 +6631,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="PackageObjectsPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageObjectsPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PackageObjectsPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6656,21 +6655,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageObjectsPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageObjectsPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6678,7 +6677,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="SortMembers" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SortMembers');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SortMembers');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6702,23 +6701,22 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SortMembers">
-                            <p>This DocMiniPhase sorts the members of all classes, traits, objects and packages</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SortMembers">
                             <p>This DocMiniPhase sorts the members of all classes, traits, objects and packages</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6726,7 +6724,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="Statistics" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Statistics');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Statistics');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6750,21 +6748,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Statistics">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Statistics">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6772,7 +6770,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="Statistics$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Statistics$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Statistics$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6796,21 +6794,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Statistics$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Statistics$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6818,7 +6816,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="StatisticsPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'StatisticsPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'StatisticsPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6842,21 +6840,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-StatisticsPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-StatisticsPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6864,7 +6862,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="TypeLinker" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TypeLinker');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'TypeLinker');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6888,21 +6886,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-TypeLinker">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-TypeLinker">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6910,7 +6908,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="UsecasePhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UsecasePhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'UsecasePhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6934,21 +6932,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UsecasePhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-UsecasePhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6956,7 +6954,7 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                 
                 <div id="transform$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'transform$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'transform$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6980,21 +6978,21 @@ methods with the name <code>&lt;init&gt;</code>, to the Entity#constructors list
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-transform$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-transform$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

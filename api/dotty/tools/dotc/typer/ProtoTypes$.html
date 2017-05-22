@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="AnyFunctionProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AnyFunctionProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AnyFunctionProto$');">[+]</span>
                         <span class="member-annotations">
                             @sharable 
                         </span>
@@ -6098,11 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AnyFunctionProto$">
-                            <p>A prototype for expressions [] that are known to be functions:</p>
-<p>[] _</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AnyFunctionProto$">
                             <p>A prototype for expressions [] that are known to be functions:</p>
 <p>[] _</p>
@@ -6110,13 +6107,16 @@
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6124,7 +6124,7 @@
                 
                 <div id="AnySelectionProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'AnySelectionProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AnySelectionProto$');">[+]</span>
                         <span class="member-annotations">
                             @sharable 
                         </span>
@@ -6148,13 +6148,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AnySelectionProto$">
-                            <p>A prototype for expressions [] that are in some unspecified selection operation</p>
-<p>[].?: ?</p>
-<p>Used to indicate that expression is in a context where the only vali...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AnySelectionProto$">
                             <p>A prototype for expressions [] that are in some unspecified selection operation</p>
 <p>[].?: ?</p>
@@ -6164,13 +6157,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6178,7 +6174,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="AnyTypeConstructorProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AnyTypeConstructorProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AnyTypeConstructorProto$');">[+]</span>
                         <span class="member-annotations">
                             @sharable 
                         </span>
@@ -6202,23 +6198,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AnyTypeConstructorProto$">
-                            <p>A prototype for type constructors that are followed by a type application</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AnyTypeConstructorProto$">
                             <p>A prototype for type constructors that are followed by a type application</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6226,7 +6221,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="ApplyingProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ApplyingProto');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ApplyingProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6250,21 +6245,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ApplyingProto">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ApplyingProto">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6272,7 +6267,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="AssignProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AssignProto$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AssignProto$');">[+]</span>
                         <span class="member-annotations">
                             @sharable 
                         </span>
@@ -6296,21 +6291,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AssignProto$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AssignProto$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6318,7 +6313,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="CachedSelectionProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CachedSelectionProto');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CachedSelectionProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6342,21 +6337,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CachedSelectionProto">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-CachedSelectionProto">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6364,7 +6359,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="CachedViewProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CachedViewProto');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CachedViewProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6388,21 +6383,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CachedViewProto">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-CachedViewProto">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6410,7 +6405,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="Compatibility" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Compatibility');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Compatibility');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6434,23 +6429,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Compatibility">
-                            <p>A trait defining an <code>isCompatible</code> method.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Compatibility">
                             <p>A trait defining an <code>isCompatible</code> method.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6458,7 +6452,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="FunProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FunProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FunProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6482,11 +6476,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FunProto">
-                            <p>A prototype for expressions that appear in function position</p>
-<p><a href="../../../../../dotty/tools/dotc/typer/ProtoTypes$/FunProto.html"></a>: resultType</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-FunProto">
                             <p>A prototype for expressions that appear in function position</p>
 <p><a href="../../../../../dotty/tools/dotc/typer/ProtoTypes$/FunProto.html"></a>: resultType</p>
@@ -6494,13 +6483,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6508,7 +6500,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="FunProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FunProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FunProto$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6532,11 +6524,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FunProto$">
-                            <p>A prototype for expressions that appear in function position</p>
-<p><a href="#"></a>: resultType</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-FunProto$">
                             <p>A prototype for expressions that appear in function position</p>
 <p><a href="#"></a>: resultType</p>
@@ -6544,13 +6531,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6558,7 +6548,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="FunProtoTyped" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FunProtoTyped');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FunProtoTyped');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6582,11 +6572,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FunProtoTyped">
-                            <p>A prototype for expressions that appear in function position</p>
-<p><a href="../../../../../dotty/tools/dotc/typer/ProtoTypes$/FunProtoTyped.html"></a>: resultType, where args are known to be typed</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-FunProtoTyped">
                             <p>A prototype for expressions that appear in function position</p>
 <p><a href="../../../../../dotty/tools/dotc/typer/ProtoTypes$/FunProtoTyped.html"></a>: resultType, where args are known to be typed</p>
@@ -6594,13 +6579,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6608,7 +6596,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="IgnoredProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'IgnoredProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IgnoredProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6632,23 +6620,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-IgnoredProto">
-                            <p>A class marking ignored prototypes that can be revealed by <code>deepenProto</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-IgnoredProto">
                             <p>A class marking ignored prototypes that can be revealed by <code>deepenProto</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6656,7 +6643,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="IgnoredProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'IgnoredProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IgnoredProto$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6680,23 +6667,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-IgnoredProto$">
-                            <p>A class marking ignored prototypes that can be revealed by <code>deepenProto</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-IgnoredProto$">
                             <p>A class marking ignored prototypes that can be revealed by <code>deepenProto</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6704,7 +6690,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="MatchAlways" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MatchAlways');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MatchAlways');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6728,23 +6714,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MatchAlways">
-                            <p>A trait for prototypes that match all types</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MatchAlways">
                             <p>A trait for prototypes that match all types</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6752,7 +6737,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="NoViewsAllowed$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoViewsAllowed$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NoViewsAllowed$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6776,21 +6761,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoViewsAllowed$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NoViewsAllowed$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6798,7 +6783,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="PolyProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PolyProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PolyProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6822,11 +6807,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PolyProto">
-                            <p>A prototype for expressions [] that are type-parameterized:</p>
-<p>[] [targs] resultType</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PolyProto">
                             <p>A prototype for expressions [] that are type-parameterized:</p>
 <p>[] [targs] resultType</p>
@@ -6834,13 +6814,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6848,7 +6831,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="PolyProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PolyProto$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PolyProto$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6872,11 +6855,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PolyProto$">
-                            <p>A prototype for expressions [] that are type-parameterized:</p>
-<p>[] [targs] resultType</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PolyProto$">
                             <p>A prototype for expressions [] that are type-parameterized:</p>
 <p>[] [targs] resultType</p>
@@ -6884,13 +6862,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6898,7 +6879,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="SelectionProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SelectionProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SelectionProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6922,12 +6903,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SelectionProto">
-                            <p>A prototype for expressions [] that are part of a selection operation:</p>
-<pre><code> [ ].name: proto
-</code></pre>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SelectionProto">
                             <p>A prototype for expressions [] that are part of a selection operation:</p>
 <pre><code> [ ].name: proto
@@ -6936,13 +6911,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6950,7 +6928,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="SelectionProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SelectionProto$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SelectionProto$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6974,21 +6952,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SelectionProto$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SelectionProto$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6996,7 +6974,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="UnapplyFunProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UnapplyFunProto');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'UnapplyFunProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7020,21 +6998,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UnapplyFunProto">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-UnapplyFunProto">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7042,7 +7020,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="UnapplySelectionProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UnapplySelectionProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'UnapplySelectionProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7066,23 +7044,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UnapplySelectionProto">
-                            <p>A prototype for selections in pattern constructors</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-UnapplySelectionProto">
                             <p>A prototype for selections in pattern constructors</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7090,7 +7067,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="ViewProto" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ViewProto');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ViewProto');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7114,11 +7091,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ViewProto">
-                            <p>A prototype for implicitly inferred views:</p>
-<p>[]: argType =&gt; resultType</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ViewProto">
                             <p>A prototype for implicitly inferred views:</p>
 <p>[]: argType =&gt; resultType</p>
@@ -7126,13 +7098,16 @@ operation is further selection. In this case, the expression need not be a value
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7140,7 +7115,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="ViewProto$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ViewProto$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ViewProto$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7164,21 +7139,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ViewProto$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ViewProto$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7186,7 +7161,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="WildApproxMap" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'WildApproxMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'WildApproxMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7210,21 +7185,21 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-WildApproxMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-WildApproxMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7232,7 +7207,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="dummyTreeOfType$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'dummyTreeOfType$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'dummyTreeOfType$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7256,23 +7231,22 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-dummyTreeOfType$">
-                            <p>Dummy tree to be used as an argument of a FunProto or ViewProto type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-dummyTreeOfType$">
                             <p>Dummy tree to be used as an argument of a FunProto or ViewProto type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7280,7 +7254,7 @@ operation is further selection. In this case, the expression need not be a value
                 
                 <div id="constrained(tl,owningTree,alwaysAddTypeVars)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'constrained(tl,owningTree,alwaysAddTypeVars)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'constrained(tl,owningTree,alwaysAddTypeVars)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7353,13 +7327,6 @@ operation is further selection. In this case, the expression need not be a value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-constrained(tl,owningTree,alwaysAddTypeVars)(ctx)">
-                            <p>Add all parameters of given type lambda <code>tl</code> to the constraint's domain.
-If the constraint contains already some of these parameters in its domain,
-make a...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-constrained(tl,owningTree,alwaysAddTypeVars)(ctx)">
                             <p>Add all parameters of given type lambda <code>tl</code> to the constraint's domain.
 If the constraint contains already some of these parameters in its domain,
@@ -7370,13 +7337,16 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7384,7 +7354,7 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                 
                 <div id="constrained(tl)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'constrained(tl)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'constrained(tl)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7436,23 +7406,22 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-constrained(tl)(ctx)">
-                            <p>Same as <code>constrained(tl, EmptyTree)</code>, but returns just the created type lambda</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-constrained(tl)(ctx)">
                             <p>Same as <code>constrained(tl, EmptyTree)</code>, but returns just the created type lambda</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7460,7 +7429,7 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                 
                 <div id="newDepTypeVar(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newDepTypeVar(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newDepTypeVar(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7512,23 +7481,22 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newDepTypeVar(tp)(ctx)">
-                            <p>Create a new TypeVar that represents a dependent method parameter singleton</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-newDepTypeVar(tp)(ctx)">
                             <p>Create a new TypeVar that represents a dependent method parameter singleton</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7536,7 +7504,7 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                 
                 <div id="normalize(tp,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'normalize(tp,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'normalize(tp,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7596,13 +7564,6 @@ Also, if <code>owningTree</code> is non-empty, add a type variable for each para
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-normalize(tp,pt)(ctx)">
-                            <p>The normalized form of a type
-- unwraps polymorphic types, tracking their parameters in the current constraint
-- skips implicit parameters of methods an...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-normalize(tp,pt)(ctx)">
                             <p>The normalized form of a type
 - unwraps polymorphic types, tracking their parameters in the current constraint
@@ -7622,13 +7583,16 @@ function type is not compatible with the prototype.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7636,7 +7600,7 @@ function type is not compatible with the prototype.</p>
                 
                 <div id="resultTypeApprox(mt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'resultTypeApprox(mt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'resultTypeApprox(mt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7688,11 +7652,6 @@ function type is not compatible with the prototype.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-resultTypeApprox(mt)(ctx)">
-                            <p>The result type of <code>mt</code>, where all references to parameters of <code>mt</code> are
-replaced by either wildcards (if typevarsMissContext) or TypeParamRefs.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-resultTypeApprox(mt)(ctx)">
                             <p>The result type of <code>mt</code>, where all references to parameters of <code>mt</code> are
 replaced by either wildcards (if typevarsMissContext) or TypeParamRefs.</p>
@@ -7700,13 +7659,16 @@ replaced by either wildcards (if typevarsMissContext) or TypeParamRefs.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7714,7 +7676,7 @@ replaced by either wildcards (if typevarsMissContext) or TypeParamRefs.</p>
                 
                 <div id="selectionProto(name,tp,typer)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'selectionProto(name,tp,typer)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'selectionProto(name,tp,typer)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7782,11 +7744,6 @@ replaced by either wildcards (if typevarsMissContext) or TypeParamRefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-selectionProto(name,tp,typer)(ctx)">
-                            <p>Create a selection proto-type, but only one level deep;
-treat constructors specially</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-selectionProto(name,tp,typer)(ctx)">
                             <p>Create a selection proto-type, but only one level deep;
 treat constructors specially</p>
@@ -7794,13 +7751,16 @@ treat constructors specially</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7808,7 +7768,7 @@ treat constructors specially</p>
                 
                 <div id="wildApprox(tp,theMap,seen)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'wildApprox(tp,theMap,seen)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'wildApprox(tp,theMap,seen)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7879,11 +7839,6 @@ treat constructors specially</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-wildApprox(tp,theMap,seen)(ctx)">
-                            <p>Approximate occurrences of parameter types and uninstantiated typevars
-by wildcard types.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-wildApprox(tp,theMap,seen)(ctx)">
                             <p>Approximate occurrences of parameter types and uninstantiated typevars
 by wildcard types.</p>
@@ -7891,13 +7846,16 @@ by wildcard types.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

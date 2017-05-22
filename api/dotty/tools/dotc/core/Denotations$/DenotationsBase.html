@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="missingHook(owner,name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'missingHook(owner,name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'missingHook(owner,name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6134,12 +6136,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-missingHook(owner,name)(ctx)">
-                            <p>If we are looking for a non-existing term name in a package,
-assume it is a package for which we do not have a directory and
-enter it.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-missingHook(owner,name)(ctx)">
                             <p>If we are looking for a non-existing term name in a package,
 assume it is a package for which we do not have a directory and
@@ -6148,13 +6144,16 @@ enter it.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6162,7 +6161,7 @@ enter it.</p>
                 
                 <div id="staticRef(path,generateStubs)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'staticRef(path,generateStubs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'staticRef(path,generateStubs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6222,12 +6221,6 @@ enter it.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-staticRef(path,generateStubs)(ctx)">
-                            <p>The current denotation of the static reference given by path,
-or a MissingRef or NoQualifyingRef instance, if it does not exist.
-if generateStubs is set...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-staticRef(path,generateStubs)(ctx)">
                             <p>The current denotation of the static reference given by path,
 or a MissingRef or NoQualifyingRef instance, if it does not exist.
@@ -6236,13 +6229,16 @@ if generateStubs is set, generates stubs for missing top-level symbols</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="CollectEntryPoints" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CollectEntryPoints');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'CollectEntryPoints');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,23 +6100,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CollectEntryPoints">
-                            <p>Created by dark on 26/11/14.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-CollectEntryPoints">
                             <p>Created by dark on 26/11/14.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6122,7 +6123,7 @@
                 
                 <div id="CollectEntryPoints$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CollectEntryPoints$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CollectEntryPoints$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6146,21 +6147,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CollectEntryPoints$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-CollectEntryPoints$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6168,7 +6169,7 @@
                 
                 <div id="CollectSuperCalls" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'CollectSuperCalls');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'CollectSuperCalls');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6192,14 +6193,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CollectSuperCalls">
-                            <p>Collect all super calls to trait members.</p>
-<p>For each super reference to trait member, register a call from the current class to the
-owner of the reference...</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-CollectSuperCalls">
                             <p>Collect all super calls to trait members.</p>
 <p>For each super reference to trait member, register a call from the current class to the
@@ -6212,13 +6205,16 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6226,7 +6222,7 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                 
                 <div id="DottyBackendInterface" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DottyBackendInterface');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DottyBackendInterface');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6250,21 +6246,21 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DottyBackendInterface">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DottyBackendInterface">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6272,7 +6268,7 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                 
                 <div id="GenBCode" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'GenBCode');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'GenBCode');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6296,21 +6292,21 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-GenBCode">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-GenBCode">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6318,7 +6314,7 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                 
                 <div id="GenBCodePipeline" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'GenBCodePipeline');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'GenBCodePipeline');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6342,21 +6338,21 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-GenBCodePipeline">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-GenBCodePipeline">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6364,7 +6360,7 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                 
                 <div id="LabelDefs" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'LabelDefs');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'LabelDefs');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6388,18 +6384,6 @@ the redundant mixin class could be required as a parent by the JVM.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LabelDefs">
-                            <p>Verifies that each Label DefDef has only a single address to jump back and
-reorders them such that they are not nested and this address is a
-fall-throug...</p>
-<p></p>
-<p></p>
-<p>
-</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-LabelDefs">
                             <p>Verifies that each Label DefDef has only a single address to jump back and
 reorders them such that they are not nested and this address is a
@@ -6437,13 +6421,16 @@ be able to call them Other DefDefs are eliminated</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

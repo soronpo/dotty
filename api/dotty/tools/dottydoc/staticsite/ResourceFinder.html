@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="ResourceNotFoundException" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ResourceNotFoundException');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ResourceNotFoundException');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,11 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ResourceNotFoundException">
-                            <p>If, for some reason, the supplied default files cannot be found - this
-exception will be thrown in <code>layouts</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ResourceNotFoundException">
                             <p>If, for some reason, the supplied default files cannot be found - this
 exception will be thrown in <code>layouts</code>.</p>
@@ -6110,13 +6107,16 @@ exception will be thrown in <code>layouts</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6124,7 +6124,7 @@ exception will be thrown in <code>layouts</code>.</p>
                 
                 <div id="ResourceNotFoundException$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ResourceNotFoundException$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ResourceNotFoundException$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6148,11 +6148,6 @@ exception will be thrown in <code>layouts</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ResourceNotFoundException$">
-                            <p>If, for some reason, the supplied default files cannot be found - this
-exception will be thrown in <code>layouts</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ResourceNotFoundException$">
                             <p>If, for some reason, the supplied default files cannot be found - this
 exception will be thrown in <code>layouts</code>.</p>
@@ -6160,13 +6155,16 @@ exception will be thrown in <code>layouts</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6174,7 +6172,7 @@ exception will be thrown in <code>layouts</code>.</p>
                 
                 <div id="getResource(r)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getResource(r)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getResource(r)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6213,21 +6211,21 @@ exception will be thrown in <code>layouts</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getResource(r)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getResource(r)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6085,6 +6086,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6092,7 +6094,7 @@
                 
                 <div id="output" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'output');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'output');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6118,21 +6120,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-output">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-output">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6140,7 +6142,7 @@
                 
                 <div id="clearLine(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'clearLine(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'clearLine(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6179,13 +6181,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-clearLine(n)">
-                            <p>Clear the current line</p>
-<p>n=0: clear from cursor to end of line
-n=1: clear from cursor to start of line
-n=2: clear entire line</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-clearLine(n)">
                             <p>Clear the current line</p>
 <p>n=0: clear from cursor to end of line
@@ -6195,13 +6190,16 @@ n=2: clear entire line</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6209,7 +6207,7 @@ n=2: clear entire line</p>
                 
                 <div id="clearScreen(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'clearScreen(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'clearScreen(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6248,13 +6246,6 @@ n=2: clear entire line</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-clearScreen(n)">
-                            <p>Clear the screen</p>
-<p>n=0: clear from cursor to end of screen
-n=1: clear from cursor to start of screen
-n=2: clear entire screen</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-clearScreen(n)">
                             <p>Clear the screen</p>
 <p>n=0: clear from cursor to end of screen
@@ -6264,13 +6255,16 @@ n=2: clear entire screen</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6278,7 +6272,7 @@ n=2: clear entire screen</p>
                 
                 <div id="control(n,c)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'control(n,c)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'control(n,c)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6325,21 +6319,21 @@ n=2: clear entire screen</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-control(n,c)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-control(n,c)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6347,7 +6341,7 @@ n=2: clear entire screen</p>
                 
                 <div id="down(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'down(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'down(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6386,23 +6380,22 @@ n=2: clear entire screen</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-down(n)">
-                            <p>Move down <code>n</code> squares</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-down(n)">
                             <p>Move down <code>n</code> squares</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6410,7 +6403,7 @@ n=2: clear entire screen</p>
                 
                 <div id="left(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'left(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'left(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6449,23 +6442,22 @@ n=2: clear entire screen</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-left(n)">
-                            <p>Move left <code>n</code> squares</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-left(n)">
                             <p>Move left <code>n</code> squares</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6473,7 +6465,7 @@ n=2: clear entire screen</p>
                 
                 <div id="right(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'right(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'right(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6512,23 +6504,22 @@ n=2: clear entire screen</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-right(n)">
-                            <p>Move right <code>n</code> squares</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-right(n)">
                             <p>Move right <code>n</code> squares</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6536,7 +6527,7 @@ n=2: clear entire screen</p>
                 
                 <div id="up(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'up(n)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'up(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6575,23 +6566,22 @@ n=2: clear entire screen</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-up(n)">
-                            <p>Move up <code>n</code> squares</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-up(n)">
                             <p>Move up <code>n</code> squares</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

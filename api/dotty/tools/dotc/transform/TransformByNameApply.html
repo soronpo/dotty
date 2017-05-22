@@ -6074,6 +6074,7 @@ common functionality to transform arguments of by-name parameters.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6094,6 +6095,7 @@ common functionality to transform arguments of by-name parameters.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6101,7 +6103,7 @@ common functionality to transform arguments of by-name parameters.</p>
                 
                 <div id="exprBecomesFunction(symd)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'exprBecomesFunction(symd)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'exprBecomesFunction(symd)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6153,23 +6155,22 @@ common functionality to transform arguments of by-name parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-exprBecomesFunction(symd)(ctx)">
-                            <p>If denotation had an ExprType before, it now gets a function type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-exprBecomesFunction(symd)(ctx)">
                             <p>If denotation had an ExprType before, it now gets a function type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6177,7 +6178,7 @@ common functionality to transform arguments of by-name parameters.</p>
                 
                 <div id="isByNameRef(tree)(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isByNameRef(tree)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isByNameRef(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6229,21 +6230,21 @@ common functionality to transform arguments of by-name parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isByNameRef(tree)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isByNameRef(tree)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6251,7 +6252,7 @@ common functionality to transform arguments of by-name parameters.</p>
                 
                 <div id="mkByNameClosure(arg,argType)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'mkByNameClosure(arg,argType)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'mkByNameClosure(arg,argType)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6311,21 +6312,21 @@ common functionality to transform arguments of by-name parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-mkByNameClosure(arg,argType)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-mkByNameClosure(arg,argType)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6333,7 +6334,7 @@ common functionality to transform arguments of by-name parameters.</p>
                 
                 <div id="originalDenotation(tree)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'originalDenotation(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'originalDenotation(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6385,23 +6386,22 @@ common functionality to transform arguments of by-name parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-originalDenotation(tree)(ctx)">
-                            <p>The info of the tree's symbol before it is potentially transformed in this phase</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-originalDenotation(tree)(ctx)">
                             <p>The info of the tree's symbol before it is potentially transformed in this phase</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6409,7 +6409,7 @@ common functionality to transform arguments of by-name parameters.</p>
                 
                 <div id="transformApply(tree)(ctx,info)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'transformApply(tree)(ctx,info)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformApply(tree)(ctx,info)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6469,21 +6469,21 @@ common functionality to transform arguments of by-name parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-transformApply(tree)(ctx,info)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-transformApply(tree)(ctx,info)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

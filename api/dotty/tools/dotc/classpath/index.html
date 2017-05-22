@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="AggregateClassPath" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'AggregateClassPath');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AggregateClassPath');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,13 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AggregateClassPath">
-                            <p>A classpath unifying multiple class- and sourcepath entries.
-The Classpath can obtain entries for classes and sources independently
-so it tries to do op...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AggregateClassPath">
                             <p>A classpath unifying multiple class- and sourcepath entries.
 The Classpath can obtain entries for classes and sources independently
@@ -6114,13 +6109,16 @@ which are needed in the given moment and only as far as it's necessary.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6128,7 +6126,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="AggregateClassPath$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AggregateClassPath$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'AggregateClassPath$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6152,21 +6150,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AggregateClassPath$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-AggregateClassPath$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6174,7 +6172,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassAndSourceFilesEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassAndSourceFilesEntry');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassAndSourceFilesEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6198,21 +6196,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassAndSourceFilesEntry">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassAndSourceFilesEntry">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6220,7 +6218,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassAndSourceFilesEntry$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassAndSourceFilesEntry$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassAndSourceFilesEntry$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6244,21 +6242,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassAndSourceFilesEntry$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassAndSourceFilesEntry$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6266,7 +6264,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassFileEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassFileEntry');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassFileEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6290,21 +6288,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassFileEntry">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassFileEntry">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6312,7 +6310,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassFileEntryImpl" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassFileEntryImpl');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassFileEntryImpl');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6336,21 +6334,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassFileEntryImpl">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassFileEntryImpl">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6358,7 +6356,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassFileEntryImpl$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassFileEntryImpl$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassFileEntryImpl$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6382,21 +6380,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassFileEntryImpl$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassFileEntryImpl$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6404,7 +6402,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassPathEntries" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassPathEntries');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassPathEntries');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6428,21 +6426,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassPathEntries">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassPathEntries">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6450,7 +6448,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassPathEntries$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassPathEntries$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassPathEntries$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6474,21 +6472,21 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassPathEntries$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassPathEntries$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6496,7 +6494,7 @@ which are needed in the given moment and only as far as it's necessary.</p>
                 
                 <div id="ClassPathFactory" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassPathFactory');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ClassPathFactory');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6520,11 +6518,6 @@ which are needed in the given moment and only as far as it's necessary.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassPathFactory">
-                            <p>Provides factory methods for classpath. When creating classpath instances for a given path,
-it uses proper type of classpath depending on a types of pa...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassPathFactory">
                             <p>Provides factory methods for classpath. When creating classpath instances for a given path,
 it uses proper type of classpath depending on a types of particular files containing sources or classes.</p>
@@ -6532,13 +6525,16 @@ it uses proper type of classpath depending on a types of particular files contai
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6546,7 +6542,7 @@ it uses proper type of classpath depending on a types of particular files contai
                 
                 <div id="ClassPathFactory$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ClassPathFactory$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ClassPathFactory$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6570,21 +6566,21 @@ it uses proper type of classpath depending on a types of particular files contai
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ClassPathFactory$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ClassPathFactory$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6592,7 +6588,7 @@ it uses proper type of classpath depending on a types of particular files contai
                 
                 <div id="DirectoryClassPath" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DirectoryClassPath');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DirectoryClassPath');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6616,21 +6612,21 @@ it uses proper type of classpath depending on a types of particular files contai
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DirectoryClassPath">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DirectoryClassPath">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6638,7 +6634,7 @@ it uses proper type of classpath depending on a types of particular files contai
                 
                 <div id="DirectoryClassPath$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DirectoryClassPath$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DirectoryClassPath$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6662,21 +6658,21 @@ it uses proper type of classpath depending on a types of particular files contai
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DirectoryClassPath$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DirectoryClassPath$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6684,7 +6680,7 @@ it uses proper type of classpath depending on a types of particular files contai
                 
                 <div id="DirectoryLookup" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'DirectoryLookup');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'DirectoryLookup');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6708,13 +6704,6 @@ it uses proper type of classpath depending on a types of particular files contai
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DirectoryLookup">
-                            <p>A trait allowing to look for classpath entries in directories. It provides common logic for
-classes handling class and source files.
-It makes use of the...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-DirectoryLookup">
                             <p>A trait allowing to look for classpath entries in directories. It provides common logic for
 classes handling class and source files.
@@ -6725,13 +6714,16 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6739,7 +6731,7 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                 
                 <div id="DirectorySourcePath" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DirectorySourcePath');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DirectorySourcePath');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6763,21 +6755,21 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DirectorySourcePath">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DirectorySourcePath">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6785,7 +6777,7 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                 
                 <div id="DirectorySourcePath$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DirectorySourcePath$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DirectorySourcePath$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6809,21 +6801,21 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DirectorySourcePath$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DirectorySourcePath$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6831,7 +6823,7 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                 
                 <div id="FileUtils$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FileUtils$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FileUtils$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6855,23 +6847,22 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FileUtils$">
-                            <p>Common methods related to Java files and abstract files used in the context of classpath</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-FileUtils$">
                             <p>Common methods related to Java files and abstract files used in the context of classpath</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6879,7 +6870,7 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                 
                 <div id="JFileDirectoryLookup" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'JFileDirectoryLookup');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'JFileDirectoryLookup');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6903,21 +6894,21 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-JFileDirectoryLookup">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-JFileDirectoryLookup">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6925,7 +6916,7 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                 
                 <div id="JrtClassPath" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'JrtClassPath');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'JrtClassPath');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6949,13 +6940,6 @@ It abstracts over the file representation to work with both JFile and AbstractFi
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-JrtClassPath">
-                            <p>Implementation <code>ClassPath</code> based on the JDK 9 encapsulated runtime modules (JEP-220)</p>
-<p><a href="https://bugs.openjdk.java.net/browse/JDK-8066492">https://bugs.openjdk.java.net/browse/JDK-8066492</a> is the most up to d...
-<a href="jrt:// ">jrt:// </a></p>
-<p></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-JrtClassPath">
                             <p>Implementation <code>ClassPath</code> based on the JDK 9 encapsulated runtime modules (JEP-220)</p>
 <p><a href="https://bugs.openjdk.java.net/browse/JDK-8066492">https://bugs.openjdk.java.net/browse/JDK-8066492</a> is the most up to date reference
@@ -6965,13 +6949,16 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6979,7 +6966,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="JrtClassPath$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'JrtClassPath$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'JrtClassPath$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7003,21 +6990,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-JrtClassPath$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-JrtClassPath$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7025,7 +7012,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="NoClassPaths" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoClassPaths');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NoClassPaths');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7049,21 +7036,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoClassPaths">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NoClassPaths">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7071,7 +7058,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="NoSourcePaths" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoSourcePaths');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NoSourcePaths');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7095,21 +7082,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoSourcePaths">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NoSourcePaths">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7117,7 +7104,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="PackageEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageEntry');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PackageEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7141,21 +7128,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageEntry">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageEntry">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7163,7 +7150,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="PackageEntryImpl" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageEntryImpl');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PackageEntryImpl');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7187,21 +7174,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageEntryImpl">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageEntryImpl">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7209,7 +7196,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="PackageEntryImpl$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageEntryImpl$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PackageEntryImpl$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7233,21 +7220,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageEntryImpl$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageEntryImpl$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7255,7 +7242,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="PackageNameUtils$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PackageNameUtils$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PackageNameUtils$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7279,23 +7266,22 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PackageNameUtils$">
-                            <p>Common methods related to package names represented as String</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PackageNameUtils$">
                             <p>Common methods related to package names represented as String</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7303,7 +7289,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="SourceFileEntry" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SourceFileEntry');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SourceFileEntry');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7327,21 +7313,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SourceFileEntry">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SourceFileEntry">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7349,7 +7335,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="SourceFileEntryImpl" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SourceFileEntryImpl');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SourceFileEntryImpl');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7373,21 +7359,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SourceFileEntryImpl">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SourceFileEntryImpl">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7395,7 +7381,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="SourceFileEntryImpl$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SourceFileEntryImpl$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SourceFileEntryImpl$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7419,21 +7405,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SourceFileEntryImpl$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SourceFileEntryImpl$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7441,7 +7427,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="VirtualDirectoryClassPath" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'VirtualDirectoryClassPath');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'VirtualDirectoryClassPath');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7465,21 +7451,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-VirtualDirectoryClassPath">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-VirtualDirectoryClassPath">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7487,7 +7473,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="VirtualDirectoryClassPath$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'VirtualDirectoryClassPath$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'VirtualDirectoryClassPath$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7511,21 +7497,21 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-VirtualDirectoryClassPath$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-VirtualDirectoryClassPath$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7533,7 +7519,7 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                 
                 <div id="ZipAndJarClassPathFactory$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ZipAndJarClassPathFactory$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ZipAndJarClassPathFactory$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7557,11 +7543,6 @@ for the structure of the <a href="jrt:// ">jrt:// </a>filesystem.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ZipAndJarClassPathFactory$">
-                            <p>Manages creation of classpath for class files placed in zip and jar files.
-It should be the only way of creating them as it provides caching.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ZipAndJarClassPathFactory$">
                             <p>Manages creation of classpath for class files placed in zip and jar files.
 It should be the only way of creating them as it provides caching.</p>
@@ -7569,13 +7550,16 @@ It should be the only way of creating them as it provides caching.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7583,7 +7567,7 @@ It should be the only way of creating them as it provides caching.</p>
                 
                 <div id="ZipAndJarFileLookupFactory" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ZipAndJarFileLookupFactory');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ZipAndJarFileLookupFactory');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7607,12 +7591,6 @@ It should be the only way of creating them as it provides caching.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ZipAndJarFileLookupFactory">
-                            <p>A trait providing an optional cache for classpath entries obtained from zip and jar files.
-It's possible to create such a cache assuming that entries i...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ZipAndJarFileLookupFactory">
                             <p>A trait providing an optional cache for classpath entries obtained from zip and jar files.
 It's possible to create such a cache assuming that entries in such files won't change (at
@@ -7624,13 +7602,16 @@ when there are a lot of projects having a lot of common dependencies.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7638,7 +7619,7 @@ when there are a lot of projects having a lot of common dependencies.</p>
                 
                 <div id="ZipAndJarSourcePathFactory$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ZipAndJarSourcePathFactory$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ZipAndJarSourcePathFactory$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7662,11 +7643,6 @@ when there are a lot of projects having a lot of common dependencies.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ZipAndJarSourcePathFactory$">
-                            <p>Manages creation of classpath for source files placed in zip and jar files.
-It should be the only way of creating them as it provides caching.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ZipAndJarSourcePathFactory$">
                             <p>Manages creation of classpath for source files placed in zip and jar files.
 It should be the only way of creating them as it provides caching.</p>
@@ -7674,13 +7650,16 @@ It should be the only way of creating them as it provides caching.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7688,7 +7667,7 @@ It should be the only way of creating them as it provides caching.</p>
                 
                 <div id="ZipArchiveFileLookup" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ZipArchiveFileLookup');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ZipArchiveFileLookup');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7712,12 +7691,6 @@ It should be the only way of creating them as it provides caching.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ZipArchiveFileLookup">
-                            <p>A trait allowing to look for classpath entries of given type in zip and jar files.
-It provides common logic for classes handling class and source files...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ZipArchiveFileLookup">
                             <p>A trait allowing to look for classpath entries of given type in zip and jar files.
 It provides common logic for classes handling class and source files.
@@ -7726,13 +7699,16 @@ It's aware of things like e.g. META-INF directory which is correctly skipped.</p
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

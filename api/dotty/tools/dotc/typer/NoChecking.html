@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6076,6 +6077,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6083,7 +6085,7 @@
                 
                 <div id="checkClassType(tp,pos,traitReq,stablePrefixReq)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkClassType(tp,pos,traitReq,stablePrefixReq)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkClassType(tp,pos,traitReq,stablePrefixReq)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6159,13 +6161,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkClassType(tp,pos,traitReq,stablePrefixReq)(ctx)">
-                            <p>Check that <code>tp</code> is a class type.
-Also, if <code>traitReq</code> is true, check that <code>tp</code> is a trait.
-Also, if <code>stablePrefixReq</code> is true and phase is not after RefChecks,
-ch...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkClassType(tp,pos,traitReq,stablePrefixReq)(ctx)">
                             <p>Check that <code>tp</code> is a class type.
 Also, if <code>traitReq</code> is true, check that <code>tp</code> is a trait.
@@ -6175,13 +6170,16 @@ check that class prefix is stable.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6189,7 +6187,7 @@ check that class prefix is stable.</p>
                 
                 <div id="checkDerivedValueClass(clazz,stats)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkDerivedValueClass(clazz,stats)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkDerivedValueClass(clazz,stats)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6252,23 +6250,22 @@ check that class prefix is stable.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkDerivedValueClass(clazz,stats)(ctx)">
-                            <p>Verify classes extending AnyVal meet the requirements</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkDerivedValueClass(clazz,stats)(ctx)">
                             <p>Verify classes extending AnyVal meet the requirements</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6276,7 +6273,7 @@ check that class prefix is stable.</p>
                 
                 <div id="checkFeasible(tp,pos,where)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkFeasible(tp,pos,where)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkFeasible(tp,pos,where)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6344,12 +6341,6 @@ check that class prefix is stable.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkFeasible(tp,pos,where)(ctx)">
-                            <p>Check that any top-level type arguments in this type are feasible, i.e. that
-their lower bound conforms to their upper bound. If a type argument is
-infe...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkFeasible(tp,pos,where)(ctx)">
                             <p>Check that any top-level type arguments in this type are feasible, i.e. that
 their lower bound conforms to their upper bound. If a type argument is
@@ -6358,13 +6349,16 @@ infeasible, issue and error and continue with upper bound.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6372,7 +6366,7 @@ infeasible, issue and error and continue with upper bound.</p>
                 
                 <div id="checkImplicitParamsNotSingletons(vparamss)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkImplicitParamsNotSingletons(vparamss)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkImplicitParamsNotSingletons(vparamss)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6430,11 +6424,6 @@ List
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkImplicitParamsNotSingletons(vparamss)(ctx)">
-                            <p>Check that a non-implicit parameter making up the first parameter section of an
-implicit conversion is not a singleton type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkImplicitParamsNotSingletons(vparamss)(ctx)">
                             <p>Check that a non-implicit parameter making up the first parameter section of an
 implicit conversion is not a singleton type.</p>
@@ -6442,13 +6431,16 @@ implicit conversion is not a singleton type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6456,7 +6448,7 @@ implicit conversion is not a singleton type.</p>
                 
                 <div id="checkInlineConformant(tree,what)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkInlineConformant(tree,what)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkInlineConformant(tree,what)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6516,23 +6508,22 @@ implicit conversion is not a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkInlineConformant(tree,what)(ctx)">
-                            <p>Check that <code>tree</code> is a pure expression of constant type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkInlineConformant(tree,what)(ctx)">
                             <p>Check that <code>tree</code> is a pure expression of constant type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6540,7 +6531,7 @@ implicit conversion is not a singleton type.</p>
                 
                 <div id="checkNoDoubleDefs(cls)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNoDoubleDefs(cls)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNoDoubleDefs(cls)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6592,23 +6583,22 @@ implicit conversion is not a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNoDoubleDefs(cls)(ctx)">
-                            <p>Check that class does not define same symbol twice</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNoDoubleDefs(cls)(ctx)">
                             <p>Check that class does not define same symbol twice</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6616,7 +6606,7 @@ implicit conversion is not a singleton type.</p>
                 
                 <div id="checkNoForwardDependencies(vparams)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNoForwardDependencies(vparams)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNoForwardDependencies(vparams)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6671,11 +6661,6 @@ implicit conversion is not a singleton type.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNoForwardDependencies(vparams)(ctx)">
-                            <p>Check that method parameter types do not reference their own parameter
-or later parameters in the same parameter section.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNoForwardDependencies(vparams)(ctx)">
                             <p>Check that method parameter types do not reference their own parameter
 or later parameters in the same parameter section.</p>
@@ -6683,13 +6668,16 @@ or later parameters in the same parameter section.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6697,7 +6685,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkNonCyclic(sym,info,reportErrors)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNonCyclic(sym,info,reportErrors)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkNonCyclic(sym,info,reportErrors)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6765,21 +6753,21 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNonCyclic(sym,info,reportErrors)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNonCyclic(sym,info,reportErrors)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6787,7 +6775,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkNotSingleton(tpt,where)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNotSingleton(tpt,where)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNotSingleton(tpt,where)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6847,23 +6835,22 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNotSingleton(tpt,where)(ctx)">
-                            <p>Check that <code>tpt</code> does not refer to a singleton type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNotSingleton(tpt,where)(ctx)">
                             <p>Check that <code>tpt</code> does not refer to a singleton type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6871,7 +6858,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkParentCall(call,caller)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkParentCall(call,caller)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkParentCall(call,caller)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6931,21 +6918,21 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkParentCall(call,caller)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-checkParentCall(call,caller)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6953,7 +6940,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkSimpleKinded(tpt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkSimpleKinded(tpt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkSimpleKinded(tpt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7005,23 +6992,22 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkSimpleKinded(tpt)(ctx)">
-                            <p>Check that <code>tpt</code> does not define a higher-kinded type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkSimpleKinded(tpt)(ctx)">
                             <p>Check that <code>tpt</code> does not define a higher-kinded type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7029,7 +7015,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkStable(tp,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkStable(tp,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkStable(tp,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7089,23 +7075,22 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkStable(tp,pos)(ctx)">
-                            <p>Check that type <code>tp</code> is stable.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkStable(tp,pos)(ctx)">
                             <p>Check that type <code>tp</code> is stable.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7113,7 +7098,7 @@ or later parameters in the same parameter section.</p>
                 
                 <div id="checkTraitInheritance(parentSym,cls,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkTraitInheritance(parentSym,cls,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkTraitInheritance(parentSym,cls,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7181,16 +7166,6 @@ or later parameters in the same parameter section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkTraitInheritance(parentSym,cls,pos)(ctx)">
-                            <p>Given a parent <code>parent</code> of a class <code>cls</code>, if <code>parent</code> is a trait check that
-the superclass of <code>cls</code> derived from the superclass of <code>parent</code>.</p>
-<p>An exception is made...
-</p>
-<pre><code>... extends Any with java.io.Serializable
-</code></pre>
-<p></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkTraitInheritance(parentSym,cls,pos)(ctx)">
                             <p>Given a parent <code>parent</code> of a class <code>cls</code>, if <code>parent</code> is a trait check that
 the superclass of <code>cls</code> derived from the superclass of <code>parent</code>.</p>
@@ -7204,13 +7179,16 @@ traits. E.g. the following is OK:</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7218,7 +7196,7 @@ traits. E.g. the following is OK:</p>
                 
                 <div id="checkValue(tree,proto)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkValue(tree,proto)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkValue(tree,proto)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7278,23 +7256,22 @@ traits. E.g. the following is OK:</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkValue(tree,proto)(ctx)">
-                            <p>Check that Java statics and packages can only be used in selections.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkValue(tree,proto)(ctx)">
                             <p>Check that Java statics and packages can only be used in selections.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

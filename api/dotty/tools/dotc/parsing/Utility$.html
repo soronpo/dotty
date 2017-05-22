@@ -6065,6 +6065,7 @@ of bound and not bound XML classes, as well as escaping text nodes.</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6073,6 +6074,7 @@ of bound and not bound XML classes, as well as escaping text nodes.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6080,7 +6082,7 @@ of bound and not bound XML classes, as well as escaping text nodes.</p>
                 
                 <div id="unescMap" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unescMap');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'unescMap');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6109,21 +6111,21 @@ String<span class="">, </span>Char
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unescMap">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-unescMap">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6131,7 +6133,7 @@ String<span class="">, </span>Char
                 
                 <div id="isName(s)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isName(s)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isName(s)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6170,13 +6172,6 @@ String<span class="">, </span>Char
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isName(s)">
-                            <p>{{{
-Name ::= ( Letter | '_' ) (NameChar)*
-}}}
-See [5] of XML 1.0 specification.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isName(s)">
                             <p>{{{
 Name ::= ( Letter | '_' ) (NameChar)*
@@ -6186,13 +6181,16 @@ See [5] of XML 1.0 specification.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6200,7 +6198,7 @@ See [5] of XML 1.0 specification.</p>
                 
                 <div id="isNameChar(ch)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isNameChar(ch)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isNameChar(ch)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6239,14 +6237,6 @@ See [5] of XML 1.0 specification.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isNameChar(ch)">
-                            <p>{{{
-NameChar ::= Letter | Digit | '.' | '-' | '_' | ':'
-| CombiningChar | Extender
-}}}
-See [4] and Appendix B of XML 1.0 specification.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isNameChar(ch)">
                             <p>{{{
 NameChar ::= Letter | Digit | '.' | '-' | '_' | ':'
@@ -6257,13 +6247,16 @@ See [4] and Appendix B of XML 1.0 specification.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6271,7 +6264,7 @@ See [4] and Appendix B of XML 1.0 specification.</p>
                 
                 <div id="isNameStart(ch)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isNameStart(ch)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isNameStart(ch)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6310,16 +6303,6 @@ See [4] and Appendix B of XML 1.0 specification.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isNameStart(ch)">
-                            <p>{{{
-NameStart ::= ( Letter | '_' )
-}}}
-where Letter means in one of the Unicode general
-categories <code>{ Ll, Lu, Lo, Lt, Nl }</code>.</p>
-<p>We do not allow a name to start...
-[3]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isNameStart(ch)">
                             <p>{{{
 NameStart ::= ( Letter | '_' )
@@ -6332,13 +6315,16 @@ See [3] and Appendix B of XML 1.0 specification</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6346,7 +6332,7 @@ See [3] and Appendix B of XML 1.0 specification</p>
                 
                 <div id="isSpace(ch)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSpace(ch)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isSpace(ch)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6385,12 +6371,6 @@ See [3] and Appendix B of XML 1.0 specification</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSpace(ch)">
-                            <p>{{{
-(#x20 | #x9 | #xD | #xA)
-}}}</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isSpace(ch)">
                             <p>{{{
 (#x20 | #x9 | #xD | #xA)
@@ -6399,13 +6379,16 @@ See [3] and Appendix B of XML 1.0 specification</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6413,7 +6396,7 @@ See [3] and Appendix B of XML 1.0 specification</p>
                 
                 <div id="isSpace(cs)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isSpace(cs)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isSpace(cs)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6455,12 +6438,6 @@ Char
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isSpace(cs)">
-                            <p>{{{
-(#x20 | #x9 | #xD | #xA)+
-}}}</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isSpace(cs)">
                             <p>{{{
 (#x20 | #x9 | #xD | #xA)+
@@ -6469,13 +6446,16 @@ Char
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6483,7 +6463,7 @@ Char
                 
                 <div id="parseAttributeValue(value,text,entityRef)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseAttributeValue(value,text,entityRef)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'parseAttributeValue(value,text,entityRef)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6541,21 +6521,21 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseAttributeValue(value,text,entityRef)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-parseAttributeValue(value,text,entityRef)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6563,7 +6543,7 @@ T
                 
                 <div id="parseCharRef(ch,nextch,reportSyntaxError,reportTruncatedError)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'parseCharRef(ch,nextch,reportSyntaxError,reportTruncatedError)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'parseCharRef(ch,nextch,reportSyntaxError,reportTruncatedError)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6626,14 +6606,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-parseCharRef(ch,nextch,reportSyntaxError,reportTruncatedError)">
-                            <p>{{{
-CharRef ::= &quot;&amp;#&quot; '0'..'9' {'0'..'9'} &quot;;&quot;
-| &quot;&amp;#x&quot; '0'..'9'|'A'..'F'|'a'..'f' { hexdigit } &quot;;&quot;
-}}}
-See [66]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-parseCharRef(ch,nextch,reportSyntaxError,reportTruncatedError)">
                             <p>{{{
 CharRef ::= &quot;&amp;#&quot; '0'..'9' {'0'..'9'} &quot;;&quot;
@@ -6644,13 +6616,16 @@ See [66]</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6658,7 +6633,7 @@ See [66]</p>
                 
                 <div id="unescape(ref,s)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unescape(ref,s)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unescape(ref,s)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6705,11 +6680,6 @@ See [66]</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unescape(ref,s)">
-                            <p>Appends unescaped string to <code>s</code>, <code>amp</code> becomes <code>&amp;amp;</code>,
-<code>lt</code> becomes <code>&amp;lt;</code> etc..</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-unescape(ref,s)">
                             <p>Appends unescaped string to <code>s</code>, <code>amp</code> becomes <code>&amp;amp;</code>,
 <code>lt</code> becomes <code>&amp;lt;</code> etc..</p>
@@ -6717,13 +6687,16 @@ See [66]</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

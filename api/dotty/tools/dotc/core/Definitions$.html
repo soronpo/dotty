@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="MaxImplementedFunctionArity" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'MaxImplementedFunctionArity');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MaxImplementedFunctionArity');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6100,14 +6102,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MaxImplementedFunctionArity">
-                            <p>The maximum arity N of a function type that's implemented
-as a trait <code>scala.FunctionN</code>. Functions of higher arity are possible,
-but are mapped in erasure...
-[]
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MaxImplementedFunctionArity">
                             <p>The maximum arity N of a function type that's implemented
 as a trait <code>scala.FunctionN</code>. Functions of higher arity are possible,
@@ -6119,13 +6113,16 @@ else without affecting the set of programs that can be compiled.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6133,7 +6130,7 @@ else without affecting the set of programs that can be compiled.</p>
                 
                 <div id="MaxStructuralMethodArity" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MaxStructuralMethodArity');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MaxStructuralMethodArity');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6159,23 +6156,22 @@ else without affecting the set of programs that can be compiled.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MaxStructuralMethodArity">
-                            <p>The maximal arity of a function that can be accessed as member of a structural type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MaxStructuralMethodArity">
                             <p>The maximal arity of a function that can be accessed as member of a structural type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6183,7 +6179,7 @@ else without affecting the set of programs that can be compiled.</p>
                 
                 <div id="MaxTupleArity" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MaxTupleArity');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MaxTupleArity');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6209,11 +6205,6 @@ else without affecting the set of programs that can be compiled.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MaxTupleArity">
-                            <p>The maximum number of elements in a tuple or product.
-This should be removed once we go to hlists.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MaxTupleArity">
                             <p>The maximum number of elements in a tuple or product.
 This should be removed once we go to hlists.</p>
@@ -6221,13 +6212,16 @@ This should be removed once we go to hlists.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

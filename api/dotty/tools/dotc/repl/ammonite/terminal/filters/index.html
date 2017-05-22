@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="BasicFilters$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'BasicFilters$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'BasicFilters$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,11 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-BasicFilters$">
-                            <p>Filters for simple operation of a terminal: cursor-navigation
-(including with all the modifier keys), enter/ctrl-c-exit, etc.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-BasicFilters$">
                             <p>Filters for simple operation of a terminal: cursor-navigation
 (including with all the modifier keys), enter/ctrl-c-exit, etc.</p>
@@ -6110,13 +6107,16 @@
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6124,7 +6124,7 @@
                 
                 <div id="GUILikeFilters$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'GUILikeFilters$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'GUILikeFilters$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6148,13 +6148,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-GUILikeFilters$">
-                            <p>Filters have hook into the various {Ctrl,Shift,Fn,Alt}x{Up,Down,Left,Right}
-combination keys, and make them behave similarly as they would on a normal
-G...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-GUILikeFilters$">
                             <p>Filters have hook into the various {Ctrl,Shift,Fn,Alt}x{Up,Down,Left,Right}
 combination keys, and make them behave similarly as they would on a normal
@@ -6164,13 +6157,16 @@ text selection, etc.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6178,7 +6174,7 @@ text selection, etc.</p>
                 
                 <div id="HistoryFilter" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'HistoryFilter');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'HistoryFilter');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6202,12 +6198,6 @@ text selection, etc.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-HistoryFilter">
-                            <p>Provides history navigation up and down, saving the current line, a well
-as history-search functionality (<code>Ctrl R</code> in bash) letting you quickly find
-&amp; fil...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-HistoryFilter">
                             <p>Provides history navigation up and down, saving the current line, a well
 as history-search functionality (<code>Ctrl R</code> in bash) letting you quickly find
@@ -6216,13 +6206,16 @@ as history-search functionality (<code>Ctrl R</code> in bash) letting you quickl
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6230,7 +6223,7 @@ as history-search functionality (<code>Ctrl R</code> in bash) letting you quickl
                 
                 <div id="HistoryFilter$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'HistoryFilter$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'HistoryFilter$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6254,21 +6247,21 @@ as history-search functionality (<code>Ctrl R</code> in bash) letting you quickl
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-HistoryFilter$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-HistoryFilter$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6276,7 +6269,7 @@ as history-search functionality (<code>Ctrl R</code> in bash) letting you quickl
                 
                 <div id="ReadlineFilters$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ReadlineFilters$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ReadlineFilters$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6300,11 +6293,6 @@ as history-search functionality (<code>Ctrl R</code> in bash) letting you quickl
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ReadlineFilters$">
-                            <p>Filters for injection of readline-specific hotkeys, the sort that
-are available in bash, python and most other interactive command-lines</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ReadlineFilters$">
                             <p>Filters for injection of readline-specific hotkeys, the sort that
 are available in bash, python and most other interactive command-lines</p>
@@ -6312,13 +6300,16 @@ are available in bash, python and most other interactive command-lines</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6326,7 +6317,7 @@ are available in bash, python and most other interactive command-lines</p>
                 
                 <div id="UndoFilter" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'UndoFilter');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'UndoFilter');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6350,13 +6341,6 @@ are available in bash, python and most other interactive command-lines</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UndoFilter">
-                            <p>A filter that implements &quot;undo&quot; functionality in the ammonite REPL. It
-shares the same <code>Ctrl -</code> hotkey that the bash undo, but shares behavior
-with the un...</p>
-<ul></ul>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-UndoFilter">
                             <p>A filter that implements &quot;undo&quot; functionality in the ammonite REPL. It
 shares the same <code>Ctrl -</code> hotkey that the bash undo, but shares behavior
@@ -6372,13 +6356,16 @@ you didn't actually want to undo!</li>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6386,7 +6373,7 @@ you didn't actually want to undo!</li>
                 
                 <div id="UndoFilter$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UndoFilter$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'UndoFilter$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6410,21 +6397,21 @@ you didn't actually want to undo!</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UndoFilter$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-UndoFilter$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6432,7 +6419,7 @@ you didn't actually want to undo!</li>
                 
                 <div id="UndoState" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UndoState');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'UndoState');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6456,21 +6443,21 @@ you didn't actually want to undo!</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UndoState">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-UndoState">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6478,7 +6465,7 @@ you didn't actually want to undo!</li>
                 
                 <div id="UndoState$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'UndoState$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'UndoState$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6502,21 +6489,21 @@ you didn't actually want to undo!</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-UndoState$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-UndoState$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

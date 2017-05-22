@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="SymDenotation(symbol,owner,name,initFlags,initInfo,initPrivateWithin)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SymDenotation(symbol,owner,name,initFlags,initInfo,initPrivateWithin)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SymDenotation(symbol,owner,name,initFlags,initInfo,initPrivateWithin)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6166,11 +6168,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SymDenotation(symbol,owner,name,initFlags,initInfo,initPrivateWithin)(ctx)">
-                            <p>Factory method for SymDenotion creation. All creations
-should be done via this method.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SymDenotation(symbol,owner,name,initFlags,initInfo,initPrivateWithin)(ctx)">
                             <p>Factory method for SymDenotion creation. All creations
 should be done via this method.</p>
@@ -6178,13 +6175,16 @@ should be done via this method.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6192,7 +6192,7 @@ should be done via this method.</p>
                 
                 <div id="stillValid(denot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'stillValid(denot)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'stillValid(denot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6231,21 +6231,21 @@ should be done via this method.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-stillValid(denot)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-stillValid(denot)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6253,7 +6253,7 @@ should be done via this method.</p>
                 
                 <div id="stillValidInOwner(denot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'stillValidInOwner(denot)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'stillValidInOwner(denot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6292,21 +6292,21 @@ should be done via this method.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-stillValidInOwner(denot)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-stillValidInOwner(denot)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6314,7 +6314,7 @@ should be done via this method.</p>
                 
                 <div id="traceInvalid(denot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'traceInvalid(denot)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'traceInvalid(denot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6353,23 +6353,22 @@ should be done via this method.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-traceInvalid(denot)">
-                            <p>Explain why symbol is invalid; used for debugging only</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-traceInvalid(denot)">
                             <p>Explain why symbol is invalid; used for debugging only</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

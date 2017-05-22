@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="etaExpand(tree,mt,xarity)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'etaExpand(tree,mt,xarity)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'etaExpand(tree,mt,xarity)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6142,23 +6144,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-etaExpand(tree,mt,xarity)(ctx)">
-                            <p>Eta-expanding a tree means converting a method reference to a function value.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-etaExpand(tree,mt,xarity)(ctx)">
                             <p>Eta-expanding a tree means converting a method reference to a function value.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6166,7 +6167,7 @@
                 
                 <div id="lift(defs,expr,prefix)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lift(defs,expr,prefix)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'lift(defs,expr,prefix)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6237,21 +6238,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lift(defs,expr,prefix)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-lift(defs,expr,prefix)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6259,7 +6260,7 @@
                 
                 <div id="liftApp(defs,tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'liftApp(defs,tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'liftApp(defs,tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6322,17 +6323,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-liftApp(defs,tree)(ctx)">
-                            <p>Lift out function prefix and all arguments from application</p>
-<p>pre.f(arg1, ..., argN)   becomes</p>
-<p>val x0 = pre
-val x1 = arg1
-...
-val xN = argN
-x0.f(x1, ..., xN)</p>
-<p>B...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-liftApp(defs,tree)(ctx)">
                             <p>Lift out function prefix and all arguments from application</p>
 <p>pre.f(arg1, ..., argN)   becomes</p>
@@ -6346,13 +6336,16 @@ x0.f(x1, ..., xN)</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6360,7 +6353,7 @@ x0.f(x1, ..., xN)</p>
                 
                 <div id="liftArg(defs,arg,prefix)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'liftArg(defs,arg,prefix)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'liftArg(defs,arg,prefix)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6431,23 +6424,22 @@ x0.f(x1, ..., xN)</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-liftArg(defs,arg,prefix)(ctx)">
-                            <p>Lift a function argument, stripping any NamedArg wrapper</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-liftArg(defs,arg,prefix)(ctx)">
                             <p>Lift a function argument, stripping any NamedArg wrapper</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6455,7 +6447,7 @@ x0.f(x1, ..., xN)</p>
                 
                 <div id="liftArgs(defs,methRef,args)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'liftArgs(defs,methRef,args)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'liftArgs(defs,methRef,args)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6535,11 +6527,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-liftArgs(defs,methRef,args)(ctx)">
-                            <p>Lift arguments that are not-idempotent into ValDefs in buffer <code>defs</code>
-and replace by the idents of so created ValDefs.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-liftArgs(defs,methRef,args)(ctx)">
                             <p>Lift arguments that are not-idempotent into ValDefs in buffer <code>defs</code>
 and replace by the idents of so created ValDefs.</p>
@@ -6547,13 +6534,16 @@ and replace by the idents of so created ValDefs.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6561,7 +6551,7 @@ and replace by the idents of so created ValDefs.</p>
                 
                 <div id="liftAssigned(defs,tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'liftAssigned(defs,tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'liftAssigned(defs,tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6624,11 +6614,6 @@ and replace by the idents of so created ValDefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-liftAssigned(defs,tree)(ctx)">
-                            <p>Lift out common part of lhs tree taking part in an operator assignment such as</p>
-<p>lhs += expr</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-liftAssigned(defs,tree)(ctx)">
                             <p>Lift out common part of lhs tree taking part in an operator assignment such as</p>
 <p>lhs += expr</p>
@@ -6636,13 +6621,16 @@ and replace by the idents of so created ValDefs.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6650,7 +6638,7 @@ and replace by the idents of so created ValDefs.</p>
                 
                 <div id="liftPrefix(defs,tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'liftPrefix(defs,tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'liftPrefix(defs,tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6713,13 +6701,6 @@ and replace by the idents of so created ValDefs.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-liftPrefix(defs,tree)(ctx)">
-                            <p>Lift prefix <code>pre</code> of an application <code>pre.f(...)</code> to</p>
-<p>val x0 = pre
-x0.f(...)</p>
-<p>unless <code>pre</code> is a <code>New</code> or <code>pre</code> is idempotent.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-liftPrefix(defs,tree)(ctx)">
                             <p>Lift prefix <code>pre</code> of an application <code>pre.f(...)</code> to</p>
 <p>val x0 = pre
@@ -6729,13 +6710,16 @@ x0.f(...)</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

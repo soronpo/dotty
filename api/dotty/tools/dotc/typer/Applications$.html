@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="extractorMember(tp,name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'extractorMember(tp,name)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'extractorMember(tp,name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6134,21 +6136,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-extractorMember(tp,name)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-extractorMember(tp,name)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6156,7 +6158,7 @@
                 
                 <div id="extractorMemberType(tp,name,errorPos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'extractorMemberType(tp,name,errorPos)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'extractorMemberType(tp,name,errorPos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6224,21 +6226,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-extractorMemberType(tp,name,errorPos)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-extractorMemberType(tp,name,errorPos)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6246,7 +6248,7 @@
                 
                 <div id="getUnapplySelectors(tp,args,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'getUnapplySelectors(tp,args,pos)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'getUnapplySelectors(tp,args,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6320,21 +6322,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-getUnapplySelectors(tp,args,pos)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-getUnapplySelectors(tp,args,pos)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6342,7 +6344,7 @@
                 
                 <div id="isGetMatch(tp,errorPos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isGetMatch(tp,errorPos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isGetMatch(tp,errorPos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6402,12 +6404,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isGetMatch(tp,errorPos)(ctx)">
-                            <p>Does <code>tp</code> fit the &quot;get match&quot; conditions as an unapply result type?
-This is the case of <code>tp</code> has a <code>get</code> member as well as a
-parameterless <code>isDefined</code> member of...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isGetMatch(tp,errorPos)(ctx)">
                             <p>Does <code>tp</code> fit the &quot;get match&quot; conditions as an unapply result type?
 This is the case of <code>tp</code> has a <code>get</code> member as well as a
@@ -6416,13 +6412,16 @@ parameterless <code>isDefined</code> member of result type <code>Boolean</code>.
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6430,7 +6429,7 @@ parameterless <code>isDefined</code> member of result type <code>Boolean</code>.
                 
                 <div id="isProductMatch(tp,numArgs)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isProductMatch(tp,numArgs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isProductMatch(tp,numArgs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6490,12 +6489,6 @@ parameterless <code>isDefined</code> member of result type <code>Boolean</code>.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isProductMatch(tp,numArgs)(ctx)">
-                            <p>Does <code>tp</code> fit the &quot;product match&quot; conditions as an unapply result type
-for a pattern with <code>numArgs</code> subpatterns?
-This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isProductMatch(tp,numArgs)(ctx)">
                             <p>Does <code>tp</code> fit the &quot;product match&quot; conditions as an unapply result type
 for a pattern with <code>numArgs</code> subpatterns?
@@ -6504,13 +6497,16 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6518,7 +6514,7 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                 
                 <div id="productArity(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productArity(tp)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productArity(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6570,21 +6566,21 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productArity(tp)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productArity(tp)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6592,7 +6588,7 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                 
                 <div id="productSelectorTypes(tp,errorPos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productSelectorTypes(tp,errorPos)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productSelectorTypes(tp,errorPos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6655,21 +6651,21 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productSelectorTypes(tp,errorPos)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productSelectorTypes(tp,errorPos)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6677,7 +6673,7 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                 
                 <div id="productSelectors(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productSelectors(tp)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productSelectors(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6732,21 +6728,21 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productSelectors(tp)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productSelectors(tp)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6754,7 +6750,7 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                 
                 <div id="unapplyArgs(unapplyResult,unapplyFn,args,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unapplyArgs(unapplyResult,unapplyFn,args,pos)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'unapplyArgs(unapplyResult,unapplyFn,args,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6836,21 +6832,21 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unapplyArgs(unapplyResult,unapplyFn,args,pos)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-unapplyArgs(unapplyResult,unapplyFn,args,pos)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6858,7 +6854,7 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                 
                 <div id="wrapDefs(defs,tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'wrapDefs(defs,tree)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'wrapDefs(defs,tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6921,21 +6917,21 @@ This is the case of <code>tp</code> has members <code>_1</code> to <code>_N</cod
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-wrapDefs(defs,tree)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-wrapDefs(defs,tree)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

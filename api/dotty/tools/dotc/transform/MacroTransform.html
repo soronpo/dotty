@@ -6079,6 +6079,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6099,6 +6100,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6106,7 +6108,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                 
                 <div id="Transformer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Transformer');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Transformer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6130,21 +6132,21 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Transformer">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Transformer">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6152,7 +6154,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                 
                 <div id="newTransformer(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newTransformer(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'newTransformer(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6193,21 +6195,21 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newTransformer(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-newTransformer(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6215,7 +6217,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                 
                 <div id="run(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'run(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'run(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6256,21 +6258,21 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-run(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-run(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6278,7 +6280,7 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                 
                 <div id="transformPhase(ctx)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformPhase(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'transformPhase(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6319,12 +6321,6 @@ A transform contains a compiler phase which applies a tree transformer.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-transformPhase(ctx)">
-                            <p>The phase in which the transformation should be run.
-By default this is the phase given by the this macro transformer,
-but it could be overridden to be...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-transformPhase(ctx)">
                             <p>The phase in which the transformation should be run.
 By default this is the phase given by the this macro transformer,
@@ -6333,13 +6329,16 @@ but it could be overridden to be the phase following that one.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

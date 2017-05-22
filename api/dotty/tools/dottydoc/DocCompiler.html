@@ -6081,6 +6081,7 @@ wihtout discarding AnyVal interfaces
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6101,6 +6102,7 @@ wihtout discarding AnyVal interfaces
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6108,7 +6110,7 @@ wihtout discarding AnyVal interfaces
                 
                 <div id="phases" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'phases');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phases');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6140,16 +6142,6 @@ List
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-phases">
-                            <p>Meta-ordering constraint:</p>
-<p>DenotTransformers that change the signature of their denotation's info must go
-after erasure. The reason is that denotations a...
-</p>
-<p>
-</p>
-<ul></ul>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-phases">
                             <p>Meta-ordering constraint:</p>
 <p>DenotTransformers that change the signature of their denotation's info must go
@@ -6169,13 +6161,16 @@ plain SymDenotation, as opposed to a UniqueRefDenotation.</li>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

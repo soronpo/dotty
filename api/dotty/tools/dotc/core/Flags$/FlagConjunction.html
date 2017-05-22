@@ -6075,6 +6075,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6119,6 +6120,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6126,7 +6128,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="bits" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'bits');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'bits');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6152,21 +6154,21 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-bits">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-bits">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6174,7 +6176,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="&(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '&(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '&(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6213,23 +6215,22 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-&(that)">
-                            <p>The intersection of this flag set and the given flag set</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-&(that)">
                             <p>The intersection of this flag set and the given flag set</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6237,7 +6238,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="&~(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '&~(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '&~(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6276,23 +6277,22 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-&~(that)">
-                            <p>The intersection of this flag set with the complement of the given flag set</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-&~(that)">
                             <p>The intersection of this flag set with the complement of the given flag set</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6300,7 +6300,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="<=(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '<=(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '<=(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6339,23 +6339,22 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-<=(that)">
-                            <p>Is this flag set a subset of that one?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-<=(that)">
                             <p>Is this flag set a subset of that one?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6363,7 +6362,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="canEqual(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'canEqual(that)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'canEqual(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6402,21 +6401,21 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-canEqual(that)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-canEqual(that)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6424,7 +6423,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="firstBit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'firstBit');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'firstBit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6450,23 +6449,22 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-firstBit">
-                            <p>The lowest non-kind bit set in this flagset</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-firstBit">
                             <p>The lowest non-kind bit set in this flagset</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6474,7 +6472,7 @@ conjunctively. I.e. for a flag conjunction <code>fc</code>,
                 
                 <div id="flagStrings" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'flagStrings');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'flagStrings');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6503,23 +6501,94 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-flagStrings">
-                            <p>The list of non-empty names of flags that are set in this FlagSet</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-flagStrings">
                             <p>The list of non-empty names of flags that are set in this FlagSet</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
+                            span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
+                        }
+                    </script>
+                </div><!-- end member -->
+                
+                <div id="is(flags,butNot)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                is
+                            
+                        </span>
 
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        flags:
+                                    </span>
+                                    FlagConjunction
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        butNot:
+                                    </span>
+                                    FlagSet
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-is(flags,butNot)">
+                            <p>Does this flag set have all of the flags in given flag conjunction?
+and at the same time contain none of the flags in the <code>butNot</code> set?
+Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+
+                        </div>
+                    </div>
+                    <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
+                        function toggleMemberBody(span, sig) {
+                            var longBody = document.getElementById("long-body-" + sig);
+                            longBody.classList.toggle("toggled")
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6527,7 +6596,7 @@ String
                 
                 <div id="is(flags)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6566,11 +6635,6 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-is(flags)">
-                            <p>Does this flag set have all of the flags in given flag conjunction?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-is(flags)">
                             <p>Does this flag set have all of the flags in given flag conjunction?
 Pre: The intersection of the typeflags of both sets must be non-empty.</p>
@@ -6578,13 +6642,16 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6592,82 +6659,7 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                 
                 <div id="is(flags,butNot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                is
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        flags:
-                                    </span>
-                                    FlagConjunction
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        butNot:
-                                    </span>
-                                    FlagSet
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-short" id="short-body-is(flags,butNot)">
-                            <p>Does this flag set have all of the flags in given flag conjunction?
-and at the same time contain none of the flags in the <code>butNot</code> set?
-Pre: The intersect...</p>
-
-                        </div>
-                        <div class="member-body-long" id ="long-body-is(flags,butNot)">
-                            <p>Does this flag set have all of the flags in given flag conjunction?
-and at the same time contain none of the flags in the <code>butNot</code> set?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
-
-                        </div>
-                    </div>
-                    <script>
-                        function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
-                            var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
-                            longBody.classList.toggle("toggled")
-
-                            span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
-                        }
-                    </script>
-                </div><!-- end member -->
-                
-                <div id="is(flags,butNot)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6714,11 +6706,6 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-is(flags,butNot)">
-                            <p>Does this flag set have a non-empty intersection with the given flag set,
-and at the same time contain none of the flags in the <code>butNot</code> set?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-is(flags,butNot)">
                             <p>Does this flag set have a non-empty intersection with the given flag set,
 and at the same time contain none of the flags in the <code>butNot</code> set?</p>
@@ -6726,13 +6713,16 @@ and at the same time contain none of the flags in the <code>butNot</code> set?</
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6740,7 +6730,7 @@ and at the same time contain none of the flags in the <code>butNot</code> set?</
                 
                 <div id="is(flags)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6779,11 +6769,6 @@ and at the same time contain none of the flags in the <code>butNot</code> set?</
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-is(flags)">
-                            <p>Does this flag set have a non-empty intersection with the given flag set?
-This means that both the kind flags and the carrier bits have non-empty inter...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-is(flags)">
                             <p>Does this flag set have a non-empty intersection with the given flag set?
 This means that both the kind flags and the carrier bits have non-empty intersection.</p>
@@ -6791,13 +6776,16 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6805,7 +6793,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="isEmpty" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isEmpty');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isEmpty');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6831,21 +6819,21 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isEmpty">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isEmpty">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6853,7 +6841,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="isTermFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isTermFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isTermFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6879,23 +6867,22 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isTermFlags">
-                            <p>Does this flag set apply to terms?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isTermFlags">
                             <p>Does this flag set apply to terms?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6903,7 +6890,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="isTypeFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isTypeFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isTypeFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6929,23 +6916,22 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isTypeFlags">
-                            <p>Does this flag set apply to terms?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isTypeFlags">
                             <p>Does this flag set apply to terms?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6953,7 +6939,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="numFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'numFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'numFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6979,23 +6965,22 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-numFlags">
-                            <p>The number of non-kind flags in this set</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-numFlags">
                             <p>The number of non-kind flags in this set</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7003,7 +6988,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="productArity" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productArity');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productArity');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7029,21 +7014,21 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productArity">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productArity">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7051,7 +7036,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="productElement(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productElement(n)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productElement(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7090,21 +7075,21 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productElement(n)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productElement(n)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7112,7 +7097,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                 
                 <div id="productIterator" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productIterator');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productIterator');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7141,21 +7126,21 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productIterator">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productIterator">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7163,7 +7148,7 @@ Any
                 
                 <div id="productPrefix" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'productPrefix');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'productPrefix');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7189,21 +7174,21 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-productPrefix">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-productPrefix">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7211,7 +7196,7 @@ Any
                 
                 <div id="toCommonFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toCommonFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toCommonFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7237,23 +7222,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toCommonFlags">
-                            <p>This flag set with all flags transposed to be common flags</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toCommonFlags">
                             <p>This flag set with all flags transposed to be common flags</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7261,7 +7245,7 @@ Any
                 
                 <div id="toString" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toString');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7287,21 +7271,21 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toString">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-toString">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7309,7 +7293,7 @@ Any
                 
                 <div id="toString" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toString');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toString');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7335,23 +7319,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toString">
-                            <p>The string representation of this flag set</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toString">
                             <p>The string representation of this flag set</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7359,7 +7342,7 @@ Any
                 
                 <div id="toTermFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toTermFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toTermFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7385,23 +7368,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toTermFlags">
-                            <p>This flag set with all flags transposed to be term flags</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toTermFlags">
                             <p>This flag set with all flags transposed to be term flags</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7409,7 +7391,7 @@ Any
                 
                 <div id="toTypeFlags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toTypeFlags');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toTypeFlags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7435,23 +7417,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toTypeFlags">
-                            <p>This flag set with all flags transposed to be type flags</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toTypeFlags">
                             <p>This flag set with all flags transposed to be type flags</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7459,7 +7440,7 @@ Any
                 
                 <div id="|(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '|(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '|(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7498,23 +7479,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-|(that)">
-                            <p>The union of this flag set and the given flag set</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-|(that)">
                             <p>The union of this flag set and the given flag set</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

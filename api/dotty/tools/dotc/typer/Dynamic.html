@@ -6078,6 +6078,7 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6086,6 +6087,7 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6093,7 +6095,7 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
                 
                 <div id="coreDynamic(qual,dynName,name,targs)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'coreDynamic(qual,dynName,name,targs)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'coreDynamic(qual,dynName,name,targs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6172,21 +6174,21 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-coreDynamic(qual,dynName,name,targs)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-coreDynamic(qual,dynName,name,targs)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6194,7 +6196,7 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
                 
                 <div id="handleStructural(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'handleStructural(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'handleStructural(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6246,18 +6248,6 @@ or <code>selectDynamicMethod</code> on a <code>Selectable</code> instance. @See 
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-handleStructural(tree)(ctx)">
-                            <p>Handle reflection-based dispatch for members of structural types.
-Given <code>x.a</code>, where <code>x</code> is of (widened) type <code>T</code> and <code>x.a</code> is of type <code>U</code>:</p>
-<p>If <code>U</code> is a value type,...</p>
-<p>[U]</p>
-<p></p>
-<p>[(T1,...,Tn) =&gt; R]</p>
-<p></p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-handleStructural(tree)(ctx)">
                             <p>Handle reflection-based dispatch for members of structural types.
 Given <code>x.a</code>, where <code>x</code> is of (widened) type <code>T</code> and <code>x.a</code> is of type <code>U</code>:</p>
@@ -6272,13 +6262,16 @@ type, or of too large arity (limit is Definitions.MaxStructuralMethodArity).</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6286,7 +6279,7 @@ type, or of too large arity (limit is Definitions.MaxStructuralMethodArity).</p>
                 
                 <div id="typedDynamicApply(tree,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedDynamicApply(tree,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typedDynamicApply(tree,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6346,13 +6339,6 @@ type, or of too large arity (limit is Definitions.MaxStructuralMethodArity).</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typedDynamicApply(tree,pt)(ctx)">
-                            <p>Translate selection that does not typecheck according to the normal rules into a applyDynamic/applyDynamicNamed.
-foo.bar(baz0, baz1, ...)...
-[T0, ...]<a href="#"></a>
-[T0, ...]<a href="#"></a></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-typedDynamicApply(tree,pt)(ctx)">
                             <p>Translate selection that does not typecheck according to the normal rules into a applyDynamic/applyDynamicNamed.
 foo.bar(baz0, baz1, ...)                       ~~&gt; foo.applyDynamic(bar)(baz0, baz1, ...)
@@ -6363,13 +6349,16 @@ foo.bar[T0, ...](x = bazX, y = bazY, baz, ...) ~~&gt; foo.applyDynamicNamed<a hr
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6377,7 +6366,7 @@ foo.bar[T0, ...](x = bazX, y = bazY, baz, ...) ~~&gt; foo.applyDynamicNamed<a hr
                 
                 <div id="typedDynamicAssign(tree,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typedDynamicAssign(tree,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typedDynamicAssign(tree,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6437,11 +6426,6 @@ foo.bar[T0, ...](x = bazX, y = bazY, baz, ...) ~~&gt; foo.applyDynamicNamed<a hr
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typedDynamicAssign(tree,pt)(ctx)">
-                            <p>Translate selection that does not typecheck according to the normal rules into a updateDynamic.
-foo.bar = baz ~~&gt; foo.updateDynamic(bar)(baz)</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-typedDynamicAssign(tree,pt)(ctx)">
                             <p>Translate selection that does not typecheck according to the normal rules into a updateDynamic.
 foo.bar = baz ~~&gt; foo.updateDynamic(bar)(baz)</p>
@@ -6449,13 +6433,16 @@ foo.bar = baz ~~&gt; foo.updateDynamic(bar)(baz)</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6463,7 +6450,7 @@ foo.bar = baz ~~&gt; foo.updateDynamic(bar)(baz)</p>
                 
                 <div id="typedDynamicSelect(tree,targs,pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedDynamicSelect(tree,targs,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typedDynamicSelect(tree,targs,pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6534,14 +6521,6 @@ foo.bar = baz ~~&gt; foo.updateDynamic(bar)(baz)</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typedDynamicSelect(tree,targs,pt)(ctx)">
-                            <p>Translate selection that does not typecheck according to the normal rules into a selectDynamic.
-foo.bar          ~~&gt; foo.selectDynamic(bar)
-foo.barT0, ....<a href="#"></a></p>
-<p>
-[foo.bar(baz) = quux ~~&gt; foo.bar.update(baz, quux)]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-typedDynamicSelect(tree,targs,pt)(ctx)">
                             <p>Translate selection that does not typecheck according to the normal rules into a selectDynamic.
 foo.bar          ~~&gt; foo.selectDynamic(bar)
@@ -6552,13 +6531,16 @@ through an existing transformation of in typedAssign [foo.bar(baz) = quux ~~&gt;
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

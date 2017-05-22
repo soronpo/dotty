@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6076,6 +6077,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6083,7 +6085,7 @@
                 
                 <div id="OptimizedCasegen" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'OptimizedCasegen');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'OptimizedCasegen');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6107,21 +6109,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-OptimizedCasegen">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-OptimizedCasegen">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6129,7 +6131,7 @@
                 
                 <div id="matcher(scrut,scrutSym,restpe)(cases,matchFailGen)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'matcher(scrut,scrutSym,restpe)(cases,matchFailGen)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'matcher(scrut,scrutSym,restpe)(cases,matchFailGen)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6209,13 +6211,6 @@ Casegen<span class="right-arrow"> =&gt; </span><a href="../../../../../../../../
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-matcher(scrut,scrutSym,restpe)(cases,matchFailGen)">
-                            <p>Inline runOrElse and get rid of Option allocations</p>
-<p>runOrElse(scrut: scrutTp)(matcher): resTp = matcher(scrut) getOrElse ${catchAll(<code>scrut</code>)}
-the matcher's...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-matcher(scrut,scrutSym,restpe)(cases,matchFailGen)">
                             <p>Inline runOrElse and get rid of Option allocations</p>
 <p>runOrElse(scrut: scrutTp)(matcher): resTp = matcher(scrut) getOrElse ${catchAll(<code>scrut</code>)}
@@ -6225,13 +6220,16 @@ if keepGoing is false, the result Some(x) of the naive translation is encoded as
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="DenotTransformer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DenotTransformer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'DenotTransformer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,23 +6100,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DenotTransformer">
-                            <p>A transformer transforms denotations at a given phase</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-DenotTransformer">
                             <p>A transformer transforms denotations at a given phase</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6122,7 +6123,7 @@
                 
                 <div id="IdentityDenotTransformer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'IdentityDenotTransformer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IdentityDenotTransformer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6146,12 +6147,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-IdentityDenotTransformer">
-                            <p>A <code>DenotTransformer</code> trait that has the identity as its <code>transform</code> method.
-You might want to inherit from this trait so that new denotations can be
-install...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-IdentityDenotTransformer">
                             <p>A <code>DenotTransformer</code> trait that has the identity as its <code>transform</code> method.
 You might want to inherit from this trait so that new denotations can be
@@ -6160,13 +6155,16 @@ installed using <code>installAfter</code> and <code>enteredAfter</code> at the e
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6174,7 +6172,7 @@ installed using <code>installAfter</code> and <code>enteredAfter</code> at the e
                 
                 <div id="InfoTransformer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'InfoTransformer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'InfoTransformer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6198,23 +6196,22 @@ installed using <code>installAfter</code> and <code>enteredAfter</code> at the e
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-InfoTransformer">
-                            <p>A transformer that only transforms the info field of denotations</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-InfoTransformer">
                             <p>A transformer that only transforms the info field of denotations</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6222,7 +6219,7 @@ installed using <code>installAfter</code> and <code>enteredAfter</code> at the e
                 
                 <div id="SymTransformer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SymTransformer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SymTransformer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6246,23 +6243,22 @@ installed using <code>installAfter</code> and <code>enteredAfter</code> at the e
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SymTransformer">
-                            <p>A transformer that only transforms SymDenotations</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SymTransformer">
                             <p>A transformer that only transforms SymDenotations</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6078,6 +6078,7 @@ ErrorType</p>
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6086,6 +6087,7 @@ ErrorType</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6093,7 +6095,7 @@ ErrorType</p>
                 
                 <div id="CachedErasedValueType" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CachedErasedValueType');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CachedErasedValueType');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6117,21 +6119,21 @@ ErrorType</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CachedErasedValueType">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-CachedErasedValueType">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6139,7 +6141,7 @@ ErrorType</p>
                 
                 <div id="ErasedValueType" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ErasedValueType');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ErasedValueType');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6163,13 +6165,6 @@ ErrorType</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ErasedValueType">
-                            <p>A type representing the semi-erasure of a derived value class, see SIP-15
-where it's called &quot;C$unboxed&quot; for a class C.
-Derived value classes are erased...
-[Erasure.Boxing#adaptToType]</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ErasedValueType">
                             <p>A type representing the semi-erasure of a derived value class, see SIP-15
 where it's called &quot;C$unboxed&quot; for a class C.
@@ -6183,13 +6178,16 @@ Nothing. This is because this type is only useful for type adaptation (see
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6197,7 +6195,7 @@ Nothing. This is because this type is only useful for type adaptation (see
                 
                 <div id="ErasedValueType$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ErasedValueType$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ErasedValueType$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6221,21 +6219,21 @@ Nothing. This is because this type is only useful for type adaptation (see
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ErasedValueType$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ErasedValueType$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6243,7 +6241,7 @@ Nothing. This is because this type is only useful for type adaptation (see
                 
                 <div id="erasures" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasures');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasures');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6272,21 +6270,21 @@ TypeErasure
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasures">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-erasures">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6294,7 +6292,7 @@ TypeErasure
                 
                 <div id="erasedGlb(tp1,tp2,isJava)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasedGlb(tp1,tp2,isJava)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasedGlb(tp1,tp2,isJava)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6362,13 +6360,6 @@ TypeErasure
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasedGlb(tp1,tp2,isJava)(ctx)">
-                            <p>The erased greatest lower bound picks one of the two argument types. It prefers, in this order:
-- arrays over non-arrays
-- subtypes over supertypes, unl...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasedGlb(tp1,tp2,isJava)(ctx)">
                             <p>The erased greatest lower bound picks one of the two argument types. It prefers, in this order:
 - arrays over non-arrays
@@ -6378,13 +6369,16 @@ TypeErasure
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6392,7 +6386,7 @@ TypeErasure
                 
                 <div id="erasedLub(tp1,tp2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasedLub(tp1,tp2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasedLub(tp1,tp2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6452,13 +6446,6 @@ TypeErasure
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasedLub(tp1,tp2)(ctx)">
-                            <p>The erased least upper bound is computed as follows
-- if both argument are arrays of objects, an array of the erased lub of the element types
-- if both...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasedLub(tp1,tp2)(ctx)">
                             <p>The erased least upper bound is computed as follows
 - if both argument are arrays of objects, an array of the erased lub of the element types
@@ -6476,13 +6463,16 @@ come after S.
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6490,7 +6480,7 @@ come after S.
                 
                 <div id="erasedRef(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasedRef(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasedRef(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6542,11 +6532,6 @@ come after S.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasedRef(tp)(ctx)">
-                            <p>The erasure of a top-level reference. Differs from normal erasure in that
-TermRefs are kept instead of being widened away.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasedRef(tp)(ctx)">
                             <p>The erasure of a top-level reference. Differs from normal erasure in that
 TermRefs are kept instead of being widened away.</p>
@@ -6554,13 +6539,16 @@ TermRefs are kept instead of being widened away.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6568,7 +6556,7 @@ TermRefs are kept instead of being widened away.</p>
                 
                 <div id="erasure(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasure(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasure(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6620,23 +6608,22 @@ TermRefs are kept instead of being widened away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasure(tp)(ctx)">
-                            <p>The standard erasure of a Scala type. Value classes are erased as normal classes.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasure(tp)(ctx)">
                             <p>The standard erasure of a Scala type. Value classes are erased as normal classes.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6644,7 +6631,7 @@ TermRefs are kept instead of being widened away.</p>
                 
                 <div id="erasureCtx(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasureCtx(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasureCtx(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6685,23 +6672,22 @@ TermRefs are kept instead of being widened away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasureCtx(ctx)">
-                            <p>The current context with a phase no later than erasure</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasureCtx(ctx)">
                             <p>The current context with a phase no later than erasure</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6709,7 +6695,7 @@ TermRefs are kept instead of being widened away.</p>
                 
                 <div id="erasureFn(isJava,semiEraseVCs,isConstructor,wildcardOK)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasureFn(isJava,semiEraseVCs,isConstructor,wildcardOK)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'erasureFn(isJava,semiEraseVCs,isConstructor,wildcardOK)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6772,11 +6758,6 @@ TermRefs are kept instead of being widened away.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasureFn(isJava,semiEraseVCs,isConstructor,wildcardOK)">
-                            <p>Produces an erasure function. See the documentation of the class [[TypeErasure]]
-for a description of each parameter.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-erasureFn(isJava,semiEraseVCs,isConstructor,wildcardOK)">
                             <p>Produces an erasure function. See the documentation of the class [[TypeErasure]]
 for a description of each parameter.</p>
@@ -6784,13 +6765,16 @@ for a description of each parameter.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6798,7 +6782,7 @@ for a description of each parameter.</p>
                 
                 <div id="erasureIdx(isJava,semiEraseVCs,isConstructor,wildcardOK)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasureIdx(isJava,semiEraseVCs,isConstructor,wildcardOK)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasureIdx(isJava,semiEraseVCs,isConstructor,wildcardOK)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6861,21 +6845,21 @@ for a description of each parameter.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasureIdx(isJava,semiEraseVCs,isConstructor,wildcardOK)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-erasureIdx(isJava,semiEraseVCs,isConstructor,wildcardOK)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6883,7 +6867,7 @@ for a description of each parameter.</p>
                 
                 <div id="hasStableErasure(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hasStableErasure(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'hasStableErasure(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6935,11 +6919,6 @@ for a description of each parameter.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hasStableErasure(tp)(ctx)">
-                            <p>Does the (possibly generic) type <code>tp</code> have the same erasure in all its
-possible instantiations?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-hasStableErasure(tp)(ctx)">
                             <p>Does the (possibly generic) type <code>tp</code> have the same erasure in all its
 possible instantiations?</p>
@@ -6947,13 +6926,16 @@ possible instantiations?</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6961,7 +6943,7 @@ possible instantiations?</p>
                 
                 <div id="isErasedType(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isErasedType(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isErasedType(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7013,13 +6995,6 @@ possible instantiations?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isErasedType(tp)(ctx)">
-                            <p>A predicate that tests whether a type is a legal erased type. Only asInstanceOf and
-isInstanceOf may have types that do not satisfy the predicate.
-Erase...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isErasedType(tp)(ctx)">
                             <p>A predicate that tests whether a type is a legal erased type. Only asInstanceOf and
 isInstanceOf may have types that do not satisfy the predicate.
@@ -7029,13 +7004,16 @@ eliminated by ElimErasedValueType).</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7043,7 +7021,7 @@ eliminated by ElimErasedValueType).</p>
                 
                 <div id="isUnboundedGeneric(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isUnboundedGeneric(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isUnboundedGeneric(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7095,12 +7073,6 @@ eliminated by ElimErasedValueType).</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isUnboundedGeneric(tp)(ctx)">
-                            <p>Is <code>tp</code> an abstract type or polymorphic type parameter that has <code>Any</code>, <code>AnyVal</code>,
-or a universal trait as upper bound and that is not Java defined? Arrays of...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isUnboundedGeneric(tp)(ctx)">
                             <p>Is <code>tp</code> an abstract type or polymorphic type parameter that has <code>Any</code>, <code>AnyVal</code>,
 or a universal trait as upper bound and that is not Java defined? Arrays of such types are
@@ -7109,13 +7081,16 @@ erased to <code>Object</code> instead of <code>Object[]</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7123,7 +7098,7 @@ erased to <code>Object</code> instead of <code>Object[]</code>.</p>
                 
                 <div id="sigName(tp,isJava)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'sigName(tp,isJava)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'sigName(tp,isJava)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7183,21 +7158,21 @@ erased to <code>Object</code> instead of <code>Object[]</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-sigName(tp,isJava)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-sigName(tp,isJava)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7205,7 +7180,7 @@ erased to <code>Object</code> instead of <code>Object[]</code>.</p>
                 
                 <div id="transformInfo(sym,tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'transformInfo(sym,tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'transformInfo(sym,tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7265,22 +7240,6 @@ erased to <code>Object</code> instead of <code>Object[]</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-transformInfo(sym,tp)(ctx)">
-                            <p>The symbol's erased info. This is the type's erasure, except for the following symbols:</p>
-<ul>
-<li>For $asInstanceOf           : [T]T</li>
-<li>For $isInstanceOf           : [T]Boolean</li>
-<li>For all abstract types      : = ?</li>
-<li>For companion methods       : the erasure of their type with semiEraseVCs = false.
-The signature of these methods are used to keep a
-link between companions and should not be semi-erased.</li>
-<li>For Java-defined symbols:   : the erasure of their type with isJava = true,
-semiEraseVCs = false. Semi-erasure never happens in Java.</li>
-<li>For all other symbols       : the semi-erasure of their types, with
-isJava, isConstructor set according to symbol.</li>
-</ul>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-transformInfo(sym,tp)(ctx)">
                             <p>The symbol's erased info. This is the type's erasure, except for the following symbols:</p>
 <ul>
@@ -7299,13 +7258,16 @@ isJava, isConstructor set according to symbol.</li>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7313,7 +7275,7 @@ isJava, isConstructor set according to symbol.</li>
                 
                 <div id="valueErasure(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'valueErasure(tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'valueErasure(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7365,11 +7327,6 @@ isJava, isConstructor set according to symbol.</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-valueErasure(tp)(ctx)">
-                            <p>The value class erasure of a Scala type, where value classes are semi-erased to
-ErasedValueType (they will be fully erased in [[ElimErasedValueType]]).</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-valueErasure(tp)(ctx)">
                             <p>The value class erasure of a Scala type, where value classes are semi-erased to
 ErasedValueType (they will be fully erased in [[ElimErasedValueType]]).</p>
@@ -7377,13 +7334,16 @@ ErasedValueType (they will be fully erased in [[ElimErasedValueType]]).</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

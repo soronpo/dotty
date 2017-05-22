@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="PickleBuffer" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PickleBuffer');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PickleBuffer');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,23 +6100,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PickleBuffer">
-                            <p>Variable length byte arrays, with methods for basic pickling and unpickling.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PickleBuffer">
                             <p>Variable length byte arrays, with methods for basic pickling and unpickling.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6122,7 +6123,7 @@
                 
                 <div id="PickleBuffer$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PickleBuffer$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PickleBuffer$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6146,21 +6147,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PickleBuffer$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PickleBuffer$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6168,7 +6169,7 @@
                 
                 <div id="PickleFormat$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PickleFormat$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PickleFormat$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6192,13 +6193,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PickleFormat$">
-                            <p>This object provides constants for pickling attributes.</p>
-<p>If you extend the format, be sure to increase the
-version minor number.</p>
-<p>This was adapted from <a href="https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/pickling/PickleFormat.scala">https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/pickling/PickleFormat.scala</a></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PickleFormat$">
                             <p>This object provides constants for pickling attributes.</p>
 <p>If you extend the format, be sure to increase the
@@ -6208,13 +6202,16 @@ version minor number.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6222,7 +6219,7 @@ version minor number.</p>
                 
                 <div id="Scala2Flags$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Scala2Flags$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Scala2Flags$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6246,23 +6243,22 @@ version minor number.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Scala2Flags$">
-                            <p>Scala2 flags, adapted from <a href="https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/Flags.scala">https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/Flags.scala</a></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Scala2Flags$">
                             <p>Scala2 flags, adapted from <a href="https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/Flags.scala">https://github.com/scala/scala/blob/2.11.x/src/reflect/scala/reflect/internal/Flags.scala</a></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6270,7 +6266,7 @@ version minor number.</p>
                 
                 <div id="Scala2Unpickler" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Scala2Unpickler');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Scala2Unpickler');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6294,11 +6290,6 @@ version minor number.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Scala2Unpickler">
-                            <p>Unpickle symbol table information descending from a class and/or module root
-from an array of bytes.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Scala2Unpickler">
                             <p>Unpickle symbol table information descending from a class and/or module root
 from an array of bytes.</p>
@@ -6306,13 +6297,16 @@ from an array of bytes.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6320,7 +6314,7 @@ from an array of bytes.</p>
                 
                 <div id="Scala2Unpickler$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Scala2Unpickler$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Scala2Unpickler$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6344,21 +6338,21 @@ from an array of bytes.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Scala2Unpickler$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Scala2Unpickler$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

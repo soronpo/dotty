@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6072,6 +6073,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6079,7 +6081,7 @@
                 
                 <div id="pathTo(pos,from)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'pathTo(pos,from)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'pathTo(pos,from)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6142,12 +6144,6 @@ Positioned
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-pathTo(pos,from)(ctx)">
-                            <p>The reverse path from node <code>from</code> to the node that closest encloses position <code>pos</code>,
-or <code>Nil</code> if no such path exists. If a non-empty path is returned it start...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-pathTo(pos,from)(ctx)">
                             <p>The reverse path from node <code>from</code> to the node that closest encloses position <code>pos</code>,
 or <code>Nil</code> if no such path exists. If a non-empty path is returned it starts with
@@ -6156,13 +6152,16 @@ the node closest enclosing <code>pos</code> and ends with <code>from</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6170,7 +6169,7 @@ the node closest enclosing <code>pos</code> and ends with <code>from</code>.</p>
                 
                 <div id="toUntyped(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toUntyped(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toUntyped(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6222,11 +6221,6 @@ the node closest enclosing <code>pos</code> and ends with <code>from</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toUntyped(tree)(ctx)">
-                            <p>The untyped tree corresponding to typed tree <code>tree</code> in the compilation
-unit specified by <code>ctx</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toUntyped(tree)(ctx)">
                             <p>The untyped tree corresponding to typed tree <code>tree</code> in the compilation
 unit specified by <code>ctx</code></p>
@@ -6234,13 +6228,16 @@ unit specified by <code>ctx</code></p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6248,7 +6245,7 @@ unit specified by <code>ctx</code></p>
                 
                 <div id="untypedPath(tree,exactMatch)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'untypedPath(tree,exactMatch)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'untypedPath(tree,exactMatch)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6311,12 +6308,6 @@ Positioned
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-untypedPath(tree,exactMatch)(ctx)">
-                            <p>The reverse path of untyped trees starting with a tree that closest matches
-<code>tree</code> and ending in the untyped tree at the root of the compilation unit
-spec...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-untypedPath(tree,exactMatch)(ctx)">
                             <p>The reverse path of untyped trees starting with a tree that closest matches
 <code>tree</code> and ending in the untyped tree at the root of the compilation unit
@@ -6325,13 +6316,16 @@ specified by <code>ctx</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6339,7 +6333,7 @@ specified by <code>ctx</code>.</p>
                 
                 <div id="untypedPath(pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'untypedPath(pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'untypedPath(pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6394,11 +6388,6 @@ Positioned
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-untypedPath(pos)(ctx)">
-                            <p>The reverse part of the untyped root of the compilation unit of <code>ctx</code> to
-position <code>pos</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-untypedPath(pos)(ctx)">
                             <p>The reverse part of the untyped root of the compilation unit of <code>ctx</code> to
 position <code>pos</code>.</p>
@@ -6406,13 +6395,16 @@ position <code>pos</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

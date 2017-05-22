@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6072,6 +6073,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6079,7 +6081,7 @@
                 
                 <div id="CaseKind$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'CaseKind$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CaseKind$');">[+]</span>
                         <span class="member-annotations">
                             @sharable 
                         </span>
@@ -6103,21 +6105,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-CaseKind$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-CaseKind$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6125,7 +6127,7 @@
                 
                 <div id="EnumCaseCount" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'EnumCaseCount');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'EnumCaseCount');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6156,23 +6158,22 @@ Int<span>, </span>Value
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-EnumCaseCount">
-                            <p>Attachment containing the number of enum cases and the smallest kind that was seen so far.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-EnumCaseCount">
                             <p>Attachment containing the number of enum cases and the smallest kind that was seen so far.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6180,7 +6181,7 @@ Int<span>, </span>Value
                 
                 <div id="addEnumFlags(cdef)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addEnumFlags(cdef)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addEnumFlags(cdef)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6235,23 +6236,22 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addEnumFlags(cdef)(ctx)">
-                            <p>Add implied flags to an enum class or an enum case</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addEnumFlags(cdef)(ctx)">
                             <p>Add implied flags to an enum class or an enum case</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6259,7 +6259,7 @@ Untyped
                 
                 <div id="enumCaseIsLegal(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enumCaseIsLegal(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumCaseIsLegal(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6311,23 +6311,22 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumCaseIsLegal(tree)(ctx)">
-                            <p>Is enum case <code>tree</code> situated in a companion object of an enum class?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumCaseIsLegal(tree)(ctx)">
                             <p>Is enum case <code>tree</code> situated in a companion object of an enum class?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6335,7 +6334,7 @@ Untyped
                 
                 <div id="enumClass(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enumClass(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumClass(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6376,23 +6375,22 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumClass(ctx)">
-                            <p>the enumeration class that is a companion of the current object</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumClass(ctx)">
                             <p>the enumeration class that is a companion of the current object</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6400,7 +6398,7 @@ Untyped
                 
                 <div id="enumClassRef(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enumClassRef(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumClassRef(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6441,23 +6439,22 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumClassRef(ctx)">
-                            <p>A type tree referring to <code>enumClass</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumClassRef(ctx)">
                             <p>A type tree referring to <code>enumClass</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6465,7 +6462,7 @@ Untyped
                 
                 <div id="enumScaffolding(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'enumScaffolding(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumScaffolding(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6509,14 +6506,6 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumScaffolding(ctx)">
-                            <p>The following lists of definitions for an enum type E:</p>
-<p>private val $values = new EnumValues[E]
-def enumValue = $values.fromInt
-def enumValueNamed = $values...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumScaffolding(ctx)">
                             <p>The following lists of definitions for an enum type E:</p>
 <p>private val $values = new EnumValues[E]
@@ -6527,13 +6516,16 @@ def enumValues = $values.values</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6541,7 +6533,7 @@ def enumValues = $values.values</p>
                 
                 <div id="enumTagMeth(kind)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'enumTagMeth(kind)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumTagMeth(kind)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6598,12 +6590,6 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumTagMeth(kind)(ctx)">
-                            <p>A pair consisting of
-- a method returning the next enum tag
-- scaffolding as defined in <code>nextEnumTag</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumTagMeth(kind)(ctx)">
                             <p>A pair consisting of
 - a method returning the next enum tag
@@ -6612,13 +6598,16 @@ Tree
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6626,7 +6615,7 @@ Tree
                 
                 <div id="enumValueCreator(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'enumValueCreator(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumValueCreator(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6667,14 +6656,6 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enumValueCreator(ctx)">
-                            <p>A creation method for a value of enum type <code>E</code>, which is defined as follows:</p>
-<p>private def $new(tag: Int, name: String) = new E {
-def enumTag = tag
-override...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enumValueCreator(ctx)">
                             <p>A creation method for a value of enum type <code>E</code>, which is defined as follows:</p>
 <p>private def $new(tag: Int, name: String) = new E {
@@ -6686,13 +6667,16 @@ $values.register(this)
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6700,7 +6684,7 @@ $values.register(this)
                 
                 <div id="expandEnumModule(name,impl,mods,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'expandEnumModule(name,impl,mods,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expandEnumModule(name,impl,mods,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6776,23 +6760,22 @@ $values.register(this)
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expandEnumModule(name,impl,mods,pos)(ctx)">
-                            <p>Expand a module definition representing a parameterless enum case</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-expandEnumModule(name,impl,mods,pos)(ctx)">
                             <p>Expand a module definition representing a parameterless enum case</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6800,7 +6783,7 @@ $values.register(this)
                 
                 <div id="expandSimpleEnumCase(name,mods,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'expandSimpleEnumCase(name,mods,pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expandSimpleEnumCase(name,mods,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6868,23 +6851,22 @@ $values.register(this)
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-expandSimpleEnumCase(name,mods,pos)(ctx)">
-                            <p>Expand a simple enum case</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-expandSimpleEnumCase(name,mods,pos)(ctx)">
                             <p>Expand a simple enum case</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6892,7 +6874,7 @@ $values.register(this)
                 
                 <div id="interpolatedEnumParent(pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpolatedEnumParent(pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'interpolatedEnumParent(pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6944,13 +6926,6 @@ $values.register(this)
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-interpolatedEnumParent(pos)(ctx)">
-                            <p>A reference to the enum class <code>E</code>, possibly followed by type arguments.
-Each covariant type parameter is approximated by its lower bound.
-Each contravaria...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-interpolatedEnumParent(pos)(ctx)">
                             <p>A reference to the enum class <code>E</code>, possibly followed by type arguments.
 Each covariant type parameter is approximated by its lower bound.
@@ -6961,13 +6936,16 @@ refers to pther type parameters.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6975,7 +6953,7 @@ refers to pther type parameters.</p>
                 
                 <div id="isLegalEnumCase(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isLegalEnumCase(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isLegalEnumCase(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7027,23 +7005,22 @@ refers to pther type parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isLegalEnumCase(tree)(ctx)">
-                            <p>Is this an enum case that's situated in a companion object of an enum class?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isLegalEnumCase(tree)(ctx)">
                             <p>Is this an enum case that's situated in a companion object of an enum class?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7051,7 +7028,7 @@ refers to pther type parameters.</p>
                 
                 <div id="nextEnumTag(kind)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'nextEnumTag(kind)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nextEnumTag(kind)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7108,13 +7085,6 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-nextEnumTag(kind)(ctx)">
-                            <p>A pair consisting of
-- the next enum tag
-- scaffolding containing the necessary definitions for singleton enum cases
-unless that scaffolding was already...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-nextEnumTag(kind)(ctx)">
                             <p>A pair consisting of
 - the next enum tag
@@ -7124,13 +7094,16 @@ unless that scaffolding was already generated by a previous call to <code>nextEn
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7138,7 +7111,7 @@ unless that scaffolding was already generated by a previous call to <code>nextEn
                 
                 <div id="reconstitutedEnumTypeParams(pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'reconstitutedEnumTypeParams(pos)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'reconstitutedEnumTypeParams(pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7196,12 +7169,6 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-reconstitutedEnumTypeParams(pos)(ctx)">
-                            <p>Type parameters reconstituted from the constructor
-of the `enum' class corresponding to an enum case.
-The variance is the same as the corresponding type...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-reconstitutedEnumTypeParams(pos)(ctx)">
                             <p>Type parameters reconstituted from the constructor
 of the `enum' class corresponding to an enum case.
@@ -7210,13 +7177,16 @@ The variance is the same as the corresponding type parameter of the enum class.<
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7224,7 +7194,7 @@ The variance is the same as the corresponding type parameter of the enum class.<
                 
                 <div id="registerCall(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'registerCall(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'registerCall(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7268,21 +7238,21 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-registerCall(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-registerCall(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7290,7 +7260,7 @@ Tree
                 
                 <div id="valuesDot(name)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'valuesDot(name)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'valuesDot(name)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7329,21 +7299,21 @@ Tree
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-valuesDot(name)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-valuesDot(name)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

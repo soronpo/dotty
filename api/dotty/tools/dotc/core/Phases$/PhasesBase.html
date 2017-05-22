@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="NoPhase$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoPhase$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NoPhase$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,21 +6100,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoPhase$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NoPhase$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6120,7 +6122,7 @@
                 
                 <div id="PhaseCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PhaseCache');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PhaseCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6144,12 +6146,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PhaseCache">
-                            <p>A cache to compute the phase with given name, which
-stores the phase as soon as phaseNamed returns something
-different from NoPhase.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-PhaseCache">
                             <p>A cache to compute the phase with given name, which
 stores the phase as soon as phaseNamed returns something
@@ -6158,13 +6154,16 @@ different from NoPhase.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6172,7 +6171,7 @@ different from NoPhase.</p>
                 
                 <div id="SomePhase$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SomePhase$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SomePhase$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6196,21 +6195,21 @@ different from NoPhase.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SomePhase$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SomePhase$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6218,7 +6217,7 @@ different from NoPhase.</p>
                 
                 <div id="TerminalPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TerminalPhase');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'TerminalPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6242,23 +6241,22 @@ different from NoPhase.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-TerminalPhase">
-                            <p>A sentinel transformer object</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-TerminalPhase">
                             <p>A sentinel transformer object</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6266,7 +6264,7 @@ different from NoPhase.</p>
                 
                 <div id="cachedPhases" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cachedPhases');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'cachedPhases');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6295,21 +6293,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cachedPhases">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-cachedPhases">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6317,7 +6315,7 @@ PhaseCache
                 
                 <div id="elimErasedValueTypeCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'elimErasedValueTypeCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elimErasedValueTypeCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6343,21 +6341,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-elimErasedValueTypeCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-elimErasedValueTypeCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6365,7 +6363,7 @@ PhaseCache
                 
                 <div id="elimRepeatedCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'elimRepeatedCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elimRepeatedCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6391,21 +6389,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-elimRepeatedCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-elimRepeatedCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6413,7 +6411,7 @@ PhaseCache
                 
                 <div id="erasureCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasureCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasureCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6439,21 +6437,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasureCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-erasureCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6461,7 +6459,7 @@ PhaseCache
                 
                 <div id="explicitOuterCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'explicitOuterCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'explicitOuterCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6487,21 +6485,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-explicitOuterCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-explicitOuterCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6509,7 +6507,7 @@ PhaseCache
                 
                 <div id="extensionMethodsCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'extensionMethodsCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'extensionMethodsCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6535,21 +6533,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-extensionMethodsCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-extensionMethodsCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6557,7 +6555,7 @@ PhaseCache
                 
                 <div id="flattenCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'flattenCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'flattenCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6583,21 +6581,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-flattenCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-flattenCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6605,7 +6603,7 @@ PhaseCache
                 
                 <div id="genBCodeCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'genBCodeCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'genBCodeCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6631,21 +6629,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-genBCodeCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-genBCodeCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6653,7 +6651,7 @@ PhaseCache
                 
                 <div id="gettersCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'gettersCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'gettersCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6679,21 +6677,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-gettersCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-gettersCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6701,7 +6699,7 @@ PhaseCache
                 
                 <div id="lambdaLiftCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lambdaLiftCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'lambdaLiftCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6727,21 +6725,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lambdaLiftCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-lambdaLiftCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6749,7 +6747,7 @@ PhaseCache
                 
                 <div id="patmatCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'patmatCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'patmatCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6775,21 +6773,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-patmatCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-patmatCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6797,7 +6795,7 @@ PhaseCache
                 
                 <div id="picklerCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'picklerCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'picklerCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6823,21 +6821,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-picklerCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-picklerCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6845,7 +6843,7 @@ PhaseCache
                 
                 <div id="refChecksCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'refChecksCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'refChecksCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6871,21 +6869,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-refChecksCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-refChecksCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6893,7 +6891,7 @@ PhaseCache
                 
                 <div id="typerCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typerCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typerCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6919,21 +6917,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typerCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-typerCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6941,7 +6939,7 @@ PhaseCache
                 
                 <div id="allPhases" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'allPhases');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'allPhases');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6967,21 +6965,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-allPhases">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-allPhases">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6989,7 +6987,7 @@ PhaseCache
                 
                 <div id="cleanPhaseCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cleanPhaseCache');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'cleanPhaseCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7015,21 +7013,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cleanPhaseCache">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-cleanPhaseCache">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7037,7 +7035,7 @@ PhaseCache
                 
                 <div id="elimErasedValueTypePhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'elimErasedValueTypePhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elimErasedValueTypePhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7063,21 +7061,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-elimErasedValueTypePhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-elimErasedValueTypePhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7085,7 +7083,7 @@ PhaseCache
                 
                 <div id="elimRepeatedPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'elimRepeatedPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elimRepeatedPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7111,21 +7109,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-elimRepeatedPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-elimRepeatedPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7133,7 +7131,7 @@ PhaseCache
                 
                 <div id="erasurePhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'erasurePhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'erasurePhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7159,21 +7157,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-erasurePhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-erasurePhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7181,7 +7179,7 @@ PhaseCache
                 
                 <div id="explicitOuterPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'explicitOuterPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'explicitOuterPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7207,21 +7205,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-explicitOuterPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-explicitOuterPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7229,7 +7227,7 @@ PhaseCache
                 
                 <div id="extensionMethodsPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'extensionMethodsPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'extensionMethodsPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7255,21 +7253,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-extensionMethodsPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-extensionMethodsPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7277,7 +7275,7 @@ PhaseCache
                 
                 <div id="flattenPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'flattenPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'flattenPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7303,21 +7301,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-flattenPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-flattenPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7325,7 +7323,7 @@ PhaseCache
                 
                 <div id="genBCodePhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'genBCodePhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'genBCodePhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7351,21 +7349,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-genBCodePhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-genBCodePhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7373,7 +7371,7 @@ PhaseCache
                 
                 <div id="gettersPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'gettersPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'gettersPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7399,21 +7397,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-gettersPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-gettersPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7421,7 +7419,7 @@ PhaseCache
                 
                 <div id="isAfterTyper(phase)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isAfterTyper(phase)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isAfterTyper(phase)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7460,21 +7458,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isAfterTyper(phase)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isAfterTyper(phase)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7482,7 +7480,7 @@ PhaseCache
                 
                 <div id="lambdaLiftPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lambdaLiftPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'lambdaLiftPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7508,21 +7506,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lambdaLiftPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-lambdaLiftPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7530,7 +7528,7 @@ PhaseCache
                 
                 <div id="patmatPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'patmatPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'patmatPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7556,21 +7554,21 @@ PhaseCache
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-patmatPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-patmatPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7578,7 +7576,7 @@ PhaseCache
                 
                 <div id="phaseOfClass(pclass)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'phaseOfClass(pclass)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'phaseOfClass(pclass)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7620,21 +7618,21 @@ Nothing<span class="bounds"> &lt;: </span>Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-phaseOfClass(pclass)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-phaseOfClass(pclass)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7642,7 +7640,7 @@ Nothing<span class="bounds"> &lt;: </span>Any
                 
                 <div id="phasePlan" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'phasePlan');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'phasePlan');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7674,21 +7672,21 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-phasePlan">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-phasePlan">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7696,7 +7694,7 @@ Phase
                 
                 <div id="picklerPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'picklerPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'picklerPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7722,21 +7720,21 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-picklerPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-picklerPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7744,7 +7742,7 @@ Phase
                 
                 <div id="refchecksPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'refchecksPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'refchecksPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7770,21 +7768,21 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-refchecksPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-refchecksPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7792,7 +7790,7 @@ Phase
                 
                 <div id="setPhasePlan(phasess)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'setPhasePlan(phasess)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'setPhasePlan(phasess)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7837,21 +7835,21 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-setPhasePlan(phasess)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-setPhasePlan(phasess)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7859,7 +7857,7 @@ Phase
                 
                 <div id="squashPhases(phasess,phasesToSkip,stopBeforePhases,stopAfterPhases,YCheckAfter)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'squashPhases(phasess,phasesToSkip,stopBeforePhases,stopAfterPhases,YCheckAfter)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'squashPhases(phasess,phasesToSkip,stopBeforePhases,stopAfterPhases,YCheckAfter)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7951,12 +7949,6 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-squashPhases(phasess,phasesToSkip,stopBeforePhases,stopAfterPhases,YCheckAfter)">
-                            <p>Squash TreeTransform's beloning to same sublist to a single TreeTransformer
-Each TreeTransform gets own period,
-whereas a combined TreeTransformer gets...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-squashPhases(phasess,phasesToSkip,stopBeforePhases,stopAfterPhases,YCheckAfter)">
                             <p>Squash TreeTransform's beloning to same sublist to a single TreeTransformer
 Each TreeTransform gets own period,
@@ -7965,13 +7957,16 @@ whereas a combined TreeTransformer gets period equal to union of periods of it's
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7979,7 +7974,7 @@ whereas a combined TreeTransformer gets period equal to union of periods of it's
                 
                 <div id="typerPhase" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typerPhase');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typerPhase');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8005,21 +8000,21 @@ whereas a combined TreeTransformer gets period equal to union of periods of it's
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typerPhase">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-typerPhase">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8027,7 +8022,7 @@ whereas a combined TreeTransformer gets period equal to union of periods of it's
                 
                 <div id="usePhases(phasess,squash)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'usePhases(phasess,squash)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'usePhases(phasess,squash)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8077,12 +8072,6 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-usePhases(phasess,squash)">
-                            <p>Use the following phases in the order they are given.
-The list should never contain NoPhase.
-if squashing is enabled, phases in same subgroup will be sq...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-usePhases(phasess,squash)">
                             <p>Use the following phases in the order they are given.
 The list should never contain NoPhase.
@@ -8091,13 +8080,16 @@ if squashing is enabled, phases in same subgroup will be squashed to single phas
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6078,6 +6078,7 @@ inheritance&quot; in the &quot;Name hashing algorithm&quot; section.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6116,6 +6117,7 @@ inheritance&quot; in the &quot;Name hashing algorithm&quot; section.</p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6123,7 +6125,7 @@ inheritance&quot; in the &quot;Name hashing algorithm&quot; section.</p>
                 
                 <div id="usedTypeTraverser$" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'usedTypeTraverser$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'usedTypeTraverser$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6147,22 +6149,6 @@ inheritance&quot; in the &quot;Name hashing algorithm&quot; section.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-usedTypeTraverser$">
-                            <p>Traverse a used type and record all the dependencies we need to keep track
-of for incremental recompilation.</p>
-<p>As a motivating example, given a type <code>T</code> def...</p>
-<p>
-</p>
-<p>
-</p>
-<p>
-</p>
-<p>
-</p>
-<p>
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-usedTypeTraverser$">
                             <p>Traverse a used type and record all the dependencies we need to keep track
 of for incremental recompilation.</p>
@@ -6194,13 +6180,16 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6208,7 +6197,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="_topLevelDependencies" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '_topLevelDependencies');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, '_topLevelDependencies');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6237,21 +6226,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-_topLevelDependencies">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-_topLevelDependencies">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6259,7 +6248,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="_topLevelInheritanceDependencies" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '_topLevelInheritanceDependencies');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, '_topLevelInheritanceDependencies');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6288,21 +6277,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-_topLevelInheritanceDependencies">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-_topLevelInheritanceDependencies">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6310,7 +6299,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="_usedNames" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '_usedNames');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, '_usedNames');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6339,21 +6328,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-_usedNames">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-_usedNames">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6361,7 +6350,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="ctx" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ctx');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ctx');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6387,21 +6376,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ctx">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ctx">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6409,7 +6398,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="addDependency(sym)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addDependency(sym)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addDependency(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6448,21 +6437,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addDependency(sym)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addDependency(sym)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6470,7 +6459,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="addInheritanceDependency(sym)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addInheritanceDependency(sym)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addInheritanceDependency(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6509,21 +6498,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addInheritanceDependency(sym)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addInheritanceDependency(sym)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6531,7 +6520,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="addUsedName(name)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'addUsedName(name)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'addUsedName(name)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6573,21 +6562,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addUsedName(name)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-addUsedName(name)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6595,7 +6584,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="ignoreDependency(sym)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ignoreDependency(sym)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ignoreDependency(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6634,21 +6623,21 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ignoreDependency(sym)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ignoreDependency(sym)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6656,7 +6645,7 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                 
                 <div id="topLevelDependencies" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'topLevelDependencies');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'topLevelDependencies');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6685,12 +6674,6 @@ possible prefix, the documentation of <code>ExtractAPI</code> explains why.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-topLevelDependencies">
-                            <p>The set of top-level classes that the compilation unit depends on
-because it refers to these classes or something defined in them.
-This is always a supe...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-topLevelDependencies">
                             <p>The set of top-level classes that the compilation unit depends on
 because it refers to these classes or something defined in them.
@@ -6699,13 +6682,16 @@ This is always a superset of <code>topLevelInheritanceDependencies</code> by def
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6713,7 +6699,7 @@ This is always a superset of <code>topLevelInheritanceDependencies</code> by def
                 
                 <div id="topLevelInheritanceDependencies" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'topLevelInheritanceDependencies');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'topLevelInheritanceDependencies');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6742,11 +6728,6 @@ This is always a superset of <code>topLevelInheritanceDependencies</code> by def
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-topLevelInheritanceDependencies">
-                            <p>The set of top-level classes that the compilation unit extends or that
-contain a non-top-level class that the compilaion unit extends.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-topLevelInheritanceDependencies">
                             <p>The set of top-level classes that the compilation unit extends or that
 contain a non-top-level class that the compilaion unit extends.</p>
@@ -6754,13 +6735,16 @@ contain a non-top-level class that the compilaion unit extends.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6768,7 +6752,7 @@ contain a non-top-level class that the compilaion unit extends.</p>
                 
                 <div id="traverse(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'traverse(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'traverse(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6820,12 +6804,6 @@ contain a non-top-level class that the compilaion unit extends.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-traverse(tree)(ctx)">
-                            <p>Traverse the tree of a source file and record the dependencies which
-can be retrieved using <code>topLevelDependencies</code>, <code>topLevelInheritanceDependencies</code>,
-and <code>u...</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-traverse(tree)(ctx)">
                             <p>Traverse the tree of a source file and record the dependencies which
 can be retrieved using <code>topLevelDependencies</code>, <code>topLevelInheritanceDependencies</code>,
@@ -6834,13 +6812,16 @@ and <code>usedNames</code></p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6848,7 +6829,7 @@ and <code>usedNames</code></p>
                 
                 <div id="usedNames" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'usedNames');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'usedNames');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6877,11 +6858,6 @@ and <code>usedNames</code></p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-usedNames">
-                            <p>The names used in this class, this does not include names which are only
-defined and not referenced.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-usedNames">
                             <p>The names used in this class, this does not include names which are only
 defined and not referenced.</p>
@@ -6889,13 +6865,16 @@ defined and not referenced.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

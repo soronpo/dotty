@@ -6080,6 +6080,7 @@ that has the TypeParamRef as origin.</li>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6100,6 +6101,7 @@ that has the TypeParamRef as origin.</li>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6107,7 +6109,7 @@ that has the TypeParamRef as origin.</li>
                 
                 <div id="This" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'This');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'This');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6139,21 +6141,21 @@ that has the TypeParamRef as origin.</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-This">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-This">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6161,7 +6163,7 @@ that has the TypeParamRef as origin.</li>
                 
                 <div id="&(other)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '&(other)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '&(other)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6213,23 +6215,22 @@ that has the TypeParamRef as origin.</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-&(other)(ctx)">
-                            <p>The weakest constraint that subsumes both this constraint and <code>other</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-&(other)(ctx)">
                             <p>The weakest constraint that subsumes both this constraint and <code>other</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6237,7 +6238,7 @@ that has the TypeParamRef as origin.</li>
                 
                 <div id="add(poly,tvars)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'add(poly,tvars)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'add(poly,tvars)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6300,11 +6301,6 @@ TypeVar
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-add(poly,tvars)(ctx)">
-                            <p>A new constraint which is derived from this constraint by adding
-entries for all type parameters of <code>poly</code>.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-add(poly,tvars)(ctx)">
                             <p>A new constraint which is derived from this constraint by adding
 entries for all type parameters of <code>poly</code>.</p>
@@ -6312,13 +6308,16 @@ entries for all type parameters of <code>poly</code>.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6326,7 +6325,7 @@ entries for all type parameters of <code>poly</code>.</p>
                 
                 <div id="addLess(p1,p2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'addLess(p1,p2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'addLess(p1,p2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6386,12 +6385,6 @@ entries for all type parameters of <code>poly</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-addLess(p1,p2)(ctx)">
-                            <p>A constraint that includes the relationship <code>p1 &lt;: p2</code>.
-<code>&lt;:</code> relationships between parameters (&quot;edges&quot;) are propagated, but
-non-parameter bounds are left al...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-addLess(p1,p2)(ctx)">
                             <p>A constraint that includes the relationship <code>p1 &lt;: p2</code>.
 <code>&lt;:</code> relationships between parameters (&quot;edges&quot;) are propagated, but
@@ -6400,13 +6393,16 @@ non-parameter bounds are left alone.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6414,7 +6410,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="checkClosed()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkClosed()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkClosed()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6460,23 +6456,22 @@ non-parameter bounds are left alone.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkClosed()(ctx)">
-                            <p>Check that constraint only refers to TypeParamRefs bound by itself</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkClosed()(ctx)">
                             <p>Check that constraint only refers to TypeParamRefs bound by itself</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6484,7 +6479,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="checkNonCyclic()(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'checkNonCyclic()(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkNonCyclic()(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6530,23 +6525,22 @@ non-parameter bounds are left alone.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-checkNonCyclic()(ctx)">
-                            <p>Check that no constrained parameter contains itself as a bound</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-checkNonCyclic()(ctx)">
                             <p>Check that no constrained parameter contains itself as a bound</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6554,7 +6548,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="contains(pt)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'contains(pt)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'contains(pt)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6593,23 +6587,22 @@ non-parameter bounds are left alone.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-contains(pt)">
-                            <p>Does the constraint's domain contain the type parameters of <code>pt</code>?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-contains(pt)">
                             <p>Does the constraint's domain contain the type parameters of <code>pt</code>?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6617,7 +6610,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="contains(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'contains(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'contains(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6656,23 +6649,22 @@ non-parameter bounds are left alone.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-contains(param)">
-                            <p>Does the constraint's domain contain the type parameter <code>param</code>?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-contains(param)">
                             <p>Does the constraint's domain contain the type parameter <code>param</code>?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6680,7 +6672,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="contains(tvar)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'contains(tvar)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'contains(tvar)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6719,23 +6711,22 @@ non-parameter bounds are left alone.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-contains(tvar)">
-                            <p>Does this constraint contain the type variable <code>tvar</code> and is it uninstantiated?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-contains(tvar)">
                             <p>Does this constraint contain the type variable <code>tvar</code> and is it uninstantiated?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6743,7 +6734,7 @@ non-parameter bounds are left alone.</p>
                 
                 <div id="domainLambdas" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'domainLambdas');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'domainLambdas');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6772,23 +6763,22 @@ TypeLambda
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-domainLambdas">
-                            <p>The type lambdas constrained by this constraint</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-domainLambdas">
                             <p>The type lambdas constrained by this constraint</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6796,7 +6786,7 @@ TypeLambda
                 
                 <div id="domainParams" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'domainParams');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'domainParams');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6825,23 +6815,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-domainParams">
-                            <p>The type lambda parameters constrained by this constraint</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-domainParams">
                             <p>The type lambda parameters constrained by this constraint</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6849,7 +6838,7 @@ TypeParamRef
                 
                 <div id="entry(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'entry(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'entry(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6888,11 +6877,6 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-entry(param)">
-                            <p>The constraint entry for given type parameter <code>param</code>, or NoType if <code>param</code> is not part of
-the constraint domain. Note: Low level, implementation dependent...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-entry(param)">
                             <p>The constraint entry for given type parameter <code>param</code>, or NoType if <code>param</code> is not part of
 the constraint domain. Note: Low level, implementation dependent.</p>
@@ -6900,13 +6884,16 @@ the constraint domain. Note: Low level, implementation dependent.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6914,7 +6901,7 @@ the constraint domain. Note: Low level, implementation dependent.</p>
                 
                 <div id="exclusiveLower(param,butNot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'exclusiveLower(param,butNot)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'exclusiveLower(param,butNot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6964,23 +6951,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-exclusiveLower(param,butNot)">
-                            <p>lower(param) \ lower(butNot)</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-exclusiveLower(param,butNot)">
                             <p>lower(param) \ lower(butNot)</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6988,7 +6974,7 @@ TypeParamRef
                 
                 <div id="exclusiveUpper(param,butNot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'exclusiveUpper(param,butNot)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'exclusiveUpper(param,butNot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7038,23 +7024,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-exclusiveUpper(param,butNot)">
-                            <p>upper(param) \ upper(butNot)</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-exclusiveUpper(param,butNot)">
                             <p>upper(param) \ upper(butNot)</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7062,7 +7047,7 @@ TypeParamRef
                 
                 <div id="forallParams(p)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'forallParams(p)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forallParams(p)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7101,23 +7086,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-forallParams(p)">
-                            <p>Check whether predicate holds for all parameters in constraint</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-forallParams(p)">
                             <p>Check whether predicate holds for all parameters in constraint</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7125,7 +7109,7 @@ TypeParamRef
                 
                 <div id="foreachTypeVar(op)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'foreachTypeVar(op)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'foreachTypeVar(op)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7164,11 +7148,6 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-foreachTypeVar(op)">
-                            <p>Perform operation <code>op</code> on all typevars, or only on uninstantiated
-typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-foreachTypeVar(op)">
                             <p>Perform operation <code>op</code> on all typevars, or only on uninstantiated
 typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
@@ -7176,13 +7155,16 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7190,7 +7172,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                 
                 <div id="fullBounds(param)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fullBounds(param)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullBounds(param)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7242,23 +7224,22 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullBounds(param)(ctx)">
-                            <p>The bounds of <code>param</code> including all known-to-be-smaller and -greater parameters</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullBounds(param)(ctx)">
                             <p>The bounds of <code>param</code> including all known-to-be-smaller and -greater parameters</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7266,7 +7247,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                 
                 <div id="fullLowerBound(param)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fullLowerBound(param)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullLowerBound(param)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7318,23 +7299,22 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullLowerBound(param)(ctx)">
-                            <p>The lower bound of <code>param</code> including all known-to-be-smaller parameters</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullLowerBound(param)(ctx)">
                             <p>The lower bound of <code>param</code> including all known-to-be-smaller parameters</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7342,7 +7322,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                 
                 <div id="fullUpperBound(param)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fullUpperBound(param)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullUpperBound(param)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7394,23 +7374,22 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullUpperBound(param)(ctx)">
-                            <p>The upper bound of <code>param</code> including all known-to-be-greater parameters</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullUpperBound(param)(ctx)">
                             <p>The upper bound of <code>param</code> including all known-to-be-greater parameters</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7418,7 +7397,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                 
                 <div id="isLess(param1,param2)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isLess(param1,param2)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isLess(param1,param2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7465,23 +7444,22 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isLess(param1,param2)">
-                            <p>Is it known that <code>param1 &lt;:&lt; param2</code>?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isLess(param1,param2)">
                             <p>Is it known that <code>param1 &lt;:&lt; param2</code>?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7489,7 +7467,7 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                 
                 <div id="isRemovable(pt)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isRemovable(pt)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isRemovable(pt)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7528,12 +7506,6 @@ typevars, depending on whether <code>uninstOnly</code> is set or not.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isRemovable(pt)">
-                            <p>Is entry associated with <code>pt</code> removable? This is the case if
-all type parameters of the entry are associated with type variables
-which have their <code>inst</code> fie...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isRemovable(pt)">
                             <p>Is entry associated with <code>pt</code> removable? This is the case if
 all type parameters of the entry are associated with type variables
@@ -7542,13 +7514,16 @@ which have their <code>inst</code> fields set.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7556,7 +7531,7 @@ which have their <code>inst</code> fields set.</p>
                 
                 <div id="lower(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lower(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lower(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7598,23 +7573,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lower(param)">
-                            <p>The parameters that are known to be smaller wrt &lt;: than <code>param</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lower(param)">
                             <p>The parameters that are known to be smaller wrt &lt;: than <code>param</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7622,7 +7596,7 @@ TypeParamRef
                 
                 <div id="nonParamBounds(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'nonParamBounds(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nonParamBounds(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7661,12 +7635,6 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-nonParamBounds(param)">
-                            <p>The constraint bounds for given type parameter <code>param</code>.
-Poly params that are known to be smaller or greater than <code>param</code>
-are not contained in the return bou...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-nonParamBounds(param)">
                             <p>The constraint bounds for given type parameter <code>param</code>.
 Poly params that are known to be smaller or greater than <code>param</code>
@@ -7675,13 +7643,16 @@ are not contained in the return bounds.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7689,7 +7660,7 @@ are not contained in the return bounds.</p>
                 
                 <div id="remove(pt)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'remove(pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'remove(pt)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7741,23 +7712,22 @@ are not contained in the return bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-remove(pt)(ctx)">
-                            <p>A new constraint with all entries coming from <code>pt</code> removed.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-remove(pt)(ctx)">
                             <p>A new constraint with all entries coming from <code>pt</code> removed.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7765,7 +7735,7 @@ are not contained in the return bounds.</p>
                 
                 <div id="replace(param,tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'replace(param,tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'replace(param,tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7825,13 +7795,6 @@ are not contained in the return bounds.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-replace(param,tp)(ctx)">
-                            <p>A new constraint which is derived from this constraint by removing
-the type parameter <code>param</code> from the domain and replacing all top-level occurrences
-of t...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-replace(param,tp)(ctx)">
                             <p>A new constraint which is derived from this constraint by removing
 the type parameter <code>param</code> from the domain and replacing all top-level occurrences
@@ -7842,13 +7805,16 @@ Occurrences nested inside a refinement or prefix are not affected.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7856,7 +7822,7 @@ Occurrences nested inside a refinement or prefix are not affected.</p>
                 
                 <div id="typeVarOfParam(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typeVarOfParam(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typeVarOfParam(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7895,11 +7861,6 @@ Occurrences nested inside a refinement or prefix are not affected.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typeVarOfParam(param)">
-                            <p>The type variable corresponding to parameter <code>param</code>, or
-NoType, if <code>param</code> is not in constrained or is not paired with a type variable.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-typeVarOfParam(param)">
                             <p>The type variable corresponding to parameter <code>param</code>, or
 NoType, if <code>param</code> is not in constrained or is not paired with a type variable.</p>
@@ -7907,13 +7868,16 @@ NoType, if <code>param</code> is not in constrained or is not paired with a type
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7921,7 +7885,7 @@ NoType, if <code>param</code> is not in constrained or is not paired with a type
                 
                 <div id="unify(p1,p2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'unify(p1,p2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unify(p1,p2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7981,11 +7945,6 @@ NoType, if <code>param</code> is not in constrained or is not paired with a type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unify(p1,p2)(ctx)">
-                            <p>A constraint resulting from adding p2 = p1 to this constraint, and at the same
-time transferring all bounds of p2 to p1</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-unify(p1,p2)(ctx)">
                             <p>A constraint resulting from adding p2 = p1 to this constraint, and at the same
 time transferring all bounds of p2 to p1</p>
@@ -7993,13 +7952,16 @@ time transferring all bounds of p2 to p1</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8007,7 +7969,7 @@ time transferring all bounds of p2 to p1</p>
                 
                 <div id="uninstVars" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'uninstVars');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uninstVars');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8036,23 +7998,22 @@ TypeVar
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-uninstVars">
-                            <p>The uninstantiated typevars of this constraint</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-uninstVars">
                             <p>The uninstantiated typevars of this constraint</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8060,7 +8021,7 @@ TypeVar
                 
                 <div id="updateEntry(param,tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'updateEntry(param,tp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'updateEntry(param,tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8120,16 +8081,6 @@ TypeVar
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-updateEntry(param,tp)(ctx)">
-                            <p>A new constraint which is derived from this constraint by updating
-the entry for parameter <code>param</code> to <code>tp</code>.
-<code>tp</code> can be one of the following:</p>
-<ul>
-<li>A TypeBounds value, indicating new constraint bounds</li>
-<li>Another type, indicating a solution for the parameter</li>
-</ul>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-updateEntry(param,tp)(ctx)">
                             <p>A new constraint which is derived from this constraint by updating
 the entry for parameter <code>param</code> to <code>tp</code>.
@@ -8142,13 +8093,16 @@ the entry for parameter <code>param</code> to <code>tp</code>.
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -8156,7 +8110,7 @@ the entry for parameter <code>param</code> to <code>tp</code>.
                 
                 <div id="upper(param)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'upper(param)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'upper(param)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -8198,23 +8152,22 @@ TypeParamRef
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-upper(param)">
-                            <p>The parameters that are known to be greater wrt &lt;: than <code>param</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-upper(param)">
                             <p>The parameters that are known to be greater wrt &lt;: than <code>param</code></p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

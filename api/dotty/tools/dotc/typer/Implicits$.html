@@ -6064,6 +6064,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6072,6 +6073,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6079,7 +6081,7 @@
                 
                 <div id="AmbiguousImplicits" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'AmbiguousImplicits');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AmbiguousImplicits');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6103,23 +6105,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-AmbiguousImplicits">
-                            <p>An ambiguous implicits failure</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-AmbiguousImplicits">
                             <p>An ambiguous implicits failure</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6127,7 +6128,7 @@
                 
                 <div id="Candidate" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Candidate');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Candidate');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6151,23 +6152,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Candidate">
-                            <p>An eligible implicit candidate, consisting of an implicit reference and a nesting level</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Candidate">
                             <p>An eligible implicit candidate, consisting of an implicit reference and a nesting level</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6175,7 +6175,7 @@
                 
                 <div id="Candidate$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Candidate$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Candidate$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6199,23 +6199,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Candidate$">
-                            <p>An eligible implicit candidate, consisting of an implicit reference and a nesting level</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-Candidate$">
                             <p>An eligible implicit candidate, consisting of an implicit reference and a nesting level</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6223,7 +6222,7 @@
                 
                 <div id="ContextualImplicits" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ContextualImplicits');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ContextualImplicits');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6247,23 +6246,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ContextualImplicits">
-                            <p>The implicit references coming from the context.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ContextualImplicits">
                             <p>The implicit references coming from the context.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6271,7 +6269,7 @@
                 
                 <div id="DivergingImplicit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DivergingImplicit');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DivergingImplicit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6295,21 +6293,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DivergingImplicit">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DivergingImplicit">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6317,7 +6315,7 @@
                 
                 <div id="DivergingImplicit$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DivergingImplicit$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DivergingImplicit$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6341,21 +6339,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DivergingImplicit$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DivergingImplicit$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6363,7 +6361,7 @@
                 
                 <div id="ExplainedSearchFailure" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ExplainedSearchFailure');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ExplainedSearchFailure');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6387,23 +6385,22 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ExplainedSearchFailure">
-                            <p>A search failure that can show information about the cause</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ExplainedSearchFailure">
                             <p>A search failure that can show information about the cause</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6411,7 +6408,7 @@
                 
                 <div id="FailedImplicit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'FailedImplicit');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FailedImplicit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6435,21 +6432,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-FailedImplicit">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-FailedImplicit">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6457,7 +6454,7 @@
                 
                 <div id="ImplicitRefs" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ImplicitRefs');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ImplicitRefs');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6481,11 +6478,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ImplicitRefs">
-                            <p>A common base class of contextual implicits and of-type implicits which
-represents a set of implicit references.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ImplicitRefs">
                             <p>A common base class of contextual implicits and of-type implicits which
 represents a set of implicit references.</p>
@@ -6493,13 +6485,16 @@ represents a set of implicit references.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6507,7 +6502,7 @@ represents a set of implicit references.</p>
                 
                 <div id="NoImplicitMatches$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoImplicitMatches$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'NoImplicitMatches$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6531,23 +6526,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoImplicitMatches$">
-                            <p>A &quot;no matching implicit found&quot; failure</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-NoImplicitMatches$">
                             <p>A &quot;no matching implicit found&quot; failure</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6555,7 +6549,7 @@ represents a set of implicit references.</p>
                 
                 <div id="NonMatchingImplicit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NonMatchingImplicit');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NonMatchingImplicit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6579,21 +6573,21 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NonMatchingImplicit">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NonMatchingImplicit">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6601,7 +6595,7 @@ represents a set of implicit references.</p>
                 
                 <div id="OfTypeImplicits" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'OfTypeImplicits');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'OfTypeImplicits');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6625,23 +6619,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-OfTypeImplicits">
-                            <p>The implicit references coming from the implicit scope of a type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-OfTypeImplicits">
                             <p>The implicit references coming from the implicit scope of a type.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6649,7 +6642,7 @@ represents a set of implicit references.</p>
                 
                 <div id="SearchFailure" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SearchFailure');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SearchFailure');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6673,23 +6666,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SearchFailure">
-                            <p>A failed search</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SearchFailure">
                             <p>A failed search</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6697,7 +6689,7 @@ represents a set of implicit references.</p>
                 
                 <div id="SearchResult" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SearchResult');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SearchResult');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6721,23 +6713,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SearchResult">
-                            <p>The result of an implicit search</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SearchResult">
                             <p>The result of an implicit search</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6745,7 +6736,7 @@ represents a set of implicit references.</p>
                 
                 <div id="SearchSuccess" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SearchSuccess');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SearchSuccess');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6769,23 +6760,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SearchSuccess">
-                            <p>A successful search</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SearchSuccess">
                             <p>A successful search</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6793,7 +6783,7 @@ represents a set of implicit references.</p>
                 
                 <div id="SearchSuccess$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SearchSuccess$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'SearchSuccess$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6817,23 +6807,22 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SearchSuccess$">
-                            <p>A successful search</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-SearchSuccess$">
                             <p>A successful search</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6841,7 +6830,7 @@ represents a set of implicit references.</p>
                 
                 <div id="ShadowedImplicit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ShadowedImplicit');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ShadowedImplicit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6865,21 +6854,21 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ShadowedImplicit">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ShadowedImplicit">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6887,7 +6876,7 @@ represents a set of implicit references.</p>
                 
                 <div id="DelayedImplicit" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DelayedImplicit');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'DelayedImplicit');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6916,11 +6905,6 @@ represents a set of implicit references.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DelayedImplicit">
-                            <p>A reference to an implicit value to be made visible on the next nested call to
-inferImplicitArg with a by-name expected type.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-DelayedImplicit">
                             <p>A reference to an implicit value to be made visible on the next nested call to
 inferImplicitArg with a by-name expected type.</p>
@@ -6928,13 +6912,16 @@ inferImplicitArg with a by-name expected type.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

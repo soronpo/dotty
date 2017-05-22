@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6076,6 +6077,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6083,7 +6085,7 @@
                 
                 <div id="NoPattern" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoPattern');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'NoPattern');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6109,11 +6111,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoPattern">
-                            <p>You'll note we're not inside the cake. &quot;Pattern&quot; and &quot;Type&quot; are
-arbitrary types here, and NoPattern and NoType arbitrary values.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-NoPattern">
                             <p>You'll note we're not inside the cake. &quot;Pattern&quot; and &quot;Type&quot; are
 arbitrary types here, and NoPattern and NoType arbitrary values.</p>
@@ -6121,13 +6118,16 @@ arbitrary types here, and NoPattern and NoType arbitrary values.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6135,7 +6135,7 @@ arbitrary types here, and NoPattern and NoType arbitrary values.</p>
                 
                 <div id="NoType" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'NoType');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'NoType');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6161,21 +6161,21 @@ arbitrary types here, and NoPattern and NoType arbitrary values.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-NoType">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-NoType">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6183,7 +6183,7 @@ arbitrary types here, and NoPattern and NoType arbitrary values.</p>
                 
                 <div id="applyMethodTypes(method)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'applyMethodTypes(method)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'applyMethodTypes(method)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6222,11 +6222,6 @@ arbitrary types here, and NoPattern and NoType arbitrary values.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-applyMethodTypes(method)">
-                            <p>In this case we are basing the pattern expansion on a case class constructor.
-The argument is the MethodType carried by the primary constructor.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-applyMethodTypes(method)">
                             <p>In this case we are basing the pattern expansion on a case class constructor.
 The argument is the MethodType carried by the primary constructor.</p>
@@ -6234,13 +6229,16 @@ The argument is the MethodType carried by the primary constructor.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6248,7 +6246,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="elementTypeOf(tpe)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'elementTypeOf(tpe)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elementTypeOf(tpe)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6287,21 +6285,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-elementTypeOf(tpe)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-elementTypeOf(tpe)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6309,7 +6307,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="hasSelectors(tpe)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hasSelectors(tpe)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'hasSelectors(tpe)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6348,21 +6346,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hasSelectors(tpe)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-hasSelectors(tpe)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6370,7 +6368,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="newExtractor(whole,fixed,repeated)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newExtractor(whole,fixed,repeated)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'newExtractor(whole,fixed,repeated)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6428,21 +6426,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newExtractor(whole,fixed,repeated)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-newExtractor(whole,fixed,repeated)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6450,7 +6448,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="newPatterns(patterns)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newPatterns(patterns)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'newPatterns(patterns)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6492,21 +6490,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newPatterns(patterns)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-newPatterns(patterns)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6514,7 +6512,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="repeatedFromSeq(seqType)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'repeatedFromSeq(seqType)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'repeatedFromSeq(seqType)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6553,21 +6551,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-repeatedFromSeq(seqType)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-repeatedFromSeq(seqType)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6575,7 +6573,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="repeatedFromVarargs(repeated)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'repeatedFromVarargs(repeated)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'repeatedFromVarargs(repeated)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6614,21 +6612,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-repeatedFromVarargs(repeated)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-repeatedFromVarargs(repeated)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6636,7 +6634,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="typeOfMemberNamedApply(tpe)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typeOfMemberNamedApply(tpe)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typeOfMemberNamedApply(tpe)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6675,21 +6673,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typeOfMemberNamedApply(tpe)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-typeOfMemberNamedApply(tpe)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6697,7 +6695,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="typeOfMemberNamedHead(tpe)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'typeOfMemberNamedHead(tpe)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typeOfMemberNamedHead(tpe)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6736,21 +6734,21 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-typeOfMemberNamedHead(tpe)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-typeOfMemberNamedHead(tpe)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6758,7 +6756,7 @@ The argument is the MethodType carried by the primary constructor.</p>
                 
                 <div id="unapplyMethodTypes(tree,fun,args,resultType,isSeq)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'unapplyMethodTypes(tree,fun,args,resultType,isSeq)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unapplyMethodTypes(tree,fun,args,resultType,isSeq)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6832,12 +6830,6 @@ The argument is the MethodType carried by the primary constructor.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-unapplyMethodTypes(tree,fun,args,resultType,isSeq)">
-                            <p>In this case, expansion is based on an unapply or unapplySeq method.
-Unfortunately the MethodType does not carry the information of whether
-it was unapp...</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-unapplyMethodTypes(tree,fun,args,resultType,isSeq)">
                             <p>In this case, expansion is based on an unapply or unapplySeq method.
 Unfortunately the MethodType does not carry the information of whether
@@ -6846,13 +6838,16 @@ it was unapplySeq, so we have to funnel that information in separately.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

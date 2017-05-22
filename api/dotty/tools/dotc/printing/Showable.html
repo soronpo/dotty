@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6076,6 +6077,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6083,7 +6085,7 @@
                 
                 <div id="fallbackToText(printer)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fallbackToText(printer)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fallbackToText(printer)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6122,11 +6124,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fallbackToText(printer)">
-                            <p>A fallback text representation, if the pattern matching
-in Printers does not have a case for this showable element</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fallbackToText(printer)">
                             <p>A fallback text representation, if the pattern matching
 in Printers does not have a case for this showable element</p>
@@ -6134,13 +6131,16 @@ in Printers does not have a case for this showable element</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6148,7 +6148,7 @@ in Printers does not have a case for this showable element</p>
                 
                 <div id="show(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'show(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'show(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6189,23 +6189,22 @@ in Printers does not have a case for this showable element</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-show(ctx)">
-                            <p>The string representation of this showable element.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-show(ctx)">
                             <p>The string representation of this showable element.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6213,7 +6212,7 @@ in Printers does not have a case for this showable element</p>
                 
                 <div id="showSummary(depth)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(depth)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'showSummary(depth)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6265,12 +6264,6 @@ in Printers does not have a case for this showable element</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-showSummary(depth)(ctx)">
-                            <p>The summarized string representation of this showable element.
-Recursion depth is limited to some smallish value. Default is
-Config.summarizeDepth.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-showSummary(depth)(ctx)">
                             <p>The summarized string representation of this showable element.
 Recursion depth is limited to some smallish value. Default is
@@ -6279,13 +6272,16 @@ Config.summarizeDepth.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6293,7 +6289,7 @@ Config.summarizeDepth.</p>
                 
                 <div id="showSummary(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6334,21 +6330,21 @@ Config.summarizeDepth.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-showSummary(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-showSummary(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6356,7 +6352,7 @@ Config.summarizeDepth.</p>
                 
                 <div id="toText(printer)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toText(printer)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toText(printer)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6395,12 +6391,6 @@ Config.summarizeDepth.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toText(printer)">
-                            <p>The text representation of this showable element.
-This normally dispatches to a pattern matching
-method in Printers.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toText(printer)">
                             <p>The text representation of this showable element.
 This normally dispatches to a pattern matching
@@ -6409,13 +6399,16 @@ method in Printers.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

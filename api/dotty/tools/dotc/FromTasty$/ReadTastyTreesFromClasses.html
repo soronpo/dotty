@@ -6068,6 +6068,7 @@
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6088,6 +6089,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6095,7 +6097,7 @@
                 
                 <div id="isTyper" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isTyper');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isTyper');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6121,13 +6123,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isTyper">
-                            <p>Is this phase the standard typerphase? True for FrontEnd, but
-not for other first phases (such as FromTasty). The predicate
-is tested in some places tha...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isTyper">
                             <p>Is this phase the standard typerphase? True for FrontEnd, but
 not for other first phases (such as FromTasty). The predicate
@@ -6137,13 +6132,16 @@ different from isAfterTyper (and cheaper to test).</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6151,7 +6149,7 @@ different from isAfterTyper (and cheaper to test).</p>
                 
                 <div id="readTASTY(unit)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'readTASTY(unit)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'readTASTY(unit)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6203,21 +6201,21 @@ different from isAfterTyper (and cheaper to test).</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-readTASTY(unit)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-readTASTY(unit)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6225,7 +6223,7 @@ different from isAfterTyper (and cheaper to test).</p>
                 
                 <div id="runOn(units)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'runOn(units)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'runOn(units)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6283,21 +6281,21 @@ different from isAfterTyper (and cheaper to test).</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-runOn(units)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-runOn(units)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

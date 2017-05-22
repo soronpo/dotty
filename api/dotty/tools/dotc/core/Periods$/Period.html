@@ -6079,6 +6079,7 @@ last phase id:        7 bits
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6105,6 +6106,7 @@ last phase id:        7 bits
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6112,7 +6114,7 @@ last phase id:        7 bits
                 
                 <div id="code" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'code');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'code');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6138,21 +6140,21 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-code">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-code">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6160,7 +6162,7 @@ last phase id:        7 bits
                 
                 <div id="&(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '&(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '&(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6199,23 +6201,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-&(that)">
-                            <p>The intersection of two periods</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-&(that)">
                             <p>The intersection of two periods</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6223,7 +6224,7 @@ last phase id:        7 bits
                 
                 <div id="contains(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'contains(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'contains(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6262,23 +6263,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-contains(that)">
-                            <p>Does this period contain given period?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-contains(that)">
                             <p>Does this period contain given period?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6286,7 +6286,7 @@ last phase id:        7 bits
                 
                 <div id="containsPhaseId(id)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'containsPhaseId(id)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'containsPhaseId(id)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6325,21 +6325,21 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-containsPhaseId(id)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-containsPhaseId(id)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6347,7 +6347,7 @@ last phase id:        7 bits
                 
                 <div id="firstPhaseId" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'firstPhaseId');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'firstPhaseId');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6373,23 +6373,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-firstPhaseId">
-                            <p>The first phase of this period</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-firstPhaseId">
                             <p>The first phase of this period</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6397,7 +6396,7 @@ last phase id:        7 bits
                 
                 <div id="lastPhaseId" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'lastPhaseId');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lastPhaseId');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6423,23 +6422,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-lastPhaseId">
-                            <p>The last phase of this period</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-lastPhaseId">
                             <p>The last phase of this period</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6447,7 +6445,7 @@ last phase id:        7 bits
                 
                 <div id="overlaps(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'overlaps(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'overlaps(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6486,23 +6484,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-overlaps(that)">
-                            <p>Does this period overlap with given period?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-overlaps(that)">
                             <p>Does this period overlap with given period?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6510,7 +6507,7 @@ last phase id:        7 bits
                 
                 <div id="phaseId" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'phaseId');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phaseId');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6536,23 +6533,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-phaseId">
-                            <p>The phase identifier of this single-phase period.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-phaseId">
                             <p>The phase identifier of this single-phase period.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6560,7 +6556,7 @@ last phase id:        7 bits
                 
                 <div id="runId" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'runId');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'runId');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6586,23 +6582,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-runId">
-                            <p>The run identifier of this period.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-runId">
                             <p>The run identifier of this period.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6610,7 +6605,7 @@ last phase id:        7 bits
                 
                 <div id="toString" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toString');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6636,21 +6631,21 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toString">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-toString">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6658,7 +6653,7 @@ last phase id:        7 bits
                 
                 <div id="|(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, '|(that)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '|(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6697,23 +6692,22 @@ last phase id:        7 bits
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-|(that)">
-                            <p>The smallest period containing two periods</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-|(that)">
                             <p>The smallest period containing two periods</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6073,6 +6073,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6081,6 +6082,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6088,7 +6090,7 @@
                 
                 <div id="PInfo" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PInfo');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PInfo');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6120,21 +6122,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PInfo">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PInfo">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6142,7 +6144,7 @@
                 
                 <div id="This" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'This');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'This');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6174,21 +6176,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-This">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-This">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6196,7 +6198,7 @@
                 
                 <div id="ThisName" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ThisName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ThisName');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6228,21 +6230,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ThisName">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ThisName">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6250,7 +6252,7 @@
                 
                 <div id="myDependencyStatus" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'myDependencyStatus');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myDependencyStatus');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6276,21 +6278,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-myDependencyStatus">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-myDependencyStatus">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6298,7 +6300,7 @@
                 
                 <div id="myParamDependencyStatus" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'myParamDependencyStatus');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myParamDependencyStatus');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6324,21 +6326,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-myParamDependencyStatus">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-myParamDependencyStatus">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6346,7 +6348,7 @@
                 
                 <div id="depStatus(initial,tp)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'depStatus(initial,tp)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'depStatus(initial,tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6406,21 +6408,21 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-depStatus(initial,tp)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-depStatus(initial,tp)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6428,7 +6430,7 @@
                 
                 <div id="dependencyStatus(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'dependencyStatus(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'dependencyStatus(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6469,14 +6471,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-dependencyStatus(ctx)">
-                            <p>The dependency status of this method. Some examples:</p>
-<p>class C extends { type S; type T = String }
-def f(x: C)(y: Boolean)   // dependencyStatus = NoDeps
-d...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-dependencyStatus(ctx)">
                             <p>The dependency status of this method. Some examples:</p>
 <p>class C extends { type S; type T = String }
@@ -6488,13 +6482,16 @@ def f(x: C)(y: x.T)       // dependencyStatus = FalseDeps, i.e.
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6502,7 +6499,7 @@ def f(x: C)(y: x.T)       // dependencyStatus = FalseDeps, i.e.
                 
                 <div id="isDependent(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isDependent(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isDependent(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6543,21 +6540,21 @@ def f(x: C)(y: x.T)       // dependencyStatus = FalseDeps, i.e.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isDependent(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-isDependent(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6565,7 +6562,7 @@ def f(x: C)(y: x.T)       // dependencyStatus = FalseDeps, i.e.
                 
                 <div id="isParamDependent(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isParamDependent(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isParamDependent(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6606,11 +6603,6 @@ def f(x: C)(y: x.T)       // dependencyStatus = FalseDeps, i.e.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isParamDependent(ctx)">
-                            <p>Does one of the parameter types contain references to earlier parameters
-of this method type which cannot be eliminated by de-aliasing?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isParamDependent(ctx)">
                             <p>Does one of the parameter types contain references to earlier parameters
 of this method type which cannot be eliminated by de-aliasing?</p>
@@ -6618,13 +6610,16 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6632,7 +6627,7 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                 
                 <div id="myDependencyStatus_=(x$1)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'myDependencyStatus_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myDependencyStatus_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6671,21 +6666,21 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-myDependencyStatus_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-myDependencyStatus_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6693,7 +6688,7 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                 
                 <div id="myParamDependencyStatus_=(x$1)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'myParamDependencyStatus_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myParamDependencyStatus_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6732,21 +6727,21 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-myParamDependencyStatus_=(x$1)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-myParamDependencyStatus_=(x$1)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6754,7 +6749,7 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                 
                 <div id="newParamRef(n)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'newParamRef(n)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'newParamRef(n)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6793,21 +6788,21 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-newParamRef(n)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-newParamRef(n)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6815,7 +6810,7 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                 
                 <div id="paramDependencyStatus(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'paramDependencyStatus(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramDependencyStatus(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6856,11 +6851,6 @@ of this method type which cannot be eliminated by de-aliasing?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-paramDependencyStatus(ctx)">
-                            <p>The parameter dependency status of this method. Analogous to <code>dependencyStatus</code>,
-but tracking dependencies in same parameter list.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-paramDependencyStatus(ctx)">
                             <p>The parameter dependency status of this method. Analogous to <code>dependencyStatus</code>,
 but tracking dependencies in same parameter list.</p>
@@ -6868,13 +6858,16 @@ but tracking dependencies in same parameter list.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6882,7 +6875,7 @@ but tracking dependencies in same parameter list.</p>
                 
                 <div id="resultType(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'resultType(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'resultType(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6923,23 +6916,22 @@ but tracking dependencies in same parameter list.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-resultType(ctx)">
-                            <p>The resultType of a LambdaType, or ExprType, the type itself for others</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-resultType(ctx)">
                             <p>The resultType of a LambdaType, or ExprType, the type itself for others</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

@@ -6098,6 +6098,7 @@ a <code>transform(List[Tree])</code> call.</p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6130,6 +6131,7 @@ T
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6137,7 +6139,7 @@ T
                 
                 <div id="ThisTree" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ThisTree');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ThisTree');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6172,23 +6174,22 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ThisTree">
-                            <p>The type  constructor at the root of the tree</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-ThisTree">
                             <p>The type  constructor at the root of the tree</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6196,7 +6197,7 @@ T
                 
                 <div id="trees" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'trees');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'trees');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6228,21 +6229,21 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-trees">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-trees">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6250,7 +6251,7 @@ T
                 
                 <div id="foreachInThicket(op)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'foreachInThicket(op)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'foreachInThicket(op)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6292,11 +6293,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-foreachInThicket(op)">
-                            <p>If this is a thicket, perform <code>op</code> on each of its trees
-otherwise, perform <code>op</code> ion tree itself.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-foreachInThicket(op)">
                             <p>If this is a thicket, perform <code>op</code> on each of its trees
 otherwise, perform <code>op</code> ion tree itself.</p>
@@ -6304,13 +6300,16 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6318,7 +6317,7 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                 
                 <div id="isEmpty" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'isEmpty');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isEmpty');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6344,23 +6343,22 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-isEmpty">
-                            <p>Is this tree either the empty tree or the empty ValDef or an empty type ident?</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-isEmpty">
                             <p>Is this tree either the empty tree or the empty ValDef or an empty type ident?</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6368,7 +6366,7 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                 
                 <div id="pos" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'pos');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'pos');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6394,23 +6392,22 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-pos">
-                            <p>The item's position.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-pos">
                             <p>The item's position.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6418,7 +6415,7 @@ otherwise, perform <code>op</code> ion tree itself.</p>
                 
                 <div id="toList" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toList');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toList');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6450,11 +6447,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toList">
-                            <p>Convert tree to a list. Gives a singleton list, except
-for thickets which return their element trees.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-toList">
                             <p>Convert tree to a list. Gives a singleton list, except
 for thickets which return their element trees.</p>
@@ -6462,13 +6454,16 @@ for thickets which return their element trees.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6476,7 +6471,7 @@ for thickets which return their element trees.</p>
                 
                 <div id="toString" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'toString');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6502,21 +6497,21 @@ for thickets which return their element trees.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-toString">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-toString">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6524,7 +6519,7 @@ for thickets which return their element trees.</p>
                 
                 <div id="withPos(pos)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'withPos(pos)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withPos(pos)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6566,13 +6561,6 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-withPos(pos)">
-                            <p>A positioned item like this one with the position set to <code>pos</code>.
-if the positioned item is source-derived, a clone is returned.
-If the positioned item is s...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-withPos(pos)">
                             <p>A positioned item like this one with the position set to <code>pos</code>.
 if the positioned item is source-derived, a clone is returned.
@@ -6582,13 +6570,16 @@ destructively and the item itself is returned.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

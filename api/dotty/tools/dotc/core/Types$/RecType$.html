@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="apply(parentExp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'apply(parentExp)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(parentExp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6126,19 +6128,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-apply(parentExp)(ctx)">
-                            <p>Create a RecType, normalizing its contents. This means:</p>
-<ol>
-<li>Nested Rec types on the type's spine are merged with the outer one.</li>
-<li>Any refinement of the form <code>type T = z.T</code> on the spine of the type
-where <code>z</code> refers to the created rec-type is replaced by
-<code>type T</code>. This avoids infinite recursons later when we
-try to follow these references.
-TODO: Figure out how to guarantee absence of cycles
-of length &gt; 1</li>
-</ol>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-apply(parentExp)(ctx)">
                             <p>Create a RecType, normalizing its contents. This means:</p>
 <ol>
@@ -6154,13 +6143,16 @@ of length &gt; 1</li>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6168,7 +6160,7 @@ of length &gt; 1</li>
                 
                 <div id="closeOver(parentExp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'closeOver(parentExp)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'closeOver(parentExp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6220,21 +6212,21 @@ of length &gt; 1</li>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-closeOver(parentExp)(ctx)">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-closeOver(parentExp)(ctx)">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

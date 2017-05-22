@@ -6065,6 +6065,7 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6085,6 +6086,7 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6092,7 +6094,7 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
                 
                 <div id="bucketsCount" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'bucketsCount');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'bucketsCount');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6118,23 +6120,22 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-bucketsCount">
-                            <p>Number of buckets in the table</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-bucketsCount">
                             <p>Number of buckets in the table</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6142,7 +6143,7 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
                 
                 <div id="collisionBucketsCount" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'collisionBucketsCount');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'collisionBucketsCount');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6168,23 +6169,22 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-collisionBucketsCount">
-                            <p>Number of buckets that hold collisions. Useful for diagnosing performance issues.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-collisionBucketsCount">
                             <p>Number of buckets that hold collisions. Useful for diagnosing performance issues.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6192,7 +6192,7 @@ needed by ordinary code, but may be useful for diagnosing performance problems</
                 
                 <div id="dump" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'dump');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'dump');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6221,23 +6221,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-dump">
-                            <p>Produces a diagnostic dump of the table that underlies this hash set.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-dump">
                             <p>Produces a diagnostic dump of the table that underlies this hash set.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6245,7 +6244,7 @@ Any
                 
                 <div id="fullBucketsCount" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'fullBucketsCount');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullBucketsCount');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6271,23 +6270,22 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullBucketsCount">
-                            <p>Number of buckets that are occupied in this hash table.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullBucketsCount">
                             <p>Number of buckets that are occupied in this hash table.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6295,7 +6293,7 @@ Any
                 
                 <div id="fullyValidate" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'fullyValidate');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyValidate');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6321,13 +6319,6 @@ Any
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-fullyValidate">
-                            <p>Verify that the internal structure of this hash set is fully consistent.
-Throws an assertion error on any problem. In order for it to be reliable
-the en...
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-fullyValidate">
                             <p>Verify that the internal structure of this hash set is fully consistent.
 Throws an assertion error on any problem. In order for it to be reliable
@@ -6337,13 +6328,16 @@ then an assertion may inappropriately fire.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

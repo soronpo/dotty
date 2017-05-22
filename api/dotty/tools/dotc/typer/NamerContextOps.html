@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="adjustModuleCompleter(completer,name)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'adjustModuleCompleter(completer,name)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'adjustModuleCompleter(completer,name)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6121,11 +6123,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-adjustModuleCompleter(completer,name)">
-                            <p>Add moduleClass or sourceModule functionality to completer
-for a module or module class</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-adjustModuleCompleter(completer,name)">
                             <p>Add moduleClass or sourceModule functionality to completer
 for a module or module class</p>
@@ -6133,13 +6130,16 @@ for a module or module class</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6147,7 +6147,7 @@ for a module or module class</p>
                 
                 <div id="defContext(sym)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'defContext(sym)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'defContext(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6186,23 +6186,22 @@ for a module or module class</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-defContext(sym)">
-                            <p>Context where <code>sym</code> is defined, assuming we are in a nested context.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-defContext(sym)">
                             <p>Context where <code>sym</code> is defined, assuming we are in a nested context.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6210,7 +6209,7 @@ for a module or module class</p>
                 
                 <div id="denotNamed(name)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'denotNamed(name)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'denotNamed(name)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6249,23 +6248,22 @@ for a module or module class</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-denotNamed(name)">
-                            <p>The denotation with the given name in current context</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-denotNamed(name)">
                             <p>The denotation with the given name in current context</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6273,7 +6271,7 @@ for a module or module class</p>
                 
                 <div id="effectiveResultType(sym,typeParams,given)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'effectiveResultType(sym,typeParams,given)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'effectiveResultType(sym,typeParams,given)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6331,11 +6329,6 @@ for a module or module class</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-effectiveResultType(sym,typeParams,given)">
-                            <p>The given type, unless <code>sym</code> is a constructor, in which case the
-type of the constructed instance is returned</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-effectiveResultType(sym,typeParams,given)">
                             <p>The given type, unless <code>sym</code> is a constructor, in which case the
 type of the constructed instance is returned</p>
@@ -6343,13 +6336,16 @@ type of the constructed instance is returned</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6357,7 +6353,7 @@ type of the constructed instance is returned</p>
                 
                 <div id="effectiveScope" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'effectiveScope');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'effectiveScope');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6383,11 +6379,6 @@ type of the constructed instance is returned</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-effectiveScope">
-                            <p>Either the current scope, or, if the current context owner is a class,
-the declarations of the current class.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-effectiveScope">
                             <p>Either the current scope, or, if the current context owner is a class,
 the declarations of the current class.</p>
@@ -6395,13 +6386,16 @@ the declarations of the current class.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6409,7 +6403,7 @@ the declarations of the current class.</p>
                 
                 <div id="enter(sym)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'enter(sym)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enter(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6448,12 +6442,6 @@ the declarations of the current class.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-enter(sym)">
-                            <p>Enter symbol into current class, if current class is owner of current context,
-or into current scope, if not. Should always be called instead of scope....
-</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-enter(sym)">
                             <p>Enter symbol into current class, if current class is owner of current context,
 or into current scope, if not. Should always be called instead of scope.enter
@@ -6463,13 +6451,16 @@ finger prints.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6477,7 +6468,7 @@ finger prints.</p>
                 
                 <div id="methodType(typeParams,valueParamss,resultType,isJava)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'methodType(typeParams,valueParamss,resultType,isJava)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'methodType(typeParams,valueParamss,resultType,isJava)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6562,23 +6553,22 @@ List
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-methodType(typeParams,valueParamss,resultType,isJava)(ctx)">
-                            <p>The method type corresponding to given parameters and result type</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-methodType(typeParams,valueParamss,resultType,isJava)(ctx)">
                             <p>The method type corresponding to given parameters and result type</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6586,7 +6576,7 @@ List
                 
                 <div id="normalizeIfConstructor(paramSymss,isConstructor)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'normalizeIfConstructor(paramSymss,isConstructor)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'normalizeIfConstructor(paramSymss,isConstructor)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6642,23 +6632,22 @@ A
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-normalizeIfConstructor(paramSymss,isConstructor)">
-                            <p>if isConstructor, make sure it has one non-implicit parameter list</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-normalizeIfConstructor(paramSymss,isConstructor)">
                             <p>if isConstructor, make sure it has one non-implicit parameter list</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6666,7 +6655,7 @@ A
                 
                 <div id="symOfContextTree(tree)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'symOfContextTree(tree)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'symOfContextTree(tree)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6705,23 +6694,22 @@ A
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-symOfContextTree(tree)">
-                            <p>The symbol (stored in some typer's symTree) of an enclosing context definition</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-symOfContextTree(tree)">
                             <p>The symbol (stored in some typer's symTree) of an enclosing context definition</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

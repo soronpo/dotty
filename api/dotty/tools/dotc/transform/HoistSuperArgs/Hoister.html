@@ -6066,6 +6066,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
             
 
             <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6110,6 +6111,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6117,7 +6119,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                 
                 <div id="cls" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'cls');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'cls');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6143,21 +6145,21 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-cls">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-cls">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6165,7 +6167,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                 
                 <div id="ctx" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ctx');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ctx');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6191,21 +6193,21 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ctx">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ctx">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6213,7 +6215,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                 
                 <div id="superArgDefs" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'superArgDefs');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'superArgDefs');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6242,21 +6244,21 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-superArgDefs">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-superArgDefs">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6264,7 +6266,7 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                 
                 <div id="hoistSuperArg(arg,cdef)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hoistSuperArg(arg,cdef)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'hoistSuperArg(arg,cdef)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6311,11 +6313,6 @@ Hoisted superarg methods are collected in <code>superArgDefs</code></p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hoistSuperArg(arg,cdef)">
-                            <p>If argument is complex, hoist it out into its own method and refer to the
-method instead.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-hoistSuperArg(arg,cdef)">
                             <p>If argument is complex, hoist it out into its own method and refer to the
 method instead.</p>
@@ -6323,13 +6320,16 @@ method instead.</p>
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6337,7 +6337,7 @@ method instead.</p>
                 
                 <div id="hoistSuperArgsFromCall(superCall,cdef)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hoistSuperArgsFromCall(superCall,cdef)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'hoistSuperArgsFromCall(superCall,cdef)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6384,23 +6384,22 @@ method instead.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hoistSuperArgsFromCall(superCall,cdef)">
-                            <p>Hoist complex arguments in super call out of the class.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-hoistSuperArgsFromCall(superCall,cdef)">
                             <p>Hoist complex arguments in super call out of the class.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6408,7 +6407,7 @@ method instead.</p>
                 
                 <div id="hoistSuperArgsFromConstr(stat)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'hoistSuperArgsFromConstr(stat)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'hoistSuperArgsFromConstr(stat)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6447,23 +6446,22 @@ method instead.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-hoistSuperArgsFromConstr(stat)">
-                            <p>Hoist complex arguments in this-constructor call of secondary constructor out of the class.</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-hoistSuperArgsFromConstr(stat)">
                             <p>Hoist complex arguments in this-constructor call of secondary constructor out of the class.</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>

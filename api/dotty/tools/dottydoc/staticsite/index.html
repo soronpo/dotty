@@ -6059,6 +6059,7 @@
             
 
             <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
@@ -6067,6 +6068,7 @@
             </div>
 
             <h1 class="section ">
+              <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
@@ -6074,7 +6076,7 @@
                 
                 <div id="BlogPost" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'BlogPost');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'BlogPost');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6098,12 +6100,6 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-BlogPost">
-                            <p>A <code>BlogPost</code> represents the parsed posts from <code>./blog/_posts/</code>
-each post must be named according to the format
-<code>YYYY-MM-DD-title.{md,html}</code></p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-BlogPost">
                             <p>A <code>BlogPost</code> represents the parsed posts from <code>./blog/_posts/</code>
 each post must be named according to the format
@@ -6112,13 +6108,16 @@ each post must be named according to the format
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6126,7 +6125,7 @@ each post must be named according to the format
                 
                 <div id="BlogPost$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'BlogPost$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'BlogPost$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6150,21 +6149,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-BlogPost$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-BlogPost$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6172,7 +6171,7 @@ each post must be named according to the format
                 
                 <div id="DefaultParams" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DefaultParams');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DefaultParams');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6196,21 +6195,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DefaultParams">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DefaultParams">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6218,7 +6217,7 @@ each post must be named according to the format
                 
                 <div id="DefaultParams$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'DefaultParams$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'DefaultParams$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6242,21 +6241,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-DefaultParams$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-DefaultParams$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6264,7 +6263,7 @@ each post must be named according to the format
                 
                 <div id="HtmlPage" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'HtmlPage');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'HtmlPage');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6288,21 +6287,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-HtmlPage">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-HtmlPage">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6310,7 +6309,7 @@ each post must be named according to the format
                 
                 <div id="IllegalFrontMatter" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'IllegalFrontMatter');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IllegalFrontMatter');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6334,23 +6333,22 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-IllegalFrontMatter">
-                            <p>When the YAML front matter cannot be parsed, this exception is thrown</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-IllegalFrontMatter">
                             <p>When the YAML front matter cannot be parsed, this exception is thrown</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6358,7 +6356,7 @@ each post must be named according to the format
                 
                 <div id="IllegalFrontMatter$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'IllegalFrontMatter$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IllegalFrontMatter$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6382,23 +6380,22 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-IllegalFrontMatter$">
-                            <p>When the YAML front matter cannot be parsed, this exception is thrown</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-IllegalFrontMatter$">
                             <p>When the YAML front matter cannot be parsed, this exception is thrown</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6406,7 +6403,7 @@ each post must be named according to the format
                 
                 <div id="Include" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Include');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Include');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6430,21 +6427,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Include">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Include">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6452,7 +6449,7 @@ each post must be named according to the format
                 
                 <div id="Include$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Include$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Include$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6476,21 +6473,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Include$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Include$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6498,7 +6495,7 @@ each post must be named according to the format
                 
                 <div id="Layout" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Layout');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Layout');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6522,21 +6519,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Layout">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Layout">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6544,7 +6541,7 @@ each post must be named according to the format
                 
                 <div id="Layout$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Layout$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Layout$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6568,21 +6565,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Layout$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Layout$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6590,7 +6587,7 @@ each post must be named according to the format
                 
                 <div id="LiquidTemplate" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LiquidTemplate');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LiquidTemplate');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6614,21 +6611,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LiquidTemplate">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LiquidTemplate">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6636,7 +6633,7 @@ each post must be named according to the format
                 
                 <div id="LiquidTemplate$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'LiquidTemplate$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'LiquidTemplate$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6660,21 +6657,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-LiquidTemplate$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-LiquidTemplate$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6682,7 +6679,7 @@ each post must be named according to the format
                 
                 <div id="MapOperations$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MapOperations$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MapOperations$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6706,23 +6703,22 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MapOperations$">
-                            <p>A simple wrapper for Maps to impose a certain degree of typesafety</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-MapOperations$">
                             <p>A simple wrapper for Maps to impose a certain degree of typesafety</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6730,7 +6726,7 @@ each post must be named according to the format
                 
                 <div id="MarkdownCodeBlockVisitor$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MarkdownCodeBlockVisitor$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'MarkdownCodeBlockVisitor$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6754,21 +6750,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MarkdownCodeBlockVisitor$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-MarkdownCodeBlockVisitor$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6776,7 +6772,7 @@ each post must be named according to the format
                 
                 <div id="MarkdownLinkVisitor$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MarkdownLinkVisitor$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'MarkdownLinkVisitor$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6800,21 +6796,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MarkdownLinkVisitor$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-MarkdownLinkVisitor$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6822,7 +6818,7 @@ each post must be named according to the format
                 
                 <div id="MarkdownPage" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'MarkdownPage');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'MarkdownPage');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6846,21 +6842,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-MarkdownPage">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-MarkdownPage">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6868,7 +6864,7 @@ each post must be named according to the format
                 
                 <div id="Page" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Page');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Page');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6892,21 +6888,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Page">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Page">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6914,7 +6910,7 @@ each post must be named according to the format
                 
                 <div id="PageInfo" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PageInfo');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PageInfo');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6938,21 +6934,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PageInfo">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PageInfo">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -6960,7 +6956,7 @@ each post must be named according to the format
                 
                 <div id="PageInfo$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'PageInfo$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PageInfo$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -6984,21 +6980,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-PageInfo$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-PageInfo$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7006,7 +7002,7 @@ each post must be named according to the format
                 
                 <div id="ResourceFinder" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'ResourceFinder');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ResourceFinder');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7030,21 +7026,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-ResourceFinder">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-ResourceFinder">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7052,7 +7048,7 @@ each post must be named according to the format
                 
                 <div id="Sidebar" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Sidebar');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Sidebar');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7076,21 +7072,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Sidebar">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Sidebar">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7098,7 +7094,7 @@ each post must be named according to the format
                 
                 <div id="Sidebar$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Sidebar$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Sidebar$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7122,21 +7118,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Sidebar$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Sidebar$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7144,7 +7140,7 @@ each post must be named according to the format
                 
                 <div id="Site" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Site');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Site');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7168,21 +7164,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Site">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Site">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7190,7 +7186,7 @@ each post must be named according to the format
                 
                 <div id="Site$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Site$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Site$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7214,21 +7210,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Site$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Site$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7236,7 +7232,7 @@ each post must be named according to the format
                 
                 <div id="SiteInfo" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SiteInfo');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SiteInfo');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7260,21 +7256,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SiteInfo">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SiteInfo">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7282,7 +7278,7 @@ each post must be named according to the format
                 
                 <div id="SiteInfo$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'SiteInfo$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'SiteInfo$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7306,21 +7302,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-SiteInfo$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-SiteInfo$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7328,7 +7324,7 @@ each post must be named according to the format
                 
                 <div id="Template" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Template');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Template');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7352,21 +7348,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Template">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Template">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7374,7 +7370,7 @@ each post must be named according to the format
                 
                 <div id="TemplateRenderingError" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TemplateRenderingError');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'TemplateRenderingError');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7398,21 +7394,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-TemplateRenderingError">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-TemplateRenderingError">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7420,7 +7416,7 @@ each post must be named according to the format
                 
                 <div id="TemplateRenderingError$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'TemplateRenderingError$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'TemplateRenderingError$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7444,21 +7440,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-TemplateRenderingError$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-TemplateRenderingError$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7466,7 +7462,7 @@ each post must be named according to the format
                 
                 <div id="Title" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Title');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Title');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7490,21 +7486,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Title">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Title">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7512,7 +7508,7 @@ each post must be named according to the format
                 
                 <div id="Title$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Title$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Title$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7536,21 +7532,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Title$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Title$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7558,7 +7554,7 @@ each post must be named according to the format
                 
                 <div id="Yaml$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'Yaml$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Yaml$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7582,21 +7578,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-Yaml$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-Yaml$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7604,7 +7600,7 @@ each post must be named according to the format
                 
                 <div id="filters$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'filters$');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'filters$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7628,23 +7624,22 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-filters$">
-                            <p>Custom liquid template filters</p>
-
-                        </div>
                         <div class="member-body-long" id ="long-body-filters$">
                             <p>Custom liquid template filters</p>
 
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
@@ -7652,7 +7647,7 @@ each post must be named according to the format
                 
                 <div id="tags$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button invisible" onclick="toggleMemberBody(this, 'tags$');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'tags$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -7676,21 +7671,21 @@ each post must be named according to the format
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-short" id="short-body-tags$">
-                            
-                        </div>
                         <div class="member-body-long" id ="long-body-tags$">
                             
                         </div>
                     </div>
                     <script>
+
+                        function toggleMembersBody(span, arg){
+                            var members = document.getElementById("entity-" + arg);
+                            members.classList.toggle("toggled");
+                            span.innerHTML = (span.innerHTML == "[-]") ?  "[+]" : "[-]";
+                        }
+
                         function toggleMemberBody(span, sig) {
-                            var shortBody = document.getElementById("short-body-" + sig);
                             var longBody = document.getElementById("long-body-" + sig);
-
-                            shortBody.classList.toggle("toggled")
                             longBody.classList.toggle("toggled")
-
                             span.innerHTML = (span.innerHTML == "[+]") ?  "[-]" : "[+]";
                         }
                     </script>
