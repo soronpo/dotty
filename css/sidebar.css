@@ -10,6 +10,7 @@ div#content-wrapper div.index-wrapper {
     font-family: "Titillium Web", sans-serif;
     font-weight: 200;
     padding-left: 14px;
+    padding-bottom: 75px;
 }
 
 /** Mobile (x < 576px) sidebar: Defaults closed with 60% wide sidebar */
@@ -24,10 +25,27 @@ ul.index-entities {
     padding-left: 0;
 }
 
+ul.index-entities > li > input#search-api-input {
+    border: 0;
+    margin-left: 22px;
+    outline: none;
+    line-height: 35px;
+    box-shadow: inset 0 0px 0 white, inset 0 -0.5px 0 rgba(0, 0, 0, 0.5);
+}
+
 ul.toc {
     list-style-type: none;
     padding-top: 18px;
     padding-left: 0;
+}
+
+ul.toc ul {
+    padding-left: 0;
+}
+
+ul.toc > li,
+ul.toc ul > li {
+    padding-left: 24px;
 }
 
 ul.toc > li:hover {
@@ -63,10 +81,11 @@ ul.toc > li.logo-li > a {
     float: none;
 }
 
-ul.toc > li > a {
+ul.toc > li > a,
+ul.toc li > a.toggle-children {
     font-size: 13px;
     display: block;
-    padding: 0 0 0 24px;
+    padding: 0;
     width: 100%;
     color: rgba(0, 0, 0, 0.87);
     background: transparent;
@@ -75,13 +94,9 @@ ul.toc > li > a {
     text-transform: uppercase;
 }
 
-ul.toc > li > ul.show {
-    display: block;
+ul.toc > li ul {
     list-style-type: none;
     font-size: 13px;
-}
-
-ul.toc > li > ul.hide {
     display: none;
 }
 
@@ -131,6 +146,30 @@ li.entity-package > ul.package-entities {
 li.entity-package > ul.package-entities > li {
     margin-left: -52px;
     transition: all 0.2s ease;
+}
+
+li.entity-package > ul.package-entities > li#hide-hidden-by-default,
+li.entity-package > ul.package-entities > li#show-hidden-by-default {
+  margin-left: 0;
+  color: #ff4081;
+  font-size: 13px;
+}
+
+li.entity-package > ul.package-entities > li#hide-hidden-by-default:hover,
+li.entity-package > ul.package-entities > li#show-hidden-by-default:hover {
+  cursor: pointer;
+}
+
+li.entity-package > ul.package-entities > li#show-hidden-by-default,
+li.entity-package > ul.package-entities > li#hide-hidden-by-default.toggled,
+li.entity-package > ul.package-entities > li.hidden-by-default.toggled {
+  display: block;
+}
+
+li.entity-package > ul.package-entities > li.hidden-by-default,
+li.entity-package > ul.package-entities > li#show-hidden-by-default.toggled,
+li.entity-package > ul.package-entities > li#hide-hidden-by-default {
+  display: none;
 }
 
 li.entity-package > ul.package-entities > li.with-companion {
@@ -187,11 +226,11 @@ ul.package-entities > li > div.entity-kinds > a.letter-anchor.trait {
 /** Cover block used to hide where the kind blocks come from */
 div#cover-block {
     position: absolute;
-    background: #fafafa;
+    background: #fff;
     border-right: 2px solid gray;
-    width: 40px;
+    width: 41px;
     height: 100%;
-    left: -40px;
+    left: -41px;
     top: 0;
 }
 
