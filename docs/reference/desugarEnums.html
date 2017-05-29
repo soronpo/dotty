@@ -112,9 +112,13 @@
         
         <li><a class="toggle-children" onclick='clickToc(this, "reference");'>Reference</a>
 <ul id="active-toc-entry">
-    <li><a href="../.././docs/reference/intersection-types.html">Intersection types</a>
+    <li><a href="../.././docs/reference/implicit-function-types.md">Implicit Function Types</a>
+</li>
+<li><a href="../.././docs/reference/intersection-types.html">Intersection types</a>
 </li>
 <li><a href="../.././docs/reference/union-types.html">Union types</a>
+</li>
+<li><a href="../.././docs/reference/type-lambdas.html">Type lambdas</a>
 </li>
 <li><a href="../.././docs/reference/trait-parameters.html">Trait Parameters</a>
 </li>
@@ -124,7 +128,15 @@
 </li>
 <li><a href="../.././docs/reference/desugarEnums.html">Enum Translation</a>
 </li>
-<li><a href="../.././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a></li>
+<li><a href="../.././docs/reference/multiversal-equality.html">Multiversal Equality</a>
+</li>
+<li><a href="../.././docs/reference/implicit-by-name-parameters.htmldocs/reference/implicit-by-name-parameters.html">By-Name Implicits</a>
+</li>
+<li><a href="../.././docs/reference/auto-parameter-tupling.html">Auto Parameter Tupling</a>
+</li>
+<li><a href="../.././docs/reference/named-typeargs.html">Named Type Arguments</a>
+</li>
+<li><a href="../.././docs/reference/inline.html">Inline</a></li>
 </ul>
 </li>
         
@@ -10403,7 +10415,7 @@ an error if <code>E</code> has type parameters that are non-variant.</p>
 <p>A class case</p>
 <pre><code>case C &lt;params&gt; ...
 </code></pre>
-<p>expands analogous to a case class:</p>
+<p>expands analogous to a final case class:</p>
 <pre><code>final case class C &lt;params&gt; ...
 </code></pre>
 <p>However, unlike for a regular case class, the return type of the associated
@@ -10448,6 +10460,13 @@ below).</p>
 cases.</p>
 </li>
 </ol>
+<h2><a href="#equality" id="equality">Equality</a></h2>
+<p>An <code>enum</code> type contains a <code>scala.Eq</code> instance that restricts values of the <code>enum</code> type to
+be compared only to other values of the same enum type. Furtermore, generic
+<code>enum</code> types are comparable only if their type arguments are. For instance the
+<code>Option</code> enum type will get the following definition in its companion object:</p>
+<pre><code>implicit def eqOption[T, U](implicit ev1: Eq[T, U]): Eq[Option[T], Option[U]] = Eq
+</code></pre>
 <h2><a href="#translation-of-enumerations" id="translation-of-enumerations">Translation of Enumerations</a></h2>
 <p>Non-generic enum classes <code>E</code> that define one or more singleton cases
 are called <em>enumerations</em>. Companion objects of enumerations define

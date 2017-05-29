@@ -112,9 +112,13 @@
         
         <li><a class="toggle-children" onclick='clickToc(this, "Flags$");'>Reference</a>
 <ul id="">
-    <li><a href="../../../../../.././docs/reference/intersection-types.html">Intersection types</a>
+    <li><a href="../../../../../.././docs/reference/implicit-function-types.md">Implicit Function Types</a>
+</li>
+<li><a href="../../../../../.././docs/reference/intersection-types.html">Intersection types</a>
 </li>
 <li><a href="../../../../../.././docs/reference/union-types.html">Union types</a>
+</li>
+<li><a href="../../../../../.././docs/reference/type-lambdas.html">Type lambdas</a>
 </li>
 <li><a href="../../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
 </li>
@@ -124,7 +128,15 @@
 </li>
 <li><a href="../../../../../.././docs/reference/desugarEnums.html">Enum Translation</a>
 </li>
-<li><a href="../../../../../.././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a></li>
+<li><a href="../../../../../.././docs/reference/multiversal-equality.html">Multiversal Equality</a>
+</li>
+<li><a href="../../../../../.././docs/reference/implicit-by-name-parameters.htmldocs/reference/implicit-by-name-parameters.html">By-Name Implicits</a>
+</li>
+<li><a href="../../../../../.././docs/reference/auto-parameter-tupling.html">Auto Parameter Tupling</a>
+</li>
+<li><a href="../../../../../.././docs/reference/named-typeargs.html">Named Type Arguments</a>
+</li>
+<li><a href="../../../../../.././docs/reference/inline.html">Inline</a></li>
 </ul>
 </li>
         
@@ -10704,6 +10716,55 @@ String
                     </div>
                 </div><!-- end member -->
                 
+                <div id="is(flags)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                is
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        flags:
+                                    </span>
+                                    FlagSet
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-is(flags)">
+                            <p>Does this flag set have a non-empty intersection with the given flag set?
+This means that both the kind flags and the carrier bits have non-empty intersection.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="is(flags,butNot)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
@@ -10762,6 +10823,55 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="is(flags)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                is
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        flags:
+                                    </span>
+                                    FlagConjunction
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-is(flags)">
+                            <p>Does this flag set have all of the flags in given flag conjunction?
+Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="is(flags,butNot)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
@@ -10814,104 +10924,6 @@ Pre: The intersection of the typeflags of both sets must be non-empty.</p>
                         <div class="member-body-long" id ="long-body-is(flags,butNot)">
                             <p>Does this flag set have a non-empty intersection with the given flag set,
 and at the same time contain none of the flags in the <code>butNot</code> set?</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="is(flags)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                is
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        flags:
-                                    </span>
-                                    FlagConjunction
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(flags)">
-                            <p>Does this flag set have all of the flags in given flag conjunction?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="is(flags)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                is
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        flags:
-                                    </span>
-                                    FlagSet
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(flags)">
-                            <p>Does this flag set have a non-empty intersection with the given flag set?
-This means that both the kind flags and the carrier bits have non-empty intersection.</p>
 
                         </div>
                     </div>
