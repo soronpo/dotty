@@ -5342,6 +5342,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/FunctionXXLForwarders.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/FunctionXXLForwarders.html">FunctionXXLForwarders</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/FunctionalInterfaces.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/FunctionalInterfaces.html">FunctionalInterfaces</a>
@@ -11535,6 +11553,45 @@ depend on value parameters of the enclosing class, as in:</p>
 to follow method parameters and translate to the following:</p>
 <pre><code>def foo$extension($this: C)[U &lt;: $this.a.type]: Unit = ...
 </code></pre>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="FunctionXXLForwarders" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'FunctionXXLForwarders');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/FunctionXXLForwarders.html">FunctionXXLForwarders</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-FunctionXXLForwarders">
+                            <p>This phase adds forwarder for XXL functions <code>apply</code> methods that are implemented with a method
+with explicit parameters (not in Array[Object]).</p>
+<p>In particular for every method
+<code>def apply(x1: T1, ... xn: Tn): R</code> in class <code>M</code> subtype of <code>FunctionN[T1, ..., Tn, R]</code> with <code>N</code> &gt; 22
+a forwarder
+<code>def apply(xs: Array[Object]): R = this.apply(xs(0).asInstanceOf[T1], ..., xs(n-1).asInstanceOf[Tn]).asInstanceOf[R]</code>
+is generated.</p>
 
                         </div>
                     </div>
