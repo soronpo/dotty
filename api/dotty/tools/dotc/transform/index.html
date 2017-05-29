@@ -10506,7 +10506,7 @@ them not-private.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-ByNameClosures">
                             <p>This phase translates arguments to call-by-name parameters, using the rules</p>
-<pre><code>x           ==&gt;    x                   if x is a =&gt; parameter
+<pre><code>x           ==&gt;    x                  if x is a =&gt; parameter
 e.apply()   ==&gt;    &lt;cbn-arg&gt;(e)       if e is pure
 e           ==&gt;    &lt;cbn-arg&gt;(() =&gt; e) for all other arguments
 </code></pre>
@@ -10520,7 +10520,7 @@ e           ==&gt;    &lt;cbn-arg&gt;(() =&gt; e) for all other arguments
                 
                 <div id="CapturedVars" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'CapturedVars');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'CapturedVars');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -10545,7 +10545,9 @@ e           ==&gt;    &lt;cbn-arg&gt;(() =&gt; e) for all other arguments
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-CapturedVars">
-                            
+                            <p>This phase translates variables that are captured in closures to
+heap-allocated refs.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12497,10 +12499,8 @@ The aim of this transformation is to avoid redundant parameter accessor fields.<
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-PatternMatcher">
-                            <p>This transform eliminates patterns. Right now it's a dummy.
-Awaiting the real pattern matcher.
-elimRepeated is required
-TODO: outer tests are not generated yet.</p>
+                            <p>This phase rewrites pattern matches.
+FIXME: A more detailed explanation would be good.</p>
 
                         </div>
                     </div>

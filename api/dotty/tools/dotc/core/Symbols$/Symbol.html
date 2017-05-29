@@ -12104,6 +12104,70 @@ Symbol
                     </div>
                 </div><!-- end member -->
                 
+                <div id="changedClassParents(info1,info2,completersMatter)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'changedClassParents(info1,info2,completersMatter)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                changedClassParents
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        info1:
+                                    </span>
+                                    Type
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        info2:
+                                    </span>
+                                    Type
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completersMatter:
+                                    </span>
+                                    Boolean
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-changedClassParents(info1,info2,completersMatter)">
+                            <p>Are <code>info1</code> and <code>info2</code> ClassInfo types with different parents?</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="checkUnique(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkUnique(ctx)');">[+]</span>
@@ -12533,6 +12597,76 @@ NoSymbol if this module does not exist.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-copy(owner,name,flags,info,privateWithin,coord,associatedFile)">
                             <p>Copy a symbol, overriding selective fields</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="copyCaches(from,phase)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'copyCaches(from,phase)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                copyCaches
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        from:
+                                    </span>
+                                    SymDenotation
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        phase:
+                                    </span>
+                                    Phase
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: SymDenotation</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-copyCaches(from,phase)(ctx)">
+                            <p>Copy mamberNames and baseData caches from given denotation, provided
+they are valid at given <code>phase</code>.</p>
 
                         </div>
                     </div>
@@ -15826,9 +15960,9 @@ of this run.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs,butNot)(ctx)" class="member ">
+                <div id="is(fs)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -15851,14 +15985,6 @@ of this run.</p>
                                 
                                     <span class="no-left">
                                         fs:
-                                    </span>
-                                    FlagConjunction
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        butNot:
                                     </span>
                                     FlagSet
                                     
@@ -15888,9 +16014,8 @@ of this run.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
-                            <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
+                            <p>Has this denotation one of the flags in <code>fs</code> set?</p>
 
                         </div>
                     </div>
@@ -15966,9 +16091,9 @@ in <code>butNot</code> are set?</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs)(ctx)" class="member ">
+                <div id="is(fs,butNot)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -15991,6 +16116,14 @@ in <code>butNot</code> are set?</p>
                                 
                                     <span class="no-left">
                                         fs:
+                                    </span>
+                                    FlagConjunction
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        butNot:
                                     </span>
                                     FlagSet
                                     
@@ -16020,8 +16153,9 @@ in <code>butNot</code> are set?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
-                            <p>Has this denotation one of the flags in <code>fs</code> set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
+                            <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
 
                         </div>
                     </div>
@@ -22884,55 +23018,6 @@ as seen from subclasses.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="showSummary(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                showSummary
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: String</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-showSummary(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="showSummary(depth)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'showSummary(depth)(ctx)');">[+]</span>
@@ -22992,6 +23077,55 @@ as seen from subclasses.</p>
 Recursion depth is limited to some smallish value. Default is
 Config.summarizeDepth.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="showSummary(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'showSummary(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                showSummary
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: String</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-showSummary(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

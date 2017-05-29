@@ -110,7 +110,7 @@
         
         <li><a href="../../../../../.././blog/index.html">Blog</a></li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "Contexts$");'>Reference</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "SymDenotations$");'>Reference</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/intersection-types.html">Intersection types</a>
 </li>
@@ -128,7 +128,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "Contexts$");'>Usage</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "SymDenotations$");'>Usage</a>
 <ul id="">
     <li><a href="../../../../../.././docs/usage/sbt-projects.html">sbt-projects</a>
 </li>
@@ -142,7 +142,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "Contexts$");'>Contributing</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "SymDenotations$");'>Contributing</a>
 <ul id="">
     <li><a href="../../../../../.././docs/contributing/getting-started.html">Getting Started</a>
 </li>
@@ -158,7 +158,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "Contexts$");'>Internals</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "SymDenotations$");'>Internals</a>
 <ul id="">
     <li><a href="../../../../../.././docs/internals/backend.html">Backend</a>
 </li>
@@ -184,7 +184,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "Contexts$");'>Resources</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "SymDenotations$");'>Resources</a>
 <ul id="">
     <li><a href="../../../../../.././docs/resources/talks.html">Talks</a></li>
 </ul>
@@ -10296,7 +10296,7 @@
 
 
     <script>
-        document.title = "Dotty Docs - ContextState"
+        document.title = "Dotty Docs - InheritedCache"
     </script>
 
     <div id="content-body">
@@ -10309,10 +10309,10 @@
                     
                 </span>
                 <span id="entity-kind">
-                    class
+                    trait
                 </span>
                 <span id="entity-name">
-                    ContextState
+                    InheritedCache
                 </span>
                 
                 
@@ -10320,29 +10320,17 @@
 
             
             <div id="entity-body" class="entity-section">
-                <p>The essential mutable state of a context base, collected into a common class</p>
+                <p>Base trait for caches that keep info dependent on inherited classes</p>
 
             </div>
             
 
-            <h1 class="section ">
-                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
+            <h1 class="section empty">
+                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
-            <div id="entity-constructors" class="entity-section ">
-                
-                    
-                    <div class="member">
-                        <div class="member-title">
-                            <span class="member-name">ContextState</span>
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                        </div>
-                    </div>
-                    
+            <div id="entity-constructors" class="entity-section empty">
                 
             </div>
 
@@ -10353,640 +10341,21 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="_nextId" class="member ">
+                <div id="invalidate()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, '_nextId');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'invalidate()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
                             
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                _nextId
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Int</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-_nextId">
-                            <p>A counter for unique ids</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="denotTransformers" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'denotTransformers');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                denotTransformers
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Array
-<span class="no-left no-right">[</span>
-DenotTransformer
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-denotTransformers">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="indent" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'indent');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                indent
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Int</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-indent">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="indentTab" class="member protected">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'indentTab');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            protected
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                indentTab
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: String</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-indentTab">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="nextDenotTransformerId" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nextDenotTransformerId');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                nextDenotTransformerId
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Array
-<span class="no-left no-right">[</span>
-Int
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-nextDenotTransformerId">
-                            <p>Next denotation transformer id</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="pendingUnderlying" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'pendingUnderlying');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                pendingUnderlying
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: HashSet
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-pendingUnderlying">
-                            <p>The set of named types on which a currently active invocation
-of underlying during a controlled operation exists.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="phases" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phases');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                phases
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Array
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-phases">
-                            <p>Phases by id</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="phasesPlan" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'phasesPlan');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                phasesPlan
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-List
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-phasesPlan">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="squashedPhases" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'squashedPhases');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                squashedPhases
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Array
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-squashedPhases">
-                            <p>Phases with consecutive Transforms grouped into a single phase, Empty array if squashing is disabled</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="thread" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'thread');">[+]</span>
-                        <span class="member-annotations">
-                            @sharable 
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                thread
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Thread</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-thread">
-                            <p>The thread on which `checkSingleThreaded was invoked last</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="toTextRecursions" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toTextRecursions');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                toTextRecursions
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Int</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toTextRecursions">
-                            <p>Number of recursive invocations of a show method on current stack</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="underlyingRecursions" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'underlyingRecursions');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                underlyingRecursions
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Int</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-underlyingRecursions">
-                            <p>The number of recursive invocation of underlying on a NamedType
-during a controlled operation.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniqueNamedTypes" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uniqueNamedTypes');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniqueNamedTypes
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: NamedTypeUniques</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniqueNamedTypes">
-                            <p>A table for hash consing unique named types</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniqueRefinedTypes" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uniqueRefinedTypes');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniqueRefinedTypes
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: RefinedUniques</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniqueRefinedTypes">
-                            <p>A table for hash consing unique refined types</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniqueTypeAliases" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uniqueTypeAliases');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniqueTypeAliases
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TypeAliasUniques</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniqueTypeAliases">
-                            <p>A table for hash consing unique type bounds</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniques" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uniques');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniques
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: HashSet
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniques">
-                            <p>A table for hash consing unique types</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="unsafeNonvariant" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unsafeNonvariant');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                unsafeNonvariant
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: RunId</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-unsafeNonvariant">
-                            <p>A flag that some unsafe nonvariant instantiation was encountered
-in this run. Used as a shortcut to a avoid scans of types in
-Typer.typedSelect.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="_nextId_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, '_nextId_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                _nextId_=
+                                invalidate
                             
                         </span>
 
@@ -10995,10 +10364,54 @@ Typer.typedSelect.</p>
                             <span class="no-left">(</span>
                                 
                                 
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Unit</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-invalidate()">
+                            <p>Render invalid this cache and all cache that depend on it</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isValid(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isValid(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isValid
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
                                     <span class="no-left">
-                                        x$1:
+                                        ctx:
                                     </span>
-                                    Int
+                                    Context
                                     
                                 
                             <span class="no-left">)</span>
@@ -11008,21 +10421,21 @@ Typer.typedSelect.</p>
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-_nextId_=(x$1)">
-                            <p>A counter for unique ids</p>
+                        <div class="member-body-long" id ="long-body-isValid(ctx)">
+                            <p>Is the cache valid in current period?</p>
 
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="checkSingleThreaded()" class="member ">
+                <div id="isValidAt(phase)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkSingleThreaded()');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isValidAt(phase)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11034,49 +10447,7 @@ Typer.typedSelect.</p>
                         </span>
                         <span class="member-name ">
                             
-                                checkSingleThreaded
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-checkSingleThreaded()">
-                            <p>Check that we are on the same thread as before</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="denotTransformers_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'denotTransformers_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                denotTransformers_=
+                                isValidAt
                             
                         </span>
 
@@ -11086,59 +10457,22 @@ Typer.typedSelect.</p>
                                 
                                 
                                     <span class="no-left">
-                                        x$1:
+                                        phase:
                                     </span>
-                                    Array
-<span class="no-left no-right">[</span>
-DenotTransformer
-<span class="no-left">]</span>
+                                    Phase
                                     
                                 
                             <span class="no-left">)</span>
                             
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-denotTransformers_=(x$1)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="indent_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'indent_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                indent_=
-                            
-                        </span>
-
-                        
-                            
                             <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
                                 
                                 
                                     <span class="no-left">
-                                        x$1:
+                                        ctx:
                                     </span>
-                                    Int
+                                    Context
                                     
                                 
                             <span class="no-left">)</span>
@@ -11148,566 +10482,13 @@ DenotTransformer
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-indent_=(x$1)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="nextDenotTransformerId_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nextDenotTransformerId_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                nextDenotTransformerId_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Array
-<span class="no-left no-right">[</span>
-Int
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-nextDenotTransformerId_=(x$1)">
-                            <p>Next denotation transformer id</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="nextId" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'nextId');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                nextId
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Int</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-nextId">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="phasesPlan_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'phasesPlan_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                phasesPlan_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-List
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span>
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-phasesPlan_=(x$1)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="phases_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phases_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                phases_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Array
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-phases_=(x$1)">
-                            <p>Phases by id</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="reset()" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'reset()');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                reset
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-reset()">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="squashedPhases_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'squashedPhases_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                squashedPhases_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Array
-<span class="no-left no-right">[</span>
-Phase
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-squashedPhases_=(x$1)">
-                            <p>Phases with consecutive Transforms grouped into a single phase, Empty array if squashing is disabled</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="thread_=(x$1)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'thread_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            @sharable 
-                        </span>
-                        <span class="member-modifiers">
-                            private <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                thread_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Thread
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-thread_=(x$1)">
-                            <p>The thread on which `checkSingleThreaded was invoked last</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="toTextRecursions_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toTextRecursions_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                toTextRecursions_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Int
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toTextRecursions_=(x$1)">
-                            <p>Number of recursive invocations of a show method on current stack</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="underlyingRecursions_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'underlyingRecursions_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                underlyingRecursions_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    Int
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-underlyingRecursions_=(x$1)">
-                            <p>The number of recursive invocation of underlying on a NamedType
-during a controlled operation.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniqueSets" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'uniqueSets');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniqueSets
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Map
-<span class="no-left no-right">[</span>
-String<span class="">, </span>HashSet
-<span class="no-left no-right">[</span>
-RefinedType<span class="and-or-separator"> &amp; </span>NamedType<span class="and-or-separator"> &amp; </span>TypeAlias<span class="bounds"> &lt;: </span>Type
-<span class="no-left">]</span>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniqueSets">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="uniquesSizes" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'uniquesSizes');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                uniquesSizes
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Map
-<span class="no-left no-right">[</span>
-String<span class="">, </span>Int
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-uniquesSizes">
-                            <p>A map that associates label and size of all uniques sets</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="unsafeNonvariant_=(x$1)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'unsafeNonvariant_=(x$1)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            <accessor>
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                unsafeNonvariant_=
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    RunId
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-unsafeNonvariant_=(x$1)">
-                            <p>A flag that some unsafe nonvariant instantiation was encountered
-in this run. Used as a shortcut to a avoid scans of types in
-Typer.typedSelect.</p>
+                        <div class="member-body-long" id ="long-body-isValidAt(phase)(ctx)">
+                            <p>is the cache valid in current run at given phase?</p>
 
                         </div>
                     </div>

@@ -10296,7 +10296,7 @@
 
 
     <script>
-        document.title = "Dotty Docs - FingerPrint"
+        document.title = "Dotty Docs - BaseClassSet"
     </script>
 
     <div id="content-body">
@@ -10312,7 +10312,7 @@
                     class
                 </span>
                 <span id="entity-name">
-                    FingerPrint
+                    BaseClassSet
                 </span>
                 
                 
@@ -10328,12 +10328,6 @@
             </div>
 
             
-            <div id="entity-body" class="entity-section">
-                <p>A fingerprint is a bitset that acts as a bloom filter for sets
-of names.</p>
-
-            </div>
-            
 
             <h1 class="section ">
                 <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
@@ -10345,16 +10339,16 @@ of names.</p>
                     
                     <div class="member">
                         <div class="member-title">
-                            <span class="member-name">FingerPrint</span>
+                            <span class="member-name">BaseClassSet</span>
                             <span class="no-left">(</span>
                                 
                                 
                                     <span class="no-left">
-                                        bits:
+                                        classIds:
                                     </span>
                                     Array
 <span class="no-left no-right">[</span>
-Long
+Int
 <span class="no-left">]</span>
                                     
                                 
@@ -10372,9 +10366,9 @@ Long
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="bits" class="member ">
+                <div id="classIds" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'bits');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'classIds');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -10386,7 +10380,7 @@ Long
                         </span>
                         <span class="member-name ">
                             
-                                bits
+                                classIds
                             
                         </span>
 
@@ -10397,21 +10391,21 @@ Long
                         
                         <span class="no-left">: Array
 <span class="no-left no-right">[</span>
-Long
+Int
 <span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-bits">
+                        <div class="member-body-long" id ="long-body-classIds">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="contains(name)" class="member ">
+                <div id="contains(sym)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'contains(name)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'contains(sym)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -10433,9 +10427,9 @@ Long
                                 
                                 
                                     <span class="no-left">
-                                        name:
+                                        sym:
                                     </span>
-                                    Name
+                                    Symbol
                                     
                                 
                             <span class="no-left">)</span>
@@ -10450,105 +10444,8 @@ Long
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-contains(name)">
-                            <p>Does set contain hash bits of given name?</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="include(name)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'include(name)');">[+]</span>
-                        <span class="member-annotations">
+                        <div class="member-body-long" id ="long-body-contains(sym)">
                             
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                include
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        name:
-                                    </span>
-                                    Name
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-include(name)">
-                            <p>Include some bits of name's hashcode in set</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="include(that)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'include(that)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                include
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        that:
-                                    </span>
-                                    FingerPrint
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-include(that)">
-                            <p>Include all bits of <code>that</code> fingerprint in set</p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
