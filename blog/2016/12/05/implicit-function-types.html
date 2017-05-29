@@ -10342,7 +10342,7 @@ scenarios where plain parameters would be too cumbersome. For
 instance, type classes would be a lot less popular if one would have
 to pass all dictionaries by hand. Implicit parameters are also very
 useful as a general context passing mechanism. For instance in the
-<em>dotty</em> compiler, almost every function takes an implicit context
+<em>Dotty</em> compiler, almost every function takes an implicit context
 parameter which defines all elements relating to the current state of
 the compilation. This is in my experience much better than the cake
 pattern because it is lightweight and can express context changes in a
@@ -10431,7 +10431,7 @@ implicit parameter:</p>
 </code></pre>
 <p>A three-times repetition might not look so bad here, but it certainly
 smells of boilerplate. In real-sized projects, this can get much worse.
-For instance, the <em>dotty</em> compiler uses implicit abstraction
+For instance, the <em>Dotty</em> compiler uses implicit abstraction
 over contexts for most of its parts. Consequently it ends up with currently
 no fewer than 2641 occurrences of the text string</p>
 <pre><code>(implicit ctx: Context)
@@ -10455,7 +10455,7 @@ type of <code>f1</code> is:</p>
 </code></pre>
 <p>Just like the normal function type syntax <code>A =&gt; B</code>, desugars to <code>scala.Function1[A, B]</code>
 the implicit function type syntax <code>implicit A =&gt; B</code> desugars to <code>scala.ImplicitFunction1[A, B]</code>.
-The same holds at other function arities. With dotty's <a href="https://github.com/lampepfl/dotty/pull/1758">pull request #1758</a>
+The same holds at other function arities. With Dotty's <a href="https://github.com/lampepfl/dotty/pull/1758">pull request #1758</a>
 merged there is no longer an upper limit of 22 for such functions.</p>
 <p>The type <code>ImplicitFunction1</code> can be thought of being defined as follows:</p>
 <pre><code>trait ImplicitFunction1[-T0, R] extends Function1[T0, R] {

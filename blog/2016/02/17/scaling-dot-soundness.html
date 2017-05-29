@@ -10358,7 +10358,7 @@ is not associated with a runtime value.</li>
 <p>We can in fact construct soundness issues in all of these cases. Look
 at the discussion for issues <a href="https://github.com/lampepfl/dotty/issues/50">#50</a>
 and <a href="https://github.com/lampepfl/dotty/issues/1050">#1050</a> in the
-<a href="https://github.com/lampepfl/dotty/issues/1050">dotty</a> repository
+<a href="https://github.com/lampepfl/dotty/issues/1050">Dotty</a> repository
 on GitHub. All issues work fundamentally in the same way: Construct a type <code>S</code>
 which has a type member <code>T</code> with bad bounds, say</p>
 <pre><code>Any &lt;: T &lt;: Nothing
@@ -10419,7 +10419,7 @@ projections. The same holds for some of the encodings of type-level
 arithmetic.</p>
 <p>To ease the transition, we will continue for a while to allow unrestricted type
 projections under a flag, even though they are potentially
-unsound. In the current dotty compiler, that flag is a language import
+unsound. In the current Dotty compiler, that flag is a language import
 <code>-language:Scala2</code>, but it could be something different for other
 compilers, e.g. <code>-unsafe</code>.  Maybe we can find rules that are less
 restrictive than the ones we have now, and are still sound.  But one
