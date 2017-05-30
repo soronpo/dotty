@@ -10411,7 +10411,7 @@ its type checking because this turns out to be more efficient).</p>
   val x: B = a    // error under Dotty
 }
 </code></pre>
-<p>is no longer legal and has to be rwritten to</p>
+<p>is no longer legal and has to be rewritten to</p>
 <pre><code>def useConversion(implicit f: ImplicitConverter[A, B]) {
   val y: A = ...
   val x: B = a    // OK

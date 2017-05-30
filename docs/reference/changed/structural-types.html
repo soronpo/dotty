@@ -10403,7 +10403,12 @@ match.</p>
 <p>The most important method of a <code>Selectable</code> is <code>selectDynamic</code>: It
 takes a field name and returns the value associated with that name in
 the selectable.</p>
-<p>Assume now <code>r</code> is a value with structural type <code>S</code>.<code>In general</code>S<code>is of the form</code>C { Rs }<code>, i.e. it consists of a class reference</code>C<code>and refinement declarations</code>Rs<code>. We call a field selection</code>r.f<code>_structural_ if</code>f<code>is a name defined by a declaration in</code>Rs<code>whereas</code>C<code>defines no member of name</code>f<code>. Assuming the selection has type</code>T`, it is mapped to something equivalent to the following code:</p>
+<p>Assume now <code>r</code> is a value with structural type <code>S</code>. In general <code>S</code> is
+of the form <code>C { Rs }</code>, i.e. it consists of a class reference <code>C</code> and
+refinement declarations <code>Rs</code>. We call a field selection <code>r.f</code>
+<em>structural</em> if <code>f</code> is a name defined by a declaration in <code>Rs</code> whereas
+<code>C</code> defines no member of name <code>f</code>. Assuming the selection has type
+<code>T</code>, it is mapped to something equivalent to the following code:</p>
 <pre><code>(r: Selectable).selectDynamic(&quot;f&quot;).asInstanceOf[T]
 </code></pre>
 <p>That is, we make sure <code>r</code> conforms to type <code>Selectable</code>, potentially
