@@ -10401,7 +10401,7 @@ object Color {
   case Blue
 }
 </code></pre>
-<h2><a href="#parameterized-enums" id="parameterized-enums">Parameterized enums</a></h2>
+<h3><a href="#parameterized-enums" id="parameterized-enums">Parameterized enums</a></h3>
 <p>Enum classes can be parameterized.</p>
 <pre><code class="language-scala">enum Color(val rgb: Int) {
   case Red   extends Color(0xFF0000)
@@ -10411,7 +10411,7 @@ object Color {
 </code></pre>
 <p>As the example shows, you can define the parameter value by using an
 explicit extends clause.</p>
-<h2><a href="#methods-defined-for-enums" id="methods-defined-for-enums">Methods defined for enums</a></h2>
+<h3><a href="#methods-defined-for-enums" id="methods-defined-for-enums">Methods defined for enums</a></h3>
 <p>The values of an enum correspond to unique integers. The integer
 associated with an enum value is returned by its <code>enumTag</code> method:</p>
 <pre><code class="language-scala">scala&gt; val red = Color.Red
@@ -10430,7 +10430,7 @@ val res2: Color = Blue
 scala&gt; Color.enumValues
 val res3: collection.Iterable[Color] = MapLike(Red, Green, Blue)
 </code></pre>
-<h2><a href="#user-defined-members-of-enums" id="user-defined-members-of-enums">User-defined members of enums</a></h2>
+<h3><a href="#user-defined-members-of-enums" id="user-defined-members-of-enums">User-defined members of enums</a></h3>
 <p>It is possible to add your own definitions to an enum class or its
 companion object.  To make clear what goes where you need to use the
 longer syntax which defines an enum class alongside its companion
@@ -10460,7 +10460,7 @@ object Planet {
   }
 }
 </code></pre>
-<h2><a href="#implementation" id="implementation">Implementation</a></h2>
+<h3><a href="#implementation" id="implementation">Implementation</a></h3>
 <p>Enum classes are represented as <code>sealed</code> classes that extend the <code>scala.Enum</code> trait.
 This trait defines a single method, <code>enumTag</code>:</p>
 <pre><code class="language-scala">package scala
@@ -10487,6 +10487,8 @@ For instance, the first
 definition of value <code>Color.Red</code> above would expand to:</p>
 <pre><code class="language-scala">val Red: Color = $new(0, &quot;Red&quot;)
 </code></pre>
+<h3><a href="#reference" id="reference">Reference</a></h3>
+<p>For more info, see <a href="https://github.com/lampepfl/dotty/issues/1970">Issue #1970</a>.</p>
 
         </div>
     </div><!-- end content-body -->

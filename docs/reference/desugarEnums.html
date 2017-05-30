@@ -10512,14 +10512,14 @@ below).</p>
 cases.</p>
 </li>
 </ol>
-<h2><a href="#equality" id="equality">Equality</a></h2>
+<h3><a href="#equality" id="equality">Equality</a></h3>
 <p>An <code>enum</code> type contains a <code>scala.Eq</code> instance that restricts values of the <code>enum</code> type to
 be compared only to other values of the same enum type. Furtermore, generic
 <code>enum</code> types are comparable only if their type arguments are. For instance the
 <code>Option</code> enum type will get the following definition in its companion object:</p>
 <pre><code>implicit def eqOption[T, U](implicit ev1: Eq[T, U]): Eq[Option[T], Option[U]] = Eq
 </code></pre>
-<h2><a href="#translation-of-enumerations" id="translation-of-enumerations">Translation of Enumerations</a></h2>
+<h3><a href="#translation-of-enumerations" id="translation-of-enumerations">Translation of Enumerations</a></h3>
 <p>Non-generic enum classes <code>E</code> that define one or more singleton cases
 are called <em>enumerations</em>. Companion objects of enumerations define
 the following additional members.</p>
