@@ -10386,12 +10386,13 @@
         <div id="doc-page-container">
             <p>Scala so far allowed general type projection <code>T#A</code> where <code>T</code> is an arbitrary type
 and <code>A</code> names a type member of <code>T</code>.</p>
-<p>Dotty allows this only if <code>T</code> is a class type. The change was made because
-unrestricted type projection is <a href="https://github.com/lampepfl/dotty/issues/1050">unsound</a>.</p>
-<p>The restriction rule out the <a href="https://michid.wordpress.com/2010/01/29/scala-type-level-encoding-of-the-ski-calculus/">type-level encoding of compbinator
-calculus</a>. It also rules out the previous encodings of type
-lambdas using structural types with projection as application.  Type
-lambdas are now <a href="../type-lambdas.html">directly supported</a> in Dotty.</p>
+<p>Dotty disallows this if <code>T</code> is an abstract type (class types and type aliases
+are fine). This change was made because unrestricted type projection
+is <a href="https://github.com/lampepfl/dotty/issues/1050">unsound</a>.</p>
+<p>This restriction rules out the <a href="https://michid.wordpress.com/2010/01/29/scala-type-level-encoding-of-the-ski-calculus/">type-level encoding of a combinator
+calculus</a>.</p>
+<p>To rewrite code using type projections on abstract types, consider using
+path-dependent types or implicit parameters.</p>
 
         </div>
     </div><!-- end content-body -->
