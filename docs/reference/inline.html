@@ -10497,7 +10497,7 @@ rewritten to its then- or else-part. Here's an example:</p>
 of the inline method <code>log</code> are defined before the inlined body (which
 is in this case simply <code>op</code>). By-name parameters of the inlined method
 correspond to <code>def</code> bindings whereas by-value parameters correspond to
-<code>val</code> bindings. Do if <code>log</code> was defined like this:</p>
+<code>val</code> bindings. So if <code>log</code> was defined like this:</p>
 <pre><code>inline def log[T](msg: String)(op: =&gt; T): T = ...
 </code></pre>
 <p>we'd get</p>
@@ -10550,7 +10550,7 @@ than the annotation: Expansion is guarenteed instead of best effort,
 it happens in the fronend instead of in the backend, and it also applies
 to method arguments and recursive methods.</p>
 <p>Since <code>inline</code> is now a keyword, it would be a syntax error to write
-<code>@inline</code>. Hwoever, one can still refer to the annotation by putting
+<code>@inline</code>. However, one can still refer to the annotation by putting
 it in backticks, i.e.</p>
 <pre><code>@`inline` def ...
 </code></pre>
