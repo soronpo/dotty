@@ -110,6 +110,20 @@
         
         <li><a href="../../../../../.././blog/index.html">Blog</a></li>
         
+        <li><a class="toggle-children" onclick='clickToc(this, "Symbols$");'>Usage</a>
+<ul id="">
+    <li><a href="../../../../../.././docs/usage/sbt-projects.html">sbt-projects</a>
+</li>
+<li><a href="../../../../../.././docs/usage/ide-support.html">IDE support for Dotty</a>
+</li>
+<li><a href="../../../../../.././docs/usage/cbt-projects.html">cbt-projects</a>
+</li>
+<li><a href="../../../../../.././docs/usage/dottydoc.html">Dottydoc</a>
+</li>
+<li><a href="../../../../../.././docs/usage/migrating.html">Migrating</a></li>
+</ul>
+</li>
+        
         <li><a class="toggle-children" onclick='clickToc(this, "Symbols$");'>Reference</a>
 <ul id="">
     <li><a class="toggle-children" onclick='clickToc(this, "Symbols$");'>New Types</a>
@@ -189,20 +203,6 @@
 <li><a href="../../../../../.././docs/reference/dropped/xml.html">XML literals</a></li>
 </ul>
 </li>
-</ul>
-</li>
-        
-        <li><a class="toggle-children" onclick='clickToc(this, "Symbols$");'>Usage</a>
-<ul id="">
-    <li><a href="../../../../../.././docs/usage/sbt-projects.html">sbt-projects</a>
-</li>
-<li><a href="../../../../../.././docs/usage/ide-support.html">IDE support for Dotty</a>
-</li>
-<li><a href="../../../../../.././docs/usage/cbt-projects.html">cbt-projects</a>
-</li>
-<li><a href="../../../../../.././docs/usage/dottydoc.html">Dottydoc</a>
-</li>
-<li><a href="../../../../../.././docs/usage/migrating.html">Migrating</a></li>
 </ul>
 </li>
         
@@ -10529,42 +10529,6 @@
                                 
                                 
                                     <span class="no-left">
-                                        sym:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                        </div>
-                    </div>
-                    
-                    <div class="member">
-                        <div class="member-title">
-                            <span class="member-name">Symbol</span>
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                        </div>
-                    </div>
-                    
-                
-                    
-                    <div class="member">
-                        <div class="member-title">
-                            <span class="member-name">Symbol</span>
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
                                         symbol:
                                     </span>
                                     Symbol
@@ -10650,6 +10614,24 @@
                         </div>
                     </div>
                     
+                    <div class="member">
+                        <div class="member-title">
+                            <span class="member-name">Symbol</span>
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                        </div>
+                    </div>
+                    
                 
                     
                     <div class="member">
@@ -10660,6 +10642,24 @@
                                 
                                     <span class="no-left">
                                         self:
+                                    </span>
+                                    Symbol
+                                    
+                                
+                            <span class="no-left">)</span>
+                        </div>
+                    </div>
+                    
+                
+                    
+                    <div class="member">
+                        <div class="member-title">
+                            <span class="member-name">Symbol</span>
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        sym:
                                     </span>
                                     Symbol
                                     
@@ -16165,9 +16165,9 @@ of this run.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs,butNot)(ctx)" class="member ">
+                <div id="is(fs)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -16192,14 +16192,6 @@ of this run.</p>
                                         fs:
                                     </span>
                                     FlagConjunction
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        butNot:
-                                    </span>
-                                    FlagSet
                                     
                                 
                             <span class="no-left">)</span>
@@ -16227,9 +16219,8 @@ of this run.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
-                            <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
+                            <p>Has this denotation all of the flags in <code>fs</code> set?</p>
 
                         </div>
                     </div>
@@ -16305,9 +16296,9 @@ in <code>butNot</code> are set?</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs)(ctx)" class="member ">
+                <div id="is(fs,butNot)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -16332,6 +16323,14 @@ in <code>butNot</code> are set?</p>
                                         fs:
                                     </span>
                                     FlagConjunction
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        butNot:
+                                    </span>
+                                    FlagSet
                                     
                                 
                             <span class="no-left">)</span>
@@ -16359,8 +16358,9 @@ in <code>butNot</code> are set?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
-                            <p>Has this denotation all of the flags in <code>fs</code> set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
+                            <p>Has this denotation all of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
 
                         </div>
                     </div>
@@ -20988,6 +20988,53 @@ These are called a &quot;flock&quot;. Flock members are generated by</p>
                 
                 <div id="orElse(that)" class="member ">
                     <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'orElse(that)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                orElse
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that: =&gt;
+                                    </span>
+                                    SingleDenotation
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: SingleDenotation</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-orElse(that)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="orElse(that)" class="member ">
+                    <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'orElse(that)');">[+]</span>
                         <span class="member-annotations">
                             
@@ -21030,53 +21077,6 @@ These are called a &quot;flock&quot;. Flock members are generated by</p>
                         <div class="member-body-long" id ="long-body-orElse(that)">
                             <p>If this denotation does not exist, fallback to alternative</p>
 
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="orElse(that)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'orElse(that)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                orElse
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        that: =&gt;
-                                    </span>
-                                    SingleDenotation
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: SingleDenotation</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-orElse(that)">
-                            
                         </div>
                     </div>
                 </div><!-- end member -->

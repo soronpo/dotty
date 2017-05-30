@@ -110,6 +110,20 @@
         
         <li><a href=".././blog/index.html">Blog</a></li>
         
+        <li><a class="toggle-children" onclick='clickToc(this, "docs");'>Usage</a>
+<ul id="">
+    <li><a href=".././docs/usage/sbt-projects.html">sbt-projects</a>
+</li>
+<li><a href=".././docs/usage/ide-support.html">IDE support for Dotty</a>
+</li>
+<li><a href=".././docs/usage/cbt-projects.html">cbt-projects</a>
+</li>
+<li><a href=".././docs/usage/dottydoc.html">Dottydoc</a>
+</li>
+<li><a href=".././docs/usage/migrating.html">Migrating</a></li>
+</ul>
+</li>
+        
         <li><a class="toggle-children" onclick='clickToc(this, "docs");'>Reference</a>
 <ul id="">
     <li><a class="toggle-children" onclick='clickToc(this, "docs");'>New Types</a>
@@ -189,20 +203,6 @@
 <li><a href=".././docs/reference/dropped/xml.html">XML literals</a></li>
 </ul>
 </li>
-</ul>
-</li>
-        
-        <li><a class="toggle-children" onclick='clickToc(this, "docs");'>Usage</a>
-<ul id="">
-    <li><a href=".././docs/usage/sbt-projects.html">sbt-projects</a>
-</li>
-<li><a href=".././docs/usage/ide-support.html">IDE support for Dotty</a>
-</li>
-<li><a href=".././docs/usage/cbt-projects.html">cbt-projects</a>
-</li>
-<li><a href=".././docs/usage/dottydoc.html">Dottydoc</a>
-</li>
-<li><a href=".././docs/usage/migrating.html">Migrating</a></li>
 </ul>
 </li>
         
@@ -10452,6 +10452,324 @@ and try to boil down Scala’s types into a smaller set of more fundamental cons
 The theory behind these constructors is researched in DOT, a calculus for dependent object types.</p>
 <p>In this documentation you will find information on how to use the Dotty compiler on your machine, navigate through
 the code, setup Dotty with your favorite IDE and more!</p>
+<h1><a href="#table-of-contents" id="table-of-contents">Table of Contents</a></h1>
+<ul>
+<li>
+<p><a href=".././blog/index.html">Blog</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p>Usage</p>
+<ul>
+<li>
+<p><a href=".././docs/usage/sbt-projects.html">sbt-projects</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/usage/ide-support.html">IDE support for Dotty</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/usage/cbt-projects.html">cbt-projects</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/usage/dottydoc.html">Dottydoc</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/usage/migrating.html">Migrating</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Reference</p>
+<ul>
+<li>
+<p>New Types</p>
+<ul>
+<li>
+<p><a href=".././docs/reference/intersection-types.html">Intersection types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/union-types.html">Union types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/type-lambdas.html">Type lambdas</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/implicit-function-types.html">Implicit Function Types</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Enums</p>
+<ul>
+<li>
+<p><a href=".././docs/reference/enums.html">Enumerations</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/adts.html">Algebraic Data Types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/desugarEnums.html">Translation</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Other New Features</p>
+<ul>
+<li>
+<p><a href=".././docs/reference/multiversal-equality.html">Multiversal Equality</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/inline.html">Inline</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/trait-parameters.html">Trait Parameters</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/auto-parameter-tupling.html">Auto Parameter Tupling</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/named-typeargs.html">Named Type Arguments</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Changed Features</p>
+<ul>
+<li>
+<p><a href=".././docs/reference/changed/lazy-vals.html">Volatile Lazy Vals</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/structural-types.html">Structural Types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/type-checking.html">Type Checking</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/type-inference.html">Type Inference</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/implicit-resolution.html">Implicit Resolution</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/implicit-conversions.html">Implicit Conversions</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/changed/vararg-patterns.html">Vararg Patterns</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Dropped Features</p>
+<ul>
+<li>
+<p><a href=".././docs/reference/dropped/delayed-init.html">DelayedInit</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/macros.html">Macros</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/existential-types.html">Existential Types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/type-projection.html">Type Projection</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/procedure-syntax.html">Procedure Syntax</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/early-initializers.html">Early Initializers</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/class-shadowing.html">Class Shadowing</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/limit22.html">Limit 22</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/reference/dropped/xml.html">XML literals</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Contributing</p>
+<ul>
+<li>
+<p><a href=".././docs/contributing/getting-started.html">Getting Started</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/contributing/workflow.html">Workflow</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/contributing/eclipse.html">Eclipse</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/contributing/intellij-idea.html">IntelliJ IDEA</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/contributing/testing.html">Testing</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/contributing/backend.html">Working with the Backend</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Internals</p>
+<ul>
+<li>
+<p><a href=".././docs/internals/backend.html">Backend</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/benchmarks.html">Benchmarks</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/classpaths.html">Classpaths</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/core-data-structures.html">Core Data Structrues</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/contexts.html">Contexts</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/dotc-scalac.html">Dotc vs Scalac</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/higher-kinded-v2.html">Higher-Kinded Types</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/overall-structure.html">Overall Structure</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/periods.html">Periods</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/syntax.html">Syntax</a></p>
+<ul>
+</ul>
+</li>
+<li>
+<p><a href=".././docs/internals/type-system.html">Type System</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Resources</p>
+<ul>
+<li>
+<p><a href=".././docs/resources/talks.html">Talks</a></p>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
         </div>
     </div><!-- end content-body -->
