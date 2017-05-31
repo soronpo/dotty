@@ -10486,8 +10486,8 @@ is, the implementation case classes are not visible in the result
 types of their <code>apply</code> methods. This is a subtle difference with
 respect to normal case classes. The classes making up the cases do
 exist, and can be unvealed by constructing them directly with a <code>new</code>.</p>
-<pre><code class="language-scala">val res3: t2.Option.Some[Int] = Some(2)
-scala&gt; scala&gt; new Option.Some(2)
+<pre><code class="language-scala">scala&gt; new Option.Some(2)
+val res3: t2.Option.Some[Int] = Some(2)
 </code></pre>
 <p>As all other enums, ADTs can have methods on both the enum class and
 its companion object. For instance, here is <code>Option</code> again, with an
