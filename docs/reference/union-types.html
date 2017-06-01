@@ -10480,7 +10480,7 @@ val res2: Object &amp; Product = UserName(Eve)
 scala&gt; val either: Password | UserName = if (true) name else password
 val either: Password | UserName = UserName(Eve)
 </code></pre>
-<p>The type of <code>res2</code> is <code>Object | Product</code>, which is a supertype of
+<p>The type of <code>res2</code> is <code>Object &amp; Product</code>, which is a supertype of
 <code>UserName</code> and <code>Product</code>, but not the least supertype <code>Password | UserName</code>.  If we want the least supertype, we have to give it
 explicitely, as is done for the type of <code>Either</code>. More precisely, the
 typechecker will <em>widen</em> a union type to a non-union type when
