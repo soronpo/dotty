@@ -10449,25 +10449,25 @@
         <hr/>
         <div id="doc-page-container">
             <p>Used on types, the <code>&amp;</code> operator creates an intersection type.</p>
-<pre><code class="language-scala">trait Resetable {
+<pre><code class="language-scala">trait Resettable {
   def reset(): this.type
 }
 trait Growable[T] {
   def add(x: T): this.type
 }
-def f(x: Resetable &amp; Growable[String]) = {
+def f(x: Resettable &amp; Growable[String]) = {
   x.reset()
   x.add(&quot;first&quot;)
 }
 </code></pre>
-<p>The value <code>x</code> is required to be <em>both</em> a <code>Resetable</code> and a
+<p>The value <code>x</code> is required to be <em>both</em> a <code>Resettable</code> and a
 <code>Growable[String]</code>.  Intersection types <code>A &amp; B</code> replace compound types
 <code>A with B</code> in Scala 2 (for the moment, <code>A with B</code> is still allowed, but
 it will be deprecated and removed in the future).</p>
 <p>Unlike <code>with</code> types, <code>&amp;</code> is <em>commutative</em>: <code>A &amp; B</code> is the same type as
 <code>B &amp; A</code>.</p>
 <p>The members of an intersection type <code>A &amp; B</code> are all the members of <code>A</code>
-and all the members of <code>B</code>. For instance <code>Resetable &amp; Growable[String]</code>
+and all the members of <code>B</code>. For instance <code>Resettable &amp; Growable[String]</code>
 has member methods <code>reset</code> and <code>add</code>.</p>
 <p>If a member appears in both <code>A</code> and <code>B</code>, its type in <code>A &amp; B</code> is the
 intersection of its type in <code>A</code> and its type in <code>B</code>. For instance, assume the definitions:</p>
