@@ -10500,7 +10500,7 @@ val either: Password | UserName = UserName(Eve)
 </code></pre>
 <p>The type of <code>res2</code> is <code>Object &amp; Product</code>, which is a supertype of
 <code>UserName</code> and <code>Product</code>, but not the least supertype <code>Password | UserName</code>.  If we want the least supertype, we have to give it
-explicitely, as is done for the type of <code>Either</code>. More precisely, the
+explicitely, as is done for the type of <code>either</code>. More precisely, the
 typechecker will <em>widen</em> a union type to a non-union type when
 inferring the type of <code>val</code> or <code>var</code>, or the result type of a <code>def</code>,
 or the argument to pass for a type parameter.  The widened type of <code>A | B</code> is usually the intersection of all class or trait types that are
