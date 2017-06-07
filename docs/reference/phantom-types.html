@@ -10473,7 +10473,7 @@
 These are useful to prove static properties of the code using type evidences.
 As they have no effect on the runtime they can be erased from the resulting code by
 the compiler once it has shown the constraints hold.</p>
-<p>When saying that a they have no effect on the runtime we do not only mean side effects
+<p>When saying that they have no effect on the runtime we do not only mean side effects
 like IO, field mutation, exceptions and so on. We also imply that if a function receives
 a phantom its result will not be affected by this argument.</p>
 <p>As phantom do not live at runtime they cannot be subtypes of <code>scala.Any</code>, which deffines
@@ -10526,7 +10526,7 @@ of the phantom types in <code>MyPhantoms</code>, these bounds are <code>protecte
 from outside <code>MyPhantoms</code> unless an alias is defined for them.</p>
 <p>New phantom types can be defined using <code>type XYZ &lt;: OtherPhantom</code> (where <code>&gt;: MyPhantom.Nothing</code>
 will be inferred), this would be the equivalent of <code>class XYZ extends OtherClass</code> on a types
-only (no runtime definitions). Or aliased with <code>type MyAny = OtherPhantom</code>. Whitin <code>MyPhantoms</code>
+only (no runtime definitions). Or aliased with <code>type MyAny = OtherPhantom</code>. Within <code>MyPhantoms</code>
 it is possible to refer to <code>MyPhantoms.Any</code> and <code>MyPhantoms.Nothing</code> with <code>this.Any</code> and
 <code>this.Nothing</code> (or just <code>Any</code> and <code>Nothing</code> but not recommended). Using this we will define
 four the four phantoms: <code>Inky</code>, <code>Blinky</code>, <code>Pinky</code> and <code>Clyde</code>.</p>
