@@ -230,8 +230,6 @@
 <ul id="">
     <li><a href="../.././docs/internals/backend.html">Backend</a>
 </li>
-<li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a>
-</li>
 <li><a href="../.././docs/internals/classpaths.html">Classpaths</a>
 </li>
 <li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a>
@@ -10474,7 +10472,7 @@ lives at</p>
 <p><a href="https://github.com/lampepfl/scala/tree/sharing-backend">https://github.com/lampepfl/scala/tree/sharing-backend</a></p>
 </blockquote>
 <p>The Dotty source tree contains a git submodule in the directory
-<a href="https://github.com/lampepfl/dotty/tree/master/scala-backend">scala-backend</a>
+<a href="https://github.com/lampepfl/scala/tree/sharing-backend">scala-backend</a>
 that points to this fork. We do not compile every file in this submodule,
 instead we add the subset of files we need to the dotty-compiler project in the
 sbt build.</p>
@@ -10520,7 +10518,7 @@ $ cd ..
 against Dotty itself to update the backend, the following commands should be run
 in the root Dotty repository, not in the submodule:</p>
 <pre><code class="language-shell"># The --remote option will update the submodule to the latest commit in the
-# https://github.com/lampepfl/dotty/tree/master/scala-backend branch
+# https://github.com/lampepfl/scala/tree/sharing-backend branch
 git submodule update --init --remote
 
 git commit -am &quot;Update backend to include ...&quot;

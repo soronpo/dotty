@@ -230,8 +230,6 @@
 <ul id="active-toc-entry">
     <li><a href="../.././docs/internals/backend.html">Backend</a>
 </li>
-<li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a>
-</li>
 <li><a href="../.././docs/internals/classpaths.html">Classpaths</a>
 </li>
 <li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a>
@@ -10472,7 +10470,7 @@
 artifacts associated with source code at all points in time.  But what is
 <em>time</em> for <code>dotc</code>? In fact, it is a combination of compiler runs and compiler
 phases.</p>
-<p>The <em>hours</em> of the compiler's clocks are measured in compiler <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/Run.scala">runs</a>. Every run
+<p>The <em>hours</em> of the compiler's clocks are measured in compiler <a href="https://github.com/lampepfl/dotty/blob/a527f3b1e49c0d48148ccfb2eb52e3302fc4a349/compiler/src/dotty/tools/dotc/Run.scala">runs</a>. Every run
 creates a new hour, which follows all the compiler runs (hours) that happened
 before. <code>dotc</code> is designed to be used as an incremental compiler that can
 support incremental builds, as well as interactions in an IDE and a REPL. This
@@ -10481,7 +10479,7 @@ keystroke in an editor or REPL can potentially launch a new compiler run, so
 potentially an &quot;hour&quot; of compiler time might take only a fraction of a second
 in real time.</p>
 <p>The <em>minutes</em> of the compiler's clocks are measured in phases. At every
-compiler run, the compiler cycles through a number of <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Phases.scala">phases</a>. The list of
+compiler run, the compiler cycles through a number of <a href="https://github.com/lampepfl/dotty/blob/a527f3b1e49c0d48148ccfb2eb52e3302fc4a349/compiler/src/dotty/tools/dotc/core/Phases.scala">phases</a>. The list of
 phases is defined in the [Compiler]object There are currently about 60 phases
 per run, so the minutes/hours analogy works out roughly. After every phase the
 view the compiler has of the world changes: trees are transformed,  types are
@@ -10499,7 +10497,7 @@ is inspired by functional reactive programming (FRP): Symbols carry not a
 single type, but a function from compiler phase to type. So the type of a
 symbol is a time-indexed function, where time ranges over compiler phases.</p>
 <p>Typically, the definition of a symbol or other quantity remains stable for a
-number of phases. This leads us to the concept of a <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Periods.scala">period</a>. Conceptually,
+number of phases. This leads us to the concept of a <a href="https://github.com/lampepfl/dotty/blob/a527f3b1e49c0d48148ccfb2eb52e3302fc4a349/compiler/src/dotty/tools/dotc/core/Periods.scala">period</a>. Conceptually,
 period is an interval of some given phases in a given compiler run. Periods
 are conceptually represented by three pieces of information</p>
 <ul>

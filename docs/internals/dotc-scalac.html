@@ -230,8 +230,6 @@
 <ul id="active-toc-entry">
     <li><a href="../.././docs/internals/backend.html">Backend</a>
 </li>
-<li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a>
-</li>
 <li><a href="../.././docs/internals/classpaths.html">Classpaths</a>
 </li>
 <li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a>
@@ -10469,9 +10467,9 @@
         <hr/>
         <div id="doc-page-container">
             <p>Overview explanation how symbols, named types and denotations hang together:
-<a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Denotations.scala#L22">Denotations.scala:22</a></p>
+<a href="https://github.com/lampepfl/dotty/blob/a527f3b1e49c0d48148ccfb2eb52e3302fc4a349/compiler/src/dotty/tools/dotc/core/Denotations.scala#L27-L72">Denotations1</a></p>
 <h3><a href="#denotation" id="denotation">Denotation</a></h3>
-<p>Comment with a few details: <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Denotations.scala#L70">Denotations.scala:70</a></p>
+<p>Comment with a few details: <a href="https://github.com/lampepfl/dotty/blob/a527f3b1e49c0d48148ccfb2eb52e3302fc4a349/compiler/src/dotty/tools/dotc/core/Denotations.scala#L77-L103">Denotations2</a></p>
 <p>A <code>Denotation</code> is the result of a name lookup during a given period</p>
 <ul>
 <li>Most properties of symbols are now in the denotation (name, type, owner,
@@ -10481,7 +10479,7 @@ etc.)</li>
 may be <code>NoSymbol</code> (the two variants have symbols).</li>
 <li>Non-overloaded denotations have an <code>info</code></li>
 </ul>
-<p>Denotations of methods have a signature (<a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Signature.scala#L7">Signature.scala:7</a>), which
+<p>Denotations of methods have a signature ([Signature.scala:7]), which
 uniquely identifies overloaded methods.</p>
 <h4><a href="#denotation-vs-symdenotation" id="denotation-vs-symdenotation">Denotation vs. SymDenotation</a></h4>
 <p>A <code>SymDenotation</code> is an extended denotation that has symbol-specific properties

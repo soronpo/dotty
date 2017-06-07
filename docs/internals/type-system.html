@@ -230,8 +230,6 @@
 <ul id="active-toc-entry">
     <li><a href="../.././docs/internals/backend.html">Backend</a>
 </li>
-<li><a href="../.././docs/internals/benchmarks.html">Benchmarks</a>
-</li>
 <li><a href="../.././docs/internals/classpaths.html">Classpaths</a>
 </li>
 <li><a href="../.././docs/internals/core-data-structures.html">Core Data Structrues</a>
@@ -10468,7 +10466,7 @@
         </a>
         <hr/>
         <div id="doc-page-container">
-            <p>The types are defined in <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Types.scala">dotty/tools/dotc/core/Types.scala</a></p>
+            <p>The types are defined in <a href="https://github.com/lampepfl/dotty/blob/master/compiler/src/dotty/tools/dotc/core/Types.scala">dotty/tools/dotc/core/Types.scala</a></p>
 <h2><a href="#class-diagram" id="class-diagram">Class diagram</a></h2>
 <ul>
 <li><a href="https://github.com/samuelgruetter/dotty/blob/classdiagrampdf/dotty-types.pdf">PDF</a>, generated with <a href="https://github.com/samuelgruetter/scaladiagrams/tree/print-descendants">a fork of scaladiagrams</a></li>
@@ -10477,7 +10475,7 @@
 <p>A type which inherits <code>TypeProxy</code> is a proxy for another type accessible using
 the <code>underlying</code> method, other types are called <em>ground</em> types and inherit
 <code>CachedGroundType</code> or <code>UncachedGroundType</code>.</p>
-<p>Here's a diagram, copied from <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/Types.scala">dotty/tools/dotc/core/Types.scala</a>:</p>
+<p>Here's a diagram, copied from <a href="https://github.com/lampepfl/dotty/blob/master/compiler/src/dotty/tools/dotc/core/Types.scala">dotty/tools/dotc/core/Types.scala</a>:</p>
 <pre><code>Type -+- ProxyType --+- NamedType ----+--- TypeRef
       |              |                 \
       |              +- SingletonType-+-+- TermRef
@@ -10549,7 +10547,7 @@ val m = MethodType(List(&quot;x&quot;, &quot;y&quot;),
 <p>Note that a PolyParam refers to a type parameter using its index (here A is 0
 and B is 1).</p>
 <h2><a href="#subtyping-checks" id="subtyping-checks">Subtyping checks</a></h2>
-<p><code>topLevelSubType(tp1, tp2)</code> in <a href="https://github.com/lampepfl/dotty/blob/master/src/dotty/tools/dotc/core/TypeComparer.scala">dotty/tools/dotc/core/TypeComparer.scala</a>
+<p><code>topLevelSubType(tp1, tp2)</code> in <a href="https://github.com/lampepfl/dotty/blob/master/compiler/src/dotty/tools/dotc/core/TypeComparer.scala">dotty/tools/dotc/core/TypeComparer.scala</a>
 checks if <code>tp1</code> is a subtype of <code>tp2</code>.</p>
 <h3><a href="#type-rebasing" id="type-rebasing">Type rebasing</a></h3>
 <p><strong>FIXME</strong>: This section is no longer accurate because
