@@ -10488,15 +10488,15 @@ conversions. It is as if there was a global implicit conversion method</p>
 <p>(In reality the Dotty compiler simulates the behavior of this method directly in
 its type checking because this turns out to be more efficient).</p>
 <p>In summary, previous code using implicit conversion parameters such as</p>
-<pre><code>def useConversion(implicit f: A =&gt; B) {
+<pre><code>def useConversion(implicit f: A =&gt; B) = {
   val y: A = ...
   val x: B = a    // error under Dotty
 }
 </code></pre>
 <p>is no longer legal and has to be rewritten to</p>
-<pre><code>def useConversion(implicit f: ImplicitConverter[A, B]) {
+<pre><code>def useConversion(implicit f: ImplicitConverter[A, B]) = {
   val y: A = ...
-  val x: B = a    // OK
+  val x: B = y    // OK
 }
 </code></pre>
 <h3><a href="#reference" id="reference">Reference</a></h3>
