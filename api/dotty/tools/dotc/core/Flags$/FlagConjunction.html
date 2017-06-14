@@ -5620,9 +5620,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/LinkScala2ImplClasses.html">C</a>
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/LinkScala2Impls.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/LinkScala2ImplClasses.html">LinkScala2ImplClasses</a>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/LinkScala2Impls.html">LinkScala2Impls</a>
                 </li>
 
                 
@@ -10852,9 +10852,9 @@ String
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(flags)" class="member ">
+                <div id="is(flags,butNot)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -10878,7 +10878,15 @@ String
                                     <span class="no-left">
                                         flags:
                                     </span>
-                                    FlagConjunction
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        butNot:
+                                    </span>
+                                    FlagSet
                                     
                                 
                             <span class="no-left">)</span>
@@ -10893,9 +10901,9 @@ String
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(flags)">
-                            <p>Does this flag set have all of the flags in given flag conjunction?
-Pre: The intersection of the typeflags of both sets must be non-empty.</p>
+                        <div class="member-body-long" id ="long-body-is(flags,butNot)">
+                            <p>Does this flag set have a non-empty intersection with the given flag set,
+and at the same time contain none of the flags in the <code>butNot</code> set?</p>
 
                         </div>
                     </div>
@@ -11008,9 +11016,9 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(flags,butNot)" class="member ">
+                <div id="is(flags)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags,butNot)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(flags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11034,15 +11042,7 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                                     <span class="no-left">
                                         flags:
                                     </span>
-                                    FlagSet
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        butNot:
-                                    </span>
-                                    FlagSet
+                                    FlagConjunction
                                     
                                 
                             <span class="no-left">)</span>
@@ -11057,9 +11057,9 @@ This means that both the kind flags and the carrier bits have non-empty intersec
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(flags,butNot)">
-                            <p>Does this flag set have a non-empty intersection with the given flag set,
-and at the same time contain none of the flags in the <code>butNot</code> set?</p>
+                        <div class="member-body-long" id ="long-body-is(flags)">
+                            <p>Does this flag set have all of the flags in given flag conjunction?
+Pre: The intersection of the typeflags of both sets must be non-empty.</p>
 
                         </div>
                     </div>
