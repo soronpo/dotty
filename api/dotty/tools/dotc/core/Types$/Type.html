@@ -184,7 +184,9 @@
 </li>
 <li><a href="../../../../../.././docs/reference/changed/vararg-patterns.html">Vararg Patterns</a>
 </li>
-<li><a href="../../../../../.././docs/reference/changed/pattern-matching.html">Pattern matching</a></li>
+<li><a href="../../../../../.././docs/reference/changed/pattern-matching.html">Pattern matching</a>
+</li>
+<li><a href="../../../../../.././docs/reference/changed/eta-expansion.html">Eta Expansion</a></li>
 </ul>
 
 </li>
@@ -206,7 +208,9 @@
 </li>
 <li><a href="../../../../../.././docs/reference/dropped/limit22.html">Limit 22</a>
 </li>
-<li><a href="../../../../../.././docs/reference/dropped/xml.html">XML literals</a></li>
+<li><a href="../../../../../.././docs/reference/dropped/xml.html">XML literals</a>
+</li>
+<li><a href="../../../../../.././docs/reference/dropped/auto-apply.html">Auto-Application</a></li>
 </ul>
 </li>
 </ul>
@@ -11386,9 +11390,9 @@ is covariant is irrelevant, so can be ignored.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="appliedTo(arg1,arg2)(ctx)" class="member ">
+                <div id="appliedTo(arg)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg1,arg2)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11410,15 +11414,7 @@ is covariant is irrelevant, so can be ignored.</p>
                                 
                                 
                                     <span class="no-left">
-                                        arg1:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        arg2:
+                                        arg:
                                     </span>
                                     Type
                                     
@@ -11448,7 +11444,7 @@ is covariant is irrelevant, so can be ignored.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-appliedTo(arg1,arg2)(ctx)">
+                        <div class="member-body-long" id ="long-body-appliedTo(arg)(ctx)">
                             
                         </div>
                     </div>
@@ -11520,9 +11516,9 @@ Type
                     </div>
                 </div><!-- end member -->
                 
-                <div id="appliedTo(arg)(ctx)" class="member ">
+                <div id="appliedTo(arg1,arg2)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg1,arg2)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11544,7 +11540,15 @@ Type
                                 
                                 
                                     <span class="no-left">
-                                        arg:
+                                        arg1:
+                                    </span>
+                                    Type
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        arg2:
                                     </span>
                                     Type
                                     
@@ -11574,7 +11578,7 @@ Type
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-appliedTo(arg)(ctx)">
+                        <div class="member-body-long" id ="long-body-appliedTo(arg1,arg2)(ctx)">
                             
                         </div>
                     </div>
@@ -16641,9 +16645,9 @@ Inherited by all other type proxies.
                     </div>
                 </div><!-- end member -->
                 
-                <div id="overrides(that)(ctx)" class="member ">
+                <div id="overrides(that,matchLoosely)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'overrides(that)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'overrides(that,matchLoosely)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -16668,6 +16672,14 @@ Inherited by all other type proxies.
                                         that:
                                     </span>
                                     Type
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        matchLoosely: =&gt;
+                                    </span>
+                                    Boolean
                                     
                                 
                             <span class="no-left">)</span>
@@ -16695,11 +16707,11 @@ Inherited by all other type proxies.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-overrides(that)(ctx)">
-                            <p>Is this type a legal type for a member that overrides another
-member of type <code>that</code>? This is the same as <code>&lt;:&lt;</code>, except that
-the types <code>()T</code>, <code>=&gt; T</code> and <code>T</code> are seen as overriding
-each other.</p>
+                        <div class="member-body-long" id ="long-body-overrides(that,matchLoosely)(ctx)">
+                            <p>Is this type a legal type for member <code>sym1</code> that overrides another
+member <code>sym2</code> of type <code>that</code>? This is the same as <code>&lt;:&lt;</code>, except that
+if <code>matchLoosely</code> evaluates to true the types <code>=&gt; T</code> and <code>()T</code> are seen
+as overriding each other.</p>
 
                         </div>
                     </div>
