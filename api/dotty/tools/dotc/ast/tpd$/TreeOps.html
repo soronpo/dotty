@@ -5825,14 +5825,38 @@
                 
 
                 
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcher$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">PatternMatcher</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">C</a>
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcherOld.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">PatternMatcher</a>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/PatternMatcherOld.html">PatternMatcherOld</a>
                 </li>
 
                 
@@ -6250,9 +6274,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor trait" href="../../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts.html">T</a>
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts$.html">O</a>
                     </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts.html">TypeTestsCasts</a>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts$.html">TypeTestsCasts</a>
                 </li>
 
                 
@@ -11861,6 +11885,67 @@ unless tree's type already conforms to <code>tp</code>.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="equal(that)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'equal(that)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                equal
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Tree
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Tree</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-equal(that)(ctx)">
+                            <p><code>tree == that</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="existsSubTree(p)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'existsSubTree(p)(ctx)');">[+]</span>
@@ -12165,7 +12250,7 @@ Tree
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isInstance(tp)(ctx)">
-                            <p><code>tree.isInstanceOf[tp]</code></p>
+                            <p><code>tree.isInstanceOf[tp]</code>, with special treatment of singleton types</p>
 
                         </div>
                     </div>
@@ -12398,6 +12483,75 @@ Tree
                     </div>
                 </div><!-- end member -->
                 
+                <div id="outerSelect(levels,tp)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'outerSelect(levels,tp)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                outerSelect
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        levels:
+                                    </span>
+                                    Int
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tp:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Tree</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-outerSelect(levels,tp)(ctx)">
+                            <p>A synthetic select with that will be turned into an outer path by ExplicitOuter.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="select(name)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'select(name)(ctx)');">[+]</span>
@@ -12454,6 +12608,76 @@ Tree
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-select(name)(ctx)">
                             <p>A select node with the given selector name and a computed type</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="select(name,p)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'select(name,p)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                select
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        name:
+                                    </span>
+                                    Name
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        p:
+                                    </span>
+                                    Symbol<span class="right-arrow"> =&gt; </span>Boolean
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Select</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-select(name,p)(ctx)">
+                            <p>A select node with the given selector name such that the designated
+member satisfies predicate <code>p</code>. Useful for disambiguating overloaded members.</p>
 
                         </div>
                     </div>

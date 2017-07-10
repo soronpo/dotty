@@ -5825,14 +5825,38 @@
                 
 
                 
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">PatternMatcher</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">C</a>
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcherOld.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher.html">PatternMatcher</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcherOld.html">PatternMatcherOld</a>
                 </li>
 
                 
@@ -6250,9 +6274,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts.html">T</a>
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts$.html">O</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts.html">TypeTestsCasts</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts$.html">TypeTestsCasts</a>
                 </li>
 
                 
@@ -12331,7 +12355,7 @@ using the most precise overload available</li>
 cases and warnings on other statically known results of <code>isInstanceOf</code>.</p>
 <p>Steps taken:</p>
 <ol>
-<li><code>evalTypeApply</code> will establish the matrix and choose the appropriate
+<li><code>evalTypeTest</code> will establish the matrix and choose the appropriate
 handling for the case:
 <ul>
 <li>Sel/sc is a value class or scrutinee is <code>Any</code></li>
@@ -13040,6 +13064,73 @@ The aim of this transformation is to avoid redundant parameter accessor fields.<
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-PatternMatcher">
+                            <p>The pattern matching transform.
+After this phase, the only Match nodes remaining in the code are simple switches
+where every pattern is an integer constant</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="PatternMatcher$" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'PatternMatcher$');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            object
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcher$.html">PatternMatcher</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-PatternMatcher$">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="PatternMatcherOld" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PatternMatcherOld');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/PatternMatcherOld.html">PatternMatcherOld</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-PatternMatcherOld">
                             <p>This phase rewrites pattern matches.
 FIXME: A more detailed explanation would be good.</p>
 
@@ -14004,9 +14095,9 @@ catch {
                     </div>
                 </div><!-- end member -->
                 
-                <div id="TypeTestsCasts" class="member ">
+                <div id="TypeTestsCasts$" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'TypeTestsCasts');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'TypeTestsCasts$');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -14014,11 +14105,11 @@ catch {
                             
                         </span>
                         <span class="member-kind">
-                            trait
+                            object
                         </span>
                         <span class="member-name ">
                             
-                                <a href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts.html">TypeTestsCasts</a>
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/TypeTestsCasts$.html">TypeTestsCasts</a>
                             
                         </span>
 
@@ -14030,7 +14121,7 @@ catch {
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-TypeTestsCasts">
+                        <div class="member-body-long" id ="long-body-TypeTestsCasts$">
                             <p>This transform normalizes type tests and type casts,
 also replacing type tests with singleton argument type with reference equality check
 Any remaining type tests
