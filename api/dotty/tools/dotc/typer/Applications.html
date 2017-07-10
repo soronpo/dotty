@@ -212,7 +212,9 @@
 </li>
 <li><a href="../../../../.././docs/reference/dropped/xml.html">XML literals</a>
 </li>
-<li><a href="../../../../.././docs/reference/dropped/auto-apply.html">Auto-Application</a></li>
+<li><a href="../../../../.././docs/reference/dropped/auto-apply.html">Auto-Application</a>
+</li>
+<li><a href="../../../../.././docs/reference/dropped/weak-conformance.html">Weak Conformance</a></li>
 </ul>
 </li>
 </ul>
@@ -11326,20 +11328,21 @@ we rely on implicit search to find one.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-harmonize(trees)(ctx)">
                             <p>If <code>trees</code> all have numeric value types, and they do not have all the same type,
-pick a common numeric supertype and convert all trees to this type.</p>
+pick a common numeric supertype and convert all constant trees to this type.
+If the resulting trees all have the same type, return them instead of the original ones.</p>
 
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="harmonizeTypes(tpes)(ctx)" class="member ">
+                <div id="harmonizeTypes(tpes)(ctx)" class="member private">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'harmonizeTypes(tpes)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            private
                         </span>
                         <span class="member-kind">
                             def
@@ -11394,7 +11397,8 @@ pick a common numeric supertype and convert all trees to this type.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-harmonizeTypes(tpes)(ctx)">
                             <p>If all <code>types</code> are numeric value types, and they are not all the same type,
-pick a common numeric supertype and return it instead of every original type.</p>
+pick a common numeric supertype and widen any constant types in <code>tpes</code> to it.
+If the resulting types are all the same, return them instead of the original ones.</p>
 
                         </div>
                     </div>
