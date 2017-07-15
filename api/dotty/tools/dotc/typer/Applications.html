@@ -12210,19 +12210,17 @@ possibly after inserting an <code>apply</code>?</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-pretypeArgs(alts,pt)(ctx)">
                             <p>Try to typecheck any arguments in <code>pt</code> that are function values missing a
-parameter type. The expected type for these arguments is the lub of the
-corresponding formal parameter types of all alternatives. Type variables
-in formal parameter types are replaced by wildcards. The result of the
-typecheck is stored in <code>pt</code>, to be retrieved when its <code>typedArgs</code> are selected.
+parameter type. If the formal parameter types corresponding to a closure argument
+all agree on their argument types, typecheck the argument with an expected
+function or partial function type that contains these argument types,
+The result of the typecheck is stored in <code>pt</code>, to be retrieved when its <code>typedArgs</code> are selected.
 The benefit of doing this is to allow idioms like this:</p>
 <p>def map(f: Char =&gt; Char): String = ???
 def map[U](f: Char =&gt; U): Seq[U] = ???
 map(x =&gt; x.toUpper)</p>
 <p>Without <code>pretypeArgs</code> we'd get a &quot;missing parameter type&quot; error for <code>x</code>.
-With <code>pretypeArgs</code>, we use the union of the two formal parameter types
-<code>Char =&gt; Char</code> and <code>Char =&gt; ?</code> as the expected type of the closure <code>x =&gt; x.toUpper</code>.
-That union is <code>Char =&gt; Char</code>, so we have an expected parameter type <code>Char</code>
-for <code>x</code>, and the code typechecks.</p>
+With <code>pretypeArgs</code>, we use the <code>Char =&gt; ?</code> as the expected type of the
+closure <code>x =&gt; x.toUpper</code>, which makes the code typecheck.</p>
 
                         </div>
                     </div>
