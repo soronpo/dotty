@@ -10769,10 +10769,10 @@ the compiler once it has shown the constraints hold.</p>
 <p>When saying that they have no effect on the runtime we do not only mean side effects
 like IO, field mutation, exceptions and so on. We also imply that if a function receives
 a phantom its result will not be affected by this argument.</p>
-<p>As phantom do not live at runtime they cannot be subtypes of <code>scala.Any</code>, which deffines
+<p>As phantom do not live at runtime they cannot be subtypes of <code>scala.Any</code>, which defines
 methods such as <code>hashCode</code>, <code>equals</code>, <code>getClass</code>, <code>asInstanceOf</code> and <code>isInstanceOf</code>.
 All these operations cannot exist on phantoms as there will not be an underlying object
-instance at runtime. At first glace this could look like a limitation, but in fact not
+instance at runtime. At first glance this could look like a limitation, but in fact not
 having <code>asInstanceOf</code> will make constraints more reliable as it will not be possible to
 downcast a phantom value to fake an evidence.</p>
 <p>If they don't live in the universe bounded by <code>scala.Any</code> and <code>scala.Nothing</code> where do
