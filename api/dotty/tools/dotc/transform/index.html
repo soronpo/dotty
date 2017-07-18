@@ -5874,6 +5874,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PhantomArgLift.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PhantomArgLift.html">PhantomArgLift</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Pickler.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Pickler.html">Pickler</a>
@@ -13135,6 +13153,48 @@ where every pattern is an integer constant</p>
                         <div class="member-body-long" id ="long-body-PatternMatcherOld">
                             <p>This phase rewrites pattern matches.
 FIXME: A more detailed explanation would be good.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="PhantomArgLift" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PhantomArgLift');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/PhantomArgLift.html">PhantomArgLift</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-PhantomArgLift">
+                            <p>This phase extracts the arguments of phantom type before the application to avoid losing any
+effects in the argument tree. This trivializes the removal of parameter in the Erasure phase.</p>
+<p><code>f(x1,...)(y1,...)...(...)</code> with at least one phantom argument</p>
+<p>--&gt;</p>
+<p><code>val ev$f = f</code> // if <code>f</code> is some expression that needs evaluation
+<code>val ev$x1 = x1</code>
+...
+<code>val ev$y1 = y1</code>
+...
+<code>ev$f(ev$x1,...)(ev$y1,...)...(...)</code></p>
 
                         </div>
                     </div>
