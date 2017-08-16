@@ -13702,7 +13702,7 @@ Refinements are typed as if they were members of refinement class <code>refineCl
                 
                 <div id="avoid(tp,symsToAvoid)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'avoid(tp,symsToAvoid)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'avoid(tp,symsToAvoid)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -13766,18 +13766,7 @@ Refinements are typed as if they were members of refinement class <code>refineCl
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-avoid(tp,symsToAvoid)(ctx)">
-                            <p>An upper approximation of the given type <code>tp</code> that does not refer to any symbol in <code>symsToAvoid</code>.
-Approximation steps are:</p>
-<ul>
-<li>follow aliases and upper bounds if the original refers to a forbidden symbol</li>
-<li>widen termrefs that refer to a forbidden symbol</li>
-<li>replace ClassInfos of forbidden classes by the intersection of their parents, refined by all
-non-private fields, methods, and type members.</li>
-<li>if the prefix of a class refers to a forbidden symbol, first try to replace the prefix,
-if this is not possible, replace the ClassInfo as above.</li>
-<li>drop refinements referring to a forbidden symbol.</li>
-</ul>
-
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13917,6 +13906,68 @@ if this is not possible, replace the ClassInfo as above.</li>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-avoidingType(expr,bindings)(ctx)">
                             
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="classBound(info)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'classBound(info)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                classBound
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        info:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/ClassInfo.html">ClassInfo</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-classBound(info)(ctx)">
+                            <p>Given a class info, the intersection of its parents, refined by all
+non-private fields, methods, and type members.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -14241,7 +14292,7 @@ If not, issue an error and return <code>tree1</code>'s type.</p>
                 
                 <div id="reallyExists(denot)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'reallyExists(denot)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'reallyExists(denot)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -14294,7 +14345,8 @@ If not, issue an error and return <code>tree1</code>'s type.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-reallyExists(denot)(ctx)">
-                            
+                            <p>A denotation exists really if it exists and does not point to a stale symbol.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->

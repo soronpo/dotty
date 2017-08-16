@@ -10840,7 +10840,7 @@
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-AsSeenFromMap">
-                            <p>The TypeMap handling the asSeenFrom in more complicated cases</p>
+                            <p>The TypeMap handling the asSeenFrom</p>
 
                         </div>
                     </div>
@@ -11081,96 +11081,7 @@ Symbol
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-asSeenFrom(tp,pre,cls)">
                             <p>The type <code>tp</code> as seen from prefix <code>pre</code> and owner <code>cls</code>. See the spec
-for what this means. Called very often, so the code is optimized heavily.</p>
-<p>A tricky aspect is what to do with unstable prefixes. E.g. say we have a class</p>
-<p>class C { type T; def f(x: T): T }</p>
-<p>and an expression <code>e</code> of type <code>C</code>. Then computing the type of <code>e.f</code> leads
-to the query asSeenFrom(<code>C</code>, <code>(x: T)T</code>). What should its result be? The
-naive answer <code>(x: C#T)C#T</code> is incorrect given that we treat <code>C#T</code> as the existential
-<code>exists(c: C)c.T</code>. What we need to do instead is to skolemize the existential. So
-the answer would be <code>(x: c.T)c.T</code> for some (unknown) value <code>c</code> of type <code>C</code>.
-<code>c.T</code> is expressed in the compiler as a skolem type <code>Skolem(C)</code>.</p>
-<p>Now, skolemization is messy and expensive, so we want to do it only if we absolutely
-must. Also, skolemizing immediately would mean that asSeenFrom was no longer
-idempotent - each call would return a type with a different skolem.
-Instead we produce an annotated type that marks the prefix as unsafe:</p>
-<p>(x: (C @ UnsafeNonvariant)#T)C#T</p>
-<p>We also set a global state flag <code>unsafeNonvariant</code> to the current run.
-When typing a Select node, typer will check that flag, and if it
-points to the current run will scan the result type of the select for</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="asSeenFrom(tp,pre,cls,theMap)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'asSeenFrom(tp,pre,cls,theMap)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                asSeenFrom
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tp:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        pre:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        cls:
-                                    </span>
-                                    Symbol
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        theMap:
-                                    </span>
-                                    AsSeenFromMap
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-asSeenFrom(tp,pre,cls,theMap)">
-                            <p>Helper method, taking a map argument which is instantiated only for more
-complicated cases of asSeenFrom.</p>
+for what this means.</p>
 
                         </div>
                     </div>
