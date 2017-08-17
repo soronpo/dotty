@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-08-16 -->
+<!-- This page was last generated on 2017-08-17 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10828,7 +10828,7 @@ phantom universes. We can define our phantom universe <code>MyPhantoms</code>.</
 trait Phantom { // only an `object` can extend this trait
   protected final type Any // not a subtype of scala.Any
   protected final type Nothing // subtype of every subtype of this.Any
-  protected final def assume: this.Nothig
+  protected final def assume: this.Nothing
 }
 </code></pre>
 <p>The types in the phantom universe are defined by the top type <code>Phantom.Any</code> and bottom type
@@ -10840,7 +10840,7 @@ will be inferred), this would be the equivalent of <code>class XYZ extends Other
 only (no runtime definitions). Or aliased with <code>type MyAny = OtherPhantom</code>. Within <code>MyPhantoms</code>
 it is possible to refer to <code>MyPhantoms.Any</code> and <code>MyPhantoms.Nothing</code> with <code>this.Any</code> and
 <code>this.Nothing</code> (or just <code>Any</code> and <code>Nothing</code> but not recommended). Using this we will define
-four the four phantoms: <code>Inky</code>, <code>Blinky</code>, <code>Pinky</code> and <code>Clyde</code>.</p>
+the four phantoms: <code>Inky</code>, <code>Blinky</code>, <code>Pinky</code> and <code>Clyde</code>.</p>
 <pre><code class="language-scala">object MyPhantoms extends Phantom {
   type Inky &lt;: this.Any
   type Blinky &lt;: this.Any
@@ -10849,7 +10849,7 @@ four the four phantoms: <code>Inky</code>, <code>Blinky</code>, <code>Pinky</cod
 }
 </code></pre>
 <p>Values of phantom type can be created using the <code>protected def assume</code>. This value can be
-used as a value of this phantom type as it's type is <code>this.Nothig</code> (or <code>MyPhantoms.Nothing</code>).
+used as a value of this phantom type as it's type is <code>this.Nothing</code> (or <code>MyPhantoms.Nothing</code>).
 Usually this value will be used to define a <code>implicit def</code> that returns the phantom with a more
 precise type. In our example we will only create values of type <code>Pinky</code> and <code>Clyde</code></p>
 <pre><code class="language-scala">object MyPhantoms extends Phantom {
@@ -10860,7 +10860,7 @@ precise type. In our example we will only create values of type <code>Pinky</cod
 }
 </code></pre>
 <h3><a href="#using-the-phantoms" id="using-the-phantoms">Using the phantoms</a></h3>
-<p>From the user of the phantom type there is almost no difference, except for stronger type guarantees.
+<p>For the user of the phantom type there is almost no difference, except for stronger type guarantees.
 We can look at the following simple application:</p>
 <pre><code class="language-scala">import MyPhantoms._
 object MyApp {
@@ -10871,7 +10871,7 @@ object MyApp {
   run(clyde)
 }
 </code></pre>
-<p>Note given the way we defined the phantoms it is impossible to call the <code>hide</code> as we did not
+<p>Note that given the way we defined the phantoms it is impossible to call <code>hide</code> as we did not
 expose any value of type <code>Blinky</code> to the user. We cannot call <code>hide(MyPhantoms.assume)</code> as
 <code>assume</code> is protected, <code>hide(null.asInstanceOf[Blinky])</code> does not compile because it is impossible
 to cast to a phantom and <code>hide(throw new Exception)</code> (or <code>hide(???)</code>) does not compile as <code>throw</code> of
