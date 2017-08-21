@@ -10773,7 +10773,7 @@
 
 
     <script>
-        document.title = "Dotty Docs - TypeAccumulator"
+        document.title = "Dotty Docs - VariantTraversal"
     </script>
 
     <div id="content-body">
@@ -10789,38 +10789,17 @@
                     class
                 </span>
                 <span id="entity-name">
-                    TypeAccumulator
+                    VariantTraversal
                 </span>
                 
-                <span id="entity-type-params">
-                    <span class="no-left">[</span>
-                    
-                    <span class="no-left">
-                        
-                            T
-                        
-                    </span>
-                    
-                    <span class="no-left">]</span>
-                </span>
-                
-                
-                <div id="super-types">
-                    
-                    
-                    <span class="keyword">extends</span>
-                    
-                    <span class="entity-super-type">VariantTraversal</span>
-                    
-                    
-                    <span class="keyword">with</span>
-                    
-                    <span class="entity-super-type">Function2</span>
-                    
-                </div>
                 
             </div>
 
+            
+            <div id="entity-body" class="entity-section">
+                <p>Common base class of TypeMap and TypeAccumulator</p>
+
+            </div>
             
 
             <h1 class="section ">
@@ -10833,27 +10812,9 @@
                     
                     <div class="member">
                         <div class="member-title">
-                            <span class="member-name">TypeAccumulator</span>
+                            <span class="member-name">VariantTraversal</span>
                             <span class="no-left">(</span>
                                 
-                                
-                            <span class="no-left">)</span>
-                        </div>
-                    </div>
-                    
-                    <div class="member">
-                        <div class="member-title">
-                            <span class="member-name">TypeAccumulator</span>
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
                                 
                             <span class="no-left">)</span>
                         </div>
@@ -10862,105 +10823,16 @@
                 
             </div>
 
-            <h1 class="section ">
+            <h1 class="section empty">
               <span class="expand-button visible" onclick="toggleMembersBody(this, 'members');">[-]</span>
                 Members
             </h1>
 
-            <div id="entity-members" class="entity-section ">
+            <div id="entity-members" class="entity-section empty">
                 
-                <div id="ctx" class="member protected">
+                <div id="variance" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'ctx');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            protected implicit
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                ctx
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Context</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-ctx">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="apply(x,tp)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'apply(x,tp)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                apply
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x:
-                                    </span>
-                                    T
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        tp:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: T</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-apply(x,tp)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="applyToAnnot(x,annot)" class="member protected">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'applyToAnnot(x,annot)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'variance');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -10968,11 +10840,45 @@
                             protected
                         </span>
                         <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                variance
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-variance">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="atVariance(v)(op)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'atVariance(v)(op)');">[+]</span>
+                        <span class="member-annotations">
+                            @Body @inline 
+                        </span>
+                        <span class="member-modifiers">
+                            protected inline
+                        </span>
+                        <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                applyToAnnot
+                                atVariance
                             
                         </span>
 
@@ -10982,17 +10888,20 @@
                                 
                                 
                                     <span class="no-left">
-                                        x:
+                                        v:
                                     </span>
-                                    T
-                                    
-                                        <span class="no-left">, </span>
+                                    Int
                                     
                                 
-                                    <span class="">
-                                        annot:
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        op: =&gt;
                                     </span>
-                                    Annotation
+                                    T
                                     
                                 
                             <span class="no-left">)</span>
@@ -11007,27 +10916,27 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-applyToAnnot(x,annot)">
+                        <div class="member-body-long" id ="long-body-atVariance(v)(op)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="applyToPrefix(x,tp)" class="member protected">
+                <div id="variance_=(x$1)" class="member protected">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'applyToPrefix(x,tp)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'variance_=(x$1)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            protected final
+                            protected <accessor>
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                applyToPrefix
+                                variance_=
                             
                         </span>
 
@@ -11037,17 +10946,9 @@
                                 
                                 
                                     <span class="no-left">
-                                        x:
+                                        x$1:
                                     </span>
-                                    T
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        tp:
-                                    </span>
-                                    NamedType
+                                    Int
                                     
                                 
                             <span class="no-left">)</span>
@@ -11057,159 +10958,12 @@
                         
 
                         
-                        <span class="no-left">: T</span>
+                        <span class="no-left">: Unit</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-applyToPrefix(x,tp)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="foldOver(x,tp)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'foldOver(x,tp)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                foldOver
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x:
-                                    </span>
-                                    T
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        tp:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: T</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-foldOver(x,tp)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="foldOver(x,ts)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'foldOver(x,ts)');">[+]</span>
-                        <span class="member-annotations">
-                            @tailrec 
-                        </span>
-                        <span class="member-modifiers">
-                            final
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                foldOver
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x:
-                                    </span>
-                                    T
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        ts:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: T</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-foldOver(x,ts)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="stopAtStatic" class="member protected">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'stopAtStatic');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            protected
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                stopAtStatic
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-stopAtStatic">
+                        <div class="member-body-long" id ="long-body-variance_=(x$1)">
                             
                         </div>
                     </div>
