@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-11 -->
+<!-- This page was last generated on 2017-09-12 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11186,7 +11186,7 @@ of any structural type using Java reflection. This is similar to the
 current implementation of structural types. The main difference is
 that to get reflection-based structural access one now has to add an
 import:</p>
-<pre><code>import scala.relect.Selectable.reflectiveSelectable
+<pre><code>import scala.reflect.Selectable.reflectiveSelectable
 </code></pre>
 <p>On the other hand, the previously required language feature import of
 <code>reflectiveCalls</code> is now redundant and is therefore dropped.</p>
@@ -11207,7 +11207,7 @@ its value.</p>
 <p>For illustration, let's define a record value and cast it to a
 structural type <code>Person</code>:</p>
 <pre><code>type Person = Record { val name: String; val age: Int }
-val person = Record((&quot;name&quot; -&gt; &quot;Emma&quot;, &quot;age&quot; -&gt; 42)).asInstanceOf[Person]
+val person = Record(&quot;name&quot; -&gt; &quot;Emma&quot;, &quot;age&quot; -&gt; 42).asInstanceOf[Person]
 </code></pre>
 <p>Then <code>person.name</code> will have static type <code>String</code>, and will produce <code>&quot;Emma&quot;</code> as result.</p>
 <p>The safety of this scheme relies on the correctness of the cast. If
