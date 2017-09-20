@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-19 -->
+<!-- This page was last generated on 2017-09-20 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -1167,6 +1167,24 @@
 
             
                 
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/classpath/FileBasedCache.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/classpath/FileBasedCache.html">FileBasedCache</a>
+                </li>
+
+                
+
                  <!-- end != "package" -->
 
             
@@ -11393,8 +11411,14 @@ ClassRepresentation
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-findClass(className)">
-                            <p>It returns both classes from class file and source files (as our base ClassRepresentation).
-So note that it's not so strictly related to findClassFile.</p>
+                            <p>Returns the class file and / or source file for a given external name, e.g., &quot;java.lang.String&quot;.
+If there is both a class file and source file, the compiler can decide whether to read the
+class file or compile the source file.</p>
+<p>Internally this seems to be used only by <code>ScriptRunner</code>, but only to call <code>.isDefined</code>. That
+could probably be implemented differently.</p>
+<p>Externally, it is used by sbt's compiler interface:
+<a href="https://github.com/sbt/sbt/blob/v0.13.15/compile/interface/src/main/scala/xsbt/CompilerInterface.scala#L249">https://github.com/sbt/sbt/blob/v0.13.15/compile/interface/src/main/scala/xsbt/CompilerInterface.scala#L249</a>
+Jason has some improvements for that in the works (<a href="https://github.com/scala/bug/issues/10289#issuecomment-310022699">https://github.com/scala/bug/issues/10289#issuecomment-310022699</a>)</p>
 
                         </div>
                     </div>
