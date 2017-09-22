@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11198,6 +11216,11 @@
                     
                     <span class="keyword">extends</span>
                     
+                    <span class="entity-super-type">Object</span>
+                    
+                    
+                    <span class="keyword">with</span>
+                    
                     <span class="entity-super-type">SpaceLogic</span>
                     
                 </div>
@@ -11748,9 +11771,9 @@ Space
                     </div>
                 </div><!-- end member -->
                 
-                <div id="expose(tp)" class="member ">
+                <div id="expose(tp,refineCtx,up)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expose(tp)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'expose(tp,refineCtx,up)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11776,6 +11799,22 @@ Space
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        refineCtx:
+                                    </span>
+                                    Boolean
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        up:
+                                    </span>
+                                    Boolean
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -11789,12 +11828,9 @@ Space
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-expose(tp)">
-                            <p>Expose refined type to eliminate reference to type variables</p>
-<p>A = B                      M { type T = A }        ~~&gt;  M { type T = B }</p>
-<p>A &lt;: X :&gt; Y                M { type T = A }        ~~&gt;  M { type T &lt;: X :&gt; Y }</p>
+                        <div class="member-body-long" id ="long-body-expose(tp,refineCtx,up)">
+                            <p>Eliminate reference to type parameters in refinements</p>
 <p>A &lt;: X :&gt; Y  B &lt;: U :&gt; V   M { type T &lt;: A :&gt; B }  ~~&gt;  M { type T &lt;: X :&gt; V }</p>
-<p>A = X  B = Y               M { type T &lt;: A :&gt; B }  ~~&gt;  M { type T &lt;: X :&gt; Y }</p>
 
                         </div>
                     </div>
@@ -11849,6 +11885,78 @@ Space
 (this is currently true due to both isSubType and and/or type simplification)</li>
 </ul>
 <p>See [[intersectUnrelatedAtomicTypes]].</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="instantiate(tp1,tp2)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'instantiate(tp1,tp2)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                instantiate
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp1:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tp2:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-instantiate(tp1,tp2)(ctx)">
+                            <p>Instantiate type <code>tp1</code> to be a subtype of <code>tp2</code></p>
+<p>Return the instantiated type if type parameters and this type
+in <code>tp1</code> can be instantiated such that <code>tp1 &lt;:&lt; tp2</code>.</p>
+<p>Otherwise, return NoType.</p>
 
                         </div>
                     </div>
@@ -12170,9 +12278,9 @@ should be a subtype of the other).</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="refine(tp1,tp2)" class="member ">
+                <div id="refine(parent,child)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'refine(tp1,tp2)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'refine(parent,child)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12194,7 +12302,7 @@ should be a subtype of the other).</p>
                                 
                                 
                                     <span class="no-left">
-                                        tp1:
+                                        parent:
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
                                     
@@ -12202,9 +12310,9 @@ should be a subtype of the other).</p>
                                     
                                 
                                     <span class="">
-                                        tp2:
+                                        child:
                                     </span>
-                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
                                     
                                 
                             <span class="no-left">)</span>
@@ -12219,12 +12327,21 @@ should be a subtype of the other).</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-refine(tp1,tp2)">
-                            <p>Refine tp2 based on tp1</p>
-<p>E.g. if <code>tp1</code> is <code>Option[Int]</code>, <code>tp2</code> is <code>Some</code>, then return
-<code>Some[Int]</code>.</p>
-<p>If <code>tp1</code> is <code>path1.A</code>, <code>tp2</code> is <code>path2.B</code>, and <code>path1</code> is subtype of
-<code>path2</code>, then return <code>path1.B</code>.</p>
+                        <div class="member-body-long" id ="long-body-refine(parent,child)">
+                            <p>Refine child based on parent</p>
+<p>In child class definition, we have:</p>
+<pre><code>class Child[Ts] extends path.Parent[Us] with Es
+object Child extends path.Parent[Us] with Es
+val child = new path.Parent[Us] with Es           // enum values
+</code></pre>
+<p>Given a parent type <code>parent</code> and a child symbol <code>child</code>, we infer the prefix
+and type parameters for the child:</p>
+<pre><code>prefix.child[Vs] &lt;:&lt; parent
+</code></pre>
+<p>where <code>Vs</code> are fresh type variables and <code>prefix</code> is the symbol prefix with all
+non-module and non-package <code>ThisType</code> replaced by fresh type variables.</p>
+<p>If the subtyping is true, the instantiated type <code>p.child[Vs]</code> is
+returned. Otherwise, <code>NoType</code> is returned.</p>
 
                         </div>
                     </div>

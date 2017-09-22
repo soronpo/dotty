@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11231,7 +11249,7 @@
       |              +- TypeParamRef
       |              +- RefinedOrRecType -+-- RefinedType
       |              |                   -+-- RecType
-      |              +- HKApply
+      |              +- AppliedType
       |              +- TypeBounds
       |              +- ExprType
       |              +- AnnotatedType
@@ -11594,13 +11612,8 @@ TypeSymbol
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-EtaExpand(tparams)(ctx)">
-                            <p>Convert a type constructor <code>TC</code> which has type parameters <code>T1, ..., Tn</code>
-in a context where type parameters <code>U1,...,Un</code> are expected to</p>
-<p>LambdaXYZ { Apply = TC[hk$0, ..., hk$n] }</p>
-<p>Here, XYZ corresponds to the variances of
-- <code>U1,...,Un</code> if the variances of <code>T1,...,Tn</code> are pairwise compatible with <code>U1,...,Un</code>,
-- <code>T1,...,Tn</code> otherwise.
-v1 is compatible with v2, if v1 = v2 or v2 is non-variant.</p>
+                            <p>Convert a type constructor <code>TC</code> which has type parameters <code>X1, ..., Xn</code>
+to <code>[X1, ..., Xn] -&gt; TC[X1, ..., Xn]</code>.</p>
 
                         </div>
                     </div>
@@ -11920,6 +11933,66 @@ Type
                     </div>
                 </div><!-- end member -->
                 
+                <div id="appliedTo(arg)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                appliedTo
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        arg:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-appliedTo(arg)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="appliedTo(arg1,arg2)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg1,arg2)(ctx)');">[+]</span>
@@ -11983,66 +12056,6 @@ Type
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-appliedTo(arg1,arg2)(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="appliedTo(arg)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                appliedTo
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        arg:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-appliedTo(arg)(ctx)">
                             
                         </div>
                     </div>
@@ -12446,266 +12459,6 @@ declared in class <code>cls</code>.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="baseArgInfos(base)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseArgInfos(base)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                baseArgInfos
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        base:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseArgInfos(base)(ctx)">
-                            <p>The type arguments of this type's base type instance wrt. <code>base</code>.
-Existential types in arguments are returned as TypeBounds instances.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="baseArgTypes(base)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseArgTypes(base)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                baseArgTypes
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        base:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseArgTypes(base)(ctx)">
-                            <p>The type arguments of this type's base type instance wrt.<code>base</code>.
-Existential types in arguments are disallowed.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="baseArgTypesHi(base)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseArgTypesHi(base)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                baseArgTypesHi
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        base:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseArgTypesHi(base)(ctx)">
-                            <p>The type arguments of this type's base type instance wrt.<code>base</code>.
-Existential types in arguments are approximated by their upper bound.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="baseArgTypesLo(base)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseArgTypesLo(base)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                baseArgTypesLo
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        base:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseArgTypesLo(base)(ctx)">
-                            <p>The type arguments of this type's base type instance wrt.<code>base</code>.
-Existential types in arguments are approximated by their lower bound.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="baseClasses(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseClasses(ctx)');">[+]</span>
@@ -12762,9 +12515,9 @@ Inherited by all type proxies. Overridden for And and Or types.
                     </div>
                 </div><!-- end member -->
                 
-                <div id="baseTypeRef(base)(ctx)" class="member ">
+                <div id="baseType(base)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseTypeRef(base)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseType(base)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12776,7 +12529,7 @@ Inherited by all type proxies. Overridden for And and Or types.
                         </span>
                         <span class="member-name ">
                             
-                                baseTypeRef
+                                baseType
                             
                         </span>
 
@@ -12816,73 +12569,8 @@ Inherited by all type proxies. Overridden for And and Or types.
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseTypeRef(base)(ctx)">
-                            <p>The basetype TypeRef of this type with given class symbol,
-but without including any type arguments</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="baseTypeWithArgs(base)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseTypeWithArgs(base)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                baseTypeWithArgs
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        base:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-baseTypeWithArgs(base)(ctx)">
-                            <p>The base type including all type arguments and applicable refinements
-of this type. Refinements are applicable if they refine a member of
-the parent type which furthermore is not a name-mangled type parameter.
-Existential types in arguments are returned as TypeBounds instances.</p>
+                        <div class="member-body-long" id ="long-body-baseType(base)(ctx)">
+                            <p>The basetype of this type with given class symbol, NoType is <code>base</code> is not a class.</p>
 
                         </div>
                     </div>
@@ -14185,7 +13873,7 @@ Type
                         
 
                         
-                        <span class="no-left">: TypeRef</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
@@ -14383,56 +14071,6 @@ Type
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-frozen_<:<(that)(ctx)">
                             <p>Is this type a subtype of that type?</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="givenSelfType(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'givenSelfType(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                givenSelfType
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-givenSelfType(ctx)">
-                            <p>the self type of the underlying classtype</p>
 
                         </div>
                     </div>
@@ -15133,55 +14771,6 @@ TermRef
                     </div>
                 </div><!-- end member -->
                 
-                <div id="isInfixType(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isInfixType(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                isInfixType
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isInfixType(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="isNotNull(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isNotNull(ctx)');">[+]</span>
@@ -15652,6 +15241,56 @@ to the given type symbol?</p>
                         <div class="member-body-long" id ="long-body-isTightPrefix(sym)(ctx)">
                             <p>Does this type refer exactly to class symbol <code>sym</code>, instead of to a subclass of <code>sym</code>?
 Implemented like <code>isRef</code>, but follows more types: all type proxies as well as and- and or-types</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isTopType(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isTopType(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isTopType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isTopType(ctx)">
+                            <p>Is this type exactly Any (no vars, aliases, refinements etc allowed)?</p>
 
                         </div>
                     </div>
@@ -17461,68 +17100,13 @@ TermName
                         
                         <span class="no-left">: List
 <span class="no-left no-right">[</span>
-TypeRef
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-parents(ctx)">
-                            <p>For a ClassInfo type, its parents,
-Inherited by all type proxies. Empty for all other types.
-Overwritten in ClassInfo, where parents is cached.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="parentsWithArgs(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'parentsWithArgs(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                parentsWithArgs
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
 Type
 <span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-parentsWithArgs(ctx)">
+                        <div class="member-body-long" id ="long-body-parents(ctx)">
                             <p>The full parent types, including all type arguments</p>
 
                         </div>
@@ -17576,6 +17160,67 @@ Type
                             <p>Returns the type of the phantom lattice (i.e. the prefix of the phantom type)
 - XYZ if XYZ extends scala.Phantom and this type is upper bounded XYZ.Any
 - NoType otherwise</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="recoverable_&(that)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'recoverable_&(that)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                recoverable_&
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-recoverable_&(that)(ctx)">
+                            <p><code>this &amp; that</code>, but handle CyclicReferences by falling back to <code>safe_&amp;</code>.</p>
 
                         </div>
                     </div>
@@ -17914,11 +17559,12 @@ Scala2 files such as <code>scala.collection.generic.Mapfactory</code>.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-safe_&(that)(ctx)">
                             <p>Safer version of <code>&amp;</code>.</p>
-<p>This version does not simplify the upper bound of the intersection of
+<p>This version does not simplify the bounds of the intersection of
 two TypeBounds. The simplification done by <code>&amp;</code> requires subtyping checks
 which may end up calling <code>&amp;</code> again, in most cases this should be safe
 but because of F-bounded types, this can result in an infinite loop
-(which will be masked unless <code>-Yno-deep-subtypes</code> is enabled).</p>
+(which will be masked unless <code>-Yno-deep-subtypes</code> is enabled).
+pos/i536 demonstrates that the infinite loop can also involve lower bounds.</p>
 
                         </div>
                     </div>
@@ -18109,7 +17755,7 @@ but because of F-bounded types, this can result in an infinite loop
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-select(sym)(ctx)">
-                            <p>The type &lt;this . name&gt; with given symbol, reduced if possible</p>
+                            <p>The type &lt;this . name&gt; with either <code>sym</code> or its signed name as designator, reduced if possible</p>
 
                         </div>
                     </div>
@@ -18222,7 +17868,7 @@ with the proxy type itself.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-signature(ctx)">
                             <p>The signature of this type. This is by default NotAMethod,
-but is overridden for PolyTypes, MethodTypes, and TermRefWithSignature types.
+but is overridden for PolyTypes, MethodTypes, and TermRef types.
 (the reason why we deviate from the &quot;final-method-with-pattern-match-in-base-class&quot;
 pattern is that method signatures use caching, so encapsulation
 is improved using an OO scheme).</p>
@@ -19138,9 +18784,9 @@ Symbol
                     </div>
                 </div><!-- end member -->
                 
-                <div id="toBounds(tparam)(ctx)" class="member ">
+                <div id="toBounds(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toBounds(tparam)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toBounds(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -19157,17 +18803,6 @@ Symbol
                         </span>
 
                         
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tparam:
-                                    </span>
-                                    ParamInfo
-                                    
-                                
-                            <span class="no-left">)</span>
                             
                             <span class="no-left">(</span>
                                 
@@ -19192,9 +18827,8 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toBounds(tparam)(ctx)">
-                            <p>Turn this type, which is used as an argument for
-type parameter <code>tparam</code>, into a TypeBounds RHS</p>
+                        <div class="member-body-long" id ="long-body-toBounds(ctx)">
+                            <p>Turns non-bounds types to type aliases</p>
 
                         </div>
                     </div>
@@ -19432,6 +19066,56 @@ Do the same for by name types =&gt; From[T] and =&gt; To[T]</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="typeConstructor(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typeConstructor(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            final
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typeConstructor
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typeConstructor(ctx)">
+                            <p>The type constructor of an applied type, otherwise the type itself</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="typeMembers(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'typeMembers(ctx)');">[+]</span>
@@ -19654,12 +19338,7 @@ For a typeref referring to a class, the type parameters of the class.
 For a typeref referring to a Lambda class, the type parameters of
 its right hand side or upper bound.
 For a refinement type, the type parameters of its parent, dropping
-any type parameter that is-rebound by the refinement. &quot;Re-bind&quot; means:
-The refinement contains a TypeAlias for the type parameter, or
-it introduces bounds for the type parameter, and we are not in the
-special case of a type Lambda, where a LambdaTrait gets refined
-with the bounds on its hk args. See <code>LambdaAbstract</code>, where these
-types get introduced, and see <code>isBoundedLambda</code> below for the test.</p>
+any type parameter that is-rebound by the refinement.</p>
 
                         </div>
                     </div>
@@ -20342,57 +20021,6 @@ Any remaining union types are replaced by their joins.</p>
 </code></pre>
 <p>is approximated by constraining <code>A</code> to be =:= to <code>Int</code> and returning <code>ArrayBuffer[Int]</code>
 instead of <code>ArrayBuffer[_ &gt;: Int | A &lt;: Int &amp; A]</code></p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="withoutArgs(typeArgs)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withoutArgs(typeArgs)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                withoutArgs
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        typeArgs:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-withoutArgs(typeArgs)">
-                            <p>The core type without any type arguments.</p>
 
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11173,7 +11191,7 @@
 
 
     <script>
-        document.title = "Dotty Docs - TermRefWithSignature"
+        document.title = "Dotty Docs - TypeArgRef"
     </script>
 
     <div id="content-body">
@@ -11183,13 +11201,13 @@
                     
                 </span>
                 <span id="entity-modifiers">
-                    final
+                    abstract
                 </span>
                 <span id="entity-kind">
-                    class
+                    case class
                 </span>
                 <span id="entity-name">
-                    TermRefWithSignature
+                    TypeArgRef
                 </span>
                 
                 
@@ -11198,12 +11216,28 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">TermRef</span>
+                    <span class="entity-super-type">CachedProxyType</span>
+                    
+                    
+                    <span class="keyword">with</span>
+                    
+                    <span class="entity-super-type">ValueType</span>
+                    
+                    
+                    <span class="keyword">with</span>
+                    
+                    <span class="entity-super-type">Product</span>
                     
                 </div>
                 
             </div>
 
+            
+            <div id="entity-body" class="entity-section">
+                <p>A reference to wildcard argument <code>p.&lt;parameter X of class C&gt;</code>
+where <code>p: C[... _ ...]</code></p>
+
+            </div>
             
 
             <h1 class="section ">
@@ -11216,7 +11250,7 @@
                     
                     <div class="member">
                         <div class="member-title">
-                            <span class="member-name">TermRefWithSignature</span>
+                            <span class="member-name">TypeArgRef</span>
                             <span class="no-left">(</span>
                                 
                                 
@@ -11229,17 +11263,17 @@
                                     
                                 
                                     <span class="">
-                                        name:
+                                        clsRef:
                                     </span>
-                                    TermName
+                                    TypeRef
                                     
                                         <span class="no-left">, </span>
                                     
                                 
                                     <span class="">
-                                        sig:
+                                        idx:
                                     </span>
-                                    Signature
+                                    Int
                                     
                                 
                             <span class="no-left">)</span>
@@ -11256,21 +11290,21 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="name" class="member private">
+                <div id="clsRef" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'name');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'clsRef');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private
+                            
                         </span>
                         <span class="member-kind">
                             val
                         </span>
                         <span class="member-name ">
                             
-                                name
+                                clsRef
                             
                         </span>
 
@@ -11279,25 +11313,59 @@
                         
 
                         
-                        <span class="no-left">: TermName</span>
+                        <span class="no-left">: TypeRef</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-name">
+                        <div class="member-body-long" id ="long-body-clsRef">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="prefix" class="member private">
+                <div id="idx" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'idx');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                idx
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-idx">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="prefix" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'prefix');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private
+                            
                         </span>
                         <span class="member-kind">
                             val
@@ -11324,21 +11392,21 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="sig" class="member ">
+                <div id="underlyingCache" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'sig');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'underlyingCache');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            override
+                            private
                         </span>
                         <span class="member-kind">
-                            val
+                            var
                         </span>
                         <span class="member-name ">
                             
-                                sig
+                                underlyingCache
                             
                         </span>
 
@@ -11347,12 +11415,46 @@
                         
 
                         
-                        <span class="no-left">: Signature</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-sig">
+                        <div class="member-body-long" id ="long-body-underlyingCache">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="underlyingCachePeriod" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'underlyingCachePeriod');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                underlyingCachePeriod
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Period</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-underlyingCachePeriod">
                             
                         </div>
                     </div>
@@ -11392,136 +11494,21 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="equals(that)" class="member ">
+                <div id="computeUnderlying(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'equals(that)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'computeUnderlying(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            override
+                            
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                equals
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        that:
-                                    </span>
-                                    Any
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-equals(that)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="fixDenot(candidate,prefix)(ctx)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'fixDenot(candidate,prefix)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                fixDenot
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        candidate:
-                                    </span>
-                                    TermRef
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        prefix:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TermRef</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-fixDenot(candidate,prefix)(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="loadDenot(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'loadDenot(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                loadDenot
+                                computeUnderlying
                             
                         </span>
 
@@ -11545,32 +11532,32 @@
                         
 
                         
-                        <span class="no-left">: Denotation</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-loadDenot(ctx)">
+                        <div class="member-body-long" id ="long-body-computeUnderlying(ctx)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="newLikeThis(prefix)(ctx)" class="member ">
+                <div id="derivedTypeArgRef(prefix)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newLikeThis(prefix)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'derivedTypeArgRef(prefix)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            override
+                            
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                newLikeThis
+                                derivedTypeArgRef
                             
                         </span>
 
@@ -11605,21 +11592,20 @@
                         
 
                         
-                        <span class="no-left">: TermRef</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-newLikeThis(prefix)(ctx)">
-                            <p>Create a NamedType of the same kind as this type, but with a new prefix.</p>
-
+                        <div class="member-body-long" id ="long-body-derivedTypeArgRef(prefix)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="shadowed(ctx)" class="member ">
+                <div id="underlying(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'shadowed(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'underlying(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11631,7 +11617,7 @@
                         </span>
                         <span class="member-name ">
                             
-                                shadowed
+                                underlying
                             
                         </span>
 
@@ -11655,119 +11641,14 @@
                         
 
                         
-                        <span class="no-left">: NamedType</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-shadowed(ctx)">
-                            <p>Create a NamedType of the same kind as this type, but with a &quot;inherited name&quot;.
-This is necessary to in situations like the following:</p>
-<p>class B { def m: T1 }
-class C extends B { private def m: T2; ... C.m }
-object C extends C
-object X { ... C.m }</p>
-<p>The two references of C.m in class C and object X refer to different
-definitions: The one in C refers to C#m whereas the one in X refers to B#m.
-But the type C.m must have only one denotation, so it can't refer to two
-members depending on context.</p>
-<p>In situations like this, the reference in X would get the type
-<code>&lt;C.m&gt;.shadowed</code> to make clear that we mean the inherited member, not
-the private one.</p>
-<p>Note: An alternative, possibly more robust scheme would be to give
-private members special names. A private definition would have a special
-name (say m' in the example above), but would be entered in its enclosing
-under both private and public names, so it could still be found by looking up
-the public name.</p>
+                        <div class="member-body-long" id ="long-body-underlying(ctx)">
+                            <p>The type to which this proxy forwards operations.</p>
 
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="signature(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'signature(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                signature
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Signature</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-signature(ctx)">
-                            <p>The signature of this type. This is by default NotAMethod,
-but is overridden for PolyTypes, MethodTypes, and TermRefWithSignature types.
-(the reason why we deviate from the &quot;final-method-with-pattern-match-in-base-class&quot;
-pattern is that method signatures use caching, so encapsulation
-is improved using an OO scheme).</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="toString" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                toString
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: String</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toString">
-                            
                         </div>
                     </div>
                 </div><!-- end member -->

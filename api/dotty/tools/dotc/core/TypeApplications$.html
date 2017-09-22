@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11193,6 +11211,15 @@
                 </span>
                 
                 
+                <div id="super-types">
+                    
+                    
+                    <span class="keyword">extends</span>
+                    
+                    <span class="entity-super-type">Object</span>
+                    
+                </div>
+                
             </div>
 
             
@@ -11212,41 +11239,6 @@
             </h1>
 
             <div id="entity-members" class="entity-section ">
-                
-                <div id="AppliedType$" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'AppliedType$');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            object
-                        </span>
-                        <span class="member-name ">
-                            
-                                <a href="../../../../.././api/dotty/tools/dotc/core/TypeApplications$/AppliedType$.html">AppliedType</a>
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-AppliedType$">
-                            <p>Extractor for type application T[U_1, ..., U_n]. This is the refined type</p>
-<p>T { type p_1 v_1= U_1; ...; type p_n v_n= U_n }</p>
-<p>where v_i, p_i are the variances and names of the type parameters of T.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
                 
                 <div id="EtaExpansion$" class="member ">
                     <div class="member-title">
@@ -11318,26 +11310,23 @@ Non-wildcard arguments are substituted everywhere as usual. A wildcard argument
 <ol>
 <li>
 <p>If Mode.AllowLambdaWildcardApply is set:
-The wildcard argument is substituted only if <code>X</code> appears in a toplevel refinement of the form</p>
-<p>{ type A = X }</p>
+The wildcard argument is substituted only if <code>X</code> appears in a toplevel application of the form</p>
+<p>C[..., X, ...]</p>
 </li>
 </ol>
 <p>and there are no other occurrences of <code>X</code> in the reduced type. In that case
 the refinement above is replaced by</p>
-<pre><code>  { type A &gt;: L &lt;: U }
+<pre><code>  C[..., _ &gt;: L &lt;: H, ...]
 </code></pre>
 <p>The <code>allReplaced</code> field indicates whether all occurrences of type lambda parameters
 in the reduced type have been replaced with arguments.</p>
 <ol>
 <li>
 <p>If Mode.AllowLambdaWildcardApply is not set:
-All refinements of the form</p>
-<p>{ type A = X }</p>
+All <code>X</code> arguments are replaced by:</p>
+<p>_ &gt;: L &lt;: H</p>
 </li>
 </ol>
-<p>are replaced by:</p>
-<pre><code>  { type A &gt;: L &lt;: U }
-</code></pre>
 <p>Any other occurrence of <code>X</code> in <code>tycon</code> is replaced by <code>U</code>, if the
 occurrence of <code>X</code> in <code>tycon</code> is covariant, or nonvariant, or by <code>L</code>,
 if the occurrence is contravariant.</p>
@@ -11392,111 +11381,6 @@ TypeName
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-TypeParamInfo">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="boundsToHi" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'boundsToHi');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                boundsToHi
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type<span class="right-arrow"> =&gt; </span>Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-boundsToHi">
-                            <p>If <code>tp</code> is a TypeBounds instance return its upper bound else return <code>tp</code></p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="boundsToLo" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'boundsToLo');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                boundsToLo
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type<span class="right-arrow"> =&gt; </span>Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-boundsToLo">
-                            <p>If <code>tp</code> is a TypeBounds instance return its lower bound else return <code>tp</code></p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="noBounds" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'noBounds');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                noBounds
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type<span class="right-arrow"> =&gt; </span>Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-noBounds">
-                            <p>Assert type is not a TypeBounds instance and return it unchanged</p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -11574,6 +11458,54 @@ Type
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-EtaExpandIfHK(tparams,args)(ctx)">
                             <p>Adapt all arguments to possible higher-kinded type parameters using etaExpandIfHK</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="noBounds(tp)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'noBounds(tp)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                noBounds
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-noBounds(tp)">
+                            <p>Assert type is not a TypeBounds instance and return it unchanged</p>
 
                         </div>
                     </div>

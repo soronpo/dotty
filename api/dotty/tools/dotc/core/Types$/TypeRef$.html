@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11193,6 +11211,15 @@
                 </span>
                 
                 
+                <div id="super-types">
+                    
+                    
+                    <span class="keyword">extends</span>
+                    
+                    <span class="entity-super-type">Object</span>
+                    
+                </div>
+                
             </div>
 
             
@@ -11213,9 +11240,9 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="apply(prefix,name)(ctx)" class="member ">
+                <div id="apply(prefix,desig)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(prefix,name)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(prefix,desig)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11245,9 +11272,9 @@
                                     
                                 
                                     <span class="">
-                                        name:
+                                        desig:
                                     </span>
-                                    TypeName
+                                    TypeDesignator
                                     
                                 
                             <span class="no-left">)</span>
@@ -11275,77 +11302,8 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-apply(prefix,name)(ctx)">
+                        <div class="member-body-long" id ="long-body-apply(prefix,desig)(ctx)">
                             <p>Create type ref with given prefix and name</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="apply(prefix,sym)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(prefix,sym)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                apply
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        prefix:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        sym:
-                                    </span>
-                                    TypeSymbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TypeRef</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-apply(prefix,sym)(ctx)">
-                            <p>Create type ref to given symbol</p>
 
                         </div>
                     </div>
@@ -11428,9 +11386,9 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="withFixedSym(prefix,name,sym)(ctx)" class="member ">
+                <div id="withSym(prefix,sym,name)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withFixedSym(prefix,name,sym)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withSym(prefix,sym,name)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11442,7 +11400,7 @@
                         </span>
                         <span class="member-name ">
                             
-                                withFixedSym
+                                withSym
                             
                         </span>
 
@@ -11460,17 +11418,17 @@
                                     
                                 
                                     <span class="">
-                                        name:
+                                        sym:
                                     </span>
-                                    TypeName
+                                    TypeSymbol
                                     
                                         <span class="no-left">, </span>
                                     
                                 
                                     <span class="">
-                                        sym:
+                                        name:
                                     </span>
-                                    TypeSymbol
+                                    TypeName
                                     
                                 
                             <span class="no-left">)</span>
@@ -11498,17 +11456,19 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-withFixedSym(prefix,name,sym)(ctx)">
-                            <p>Create a non-member type ref  (which cannot be reloaded using <code>member</code>),
-with given prefix, name, and symbol.</p>
+                        <div class="member-body-long" id ="long-body-withSym(prefix,sym,name)(ctx)">
+                            <p>Create a type ref referring to either a given symbol or its name.
+This is similar to TypeRef(prefix, sym), except:
+(1) the symbol might not yet have a denotation, so the name needs to be given explicitly.
+(2) the designator of the TypeRef is either the symbol or its name</p>
 
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="withSymAndName(prefix,sym,name)(ctx)" class="member ">
+                <div id="withSym(prefix,sym)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withSymAndName(prefix,sym,name)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'withSym(prefix,sym)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11520,7 +11480,7 @@ with given prefix, name, and symbol.</p>
                         </span>
                         <span class="member-name ">
                             
-                                withSymAndName
+                                withSym
                             
                         </span>
 
@@ -11541,14 +11501,6 @@ with given prefix, name, and symbol.</p>
                                         sym:
                                     </span>
                                     TypeSymbol
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        name:
-                                    </span>
-                                    TypeName
                                     
                                 
                             <span class="no-left">)</span>
@@ -11576,13 +11528,8 @@ with given prefix, name, and symbol.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-withSymAndName(prefix,sym,name)(ctx)">
-                            <p>Create a type ref referring to given symbol with given name.
-This is very similar to TypeRef(Type, Symbol),
-except for two differences:
-(1) The symbol might not yet have a denotation, so the name needs to be given explicitly.
-(2) The name in the type ref need not be the same as the name of the Symbol.</p>
-
+                        <div class="member-body-long" id ="long-body-withSym(prefix,sym)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

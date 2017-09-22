@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11193,6 +11211,15 @@
                 </span>
                 
                 
+                <div id="super-types">
+                    
+                    
+                    <span class="keyword">extends</span>
+                    
+                    <span class="entity-super-type">Object</span>
+                    
+                </div>
+                
             </div>
 
             
@@ -14365,8 +14392,11 @@ Refinements are typed as if they were members of refinement class <code>refineCl
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-classBound(info)(ctx)">
-                            <p>Given a class info, the intersection of its parents, refined by all
-non-private fields, methods, and type members.</p>
+                            <p>An abstraction of a class info, consisting of
+- the intersection of its parents,
+- refined by all non-private fields, methods, and type members,
+- abstracted over all type parameters (into a type lambda)
+- where all references to <code>this</code> of the class are closed over in a RecType.</p>
 
                         </div>
                     </div>

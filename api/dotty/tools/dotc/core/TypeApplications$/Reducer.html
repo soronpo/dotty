@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11213,26 +11231,23 @@ Non-wildcard arguments are substituted everywhere as usual. A wildcard argument
 <ol>
 <li>
 <p>If Mode.AllowLambdaWildcardApply is set:
-The wildcard argument is substituted only if <code>X</code> appears in a toplevel refinement of the form</p>
-<p>{ type A = X }</p>
+The wildcard argument is substituted only if <code>X</code> appears in a toplevel application of the form</p>
+<p>C[..., X, ...]</p>
 </li>
 </ol>
 <p>and there are no other occurrences of <code>X</code> in the reduced type. In that case
 the refinement above is replaced by</p>
-<pre><code>  { type A &gt;: L &lt;: U }
+<pre><code>  C[..., _ &gt;: L &lt;: H, ...]
 </code></pre>
 <p>The <code>allReplaced</code> field indicates whether all occurrences of type lambda parameters
 in the reduced type have been replaced with arguments.</p>
 <ol>
 <li>
 <p>If Mode.AllowLambdaWildcardApply is not set:
-All refinements of the form</p>
-<p>{ type A = X }</p>
+All <code>X</code> arguments are replaced by:</p>
+<p>_ &gt;: L &lt;: H</p>
 </li>
 </ol>
-<p>are replaced by:</p>
-<pre><code>  { type A &gt;: L &lt;: U }
-</code></pre>
 <p>Any other occurrence of <code>X</code> in <code>tycon</code> is replaced by <code>U</code>, if the
 occurrence of <code>X</code> in <code>tycon</code> is covariant, or nonvariant, or by <code>L</code>,
 if the occurrence is contravariant.</p>
@@ -11569,12 +11584,106 @@ Int
                         
 
                         
-                        <span class="no-left">: R</span>
+                        <span class="no-left">: Type</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-apply(t)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="applyArg(arg)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'applyArg(arg)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                applyArg
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        arg:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-applyArg(arg)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="atNestedLevel(op)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'atNestedLevel(op)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                atNestedLevel
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        op: =&gt;
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-atNestedLevel(op)">
                             
                         </div>
                     </div>

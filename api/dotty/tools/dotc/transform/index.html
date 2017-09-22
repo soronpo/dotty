@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -13710,6 +13728,7 @@ field (corresponding = super class field is initialized with subclass field)
 <p>(10) Adds Child annotations to all sealed classes</p>
 <p>(11) Minimizes <code>call</code> fields of <code>Inline</code> nodes to just point to the toplevel
 class from which code was inlined.</p>
+<p>(12) Converts GADT bounds into normal type bounds</p>
 <p>The reason for making this a macro transform is that some functions (in particular
 super and protected accessors and instantiation checks) are naturally top-down and
 don't lend themselves to the bottom-up approach of a mini phase. The other two functions
@@ -14807,11 +14826,12 @@ V.foo$extension<a href="#">T, S, ..., A, B, ...</a>(arg1, arg2, ...)</p>
 type parameter, then we can rewrite:
 e.foo<a href="#">X, Y, ...</a>
 as:
-V.foo$extension<a href="#">X, Y, ..., e.A, e.B, ...</a>(args)
+V.foo$extension<a href="#">X, Y, ..., A', B', ...</a>(args)
+where A', B', ... are the class type parameters A, B, ... as seen from <code>e</code>.
 Otherwise, we need to evaluate e first:
 {
 val ev = e
-V.foo$extension<a href="#">X, Y, ..., ev.A, ev.B, ...</a>(args)
+V.foo$extension<a href="#">X, Y, ..., A', B', ...</a>(args)
 }</p>
 <p>This phase needs to be placed after phases which may introduce calls to
 value class methods (like [[PatternMatcher]]). This phase uses name mangling

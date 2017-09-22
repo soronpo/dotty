@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11193,6 +11211,15 @@
                 </span>
                 
                 
+                <div id="super-types">
+                    
+                    
+                    <span class="keyword">extends</span>
+                    
+                    <span class="entity-super-type">Object</span>
+                    
+                </div>
+                
             </div>
 
             
@@ -11363,8 +11390,16 @@ to avoid infinite recursions when analyzing recursive types.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-boundsRealizability(tp)">
-                            <p><code>Realizable</code> if <code>tp</code> has good bounds, a <code>HasProblemBounds</code> instance
-pointing to a bad bounds member otherwise.</p>
+                            <p><code>Realizable</code> if <code>tp</code> has good bounds, a <code>HasProblem...</code> instance
+pointing to a bad bounds member otherwise. &quot;Has good bounds&quot; means:</p>
+<ul>
+<li>all type members have good bounds</li>
+<li>all base types are class types, and if their arguments are wildcards
+they have good bounds.</li>
+<li>base types do not appear in multiple instances with different arguments.
+(depending on the simplification scheme for AndTypes employed, this could
+also lead to base types with bad bounds).</li>
+</ul>
 
                         </div>
                     </div>
@@ -11421,7 +11456,7 @@ pointing to a bad bounds member otherwise.</p>
                 
                 <div id="memberRealizability(tp)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'memberRealizability(tp)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'memberRealizability(tp)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11461,9 +11496,7 @@ pointing to a bad bounds member otherwise.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-memberRealizability(tp)">
-                            <p><code>Realizable</code> if all of <code>tp</code>'s non-struct fields have realizable types,
-a <code>HasProblemField</code> instance pointing to a bad field otherwise.</p>
-
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

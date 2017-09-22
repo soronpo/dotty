@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11203,7 +11221,7 @@
                     
                     <span class="keyword">with</span>
                     
-                    <span class="entity-super-type"><a href="../../../../.././api/dotty/tools/dotc/core/DenotTransformers$/IdentityDenotTransformer.html">IdentityDenotTransformer</a></span>
+                    <span class="entity-super-type"><a href="../../../../.././api/dotty/tools/dotc/core/DenotTransformers$/SymTransformer.html">SymTransformer</a></span>
                     
                 </div>
                 
@@ -11227,6 +11245,7 @@ field (corresponding = super class field is initialized with subclass field)
 <p>(10) Adds Child annotations to all sealed classes</p>
 <p>(11) Minimizes <code>call</code> fields of <code>Inline</code> nodes to just point to the toplevel
 class from which code was inlined.</p>
+<p>(12) Converts GADT bounds into normal type bounds</p>
 <p>The reason for making this a macro transform is that some functions (in particular
 super and protected accessors and instantiation checks) are naturally top-down and
 don't lend themselves to the bottom-up approach of a mini phase. The other two functions
@@ -11549,7 +11568,7 @@ they do not warrant their own group of miniphases before pickling.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-fixSignature(tree)(ctx)">
-                            <p>If the type of <code>tree</code> is a TermRefWithSignature with an underdefined
+                            <p>If the type of <code>tree</code> is a TermRef with an underdefined
 signature, narrow the type by re-computing the signature (which should
 be fully-defined by now).</p>
 
@@ -11739,6 +11758,66 @@ be fully-defined by now).</p>
 By default this is the phase given by the this macro transformer,
 but it could be overridden to be the phase following that one.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="transformSym(ref)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformSym(ref)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                transformSym
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ref:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/SymDenotations$/SymDenotation.html">SymDenotation</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/SymDenotations$/SymDenotation.html">SymDenotation</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-transformSym(ref)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

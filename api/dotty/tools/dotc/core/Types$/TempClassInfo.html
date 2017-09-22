@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11205,6 +11223,11 @@
             </div>
 
             
+            <div id="entity-body" class="entity-section">
+                <p>A class for temporary class infos where <code>parents</code> are not yet known</p>
+
+            </div>
+            
 
             <h1 class="section ">
                 <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
@@ -11400,61 +11423,21 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="suspensions" class="member private">
+                <div id="derivedClassInfo(prefix)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'suspensions');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'derivedClassInfo(prefix)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                suspensions
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-Context<span class="right-arrow"> =&gt; </span>Unit
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-suspensions">
-                            <p>A list of actions that were because they rely on the class info of <code>cls</code> to
-be no longer temporary. These actions will be performed once <code>cls</code> gets a real
-ClassInfo.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="addSuspension(suspension)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'addSuspension(suspension)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                addSuspension
+                                derivedClassInfo
                             
                         </span>
 
@@ -11464,9 +11447,22 @@ ClassInfo.</p>
                                 
                                 
                                     <span class="no-left">
-                                        suspension:
+                                        prefix:
                                     </span>
-                                    Context<span class="right-arrow"> =&gt; </span>Unit
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
                                     
                                 
                             <span class="no-left">)</span>
@@ -11476,12 +11472,12 @@ ClassInfo.</p>
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: ClassInfo</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-addSuspension(suspension)">
+                        <div class="member-body-long" id ="long-body-derivedClassInfo(prefix)(ctx)">
                             
                         </div>
                     </div>
@@ -11523,7 +11519,7 @@ ClassInfo.</p>
                                     </span>
                                     List
 <span class="no-left no-right">[</span>
-TypeRef
+Type
 <span class="no-left">]</span>
                                     
                                 
@@ -11553,61 +11549,42 @@ TypeRef
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-finalize(denot,parents)(ctx)">
-                            <p>Install classinfo with known parents in <code>denot</code> and resume all suspensions</p>
+                            <p>Install classinfo with known parents in <code>denot</code> s</p>
 
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="suspensions_=(x$1)" class="member private">
+                <div id="toString" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'suspensions_=(x$1)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private <accessor>
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                suspensions_=
+                                toString
                             
                         </span>
 
                         
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-Context<span class="right-arrow"> =&gt; </span>Unit
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
 
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: String</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-suspensions_=(x$1)">
-                            <p>A list of actions that were because they rely on the class info of <code>cls</code> to
-be no longer temporary. These actions will be performed once <code>cls</code> gets a real
-ClassInfo.</p>
-
+                        <div class="member-body-long" id ="long-body-toString">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

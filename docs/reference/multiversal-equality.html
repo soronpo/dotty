@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11253,14 +11271,22 @@ done with an import</p>
 <li>
 <p>A comparison using <code>x == y</code> or <code>x != y</code> between values <code>x: T</code> and <code>y: U</code>
 is legal if either <code>T</code> and <code>U</code> are the same, or one of the types is a subtype
-of the other, or an implicit value of type <code>scala.Eq[T, U]</code> is found.</p>
+of the &quot;lifted&quot; version of the other type, or an implicit value of type <code>scala.Eq[T, U]</code> is found.
+See the <a href="https://github.com/lampepfl/dotty/issues/1247">description on Github</a> for
+a definition of lifting.</p>
 </li>
-<li>The usual rules for implicit search apply also to <code>Eq</code> instances,
+<li>
+<p>The usual rules for implicit search apply also to <code>Eq</code> instances,
 with one modification: An instance of <code>scala.Eq.eqAny[T, U]</code> is
 constructed if neither <code>T</code> nor <code>U</code> have a reflexive <code>Eq</code>
 instance themselves. Here, a type <code>T</code> has a reflexive <code>Eq</code>
 instance if the implicit search for <code>Eq[T, T]</code> succeeds
-and constructs an instance different from <code>eqAny</code>.</li>
+and constructs an instance different from <code>eqAny</code>.</p>
+<p>Here <em>lifting</em> a type <code>S</code> means replacing all references to  abstract types
+in covariant positions of <code>S</code> by their upper bound, and to replacing
+all refinement types in in covariant positions of <code>S</code> by their parent.
+The purpose if lifte</p>
+</li>
 </ol>
 <p>More on multiversal equality is found in a <a href="http://www.scala-lang.org/blog/2016/05/06/multiversal-equality.html">blog post</a>
 and a <a href="https://github.com/lampepfl/dotty/issues/1247">Github issue</a>.</p>

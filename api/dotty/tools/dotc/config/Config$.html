@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-20 -->
+<!-- This page was last generated on 2017-09-22 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2097,6 +2097,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Denotations$.html">Denotations</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
                 </li>
 
                 
@@ -11193,6 +11211,15 @@
                 </span>
                 
                 
+                <div id="super-types">
+                    
+                    
+                    <span class="keyword">extends</span>
+                    
+                    <span class="entity-super-type">Object</span>
+                    
+                </div>
+                
             </div>
 
             
@@ -11425,11 +11452,11 @@ when findMemberLimit is set.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-alignArgsInAnd">
-                            <p>If this flag is set, and we compute <code>T1 { X = S1 }</code> &amp; <code>T2 { X = S2 }</code> as a new
-upper bound of a constrained parameter, try to align the refinements by computing
+                            <p>If this flag is set, and we compute <code>T1[X1]</code> &amp; <code>T2[X2]</code> as a new
+upper bound of a constrained parameter, try to align the arguments by computing
 <code>S1 =:= S2</code> (which might instantiate type parameters).
 This rule is contentious because it cuts the constraint set.</p>
-<p>For more info, see the comment in <code>TypeComparer#distributeAnd</code>.</p>
+<p>For more info, see the comment in <code>TypeComparer#glbArgs</code>.</p>
 
                         </div>
                     </div>
@@ -12040,6 +12067,44 @@ skolem types.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="checkTypeParamRefs" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkTypeParamRefs');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            final
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                checkTypeParamRefs
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: false</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-checkTypeParamRefs">
+                            <p>If this flag is set, it is checked that class type parameters are
+only references with NoPrefix or ThisTypes as prefixes. This option
+is usally disabled, because there are still some legitimate cases where
+this can arise (e.g. for pos/Map.scala, in LambdaType.integrate).</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="checkTypeRefCycles" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkTypeRefCycles');">[+]</span>
@@ -12223,44 +12288,6 @@ is not an error consdition.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-fastPathForRefinedSubtype">
                             <p>If this flag is set, take the fast path when comparing same-named type-aliases and types</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="forwardTypeParams" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forwardTypeParams');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            final
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                forwardTypeParams
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: true</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-forwardTypeParams">
-                            <p>If this flag is set, <code>TypeOps.normalizeToClassRefs</code> will insert forwarders
-for type parameters of base classes. This is an optimization, which avoids
-long alias chains. We should  not rely on the optimization, though. So changing
-the flag to false can be used for checking that everything works OK without it.</p>
 
                         </div>
                     </div>
