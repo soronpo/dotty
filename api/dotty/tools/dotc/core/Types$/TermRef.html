@@ -11638,67 +11638,6 @@ TermRef
                     </div>
                 </div><!-- end member -->
                 
-                <div id="newLikeThis(prefix)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'newLikeThis(prefix)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                newLikeThis
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        prefix:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: NamedType</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-newLikeThis(prefix)(ctx)">
-                            <p>Create a NamedType of the same kind as this type, but with a new prefix.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="rewrap(sd)(ctx)" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'rewrap(sd)(ctx)');">[+]</span>
@@ -11759,73 +11698,6 @@ TermRef
                     </div>
                 </div><!-- end member -->
                 
-                <div id="shadowed(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'shadowed(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                shadowed
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: NamedType</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-shadowed(ctx)">
-                            <p>Create a NamedType of the same kind as this type, but with a &quot;inherited name&quot;.
-This is necessary to in situations like the following:</p>
-<p>class B { def m: T1 }
-class C extends B { private def m: T2; ... C.m }
-object C extends C
-object X { ... C.m }</p>
-<p>The two references of C.m in class C and object X refer to different
-definitions: The one in C refers to C#m whereas the one in X refers to B#m.
-But the type C.m must have only one denotation, so it can't refer to two
-members depending on context.</p>
-<p>In situations like this, the reference in X would get the type
-<code>&lt;C.m&gt;.shadowed</code> to make clear that we mean the inherited member, not
-the private one.</p>
-<p>Note: An alternative, possibly more robust scheme would be to give
-private members special names. A private definition would have a special
-name (say m' in the example above), but would be entered in its enclosing
-under both private and public names, so it could still be found by looking up
-the public name.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="underlying(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'underlying(ctx)');">[+]</span>
@@ -11871,6 +11743,67 @@ the public name.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-underlying(ctx)">
                             <p>The type to which this proxy forwards operations.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="withPrefix(prefix)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withPrefix(prefix)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                withPrefix
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        prefix:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: NamedType</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-withPrefix(prefix)(ctx)">
+                            <p>Create a NamedType of the same kind as this type, but with a new prefix.</p>
 
                         </div>
                     </div>

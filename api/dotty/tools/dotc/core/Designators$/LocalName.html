@@ -110,7 +110,7 @@
         
         <li><a href="../../../../../.././blog/index.html">Blog</a></li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Usage</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Usage</a>
 <ul id="">
     <li><a href="../../../../../.././docs/usage/getting-started.html">Getting Started</a>
 </li>
@@ -124,9 +124,9 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Reference</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Reference</a>
 <ul id="">
-    <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>New Types</a>
+    <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>New Types</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/intersection-types.html">Intersection types</a>
 </li>
@@ -142,7 +142,7 @@
 </ul>
 
 </li>
-<li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Enums</a>
+<li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Enums</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/enums/enums.html">Enumerations</a>
 </li>
@@ -152,7 +152,7 @@
 </ul>
 
 </li>
-<li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Other New Features</a>
+<li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Other New Features</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/multiversal-equality.html">Multiversal Equality</a>
 </li>
@@ -170,7 +170,7 @@
 </ul>
 
 </li>
-<li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Changed Features</a>
+<li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Changed Features</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/changed/lazy-vals.html">Volatile Lazy Vals</a>
 </li>
@@ -192,7 +192,7 @@
 </ul>
 
 </li>
-<li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Dropped Features</a>
+<li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Dropped Features</a>
 <ul id="">
     <li><a href="../../../../../.././docs/reference/dropped/delayed-init.html">DelayedInit</a>
 </li>
@@ -220,7 +220,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Contributing</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Contributing</a>
 <ul id="">
     <li><a href="../../../../../.././docs/contributing/getting-started.html">Getting Started</a>
 </li>
@@ -236,7 +236,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Internals</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Internals</a>
 <ul id="">
     <li><a href="../../../../../.././docs/internals/backend.html">Backend</a>
 </li>
@@ -260,7 +260,7 @@
 </ul>
 </li>
         
-        <li><a class="toggle-children" onclick='clickToc(this, "NameOps$");'>Resources</a>
+        <li><a class="toggle-children" onclick='clickToc(this, "Designators$");'>Resources</a>
 <ul id="">
     <li><a href="../../../../../.././docs/resources/talks.html">Talks</a></li>
 </ul>
@@ -11173,7 +11173,7 @@
 
 
     <script>
-        document.title = "Dotty Docs - TermNameDecorator"
+        document.title = "Dotty Docs - LocalName"
     </script>
 
     <div id="content-body">
@@ -11183,13 +11183,25 @@
                     
                 </span>
                 <span id="entity-modifiers">
-                    final
+                    
                 </span>
                 <span id="entity-kind">
-                    class
+                    case class
                 </span>
                 <span id="entity-name">
-                    TermNameDecorator
+                    LocalName
+                </span>
+                
+                <span id="entity-type-params">
+                    <span class="no-left">[</span>
+                    
+                    <span class="no-left">
+                        
+                            N
+                        
+                    </span>
+                    
+                    <span class="no-left">]</span>
                 </span>
                 
                 
@@ -11198,12 +11210,24 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">AnyVal</span>
+                    <span class="entity-super-type">Designator</span>
+                    
+                    
+                    <span class="keyword">with</span>
+                    
+                    <span class="entity-super-type">Product</span>
                     
                 </div>
                 
             </div>
 
+            
+            <div id="entity-body" class="entity-section">
+                <p>Names that come with the namespace where they are defined.
+Used to give a stable reference to private names, and also to
+Scala 2x inner classes.</p>
+
+            </div>
             
 
             <h1 class="section ">
@@ -11216,14 +11240,22 @@
                     
                     <div class="member">
                         <div class="member-title">
-                            <span class="member-name">TermNameDecorator</span>
+                            <span class="member-name">LocalName</span>
                             <span class="no-left">(</span>
                                 
                                 
                                     <span class="no-left">
                                         name:
                                     </span>
-                                    TermName
+                                    N
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        nameSpace:
+                                    </span>
+                                    TypeRef
                                     
                                 
                             <span class="no-left">)</span>
@@ -11239,6 +11271,46 @@
             </h1>
 
             <div id="entity-members" class="entity-section ">
+                
+                <div id="ThisName" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'ThisName');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            type
+                        </span>
+                        <span class="member-name ">
+                            
+                                ThisName
+                            
+                        </span>
+
+                        
+
+                        
+                        
+                        
+                        <span class="type-alias">
+                            <span class="equals"> = </span>
+                            N
+                        </span>
+                        
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-ThisName">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
                 
                 <div id="name" class="member ">
                     <div class="member-title">
@@ -11263,7 +11335,7 @@
                         
 
                         
-                        <span class="no-left">: TermName</span>
+                        <span class="no-left">: N</span>
                         
                     </div><!-- end member-title -->
 
@@ -11274,9 +11346,9 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="fieldName" class="member ">
+                <div id="nameSpace" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'fieldName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'nameSpace');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11284,11 +11356,11 @@
                             
                         </span>
                         <span class="member-kind">
-                            def
+                            val
                         </span>
                         <span class="member-name ">
                             
-                                fieldName
+                                nameSpace
                             
                         </span>
 
@@ -11297,148 +11369,315 @@
                         
 
                         
-                        <span class="no-left">: TermName</span>
+                        <span class="no-left">: TypeRef</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-fieldName">
+                        <div class="member-body-long" id ="long-body-nameSpace">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="getterName" class="member ">
+                <div id="asTerm(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'getterName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'asTerm(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                getterName
+                                asTerm
                             
                         </span>
 
                         
-
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
                         
 
                         
-                        <span class="no-left">: TermName</span>
+
+                        
+                        <span class="no-left">: TermDesignator</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-getterName">
+                        <div class="member-body-long" id ="long-body-asTerm(ctx)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="setterName" class="member ">
+                <div id="asType(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'setterName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'asType(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                setterName
+                                asType
                             
                         </span>
 
                         
-
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
                         
 
                         
-                        <span class="no-left">: TermName</span>
+
+                        
+                        <span class="no-left">: TypeDesignator</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-setterName">
+                        <div class="member-body-long" id ="long-body-asType(ctx)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="stripScala2LocalSuffix" class="member ">
+                <div id="isTerm(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'stripScala2LocalSuffix');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isTerm(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                stripScala2LocalSuffix
+                                isTerm
                             
                         </span>
 
                         
-
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
                         
 
                         
-                        <span class="no-left">: TermName</span>
+
+                        
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-stripScala2LocalSuffix">
+                        <div class="member-body-long" id ="long-body-isTerm(ctx)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="toUnaryName" class="member ">
+                <div id="isType(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'toUnaryName');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isType(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                toUnaryName
+                                isType
                             
                         </span>
 
                         
-
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
                         
 
                         
-                        <span class="no-left">: TermName</span>
+
+                        
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toUnaryName">
+                        <div class="member-body-long" id ="long-body-isType(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="withNameSpace(space)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'withNameSpace(space)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                withNameSpace
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        space:
+                                    </span>
+                                    NameSpace
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Designator</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-withNameSpace(space)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="withSig(sig)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'withSig(sig)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                withSig
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        sig:
+                                    </span>
+                                    Signature
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Designator</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-withSig(sig)">
                             
                         </div>
                     </div>
