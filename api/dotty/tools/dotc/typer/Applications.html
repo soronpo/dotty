@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-10-08 -->
+<!-- This page was last generated on 2017-10-09 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7060,11 +7060,11 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/util/SimpleMap$.html">O</a>
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentityMap$.html">O</a>
                         
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/util/SimpleMap.html">C</a>
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentityMap.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/util/SimpleMap.html">SimpleMap</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentityMap.html">SimpleIdentityMap</a>
                 </li>
 
                 
@@ -11702,6 +11702,97 @@ we rely on implicit search to find one.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-handleUnexpectedFunType(tree,fun)(ctx)">
                             <p>Overridden in ReTyper to handle primitive operations that can be generated after erasure</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="harmonic(harmonize)(op)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'harmonic(harmonize)(op)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                harmonic
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        harmonize:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+T
+<span class="no-left">]</span><span class="right-arrow"> =&gt; </span>List
+<span class="no-left no-right">[</span>
+T
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        op: =&gt;
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+T
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+T
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-harmonic(harmonize)(op)(ctx)">
+                            <p>Apply a transformation <code>harmonize</code> on the results of operation <code>op</code>.
+If the result is different (wrt eq) from the original results of <code>op</code>,
+revert back to the constraint in force before computing <code>op</code>.
+This reset is needed because otherwise the original results might
+have added constraints to type parameters which are no longer
+implied after harmonization. No essential constraints are lost by this because
+the result of harmomization will be compared again with the expected type.
+Test cases where this matters are in pos/harmomize.scala.</p>
 
                         </div>
                     </div>
