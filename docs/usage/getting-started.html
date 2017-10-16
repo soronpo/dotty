@@ -88,7 +88,7 @@
     </a>
     <div id="project-details">
         <h1 id="project-name"><a href="../.././docs/">Dotty Documentation</a></h1>
-        <h2 id="project-version">0.4.0-bin-SNAPSHOT</h2>
+        <h2 id="project-version">0.5.0-bin-SNAPSHOT</h2>
     </div>
 
     
@@ -11215,58 +11215,55 @@
         </a>
         <hr/>
         <div id="doc-page-container">
-            <h2><a href="#basics" id="basics">Basics</a></h2>
-<p>Make sure that you are using Java 8 or later. The output of <code>java -version</code>
-should contain <code>1.8</code>.</p>
-<h2><a href="#option-1-install-dotty" id="option-1-install-dotty">Option 1: Install Dotty</a></h2>
-<p>If you're a Mac user, you can install dotty with <a href="https://brew.sh/">brew</a></p>
-<pre><code class="language-bash">brew install lampepfl/brew/dotty
-</code></pre>
-<p>If you're a Linux or Windows user, download the <a href="https://github.com/lampepfl/dotty/releases">latest release</a>. Optionally add path of the folder <code>bin/</code> to the system environment variable <code>PATH</code>.</p>
-<h2><a href="#option-2-using-dotty-directly-from-source" id="option-2-using-dotty-directly-from-source">Option 2: Using Dotty directly from source</a></h2>
-<pre><code class="language-bash">$ git clone --recursive https://github.com/lampepfl/dotty.git
-$ cd dotty
-$ sbt managedSources # Needed for IDE import to succeed
-</code></pre>
-<p>Dotty provides a standard sbt build: compiling, running and starting a repl can
-all be done from within sbt:</p>
-<pre><code class="language-bash">$ sbt
-&gt; dotc tests/pos/HelloWorld.scala
-&gt; dotr HelloWorld
-hello world
-</code></pre>
-<h2><a href="#try-dotty" id="try-dotty">Try Dotty</a></h2>
-<p>Try it in your browser with <a href="https://scastie.scala-lang.org/?target=dotty">Scastie</a></p>
-<h2><a href="#create-a-dotty-project" id="create-a-dotty-project">Create a Dotty Project</a></h2>
-<p>The fastest way to create a new project in dotty is using <a href="http://www.scala-sbt.org/">sbt (0.13.5+)</a></p>
-<p>Create a dotty project:</p>
+            <h2><a href="#trying-out-dotty" id="trying-out-dotty">Trying out Dotty</a></h2>
+<h3><a href="#in-your-web-browser" id="in-your-web-browser">In your web browser</a></h3>
+<p><a href="https://scastie.scala-lang.org/?target=dotty">Scastie</a>, the online Scala playground, supports Dotty.
+This is an easy way to try Dotty without installing anything, directly in your browser.</p>
+<h3><a href="#sbt" id="sbt">sbt</a></h3>
+<p>The fastest way to create a new project compiled by Dotty is using <a href="http://www.scala-sbt.org/">sbt (0.13.13+)</a></p>
+<p>Create a simple Dotty project:</p>
 <pre><code class="language-bash">$ sbt new lampepfl/dotty.g8
 </code></pre>
 <p>Or a Dotty project that cross compiles with Scala 2:</p>
 <pre><code class="language-bash">$ sbt new lampepfl/dotty-cross.g8
 </code></pre>
-<p>For an example project, see the <a href="https://github.com/lampepfl/dotty-example-project">Dotty Example Proejct</a></p>
-<h2><a href="#bash-scripts" id="bash-scripts">Bash Scripts</a></h2>
-<p>Assuming that you have cloned the Dotty repo locally, append the following line on your <code>.bash_profile</code>:</p>
-<pre><code class="language-shell">$ export PATH=$HOME/dotty/bin:$PATH
+<p>You can then start a Dotty REPL directly from your sbt project:</p>
+<pre><code class="language-bash">$ sbt
+&gt; console
+scala&gt;
 </code></pre>
-<p>and you will be able to run the corresponding commands directly from your console:</p>
-<pre><code class="language-shell"># Compile code using Dotty
-$ dotc tests/pos/HelloWorld.scala
+<p>For more information, see the <a href="https://github.com/lampepfl/dotty-example-project">Dotty Example Project</a></p>
+<h3><a href="#ide-support" id="ide-support">IDE support</a></h3>
+<p>Start using the Dotty IDE in any Dotty project by following the
+<a href="http://dotty.epfl.ch/docs/usage/ide-support.html">IDE guide</a>.</p>
+<h3><a href="#standalone-installation" id="standalone-installation">Standalone installation</a></h3>
+<p>Releases are available for download on the <a href="https://github.com/lampepfl/dotty/releases">Releases section</a>)
+of the Dotty repository. Releases include three executables: <code>dotc</code> the Dotty compiler,
+<code>dotd</code> the <a href="http://dotty.epfl.ch/docs/usage/dottydoc.html">Dotty Documentation tool</a> and <code>dotr</code> the Dotty REPL.</p>
+<pre><code>.
+└── bin
+    ├── dotc
+    ├── dotd
+    └── dotr
+</code></pre>
+<p>Add these executables to your <code>PATH</code> and you will be able to run the corresponding commands directly
+from your console:</p>
+<pre><code class="language-bash"># Compile code using Dotty
+$ dotc HelloWorld.scala
 
 # Run it with the proper classpath
 $ dotr HelloWorld
-</code></pre>
-<h2><a href="#starting-a-repl" id="starting-a-repl">Starting a REPL</a></h2>
-<pre><code class="language-bash">$ sbt
-&gt; repl
-Welcome to Scala.next (pre-alpha)  (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_101).
-Type in expressions to have them evaluated.
-Type :help for more information.
+
+# Start a Dotty REPL
+$ dotr
+Starting dotty REPL...
 scala&gt;
 </code></pre>
-<p>or via bash:</p>
-<pre><code class="language-bash">$ dotr
+<p>If you're a Mac user, we also provide a <a href="https://brew.sh/">homebrew</a> package that can be installed by running:</p>
+<pre><code>brew install lampepfl/brew/dotty
+</code></pre>
+<p>In case you have already installed Dotty via brew, you should instead update it:</p>
+<pre><code>brew upgrade dotty
 </code></pre>
 
         </div>
