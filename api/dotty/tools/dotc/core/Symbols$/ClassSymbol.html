@@ -9902,6 +9902,30 @@
                 
 
                 
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/io/JarArchive$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/io/JarArchive.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/io/JarArchive.html">JarArchive</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default ">
                 <!-- end li setter -->
 
@@ -16717,9 +16741,9 @@ of this run.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs)(ctx)" class="member ">
+                <div id="is(fs,butNot)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -16743,7 +16767,15 @@ of this run.</p>
                                     <span class="no-left">
                                         fs:
                                     </span>
-                                    FlagConjunction
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        butNot:
+                                    </span>
+                                    FlagSet
                                     
                                 
                             <span class="no-left">)</span>
@@ -16771,8 +16803,9 @@ of this run.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
-                            <p>Has this denotation all of the flags in <code>fs</code> set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
+                            <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
+in <code>butNot</code> are set?</p>
 
                         </div>
                     </div>
@@ -16909,9 +16942,9 @@ in <code>butNot</code> are set?</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="is(fs,butNot)(ctx)" class="member ">
+                <div id="is(fs)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs,butNot)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'is(fs)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -16935,15 +16968,7 @@ in <code>butNot</code> are set?</p>
                                     <span class="no-left">
                                         fs:
                                     </span>
-                                    FlagSet
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        butNot:
-                                    </span>
-                                    FlagSet
+                                    FlagConjunction
                                     
                                 
                             <span class="no-left">)</span>
@@ -16971,9 +16996,8 @@ in <code>butNot</code> are set?</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-is(fs,butNot)(ctx)">
-                            <p>Has this denotation one of the flags in <code>fs</code> set, whereas none of the flags
-in <code>butNot</code> are set?</p>
+                        <div class="member-body-long" id ="long-body-is(fs)(ctx)">
+                            <p>Has this denotation all of the flags in <code>fs</code> set?</p>
 
                         </div>
                     </div>
@@ -21857,6 +21881,66 @@ Type
                     </div>
                 </div><!-- end member -->
                 
+                <div id="requiredMethodRef(name)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'requiredMethodRef(name)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                requiredMethodRef
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        name:
+                                    </span>
+                                    PreName
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: TermRef</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-requiredMethodRef(name)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="requiredMethodRef(name,argTypes)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'requiredMethodRef(name,argTypes)(ctx)');">[+]</span>
@@ -21923,66 +22007,6 @@ Type
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-requiredMethodRef(name,argTypes)(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="requiredMethodRef(name)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'requiredMethodRef(name)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                requiredMethodRef
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        name:
-                                    </span>
-                                    PreName
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TermRef</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-requiredMethodRef(name)(ctx)">
                             
                         </div>
                     </div>
