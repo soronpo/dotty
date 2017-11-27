@@ -11397,7 +11397,7 @@
                     
                 </span>
                 <span id="entity-modifiers">
-                    final
+                    
                 </span>
                 <span id="entity-kind">
                     case class
@@ -11423,23 +11423,6 @@
                 
             </div>
 
-            
-            <div id="entity-body" class="entity-section">
-                <p>An 'extractor' can be a case class or an unapply or unapplySeq method.
-Decoding what it is that they extract takes place before we arrive here,
-so that this class can concentrate only on the relationship between
-patterns and types.</p>
-<p>In a case class, the class is the unextracted type and the fixed and
-repeated types are derived from its constructor parameters.</p>
-<p>In an unapply, this is reversed: the parameter to the unapply is the
-unextracted type, and the other types are derived based on the return
-type of the unapply method.</p>
-<p>In other words, this case class and unapply are encoded the same:</p>
-<p>case class Foo(x: Int, y: Int, zs: Char*)
-def unapplySeq(x: Foo): Option[(Int, Int, Seq[Char])]</p>
-<p>Both are Extractor(Foo, Int :: Int :: Nil, Repeated(Seq[Char], Char, Char*))</p>
-
-            </div>
             
 
             <h1 class="section ">
