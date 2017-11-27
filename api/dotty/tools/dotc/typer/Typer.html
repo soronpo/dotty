@@ -11929,7 +11929,7 @@ user-defined definitions of <code>==</code>.</p>
                 
                 <div id="decomposeProtoFunction(pt,defaultArity)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'decomposeProtoFunction(pt,defaultArity)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'decomposeProtoFunction(pt,defaultArity)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11988,14 +11988,21 @@ user-defined definitions of <code>==</code>.</p>
 List
 <span class="no-left no-right">[</span>
 <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
-<span class="no-left">]</span><span>, </span><a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+<span class="no-left">]</span><span>, </span><a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
 <span class="no-left">)</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-decomposeProtoFunction(pt,defaultArity)(ctx)">
-                            
+                            <p>Decompose function prototype into a list of parameter prototypes and a result prototype
+tree, using WildcardTypes where a type is not known.
+For the result type we do this even if the expected type is not fully
+defined, which is a bit of a hack. But it's needed to make the following work
+(see typers.scala and printers/PlainPrinter.scala for examples).</p>
+<p>def double(x: Char): String = s&quot;$x$x&quot;
+&quot;abc&quot; flatMap double</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -14759,6 +14766,142 @@ typedCases.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-typedFunction(tree,pt)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="typedFunctionType(tree,pt)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedFunctionType(tree,pt)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedFunctionType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/untpd$/Function.html">Function</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pt:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedFunctionType(tree,pt)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="typedFunctionValue(tree,pt)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedFunctionValue(tree,pt)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedFunctionValue
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/untpd$/Function.html">Function</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pt:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedFunctionValue(tree,pt)(ctx)">
                             
                         </div>
                     </div>
