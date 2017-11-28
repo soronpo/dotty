@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-11-27 -->
+<!-- This page was last generated on 2017-11-28 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11401,7 +11401,7 @@ the compiler once it has shown the constraints hold.</p>
 <p>When saying that they have no effect on the runtime we do not only mean side effects
 like IO, field mutation, exceptions and so on. We also imply that if a function receives
 a phantom its result will not be affected by this argument.</p>
-<p>As phantom do not live at runtime they cannot be subtypes of <code>scala.Any</code>, which defines
+<p>As phantoms do not live at runtime they cannot be subtypes of <code>scala.Any</code>, which defines
 methods such as <code>hashCode</code>, <code>equals</code>, <code>getClass</code>, <code>asInstanceOf</code> and <code>isInstanceOf</code>.
 All these operations cannot exist on phantoms as there will not be an underlying object
 instance at runtime. At first glance this could look like a limitation, but in fact not
@@ -11430,10 +11430,10 @@ In fact we allow multiple phantom universes to exist.</p>
          | Nothing |                | MyPhantom.Nothing |       | MyOtherPhantom.Nothing |
          +---------+                +-------------------+       +------------------------+
 </code></pre>
-<p>Inside a universe it types support the full Dotty type system. But we cannot mix types from
-different universes with <code>&amp;</code>, <code>|</code> or in type bounds. Each type must be fully defined one universe.</p>
+<p>Inside a universe the full Dotty type system is supported. But we cannot mix types from
+different universes with <code>&amp;</code>, <code>|</code> or in type bounds. Each type must be fully defined in a single universe.</p>
 <h2><a href="#implement-your-own-phantom-type" id="implement-your-own-phantom-type">Implement your own phantom type</a></h2>
-<p>Phantom types are definded by an <code>object</code> extending <code>scala.Phantom</code>. This object will represent
+<p>Phantom types are defined by an <code>object</code> extending <code>scala.Phantom</code>. This object will represent
 a universe of phantom types that is completely separated from types in <code>scala.Any</code> or other
 phantom universes. We can define our phantom universe <code>MyPhantoms</code>.</p>
 <pre><code class="language-scala">object MyPhantoms extends Phantom
@@ -11450,7 +11450,7 @@ trait Phantom { // only an `object` can extend this trait
 of the phantom types in <code>MyPhantoms</code>, these bounds are <code>protected</code> and can not be accessed
 from outside <code>MyPhantoms</code> unless an alias is defined for them.</p>
 <p>New phantom types can be defined using <code>type XYZ &lt;: OtherPhantom</code> (where <code>&gt;: MyPhantom.Nothing</code>
-will be inferred), this would be the equivalent of <code>class XYZ extends OtherClass</code> on a types
+will be inferred), this would be the equivalent of <code>class XYZ extends OtherClass</code> on types
 only (no runtime definitions). Or aliased with <code>type MyAny = OtherPhantom</code>. Within <code>MyPhantoms</code>
 it is possible to refer to <code>MyPhantoms.Any</code> and <code>MyPhantoms.Nothing</code> with <code>this.Any</code> and
 <code>this.Nothing</code> (or just <code>Any</code> and <code>Nothing</code> but not recommended). Using this we will define
@@ -11463,7 +11463,7 @@ the four phantoms: <code>Inky</code>, <code>Blinky</code>, <code>Pinky</code> an
 }
 </code></pre>
 <p>Values of phantom type can be created using the <code>protected def assume</code>. This value can be
-used as a value of this phantom type as it's type is <code>this.Nothing</code> (or <code>MyPhantoms.Nothing</code>).
+used as a value of this phantom type as its type is <code>this.Nothing</code> (or <code>MyPhantoms.Nothing</code>).
 Usually this value will be used to define a <code>implicit def</code> that returns the phantom with a more
 precise type. In our example we will only create values of type <code>Pinky</code> and <code>Clyde</code></p>
 <pre><code class="language-scala">object MyPhantoms extends Phantom {
@@ -11493,8 +11493,8 @@ type <code>scala.Nothing</code> is not in the same type universe as <code>Blinky
 mistakes before when compiling the code, no surprises at runtime (hopefully not in production).</p>
 <h2><a href="#what-happens-with-phantoms-at-runtime" id="what-happens-with-phantoms-at-runtime">What happens with Phantoms at runtime?</a></h2>
 <p>Disclaimer: Most of phantom erasure is implemented, but not all of is has been merged in <code>dotty/master</code> yet.</p>
-<p>As phantom have no effect on the result of a method invocation we just remove them for the call an definition.
-The evaluation of the phantom parameter is still be done unless it can be optimized away.
+<p>As phantoms have no effect on the result of a method invocation we just remove them for the call and definition.
+The evaluation of the phantom parameter is still done unless it can be optimized away.
 By removing them we also restrict overloading as <code>def f()</code> and <code>def f(x: MyPhantom)</code> will
 have the same signature in the bytecode, just use different names to avoid this.</p>
 <p>At runtime the <code>scala.Phantom</code> trait will not exist.

@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-11-27 -->
+<!-- This page was last generated on 2017-11-28 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11412,10 +11412,9 @@ def help(id: UserName | Password) = {
 <p>Union types are dual of intersection types. Values of type <code>A | B</code> are
 all values of type <code>A</code> and all values of type <code>B</code>. <code>|</code> is <em>commutative</em>:
 <code>A | B</code> is the same type as <code>B | A</code>.</p>
-<p>The compiler will assign an expression a union type only if such a
+<p>The compiler will assign a union type to an expression only if such a
 type is explicitly given.
-This can be seen in the folling REPL
-transcript:</p>
+This can be seen in the following REPL transcript:</p>
 <pre><code class="language-scala">scala&gt; val password = Password(123)
 val password: Password = Password(123)
 scala&gt; val name = UserName(&quot;Eve&quot;)
@@ -11427,7 +11426,7 @@ val either: Password | UserName = UserName(Eve)
 </code></pre>
 <p>The type of <code>res2</code> is <code>Object &amp; Product</code>, which is a supertype of
 <code>UserName</code> and <code>Product</code>, but not the least supertype <code>Password | UserName</code>.  If we want the least supertype, we have to give it
-explicitely, as is done for the type of <code>either</code>. More precisely, the
+explicitly, as is done for the type of <code>either</code>. More precisely, the
 typechecker will <em>widen</em> a union type to a non-union type when
 inferring the type of <code>val</code> or <code>var</code>, or the result type of a <code>def</code>,
 or the argument to pass for a type parameter.  The widened type of <code>A | B</code> is usually the intersection of all class or trait types that are
