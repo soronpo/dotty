@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-09-07 -->
+<!-- This page was last generated on 2017-12-01 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-        <title>Announcing Dotty 0.3.0-RC2</title>
+        <title>Announcing Dotty 0.5.0-RC1</title>
 
         <link rel="icon" type="image/png" href="../../../.././images/favicon.png">
 
@@ -11384,14 +11384,14 @@
     <div id="content-body" class="doc-page-body">
         <div id="post-title">
             <h3 id="post-date">
-                2017-09-07
+                2017-12-01
             </h3>
-            <h1 id="main-title">Announcing Dotty 0.3.0-RC2</h1>
+            <h1 id="main-title">Announcing Dotty 0.5.0-RC1</h1>
             
         </div>
 
         <div id="blog-post-container">
-            <p>Today, we are excited to release Dotty version 0.3.0-RC2. This release
+            <p>Today, we are excited to release Dotty version 0.5.0-RC1. This release
 serves as a technology preview that demonstrates new language features
 and the compiler supporting them.</p>
 <p>If you’re not familiar with Dotty, it's a platform to try out new language concepts and compiler
@@ -11401,97 +11401,151 @@ constructs. The theory behind these constructs is researched in
 <a href="https://infoscience.epfl.ch/record/215280">DOT</a>, a calculus for dependent object types.
 You can learn more about Dotty on our <a href="http://dotty.epfl.ch">website</a>.</p>
 <!--more-->
-<p>This is our third scheduled release according to our <a href="http://dotty.epfl.ch/docs/usage/version-numbers.html">6-week release schedule</a>.
-The <a href="/blog/2017/07/12/second-dotty-milestone-release.html">previous technology preview</a> improved
-stability and reliability:</p>
+<p>This is our fifth scheduled release according to our <a href="http://dotty.epfl.ch/docs/usage/version-numbers.html">6-week release schedule</a>.
+The <a href="/blog/2017/10/16/fourth-dotty-milestone-release.html">previous technology preview</a> added
+support for Scala 2.12 and came with a brand new REPL.</p>
+<h2><a href="#whats-new-in-the-050-rc1-technology-preview" id="whats-new-in-the-050-rc1-technology-preview">What’s new in the 0.5.0-RC1 technology preview?</a></h2>
+<h3><a href="#reworked-implicit-search-3421" id="reworked-implicit-search-3421">Reworked implicit search <a href="https://github.com/lampepfl/dotty/pull/3421">#3421</a></a></h3>
+<p>The treatment of ambiguity errors has changed. If an ambiguity is encountered
+in some recursive step of an implicit search, the ambiguity is propagated to the caller.
+Example: Say you have the following definitions:</p>
+<pre><code class="language-scala">class A
+class B extends C
+class C
+implicit def a1: A
+implicit def a2: A
+implicit def b(implicit a: A): B
+implicit def c: C
+</code></pre>
+<p>and the query <code>implicitly[C]</code>.</p>
+<p>This query would now be classified as ambiguous. This makes sense, after all
+there are two possible solutions, <code>b(a1)</code> and <code>b(a2)</code>, neither of which is better
+than the other and both of which are better than the third solution, <code>c</code>.
+By contrast, Scala 2 would have rejected the search for <code>A</code> as
+ambiguous, and subsequently have classified the query <code>b(implictly[A])</code> as a normal fail,
+which means that the alternative <code>c</code> would be chosen as solution!</p>
+<p>Scala 2's somewhat puzzling behavior with respect to ambiguity has been exploited to implement
+the analogue of a &quot;negated&quot; search in implicit resolution, where a query <code>Q1</code> fails if some other
+query <code>Q2</code> succeeds and <code>Q1</code> succeeds if <code>Q2</code> fails. With the new cleaned up behavior these
+techniques no longer work. But there is now a new special type <code>scala.implicits.Not</code> which
+implements negation directly. For any query type <code>Q</code>: <code>Not[Q]</code> succeeds if and only if the
+implicit search for <code>Q</code> fails.</p>
+<h3><a href="#dependent-function-types-3464" id="dependent-function-types-3464">Dependent function types <a href="https://github.com/lampepfl/dotty/pull/3464">#3464</a></a></h3>
+<p>A dependent function type describes functions where the result type may depend
+on the function's parameter values. Example:</p>
+<pre><code class="language-scala">class Entry { type Key; key: Key }
+
+def extractKey(e: Entry): e.Key = e.key          // a dependent method
+val extractor: (e: Entry) =&gt; e.Key = extractKey  // a dependent function value
+</code></pre>
+<p>Scala already has <em>dependent methods</em>, i.e. methods where the result
+type refers to some of the parameters of the method. Method
+<code>extractKey</code> is an example. Its result type, <code>e.key</code> refers its
+parameter <code>e</code> (we also say, <code>e.Key</code> <em>depends</em> on <code>e</code>). But so far it
+was not possible to turn such methods into function values, so that
+they can be passed as parameters to other functions, or returned as
+results. Dependent methods could not be turned into functions simply
+because there was no type that could describe them.</p>
+<p>In Dotty this is now possible. The type of the <code>extractor</code> value above is</p>
+<pre><code class="language-scala">(e: Entry) =&gt; e.Key
+</code></pre>
+<p>This type describes function values that take any argument <code>x</code> of type
+<code>Entry</code> and return a result of type <code>x.Key</code>.</p>
+<h3><a href="#tasty-frontend" id="tasty-frontend">TASTY frontend</a></h3>
+<p><a href="https://docs.google.com/document/d/1Wp86JKpRxyWTqUU39H40ZdXOlacTNs20aTj7anZLQDw/edit">TASTY</a> is a
+new serialization format for typed syntax trees of Scala programs. When compiled by Dotty, a program
+classfile will include its TASTY representation in addition to its bytecode.</p>
+<p>The TASTY frontend uses ASTs from the TASTY in classfiles as input instead of source files. There
+are currently two backends using the TASTY frontend:</p>
 <ul>
-<li>substantial improvement of quality of generated code for pattern matching</li>
-<li>improvements in VS Code IDE stability</li>
-<li>support Windows in VS Code IDE</li>
-<li>improved compatibility with scalac</li>
-<li>initial support for reproducible builds</li>
+<li>
+<p>A Dotty class file decompiler that let you decompile code previously compiled to TASTY:</p>
+<pre><code class="language-shell">dotc -decompile -classpath &lt;classpath&gt; &lt;classname&gt;
+</code></pre>
+</li>
+<li>
+<p>A Dotty TASTY compiler that will recompile code previously compiled to TASTY:</p>
+<pre><code class="language-shell">dotc -from-tasty -classpath &lt;classpath&gt; &lt;classname&gt;
+</code></pre>
+<p>This is the first step toward linking and whole word optimisations, recompiling code to a
+different backends...</p>
+</li>
 </ul>
-<h2><a href="#whats-in-the-030-rc2-technology-preview" id="whats-in-the-030-rc2-technology-preview">What’s in the 0.3.0-RC2 technology preview?</a></h2>
-<p>This technology preview further improves stability and reliability. Some highlighted PRs are:</p>
-<ul>
-<li>IDE bug fixes:
-<a href="https://github.com/lampepfl/dotty/pull/2986">#2986</a>,
-<a href="https://github.com/lampepfl/dotty/pull/2932">#2932</a>,
-<a href="https://github.com/lampepfl/dotty/pull/2885">#2885</a>,
-<a href="https://github.com/lampepfl/dotty/pull/2876">#2876</a>,
-<a href="https://github.com/lampepfl/dotty/pull/2870">#2870</a>,
-<a href="https://github.com/lampepfl/dotty/pull/2872">#2872</a> by <a href="https://github.com/odersky">@odersky</a> and <a href="https://github.com/smarter">@smarter</a>.</li>
-</ul>
-<h2><a href="#how-can-you-try-it-out" id="how-can-you-try-it-out">How can you try it out?</a></h2>
-<p>We ship with tools that help you try out the Dotty platform:</p>
-<ul>
-<li><a href="http://dotty.epfl.ch/docs/usage/ide-support.html">IDE features for Visual Studio Code</a></li>
-<li><a href="https://github.com/lampepfl/dotty-example-project">sbt support, including retro-compatibility with Scala 2</a></li>
-</ul>
-<p>You have several alternatives; use the <code>sbt-dotty</code> plugin, get a standalone
-installation, or try it online on <a href="https://scastie.scala-lang.org/?target=dotty">Scastie</a>.</p>
+<h3><a href="#generic-java-signatures-3234" id="generic-java-signatures-3234">Generic java signatures <a href="https://github.com/lampepfl/dotty/pull/3234">#3234</a></a></h3>
+<p>Dotty now emits generic signatures for classes and methods. Theses signatures are used by compilers,
+debuggers and to support runtime reflection. For example:</p>
+<pre><code class="language-scala">scala&gt; class Foo[T, U]
+// defined class Foo
+scala&gt; classOf[Foo[_, _]].getTypeParameters.map(_.getName).mkString(&quot;, &quot;)
+val res0: String = &quot;T, U&quot;
+</code></pre>
+<h2><a href="#trying-out-dotty" id="trying-out-dotty">Trying out Dotty</a></h2>
+<h3><a href="#scastie" id="scastie">Scastie</a></h3>
+<p><a href="https://scastie.scala-lang.org/?target=dotty">Scastie</a>, the online Scala playground, supports Dotty.
+This is an easy way to try Dotty without installing anything.</p>
 <h3><a href="#sbt" id="sbt">sbt</a></h3>
 <p>Using sbt 0.13.13 or newer, do:</p>
-<pre><code>sbt new lampepfl/dotty.g8
+<pre><code class="language-shell">sbt new lampepfl/dotty.g8
 </code></pre>
 <p>This will setup a new sbt project with Dotty as compiler. For more details on
 using Dotty with sbt, see the
 <a href="https://github.com/lampepfl/dotty-example-project">example project</a>.</p>
+<h3><a href="#ide-support" id="ide-support">IDE support</a></h3>
+<p>It is very easy to start using the Dotty IDE in any Dotty project by following
+the <a href="http://dotty.epfl.ch/docs/usage/ide-support.html">IDE guide</a>.</p>
 <h3><a href="#standalone-installation" id="standalone-installation">Standalone installation</a></h3>
 <p>Releases are available for download on the <em>Releases</em>
 section of the Dotty repository:
 <a href="https://github.com/lampepfl/dotty/releases">https://github.com/lampepfl/dotty/releases</a></p>
 <p>We also provide a <a href="https://brew.sh/">homebrew</a> package that can be installed by running:</p>
-<pre><code>brew install lampepfl/brew/dotty
+<pre><code class="language-shell">brew install lampepfl/brew/dotty
 </code></pre>
 <p>In case you have already installed Dotty via brew, you should instead update it:</p>
-<pre><code>brew upgrade dotty
+<pre><code class="language-shell">brew upgrade dotty
 </code></pre>
-<h3><a href="#scastie" id="scastie">Scastie</a></h3>
-<p><a href="https://scastie.scala-lang.org/?target=dotty">Scastie</a>, the online Scala playground, supports Dotty.
-You can try it out there without installing anything.</p>
-<h2><a href="#what-are-the-next-steps" id="what-are-the-next-steps">What are the next steps?</a></h2>
-<p>Over the coming weeks and months, we plan to work on the following topics:</p>
-<ul>
-<li><a href="https://github.com/lampepfl/dotty/pull/2827">Add support for using Dotty generated classes with Scala 2.12</a></li>
-<li><a href="https://github.com/lampepfl/dotty/pull/2199">Add Language-level support for HMaps and HLists</a>;</li>
-<li>Upstream more optimizations from Dotty Linker</li>
-<li><a href="https://github.com/lampepfl/dotty/pull/2827">Add support for existing in the same classpath with Scala 2.12</a></li>
-<li><a href="https://github.com/lampepfl/dotty/pull/2991">Add native Dotty REPL</a></li>
-</ul>
-<h2><a href="#questions--reporting-bugs" id="questions--reporting-bugs">Questions / Reporting Bugs</a></h2>
+<h2><a href="#let-us-know-what-you-think" id="let-us-know-what-you-think">Let us know what you think!</a></h2>
 <p>If you have questions or any sort of feedback, feel free to send us a message on our
 <a href="https://gitter.im/lampepfl/dotty">Gitter channel</a>. If you encounter a bug, please
 <a href="https://github.com/lampepfl/dotty/issues/new">open an issue on GitHub</a>.</p>
 <h2><a href="#contributing" id="contributing">Contributing</a></h2>
 <p>Thank you to all the contributors who made this release possible!</p>
-<p>According to <code>git shortlog -sn --no-merges 0.2.0-RC1..0.3.0-RC2</code> these are:</p>
-<pre><code>   138  Martin Odersky
-    36  Nicolas Stucki
-    12  Guillaume Martres
-     7  Dmitry Petrashko
-     5  liu fengyun
-     4  Allan Renucci
-     4  Felix Mulder
-     2  Lorand Szakacs
-     1  Lukas Ciszewski
-     1  Max Ovsiankin
-     1  Lanny Ripple
-     1  Serhii Pererva
-     1  Georg Schmid
+<p>According to <code>git shortlog -sn --no-merges 0.4.0-RC1..0.5.0-RC1</code> these are:</p>
+<pre><code>   112  Nicolas Stucki
+   108  Martin Odersky
+    33  Allan Renucci
+    18  Guillaume Martres
+    17  Martin Duhem
+    13  liu fengyun
+     9  Miron Aseev
+     4  Matt D'Souza
+     4  Raphael Bosshard
+     2  k0ala
+     2  Vitor Vieira
+     2  Fengyun Liu
+     2  Michal Gutowski
+     2  Robert Soeldner
+     2  Aurélien Richez
+     1  rsoeldner
+     1  Hermes Espínola González
+     1  Jean Detoeuf
+     1  Karol Chmist
+     1  Olivier Blanvillain
+     1  William Narmontas
+     1  Yevgen Nerush
+     1  gan74
+     1  gosubpl
 </code></pre>
-<p>If you want to get your hands dirty with any of this, now is a good moment to get involved!
-You can have a look at our <a href="http://dotty.epfl.ch/docs/contributing/getting-started.html">Getting Started page</a>,
-our <a href="http://scala-lang.org/blog/2016/10/14/dotty-errors.html">Awesome Error Messages</a> or some of
+<p>If you want to get your hands dirty and contribute to Dotty, now is a good time to get involved!
+You can have a look at our <a href="http://dotty.epfl.ch/docs/contributing/getting-started.html">Getting Started page for new contributors</a>,
+the <a href="http://scala-lang.org/blog/2016/10/14/dotty-errors.html">Awesome Error Messages</a> project or some of
 the simple <a href="https://github.com/lampepfl/dotty/issues?q=is%3Aissue+is%3Aopen+label%3Aexp%3Anovice">Dotty issues</a>.
 They make perfect entry-points into hacking on the compiler.</p>
 <p>We are looking forward to having you join the team of contributors.</p>
 <h2><a href="#library-authors-join-our-community-build" id="library-authors-join-our-community-build">Library authors: Join our community build</a></h2>
-<p>Dotty now has a set of libraries that are built against every nightly snapshot.
-Currently this includes scalatest, squants and algebra.
+<p>Dotty now has a set of widely-used community libraries that are built against every nightly Dotty
+snapshot. Currently this includes ScalaPB, algebra, scalatest, scopt and squants.
 Join our <a href="https://github.com/lampepfl/dotty-community-build">community build</a>
 to make sure that our regression suite includes your library.</p>
-<p>To get started, see <a href="https://github.com/lampepfl/dotty">https://github.com/lampepfl/dotty</a>.</p>
 
         </div>
 
