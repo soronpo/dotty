@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-12-05 -->
+<!-- This page was last generated on 2017-12-06 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2096,24 +2096,6 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/core/ExplainingTypeComparer.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/ExplainingTypeComparer.html">ExplainingTypeComparer</a>
@@ -3722,10 +3704,12 @@
 
                 
                 <li id="show-hidden-by-default" onclick="toggleHiddenByDefault(this);">+ expand rest</li>
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/printing/Printer$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/printing/Printer.html">C</a>
                     </div>
@@ -3734,6 +3718,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -11438,9 +11426,9 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="apply(prefix,designator)(ctx)" class="member ">
+                <div id="apply(prefix,desig)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(prefix,designator)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'apply(prefix,desig)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11470,9 +11458,9 @@
                                     
                                 
                                     <span class="">
-                                        designator:
+                                        desig:
                                     </span>
-                                    TermDesignator
+                                    Designator
                                     
                                 
                             <span class="no-left">)</span>
@@ -11500,10 +11488,8 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-apply(prefix,designator)(ctx)">
-                            <p>Create term ref with given name, without specifying a signature.
-Its meaning is the (potentially multi-) denotation of the member(s)
-of prefix with given name.</p>
+                        <div class="member-body-long" id ="long-body-apply(prefix,desig)(ctx)">
+                            <p>Create a term ref with given designator</p>
 
                         </div>
                     </div>
@@ -11580,158 +11566,9 @@ of prefix with given name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-apply(prefix,name,denot)(ctx)">
-                            <p>Create term ref to given initial denotation, taking the signature
-from the denotation if it is completed, or creating a term ref without
-signature, if denotation is not yet completed.</p>
+                            <p>Create a term ref with given initial denotation. The name of the reference is taken
+from the denotation's symbol if the latter exists, or else it is the given name.</p>
 
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="withSym(prefix,sym,name)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'withSym(prefix,sym,name)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                withSym
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        prefix:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        sym:
-                                    </span>
-                                    TermSymbol
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        name:
-                                    </span>
-                                    TermName
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TermRef</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-withSym(prefix,sym,name)(ctx)">
-                            <p>Create a term ref referring to given symbol with given name.
-This is similar to TermRef(Type, Symbol), except:
-(1) the symbol might not yet have a denotation, so the name needs to be given explicitly.
-(2) the designator of the TermRef is either the symbol or its name &amp; unforced signature.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="withSym(prefix,sym)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'withSym(prefix,sym)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                withSym
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        prefix:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        sym:
-                                    </span>
-                                    TermSymbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: TermRef</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-withSym(prefix,sym)(ctx)">
-                            
                         </div>
                     </div>
                 </div><!-- end member -->

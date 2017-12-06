@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-12-05 -->
+<!-- This page was last generated on 2017-12-06 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -2096,24 +2096,6 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">O</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/Designators$.html">Designators</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/core/ExplainingTypeComparer.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/core/ExplainingTypeComparer.html">ExplainingTypeComparer</a>
@@ -3722,10 +3704,12 @@
 
                 
                 <li id="show-hidden-by-default" onclick="toggleHiddenByDefault(this);">+ expand rest</li>
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/printing/Printer$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/printing/Printer.html">C</a>
                     </div>
@@ -3734,6 +3718,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -11416,11 +11404,6 @@
                     
                     <span class="entity-super-type">Denotation</span>
                     
-                    
-                    <span class="keyword">with</span>
-                    
-                    <span class="entity-super-type">PreDenotation</span>
-                    
                 </div>
                 
             </div>
@@ -11911,7 +11894,15 @@ when seen from prefix <code>site</code>.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-bringForward()(ctx)">
                             <p>Move validity period of this denotation to a new run. Throw a StaleSymbol error
-if denotation is no longer valid.</p>
+if denotation is no longer valid.
+However, StaleSymbol error is not thrown in the following situations:</p>
+<ul>
+<li>If ctx.acceptStale returns true (e.g. because we are in the IDE),
+update the symbol to the new version if it exists, or return
+the old version otherwise.</li>
+<li>If the symbol did not have a denotation that was defined at the current phase
+return a NoDenotation instead.</li>
+</ul>
 
                         </div>
                     </div>
@@ -11973,54 +11964,6 @@ if denotation is no longer valid.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-computeAsSeenFrom(pre)(ctx)">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="containsSym(sym)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'containsSym(sym)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            final
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                containsSym
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        sym:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-containsSym(sym)">
-                            <p>Group contains a denotation that refers to given symbol</p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12542,40 +12485,6 @@ with <code>excluded</code>.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="hasUniqueSym" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'hasUniqueSym');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                hasUniqueSym
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-hasUniqueSym">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="history" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'history');">[+]</span>
@@ -13091,7 +13000,57 @@ a base type which comes earlier in the linearization.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-matches(other)(ctx)">
-                            <p>Group contains a denotation with given signature</p>
+                            <p>Group contains a denotation with the same signature as <code>other</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="name(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'name(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            final
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                name
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Name</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-name(ctx)">
+                            <p>The name of the denotation</p>
 
                         </div>
                     </div>
@@ -13499,6 +13458,57 @@ as seen from subclasses.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="skipRemoved(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'skipRemoved(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                skipRemoved
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: SingleDenotation</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-skipRemoved(ctx)">
+                            <p>Skip any denotations that have been removed by an installAfter or that
+are otherwise undefined.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="staleSymbolError(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'staleSymbolError(ctx)');">[+]</span>
@@ -13761,67 +13771,6 @@ itself, otherwise a freshly initialized copy.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="toDenot(pre)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toDenot(pre)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            final
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                toDenot
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        pre:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Denotation</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-toDenot(pre)(ctx)">
-                            <p>Convert to full denotation by &amp;-ing all elements</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="toString" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'toString');">[+]</span>
@@ -13972,6 +13921,60 @@ given phase. Denotations are replaced while keeping the same validity periods.</
                         <div class="member-body-long" id ="long-body-typeRef(ctx)">
                             <p>The TypeRef representing this type denotation at its original location.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="updateValidity()(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'updateValidity()(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                updateValidity
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: SingleDenotation</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-updateValidity()(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
