@@ -11429,7 +11429,7 @@ would not typecheck if an implicit was declared like this for type <code>T</code
 <p>This definition effectively says that value of type <code>T</code> can (only) be
 compared with <code>==</code> or <code>!=</code> to other values of type <code>T</code>. The definition
 is used only for type checking; it has no significance for runtime
-behavior, since <code>==</code> always maps to <code>equals</code> and <code>!=</code> alwatys maps to
+behavior, since <code>==</code> always maps to <code>equals</code> and <code>!=</code> always maps to
 the negation of <code>equals</code>. The right hand side of the definition is a value
 that has any <code>Eq</code> instance as its type. Here is the definition of class
 <code>Eq</code> and its companion object:</p>
@@ -11457,7 +11457,7 @@ values of the same type. They also make numbers only comparable to
 other numbers, sequences only comparable to other
 sequences and sets only comparable to other sets.</p>
 <p>There's also a &quot;fallback&quot; instance named <code>eqAny</code> that allows comparisons
-over all types that do not themeselves have an <code>Eq</code> instance.  <code>eqAny</code> is
+over all types that do not themselves have an <code>Eq</code> instance.  <code>eqAny</code> is
 defined as follows:</p>
 <pre><code>def eqAny[L, R]: Eq[L, R] = Eq
 </code></pre>
@@ -11492,8 +11492,7 @@ instance if the implicit search for <code>Eq[T, T]</code> succeeds
 and constructs an instance different from <code>eqAny</code>.</p>
 <p>Here <em>lifting</em> a type <code>S</code> means replacing all references to  abstract types
 in covariant positions of <code>S</code> by their upper bound, and to replacing
-all refinement types in in covariant positions of <code>S</code> by their parent.
-The purpose if lifte</p>
+all refinement types in covariant positions of <code>S</code> by their parent.</p>
 </li>
 </ol>
 <p>More on multiversal equality is found in a <a href="http://www.scala-lang.org/blog/2016/05/06/multiversal-equality.html">blog post</a>

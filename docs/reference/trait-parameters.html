@@ -11418,7 +11418,7 @@ class C extends Greeting(&quot;Bob&quot;) {
 <p>One potential issue with trait parameters is how to prevent
 ambiguities. For instance, you might try to extend <code>Greeting</code> twice,
 with different parameters.</p>
-<pre><code class="language-scala">/*!*/ class D extends C with Greeting(&quot;Bill&quot;) // error: parameters passed twice
+<pre><code class="language-scala">/*!*/ class D extends C with Greeting(&quot;Bill&quot;) // error: parameter passed twice
 </code></pre>
 <p>Should this print &quot;Bob&quot; or &quot;Bill&quot;? In fact this program is illegal,
 because it violates one of the following rules for trait parameters:</p>

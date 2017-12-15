@@ -11405,7 +11405,7 @@
         </a>
         <hr/>
         <div id="doc-page-container">
-            <p>Type arguments of methods can now be named as well as by position. Example:</p>
+            <p>Type arguments of methods can now be named, as well as by position. Example:</p>
 <pre><code>def construct[Elem, Coll[_]](xs: Elem*): Coll[Elem] = ???
 
 val xs2 = construct[Coll = List, Elem = Int](1, 2, 3)
@@ -11419,8 +11419,8 @@ positional type arguments are not supported.</p>
 arguments to be omitted. Indeed, if type arguments are named, some
 arguments may be left out.  An example is the definition of <code>xs3</code>
 above. A missing type argument is inferred as usual by local type
-inference. The same is not true for positional arguments, which have
-to be given always for all type parameters.</p>
+inference. The same is not true for positional arguments, which must always
+be provided for all type parameters.</p>
 
         </div>
     </div><!-- end content-body -->
