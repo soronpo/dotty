@@ -11615,14 +11615,16 @@ Tree
                         
                         <span class="no-left">: SimpleIdentityMap
 <span class="no-left no-right">[</span>
-<a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a><span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/core/TyperState.html">TyperState</a>
+<a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a><span class="">, </span><span class="no-right">(</span>
+<a href="../../../../../.././api/dotty/tools/dotc/core/TyperState.html">TyperState</a><span>, </span><a href="../../../../../.././api/dotty/tools/dotc/core/Constraint.html">Constraint</a>
+<span class="no-left">)</span>
 <span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-evalState">
-                            <p>A map recording the typer states in which arguments stored in myTypedArg were typed</p>
+                            <p>A map recording the typer states and constraints in which arguments stored in myTypedArg were typed</p>
 
                         </div>
                     </div>
@@ -11889,11 +11891,12 @@ Tree
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-allArgTypesAreCurrent()(ctx)">
-                            <p>Forget the types of any arguments that have been typed producing a constraint in a
-typer state that is not yet committed into the one of the current context <code>ctx</code>.
+                            <p>Forget the types of any arguments that have been typed producing a constraint
+- that is in a typer state that is not yet committed into the one of the current context <code>ctx</code>,
+- or that has been retracted from its typestate because oif a failed operation.
 This is necessary to avoid &quot;orphan&quot; TypeParamRefs that are referred to from
 type variables in the typed arguments, but that are not registered in the
-current constraint. A test case is pos/t1756.scala.</p>
+current constraint. Test cases are pos/t1756.scala and pos/i3538.scala.</p>
 
                         </div>
                     </div>
