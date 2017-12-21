@@ -52,7 +52,7 @@ two fundamental types:</p>
 and it takes types <code>T</code> to expressions of type <code>Type[T]</code>. Splicing
 takes expressions of type <code>Expr[T]</code> to expressions of type <code>T</code> and it
 takes expressions of type <code>Type[T]</code> to types <code>T</code>.</p>
-<p>The two types can be are defined in package <code>scala.quoted</code> as follows:</p>
+<p>The two types can be defined in package <code>scala.quoted</code> as follows:</p>
 <pre><code>package scala.quoted
 
 abstract class Expr[T] {
@@ -167,12 +167,12 @@ types can be effectively ignored for phase consistency checking.</p>
 </code></pre>
 <p>==&gt; (inline)</p>
 <pre><code>val $this: Seq[Int] = genSeq[Int]()
-val f: Int =&gt; Int = x =&gt; x * x
+val f: Int =&gt; Int = x =&gt; x + 1
 ~ _root_.Macros.mapImpl[Int, Int](’[Int], ’($this), ’(f))
 </code></pre>
 <p>==&gt; (splice)</p>
 <pre><code>val $this: Seq[Int] = genSeq[Int]()
-val f: Int =&gt; Int = x =&gt; x * x
+val f: Int =&gt; Int = x =&gt; x + 1
 
 {
   var i = 0
@@ -188,7 +188,7 @@ val f: Int =&gt; Int = x =&gt; x * x
 </code></pre>
 <p>==&gt; (expand and splice inside quotes)</p>
 <pre><code>val $this: Seq[Int] = genSeq[Int]()
-val f: Int =&gt; Int = x =&gt; x * x
+val f: Int =&gt; Int = x =&gt; x + 1
 
 {
   var i = 0
