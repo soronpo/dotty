@@ -11688,6 +11688,47 @@ Int<span class="">, </span><a href="../../../.././api/dotty/tools/dotc/core/Name
                     </div>
                 </div><!-- end member -->
                 
+                <div id="backendPhases" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'backendPhases');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                backendPhases
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+List
+<span class="no-left no-right">[</span>
+<a href="../../../.././api/dotty/tools/dotc/core/Phases$/Phase.html">Phase</a>
+<span class="no-left">]</span>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-backendPhases">
+                            <p>Generate the output of the compilation</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="compile(parsed)(state)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'compile(parsed)(state)');">[+]</span>
@@ -11866,6 +11907,47 @@ Int<span class="">, </span><a href="../../../.././api/dotty/tools/dotc/core/Name
                     </div>
                 </div><!-- end member -->
                 
+                <div id="frontendPhases" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'frontendPhases');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                frontendPhases
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+List
+<span class="no-left no-right">[</span>
+<a href="../../../.././api/dotty/tools/dotc/core/Phases$/Phase.html">Phase</a>
+<span class="no-left">]</span>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-frontendPhases">
+                            <p>Phases dealing with the frontend up to trees ready for TASTY pickling</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="newRun(initCtx,objectIndex)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'newRun(initCtx,objectIndex)');">[+]</span>
@@ -11964,60 +12046,6 @@ Int<span class="">, </span><a href="../../../.././api/dotty/tools/dotc/core/Name
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-objectName(state)">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="phases" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'phases');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                phases
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-List
-<span class="no-left no-right">[</span>
-<a href="../../../.././api/dotty/tools/dotc/core/Phases$/Phase.html">Phase</a>
-<span class="no-left">]</span>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-phases">
-                            <p>Meta-ordering constraint:</p>
-<p>DenotTransformers that change the signature of their denotation's info must go
-after erasure. The reason is that denotations are permanently referred to by
-TermRefs which contain a signature. If the signature of a symbol would change,
-all refs to it would become outdated - they could not be dereferenced in the
-new phase.</p>
-<p>After erasure, signature changing denot-transformers are OK because erasure
-will make sure that only term refs with fixed SymDenotations survive beyond it. This
-is possible because:</p>
-<ul>
-<li>splitter has run, so every ident or select refers to a unique symbol</li>
-<li>after erasure, asSeenFrom is the identity, so every reference has a
-plain SymDenotation, as opposed to a UniqueRefDenotation.</li>
-</ul>
-
                         </div>
                     </div>
                 </div><!-- end member -->
