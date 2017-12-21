@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-12-20 -->
+<!-- This page was last generated on 2017-12-21 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -158,9 +158,11 @@
 <ul id="">
     <li><a href="../.././docs/reference/multiversal-equality.html">Multiversal Equality</a>
 </li>
+<li><a href="../.././docs/reference/trait-parameters.html">Trait Parameters</a>
+</li>
 <li><a href="../.././docs/reference/inline.html">Inline</a>
 </li>
-<li><a href="../.././docs/reference/trait-parameters.html">Trait Parameters</a>
+<li><a href="../.././docs/reference/symmetric-meta-programming.html">Symmetric Meta Programming</a>
 </li>
 <li><a href="../.././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a>
 </li>
@@ -3026,10 +3028,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../.././api/dotty/tools/dotc/core/tasty/TreePickler$.html">O</a>
                         
                         <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/core/tasty/TreePickler.html">C</a>
                     </div>
@@ -3038,6 +3042,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -4652,9 +4660,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/ElimJavaPackages.html">C</a>
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">C</a>
                     </div>
-                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/ElimJavaPackages.html">ElimJavaPackages</a>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">ElimOuterSelect</a>
                 </li>
 
                 
@@ -4670,9 +4678,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">C</a>
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/ElimPackagePrefixes.html">C</a>
                     </div>
-                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">ElimOuterSelect</a>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/ElimPackagePrefixes.html">ElimPackagePrefixes</a>
                 </li>
 
                 
@@ -5175,6 +5183,24 @@
                 
 
                 
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/MacroTransformWithImplicits.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/MacroTransformWithImplicits.html">MacroTransformWithImplicits</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -5453,6 +5479,24 @@
                         <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/PrimitiveForwarders.html">C</a>
                     </div>
                     <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/PrimitiveForwarders.html">PrimitiveForwarders</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">ReifyQuotes</a>
                 </li>
 
                 
@@ -11421,7 +11465,7 @@ upper            ::=  ‘A’ | … | ‘Z’ | ‘\$’ | ‘_’  “… and U
 lower            ::=  ‘a’ | … | ‘z’ “… and Unicode category Ll”
 letter           ::=  upper | lower “… and Unicode categories Lo, Lt, Nl”
 digit            ::=  ‘0’ | … | ‘9’
-paren            ::=  ‘(’ | ‘)’ | ‘[’ | ‘]’ | ‘{’ | ‘}’
+paren            ::=  ‘(’ | ‘)’ | ‘[’ | ‘]’ | ‘{’ | ‘}’ | ‘'(’ | ‘'[’ | ‘'{’
 delim            ::=  ‘`’ | ‘'’ | ‘&quot;’ | ‘.’ | ‘;’ | ‘,’
 opchar           ::=  “printableChar not matched by (whiteSpace | upper | lower |
                        letter | digit | paren | delim | opchar | Unicode_Sm |
@@ -11519,6 +11563,7 @@ AnnotType         ::=  SimpleType {Annotation}                                  
 SimpleType        ::=  SimpleType TypeArgs                                      AppliedTypeTree(t, args)
                     |  SimpleType ‘#’ id                                        Select(t, name)
                     |  StableId
+                    |  [‘-’ | ‘+’ | ‘~’ | ‘!’] StableId                         PrefixOp(expr, op)
                     |  Path ‘.’ ‘type’                                          SingletonTypeTree(p)
                     |  ‘(’ ArgTypes ‘)’                                         Tuple(ts)
                     |  ‘_’ TypeBounds
@@ -11568,6 +11613,9 @@ InfixExpr         ::=  PrefixExpr
 PrefixExpr        ::=  [‘-’ | ‘+’ | ‘~’ | ‘!’] SimpleExpr                       PrefixOp(expr, op)
 SimpleExpr        ::=  ‘new’ Template                                           New(templ)
                     |  BlockExpr
+                    |  ''{’ BlockExprContents ‘}’
+                    |  ‘'(’ ExprsInParens ‘)’
+                    |  ‘'[’ Type ‘]’
                     |  SimpleExpr1 [‘_’]                                        PostfixOp(expr, _)
 SimpleExpr1       ::=  Literal
                     |  Path
@@ -11584,8 +11632,8 @@ ParArgumentExprs  ::=  ‘(’ ExprsInParens ‘)’                            
                     |  ‘(’ [ExprsInParens] PostfixExpr ‘:’ ‘_’ ‘*’ ‘)’          exprs :+ Typed(expr, Ident(wildcardStar))
 ArgumentExprs     ::=  ParArgumentExprs
                     |  [nl] BlockExpr
-BlockExpr         ::=  ‘{’ CaseClauses ‘}’                                      Match(EmptyTree, cases)
-                    |  ‘{’ Block ‘}’                                            block // starts at {
+BlockExpr         ::=  ‘{’ BlockExprContents ‘}’                                
+BlockExprContents ::=  CaseClauses | Block
 Block             ::=  {BlockStat semi} [BlockResult]                           Block(stats, expr?)
 BlockStat         ::=  Import
                     |  {Annotation} [‘implicit’ | ‘lazy’] Def
@@ -11602,8 +11650,8 @@ Enumerator        ::=  Generator
 Generator         ::=  Pattern1 ‘&lt;-’ Expr                                       GenFrom(pat, expr)
 Guard             ::=  ‘if’ PostfixExpr
 
-CaseClauses       ::=  CaseClause { CaseClause }                                CaseDef(pat, guard?, block)   // block starts at =&gt;
-CaseClause        ::=  ‘case’ (Pattern [Guard] ‘=&gt;’ Block | INT)
+CaseClauses       ::=  CaseClause { CaseClause }                                Match(EmptyTree, cases)
+CaseClause        ::=  ‘case’ (Pattern [Guard] ‘=&gt;’ Block | INT)                CaseDef(pat, guard?, block)   // block starts at =&gt;
 
 Pattern           ::=  Pattern1 { ‘|’ Pattern1 }                                Alternative(pats)
 Pattern1          ::=  PatVar ‘:’ RefinedType                                   Bind(name, Typed(Ident(wildcard), tpe))

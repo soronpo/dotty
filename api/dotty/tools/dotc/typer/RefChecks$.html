@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2017-12-20 -->
+<!-- This page was last generated on 2017-12-21 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -158,9 +158,11 @@
 <ul id="">
     <li><a href="../../../../.././docs/reference/multiversal-equality.html">Multiversal Equality</a>
 </li>
+<li><a href="../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
+</li>
 <li><a href="../../../../.././docs/reference/inline.html">Inline</a>
 </li>
-<li><a href="../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
+<li><a href="../../../../.././docs/reference/symmetric-meta-programming.html">Symmetric Meta Programming</a>
 </li>
 <li><a href="../../../../.././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a>
 </li>
@@ -3026,10 +3028,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/tasty/TreePickler$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/core/tasty/TreePickler.html">C</a>
                     </div>
@@ -3038,6 +3042,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -4652,9 +4660,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimJavaPackages.html">C</a>
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimJavaPackages.html">ElimJavaPackages</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">ElimOuterSelect</a>
                 </li>
 
                 
@@ -4670,9 +4678,9 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">C</a>
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimPackagePrefixes.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimOuterSelect.html">ElimOuterSelect</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimPackagePrefixes.html">ElimPackagePrefixes</a>
                 </li>
 
                 
@@ -5175,6 +5183,24 @@
                 
 
                 
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/MacroTransformWithImplicits.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/MacroTransformWithImplicits.html">MacroTransformWithImplicits</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -5453,6 +5479,24 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PrimitiveForwarders.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PrimitiveForwarders.html">PrimitiveForwarders</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">ReifyQuotes</a>
                 </li>
 
                 
@@ -11686,7 +11730,7 @@ LevelInfo<span>, </span>Int
 That is for overriding member M and overridden member O:</li>
 </ol>
 <p>1.1. M must have the same or stronger access privileges as O.
-1.2. O must not be final.
+1.2. O must not be effectively final.
 1.3. O is deferred, or M has <code>override</code> modifier.
 1.4. If O is stable, then so is M.
 // @M: LIFTED 1.5. Neither M nor O are a parameterized type alias
@@ -11700,8 +11744,9 @@ or M is a type alias or class which conforms to O's bounds.
 1.8.1  M's type is a subtype of O's type, or
 1.8.2  M is of type []S, O is of type ()T and S &lt;: T, or
 1.8.3  M is of type ()S, O is of type []T and S &lt;: T, or
-1.9.  If M is a macro def, O cannot be deferred unless there's a concrete method overriding O.
-1.10. If M is not a macro def, O cannot be a macro def.
+1.9    M must not be a Dotty macro def
+1.10.  If M is a 2.x macro def, O cannot be deferred unless there's a concrete method overriding O.
+1.11.  If M is not a macro def, O cannot be a macro def.
 2. Check that only abstract classes have deferred members
 3. Check that concrete classes do not have deferred definitions
 that are not implemented in a subclass.
