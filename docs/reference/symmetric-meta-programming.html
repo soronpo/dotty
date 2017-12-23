@@ -153,7 +153,7 @@ types can be effectively ignored for phase consistency checking.</p>
     var i = 0
     val xs = ~arr
     var len = xs.length
-    val ys = new Array[~u]
+    val ys = new Array[~u](len)
     while (i &lt; len) {
       ys(i) = ~op(’(xs(i)))
       i += 1
@@ -178,7 +178,7 @@ val f: Int =&gt; Int = x =&gt; x + 1
   var i = 0
   val xs = ~’($this)
   var len = xs.length
-  val ys = new Array[~’[Int]]
+  val ys = new Array[~’[Int]](len)
   while (i &lt; len) {
     ys(i) = ~(’(f)(’(xs(i))))
     i += 1
@@ -194,7 +194,7 @@ val f: Int =&gt; Int = x =&gt; x + 1
   var i = 0
   val xs = $this
   var len = xs.length
-  val ys = new Array[Int]
+  val ys = new Array[Int](len)
   while (i &lt; len) {
     ys(i) = xs(i) + 1
     i += 1
@@ -209,7 +209,7 @@ val f: Int =&gt; Int = x =&gt; x + 1
   var i = 0
   val xs = $this
   var len = xs.length
-  val ys = new Array[Int]
+  val ys = new Array[Int](len)
   while (i &lt; len) {
     ys(i) = xs(i) + 1
     i += 1
@@ -251,7 +251,7 @@ a bit unsatisfactory. If the PCP is so fundamental, it should be
 applicable without the global value exception. But in the example as
 given this does not hold since both <code>assert</code> and <code>program</code> call
 <code>assertImpl</code> with a splice but no quote.</p>
-<p>However, one can could argue that the example is really missing
+<p>However, one could argue that the example is really missing
 an important aspect: The macro library has to be compiled in a phase
 prior to the program using it, but in the code above, macro
 and program are defined together. A more accurate view of
