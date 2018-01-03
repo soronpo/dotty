@@ -12396,6 +12396,49 @@ of some operation on an existing type.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="checkUnreportedErrors" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkUnreportedErrors');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            final
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                checkUnreportedErrors
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: [31mfalse[0m</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-checkUnreportedErrors">
+                            <p>If this flag is set, we check that types assigned to trees are error types only
+if some error was already reported. There are complicicated scenarios where this
+is not true. An example is TestNonCyclic in posTwice. If we remove the
+first (unused) import <code>import dotty.tools.dotc.core.Types.Type</code> in <code>CompilationUnit</code>,
+we end up assigning a CyclicReference error type to an import expression <code>annotation</code>
+before the cyclic reference is reported. What happens is that the error was reported
+as a result of a completion in a not-yet committed typerstate. So we cannot enforce
+this in all circumstances. But since it is almost always true it is useful to
+keep the Config option for debugging.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="debugCheckConstraintsClosed" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'debugCheckConstraintsClosed');">[+]</span>
