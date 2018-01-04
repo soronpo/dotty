@@ -11482,19 +11482,19 @@ The example below picks up all methods with the name <code>canOverwrite</code>:<
 <h2><a href="#integration-tests" id="integration-tests">Integration tests</a></h2>
 <p>These tests are Scala source files expected to compile with Dotty (pos tests),
 along with their expected output (run tests) or errors (neg tests).</p>
-<p>All of these tests are contained in the <code>./tests/*</code> directories and can be run with the <code>vulpix</code> command.</p>
+<p>All of these tests are contained in the <code>./tests/*</code> directories and can be run with the <code>testCompilation</code> command.</p>
 <p>Currently to run these tests you need to invoke from sbt:</p>
 <pre><code class="language-bash">$ sbt
-&gt; vulpix
+&gt; testCompilation
 </code></pre>
 <p>(which is effectively the same with <code>testOnly dotty.tools.dotc.CompilationTests</code>)</p>
 <p>It is also possible to run tests filtered, again from sbt:</p>
 <pre><code class="language-bash">$ sbt
-&gt; vulpix i2147.scala
+&gt; testCompilation companions
 </code></pre>
-<p>This will run both the test <code>./tests/pos/i2147.scala</code> and
-<code>./tests/partest-test/i2147.scala</code> since both of these match the given string.
-This also means that you could run <code>vulpix</code> with no arguments to run all integration tests.</p>
+<p>This will run both the test <code>./tests/pos/companions.scala</code> and
+<code>./tests/neg/companions.scala</code> since both of these match the given string.
+This also means that you could run <code>testCompilation</code> with no arguments to run all integration tests.</p>
 
         </div>
     </div><!-- end content-body -->
