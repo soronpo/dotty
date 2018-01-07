@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-01-05 -->
+<!-- This page was last generated on 2018-01-07 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11560,41 +11560,6 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="ParamNotArg" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ParamNotArg');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                ParamNotArg
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Thicket">Thicket</a></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-ParamNotArg">
-                            <p>A placeholder for dummy arguments that should be re-parsed as parameters</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="argumentExpr" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'argumentExpr');">[+]</span>
@@ -12061,46 +12026,6 @@ class constructor</p>
                         <div class="member-body-long" id ="long-body-lastStatOffset">
                             <p>The offset of the last time when a statement on a new line was definitely
 encountered in the current scope or an outer scope.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="lookaheadTokens" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lookaheadTokens');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                lookaheadTokens
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: ListBuffer
-<span class="no-left no-right">[</span>
-TokenData
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-lookaheadTokens">
-                            <p>Lookahead tokens for the case of annotations in class constructors.
-We store tokens in lookahead as long as they can form a valid prefix
-of a class parameter clause.</p>
 
                         </div>
                     </div>
@@ -13976,53 +13901,6 @@ List
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-classConstr(owner,isCaseClass)">
                             <p>ClassConstr ::= [ClsTypeParamClause] [ConstrMods] ClsParamClauses</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="classConstrAnnotExpr()" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'classConstrAnnotExpr()');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                classConstrAnnotExpr
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-classConstrAnnotExpr()">
-                            <p>Handle first argument of an argument list to an annotation of
-a primary class constructor. If the current token either cannot
-start an expression or is an identifier and is followed by <code>:</code>,
-stop parsing the rest of the expression and return <code>EmptyTree</code>,
-indicating that we should re-parse the expression as a parameter clause.
-Otherwise parse as normal.</p>
 
                         </div>
                     </div>
@@ -18429,9 +18307,9 @@ OpInfo
                     </div>
                 </div><!-- end member -->
                 
-                <div id="parArgumentExprs(first)" class="member ">
+                <div id="parArgumentExprs()" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'parArgumentExprs(first)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'parArgumentExprs()');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -18452,12 +18330,6 @@ OpInfo
                             <span class="no-left">(</span>
                                 
                                 
-                                    <span class="no-left">
-                                        first:
-                                    </span>
-                                    Boolean
-                                    
-                                
                             <span class="no-left">)</span>
                             
                         
@@ -18473,19 +18345,9 @@ OpInfo
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-parArgumentExprs(first)">
+                        <div class="member-body-long" id ="long-body-parArgumentExprs()">
                             <p>ParArgumentExprs ::= <code>(' [ExprsInParens]</code>)'
 |  <code>(' [ExprsInParens</code>,'] PostfixExpr <code>:'</code>_' `*' ')'</p>
-<p>Special treatment for arguments of primary class constructor
-annotations. All empty argument lists <code>(</code> <code>)</code> following the first
-get represented as <code>List(ParamNotArg)</code> instead of <code>Nil</code>, indicating that
-the token sequence should be interpreted as an empty parameter clause
-instead. <code>ParamNotArg</code> can also be produced when parsing the first
-argument (see <code>classConstrAnnotExpr</code>).</p>
-<p>The method affects <code>lookaheadTokens</code> as a side effect.
-If the argument list parses as <code>List(ParamNotArg)</code>, <code>lookaheadTokens</code>
-contains the tokens that need to be replayed to parse the parameter clause.
-Otherwise, <code>lookaheadTokens</code> is empty.</p>
 
                         </div>
                     </div>
@@ -18534,9 +18396,10 @@ Otherwise, <code>lookaheadTokens</code> is empty.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-parArgumentExprss(fn)">
                             <p>ParArgumentExprss ::= {ParArgumentExprs}</p>
-<p>Special treatment for arguments of primary class constructor
-annotations. If an argument list returns <code>List(ParamNotArg)</code>
-ignore it, and return prefix parsed before that list instead.</p>
+<p>Special treatment for arguments to primary constructor annotations.
+(...) is considered an argument only if it does not look like a formal
+parameter list, i.e. does not start with <code>( &lt;annot&gt;* &lt;mod&gt;* ident :</code>
+Furthermore, <code>()</code> is considered a annotation argument only if it comes first.</p>
 
                         </div>
                     </div>
@@ -19437,51 +19300,6 @@ RefineStat       ::= Dcl
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-refinement()">
                             <p>Refinement ::= <code>{' RefineStatSeq</code>}'</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="saveLookahead()" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'saveLookahead()');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                saveLookahead
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: ListBuffer
-<span class="no-left no-right">[</span>
-TokenData
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-saveLookahead()">
-                            <p>Copy current token to end of lookahead</p>
 
                         </div>
                     </div>

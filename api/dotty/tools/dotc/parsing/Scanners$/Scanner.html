@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-01-05 -->
+<!-- This page was last generated on 2018-01-07 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11675,45 +11675,6 @@ Int<span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/cor
                     </div>
                 </div><!-- end member -->
                 
-                <div id="following" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'following');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                following
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-TokenData
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-following">
-                            <p>The parser can also add more lookahead tokens via <code>insertTokens</code>.
-Tokens beyond <code>next</code> are stored in <code>following</code>.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="isScala2Mode" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'isScala2Mode');">[+]</span>
@@ -11811,7 +11772,7 @@ Tokens beyond <code>next</code> are stored in <code>following</code>.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-next">
-                            <p>The scanner itself needs one token lookahead and one token history</p>
+                            <p>We need one token lookahead and one token history</p>
 
                         </div>
                     </div>
@@ -12869,57 +12830,6 @@ and advance to next character.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="insertTokens(tds)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'insertTokens(tds)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                insertTokens
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tds:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-TokenData
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-insertTokens(tds)">
-                            <p>Insert tokens <code>tds</code> in front of current token</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="invalidEscape()" class="member protected">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'invalidEscape()');">[+]</span>
@@ -13044,6 +12954,41 @@ TokenData
                     </div>
                 </div><!-- end member -->
                 
+                <div id="lookaheadScanner" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lookaheadScanner');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                lookaheadScanner
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Scanner</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-lookaheadScanner">
+                            <p>A new Scanner that starts at the current token offset</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="nextToken()" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'nextToken()');">[+]</span>
@@ -13128,55 +13073,6 @@ TokenData
                     </div>
                 </div><!-- end member -->
                 
-                <div id="popCopy(td)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'popCopy(td)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                popCopy
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        td:
-                                    </span>
-                                    TokenData
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-popCopy(td)">
-                            <p>If following is empty, invalidate token data <code>td</code> by setting
-<code>td.token</code> to <code>EMPTY</code>. Otherwise pop head of <code>following</code> into <code>td</code>.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="postProcessToken()" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'postProcessToken()');">[+]</span>
@@ -13214,54 +13110,6 @@ TokenData
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-postProcessToken()">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="pushCopy(td)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'pushCopy(td)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                pushCopy
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        td:
-                                    </span>
-                                    TokenData
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-pushCopy(td)">
-                            <p>Push a copy of token data <code>td</code> to <code>following</code></p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
