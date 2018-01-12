@@ -11605,10 +11605,14 @@
         <div id="doc-page-container">
             <p>A dependent function type describes functions where the result type may depend
 on the function's parameter values. Example:</p>
-<pre><code>class Entry { type Key; key: Key }
+<pre><code>trait Entry { type Key; val key: Key }
 
 def extractKey(e: Entry): e.Key = e.key          // a dependent method
 val extractor: (e: Entry) =&gt; e.Key = extractKey  // a dependent function value
+//            ║   ⇓ ⇓ ⇓ ⇓ ⇓ ⇓ ⇓   ║ 
+//            ║     Dependent     ║  
+//            ║   Function Type   ║  
+//            ╚═══════════════════╝
 </code></pre>
 <p>Scala already has <em>dependent methods</em>, i.e. methods where the result
 type refers to some of the parameters of the method. Method
