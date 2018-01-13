@@ -12001,6 +12001,40 @@
                     </div>
                 </div><!-- end member -->
                 
+                <div id="elimErasedCtx" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'elimErasedCtx');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                elimErasedCtx
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-elimErasedCtx">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="preErasureCtx" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'preErasureCtx');">[+]</span>
@@ -12273,11 +12307,62 @@ time deferred methods in <code>stats</code> that are replaced by a bridge with t
                             <p>Add a bridge between <code>member</code> and <code>other</code>, where <code>member</code> overrides <code>other</code>
 before erasure, if the following conditions are satisfied.</p>
 <ul>
-<li><code>member</code> and other have different signatures</li>
-<li>there is not yet a bridge with the same name and signature in <code>root</code></li>
+<li><code>member</code> and <code>other</code> have different signatures</li>
+<li>there is not yet a bridge with the same name and signature in <code>root</code>.</li>
 </ul>
-<p>The bridge has the erased info of <code>other</code> and forwards to <code>member</code>.</p>
+<p>The bridge has the erased info of <code>other</code> and forwards to <code>member</code>.
+Additionally, if <code>member</code> and <code>other</code> do have the same signature,
+but not the same type after erasure and before elimErasedValueTypes
+issue an error: A bridge would be needed yet it would clash with the member itself.
+See neg/i1905.scala</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="bridgePosFor(member)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'bridgePosFor(member)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                bridgePosFor
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        member:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Position</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-bridgePosFor(member)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
