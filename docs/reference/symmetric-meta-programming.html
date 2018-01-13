@@ -4023,6 +4023,122 @@
         </li>
     
         <li class="index-entity entity-package">
+            <h1><a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/index.html">dotty.tools.dotc.quoted</a></h1>
+            <ul class="package-entities">
+                <div id="cover-block"></div>
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/quoted/ExprCompilationUnit.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/ExprCompilationUnit.html">ExprCompilationUnit</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/quoted/ExprCompiler.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/ExprCompiler.html">ExprCompiler</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/quoted/ExprDecompiler.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/ExprDecompiler.html">ExprDecompiler</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/quoted/QuoteDriver.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/QuoteDriver.html">QuoteDriver</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/quoted/QuotePrinter.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/QuotePrinter.html">QuotePrinter</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../.././api/dotty/tools/dotc/quoted/Runners$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/quoted/Runners$.html">Runners</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+            </ul>
+        </li>
+    
+        <li class="index-entity entity-package">
             <h1><a class="entity-name" href="../.././api/dotty/tools/dotc/reporting/index.html">dotty.tools.dotc.reporting</a></h1>
             <ul class="package-entities">
                 <div id="cover-block"></div>
@@ -11983,7 +12099,8 @@ in class <code>Expr</code> called <code>run</code>. Note that <code>~</code> and
 to <code>T</code> but only <code>~</code> is subject to the PCP, whereas <code>run</code> is just a normal method.</p>
 <pre><code>abstract class Expr[T] {
   def unary_~: T
-  def run: T     // run staged code
+  def run(implicit runner: Runner[T]): T       // run staged code
+  def show(implicit runner: Runner[T]): String // show staged code
 }
 </code></pre>
 <h3><a href="#limitations-to-splicing" id="limitations-to-splicing">Limitations to Splicing</a></h3>
