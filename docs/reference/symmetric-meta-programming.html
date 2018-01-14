@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-01-13 -->
+<!-- This page was last generated on 2018-01-14 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11766,7 +11766,7 @@ inline def assert(expr: =&gt; Boolean): Unit =
   ~ assertImpl(’(expr))
 
 def assertImpl(expr: Expr[Boolean]) =
-  ’{ if !(~expr) then throw new AssertionError(s&quot;failed assertion: ${~expr}&quot;) }
+  ’{ if !(~expr) then throw new AssertionError(s&quot;failed assertion: ${~showExpr(expr)}&quot;) }
 </code></pre>
 <p>If <code>e</code> is an expression, then <code>’(e)</code> or <code>’{e}</code> represent the typed
 abstract syntax tree representing <code>e</code>. If <code>T</code> is a type, then <code>’[T]</code>
@@ -12177,14 +12177,14 @@ is defined in the companion object of class <code>Expr</code> as follows:</p>
 <p>The conversion says that values of types implementing the <code>Liftable</code>
 type class can be converted (&quot;lifted&quot;) automatically to <code>Expr</code>
 values. Dotty comes with instance definitions of <code>Liftable</code> for
-several types including all underlying types of literals. For example,
-<code>Int</code> values can be converted to <code>Expr[Int]</code> values by wrapping the
-value in a <code>Literal</code> tree node. This makes use of the underlying tree
-representation in the compiler for efficiency. But the <code>Liftable</code>
-instances are nevertheless not &quot;magic&quot; in the sense that they could
-all be defined in a user program without knowing anything about the
-representation of <code>Expr</code> trees. For instance, here is a possible
-instance of <code>Liftable[Boolean]</code>:</p>
+several types including <code>Boolean</code>, <code>String</code>, and all primitive number
+types. For example, <code>Int</code> values can be converted to <code>Expr[Int]</code>
+values by wrapping the value in a <code>Literal</code> tree node. This makes use
+of the underlying tree representation in the compiler for
+efficiency. But the <code>Liftable</code> instances are nevertheless not &quot;magic&quot;
+in the sense that they could all be defined in a user program without
+knowing anything about the representation of <code>Expr</code> trees. For
+instance, here is a possible instance of <code>Liftable[Boolean]</code>:</p>
 <pre><code>implicit def BooleanIsLiftable: Liftable[Boolean] = new {
   implicit def toExpr(b: Boolean) = if (b) ’(true) else ’(false)
 }
@@ -12214,6 +12214,11 @@ a <code>List</code> is liftable if its element type is:</p>
 <p>In the end, <code>Liftable</code> resembles very much a serialization
 framework. Like the latter it can be derived systematically for all
 collections, case classes and enums.</p>
+<p>Using lifting, we can now give the missing definition of <code>showExpr</code> in the introductory example:</p>
+<pre><code>def showExpr[T](expr: Expr[T]): Expr[String] = expr.toString
+</code></pre>
+<p>That is, the <code>showExpr</code> method converts its <code>Expr</code> argument to a string, and lifts
+the result back to an <code>Expr[String]</code> using the implicit <code>toExpr</code> conversion.</p>
 <h2><a href="#implementation" id="implementation">Implementation</a></h2>
 <h3><a href="#syntax-changes" id="syntax-changes">Syntax changes</a></h3>
 <p>A splice <code>~e</code> on an expression of type <code>Expr[T]</code> is a normal prefix
@@ -12269,9 +12274,9 @@ extends simply-typed lambda calculus with quotes and splices.</p>
                       ~t                splice
 
 Values        v  ::=  (x: T) =&gt; t       lambda
-                      ’q                pure quote
+                      ’u                quote
 
-Quoted        q  ::=  x  |  (x: T) =&gt; q  |  q q  |  ’t
+Simple terms  u  ::=  x  |  (x: T) =&gt; u  |  u u  |  ’t
 
 Types         T  ::=  A                 base type
                       T -&gt; T            function type
@@ -12297,7 +12302,7 @@ right identity <code>()</code>.</p>
 <p>We define a small step reduction relation <code>--&gt;</code> with the following rules:</p>
 <pre><code>            ((x: T) =&gt; t) v  --&gt;  [x := v]t
 
-                      ~(’t)  --&gt;  t
+                      ~(’u)  --&gt;  u
 
                          t1  --&gt;  t2
                       -----------------
@@ -12309,7 +12314,7 @@ is a context rule; it says that reduction is allowed in the hole <code>[ ]</code
 position of an evaluation context.  Evaluation contexts <code>e</code> and
 splice evaluation context <code>e_s</code> are defined syntactically as follows:</p>
 <pre><code>Eval context    e    ::=  [ ]  |  e t  |  v e  |  ’e_s[~e]
-Splice context  e_s  ::=  [ ]  |  (x: T) =&gt; e_s  |  e_s t  |  q e_s
+Splice context  e_s  ::=  [ ]  |  (x: T) =&gt; e_s  |  e_s t  |  u e_s
 </code></pre>
 <h3><a href="#typing-rules" id="typing-rules">Typing rules</a></h3>
 <p>Typing judgments are of the form <code>Es |- t: T</code>. There are two
@@ -12352,6 +12357,8 @@ environments and terms.</p>
                        ----------------
                        Es |- ’t: expr T
 </code></pre>
+<p>The meta theory of a slightly simplified variant 2-stage variant of this calculus
+is studied <a href="../simple-smp.html">separatey</a></p>
 <h2><a href="#going-further" id="going-further">Going Further</a></h2>
 <p>The meta-programming framework as presented and currently implemented is quite restrictive
 in that it does not allow for the inspection of quoted expressions and
