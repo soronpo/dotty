@@ -11843,6 +11843,40 @@
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isShared" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isShared');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                isShared
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isShared">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="myConstraint" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'myConstraint');">[+]</span>
@@ -12596,6 +12630,50 @@ without also retracting the type var as a whole.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="markShared()" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'markShared()');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                markShared
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Unit</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-markShared()">
+                            <p>Mark typer state as shared (typically because it is the typer state of
+the creation context of a source definition that potentially still needs
+to be completed). Members of shared typer states are never overwritten in <code>test</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="reporter" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'reporter');">[+]</span>
@@ -12773,9 +12851,9 @@ without also retracting the type var as a whole.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="test(op)" class="member ">
+                <div id="test(op)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'test(op)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'test(op)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12797,9 +12875,22 @@ without also retracting the type var as a whole.</p>
                                 
                                 
                                     <span class="no-left">
-                                        op: =&gt;
+                                        op:
                                     </span>
-                                    T
+                                    Context<span class="right-arrow"> =&gt; </span>T
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
                                     
                                 
                             <span class="no-left">)</span>
@@ -12814,8 +12905,10 @@ without also retracting the type var as a whole.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-test(op)">
-                            <p>Test using <code>op</code>, restoring typerState to previous state afterwards</p>
+                        <div class="member-body-long" id ="long-body-test(op)(ctx)">
+                            <p>Test using <code>op</code>. If current typerstate is shared, run <code>op</code> in a fresh exploration
+typerstate. If it is unshared, run <code>op</code> in current typerState, restoring typerState
+to previous state afterwards.</p>
 
                         </div>
                     </div>
