@@ -11842,7 +11842,7 @@ expressiveness. Symmetric meta programming allows to define a <code>Liftable</co
 type-class which can implement such accesses within the confines of the
 PCP. This is explained further in a later section.</p>
 <h2><a href="#details" id="details">Details</a></h2>
-<h3><a href="#from-s-to-functions-and-back" id="from-s-to-functions-and-back">From <code>Expr</code>s to Functions and Back</a></h3>
+<h3><a href="#from-exprs-to-functions-and-back" id="from-exprs-to-functions-and-back">From <code>Expr</code>s to Functions and Back</a></h3>
 <p>The <code>Expr</code> companion object contains an &quot;AsFunction&quot; decorator that turns a tree
 describing a function into a function mapping trees to trees.</p>
 <pre><code>object Expr {
@@ -12127,7 +12127,7 @@ expression <code>{’(x)}.run</code> to <code>x</code>. But then the result</p>
 <p>is no longer phase correct. To prevent this soundness hole it seems easiest to classify <code>run</code> as a side-effecting
 operation. It would thus be prevented from appearing in splices. In a base language with side-effects we'd have to
 do this anyway: Since <code>run</code> runs arbitrary code it can always produce a side effect if the code it runs produces one.</p>
-<h3><a href="#the--type-class" id="the--type-class">The <code>Liftable</code> type-class</a></h3>
+<h3><a href="#the-liftable-type-class" id="the-liftable-type-class">The <code>Liftable</code> type-class</a></h3>
 <p>Consider the following implementation of a staged interpreter that implements
 a compiler through staging.</p>
 <pre><code>import scala.quoted._
@@ -12243,7 +12243,7 @@ grammar</a>.</p>
 would be attractive since it enables quoting single identifiers as
 e.g. <code>’x</code> instead of <code>’(x)</code>. But it would clash with symbol
 literals. So it could be done only if symbol literals were abolished.</p>
-<h3><a href="#implementation-in-" id="implementation-in-">Implementation in <code>dotc</code></a></h3>
+<h3><a href="#implementation-in-dotc" id="implementation-in-dotc">Implementation in <code>dotc</code></a></h3>
 <p>Quotes and splices are primitive forms in the generated abstract
 syntax trees. They are eliminated in an expansion phase
 <code>ReifyQuotes</code>. This phase runs after typing and pickling.</p>
