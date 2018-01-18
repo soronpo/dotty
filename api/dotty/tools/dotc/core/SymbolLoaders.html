@@ -653,12 +653,10 @@
                 
 
                 
-                <li class="hidden-by-default  with-companion ">
+                <li class="hidden-by-default ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
-                        
-                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/Run$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/Run.html">C</a>
                     </div>
@@ -666,11 +664,9 @@
                 </li>
 
                 
-
-                 <!-- end != "package" -->
-
-            
+                <li id="hide-hidden-by-default" onclick="toggleHiddenByDefault(this);">- collapse members</li>
                 
+
                  <!-- end != "package" -->
 
             
@@ -12457,11 +12453,13 @@ and give them <code>completer</code> as type.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-enterToplevelsFromSource(owner,name,src,scope)(ctx)">
-                            <p>In batch mode: Enter class and module with given <code>name</code> into scope of <code>owner</code>
-and give them a source completer for given <code>src</code> as type.
-In IDE mode: Find all toplevel definitions in <code>src</code> and enter then into scope of <code>owner</code>
-with source completer for given <code>src</code> as type.
-(overridden in interactive.Global).</p>
+                            <p>If setting -scansource is set:
+Enter all toplevel classes and objects in file <code>src</code> into package <code>owner</code>, provided
+they are in the right package. Issue a warning if a class or object is in the wrong
+package, i.e. if the file path differs from the declared package clause.
+If -scansource is not set:
+Enter class and module with given <code>name</code> into scope of <code>owner</code>.</p>
+<p>All entered symbols are given a source completer of <code>src</code> as info.</p>
 
                         </div>
                     </div>
