@@ -11800,109 +11800,6 @@ tool. It's methods are used by the external scala and java APIs.</p>
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="compiledDocs(args)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'compiledDocs(args)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                compiledDocs
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        args:
-                                    </span>
-                                    Array
-<span class="no-left no-right">[</span>
-String
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Map
-<span class="no-left no-right">[</span>
-String<span class="">, </span><a href="../../../.././api/dotty/tools/dottydoc/model/Package.html">Package</a>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-compiledDocs(args)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="main(args)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'main(args)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            override
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                main
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        args:
-                                    </span>
-                                    Array
-<span class="no-left no-right">[</span>
-String
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-main(args)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="newCompiler(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'newCompiler(ctx)');">[+]</span>
@@ -11948,6 +11845,71 @@ String
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-newCompiler(ctx)">
                             
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="process(args,rootCtx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'process(args,rootCtx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                process
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        args:
+                                    </span>
+                                    Array
+<span class="no-left no-right">[</span>
+String
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        rootCtx:
+                                    </span>
+                                    <a href="../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../.././api/dotty/tools/dotc/reporting/Reporter.html">Reporter</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-process(args,rootCtx)">
+                            <p>Entry point to the compiler using a custom <code>Context</code>.</p>
+<p>In most cases, you do not need a custom <code>Context</code> and should
+instead use one of the other overloads of <code>process</code>. However,
+the other overloads cannot be overriden, instead you
+should override this one which they call internally.</p>
+<p>Usage example: [[https://github.com/lampepfl/dotty/tree/master/test/test/OtherEntryPointsTest.scala]]
+in method <code>runCompilerWithContext</code></p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
