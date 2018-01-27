@@ -162,7 +162,7 @@
 </li>
 <li><a href="../../../../../.././docs/reference/inline.html">Inline</a>
 </li>
-<li><a href="../../../../../.././docs/reference/symmetric-meta-programming.html">Symmetric Meta Programming</a>
+<li><a href="../../../../../.././docs/reference/principled-meta-programming.html">Meta Programming</a>
 </li>
 <li><a href="../../../../../.././docs/reference/implicit-by-name-parameters.html">By-Name Implicits</a>
 </li>
@@ -11758,7 +11758,7 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">Transformer</span>
+                    <span class="entity-super-type">ImplicitsTransformer</span>
                     
                 </div>
                 
@@ -11867,9 +11867,9 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="importedTypes" class="member ">
+                <div id="importedTags" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'importedTypes');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'importedTags');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11881,7 +11881,7 @@
                         </span>
                         <span class="member-name ">
                             
-                                importedTypes
+                                importedTags
                             
                         </span>
 
@@ -11890,16 +11890,16 @@
                         
 
                         
-                        <span class="no-left">: LinkedHashSet
+                        <span class="no-left">: LinkedHashMap
 <span class="no-left no-right">[</span>
-<a href="../../../../../.././api/dotty/tools/dotc/core/Types$/TypeRef.html">TypeRef</a>
+<a href="../../../../../.././api/dotty/tools/dotc/core/Types$/TypeRef.html">TypeRef</a><span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
 <span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-importedTypes">
-                            <p>A map from type ref T to &quot;expression of type <code>quoted.Type[T]</code>&quot;.
+                        <div class="member-body-long" id ="long-body-importedTags">
+                            <p>A map from type ref T to expressions of type <code>quoted.Type[T]</code>&quot;.
 These will be turned into splices using <code>addTags</code></p>
 
                         </div>
@@ -12097,15 +12097,15 @@ These will be turned into splices using <code>addTags</code></p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-addTags(expr)(ctx)">
-                            <p>Assuming typeTagOfRef = <code>Type1 -&gt; tag1, ..., TypeN -&gt; tagN</code>, the expression</p>
+                            <p>Assuming importedTags = <code>Type1 -&gt; tag1, ..., TypeN -&gt; tagN</code>, the expression</p>
 <pre><code>{ type &lt;Type1&gt; = &lt;tag1&gt;.unary_~
   ...
   type &lt;TypeN&gt; = &lt;tagN&gt;.unary.~
   &lt;expr&gt;
 }
 </code></pre>
-<p>where all references to <code>TypeI</code> in <code>expr</code> are rewired to point to the locally
-defined versions. As a side effect, prepend the expressions <code>tag1, ...,</code>tagN<code>as splices to</code>buf`.</p>
+<p>references to <code>TypeI</code> in <code>expr</code> are rewired to point to the locally
+defined versions. As a side effect, prepend the expressions <code>tag1, ...,</code>tagN<code>as splices to</code>embedded`.</p>
 
                         </div>
                     </div>
@@ -12939,6 +12939,78 @@ or splices as a pair, after performing the <code>addTags</code> transform.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-transform(tree)(ctx)">
                             
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="tryHeal(tp,pos)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'tryHeal(tp,pos)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                tryHeal
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pos:
+                                    </span>
+                                    Position
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Option
+<span class="no-left no-right">[</span>
+String
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-tryHeal(tp,pos)(ctx)">
+                            <p>Try to heal phase-inconsistent reference to type <code>T</code> using a local type definition.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
