@@ -11784,7 +11784,7 @@
                 
                 <div id="DerivedFromParamTree" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'DerivedFromParamTree');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'DerivedFromParamTree');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -11809,7 +11809,8 @@
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-DerivedFromParamTree">
-                            
+                            <p>A type tree that computes its type from an existing parameter.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12680,9 +12681,9 @@ Untyped
                     </div>
                 </div><!-- end member -->
                 
-                <div id="derivedTypeParam(tdef)" class="member ">
+                <div id="derivedTypeParam(tdef,suffix)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'derivedTypeParam(tdef)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'derivedTypeParam(tdef,suffix)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12708,6 +12709,14 @@ Untyped
                                     </span>
                                     TypeDef
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        suffix:
+                                    </span>
+                                    String
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12721,8 +12730,69 @@ Untyped
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-derivedTypeParam(tdef)">
+                        <div class="member-body-long" id ="long-body-derivedTypeParam(tdef,suffix)">
                             <p>A type definition copied from <code>tdef</code> with a rhs typetree derived from it</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="derivedTypeParam(sym)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'derivedTypeParam(sym)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                derivedTypeParam
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        sym:
+                                    </span>
+                                    TypeSymbol
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: TypeDef</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-derivedTypeParam(sym)(ctx)">
+                            <p>A derived type definition watching <code>sym</code></p>
 
                         </div>
                     </div>

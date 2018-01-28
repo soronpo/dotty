@@ -11923,6 +11923,108 @@ Untyped
                     </div>
                 </div><!-- end member -->
                 
+                <div id="enumApplyResult(cdef,parents,tparams,appliedEnumRef)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumApplyResult(cdef,parents,tparams,appliedEnumRef)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enumApplyResult
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        cdef:
+                                    </span>
+                                    TypeDef
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        parents:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+Tree
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tparams:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+TypeDef
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        appliedEnumRef:
+                                    </span>
+                                    Tree
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <span class="no-right">(</span>
+Tree<span>, </span>List
+<span class="no-left no-right">[</span>
+DefDef
+<span class="no-left">]</span>
+<span class="no-left">)</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enumApplyResult(cdef,parents,tparams,appliedEnumRef)(ctx)">
+                            <p>The return type of an enum case apply method and any widening methods in which
+the apply's right hand side will be wrapped. For parents of the form</p>
+<pre><code>extends E(args) with T1(args1) with ... TN(argsN)
+</code></pre>
+<p>and type parameters <code>tparams</code> the generated widen method is</p>
+<pre><code>def C$to$E[tparams](x$1: E[tparams] with T1 with ... TN) = x$1
+</code></pre>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="enumCaseIsLegal(tree)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumCaseIsLegal(tree)(ctx)');">[+]</span>
@@ -12554,7 +12656,7 @@ refers to pther type parameters.</p>
                 
                 <div id="nextEnumTag(kind)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'nextEnumTag(kind)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'nextEnumTag(kind)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12612,11 +12714,7 @@ Tree
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-nextEnumTag(kind)(ctx)">
-                            <p>A pair consisting of
-- the next enum tag
-- scaffolding containing the necessary definitions for singleton enum cases
-unless that scaffolding was already generated by a previous call to <code>nextEnumKind</code>.</p>
-
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

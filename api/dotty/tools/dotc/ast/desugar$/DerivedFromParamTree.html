@@ -11765,6 +11765,11 @@
             </div>
 
             
+            <div id="entity-body" class="entity-section">
+                <p>A type tree that computes its type from an existing parameter.</p>
+
+            </div>
+            
 
             <h1 class="section ">
                 <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
@@ -11780,6 +11785,12 @@
                             <span class="no-left">(</span>
                                 
                                 
+                                    <span class="no-left">
+                                        suffix:
+                                    </span>
+                                    String
+                                    
+                                
                             <span class="no-left">)</span>
                         </div>
                     </div>
@@ -11793,6 +11804,40 @@
             </h1>
 
             <div id="entity-members" class="entity-section ">
+                
+                <div id="suffix" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'suffix');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                suffix
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: String</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-suffix">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
                 
                 <div id="derivedType(sym)(ctx)" class="member ">
                     <div class="member-title">
@@ -11851,12 +11896,15 @@
                         <div class="member-body-long" id ="long-body-derivedType(sym)(ctx)">
                             <p>Return info of original symbol, where all references to siblings of the
 original symbol (i.e. sibling and original symbol have the same owner)
-are rewired to same-named parameters or accessors in the scope enclosing
+are rewired to like-named* parameters or accessors in the scope enclosing
 the current scope. The current scope is the scope owned by the defined symbol
 itself, that's why we have to look one scope further out. If the resulting
 type is an alias type, dealias it. This is necessary because the
 accessor of a type parameter is a private type alias that cannot be accessed
 from subclasses.</p>
+<p>(*) like-named means:</p>
+<pre><code> parameter name  ==  reference name ++ suffix
+</code></pre>
 
                         </div>
                     </div>
