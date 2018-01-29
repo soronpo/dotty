@@ -6617,12 +6617,10 @@
                 
 
                 
-                <li class="hidden-by-default  with-companion ">
+                <li class="hidden-by-default ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
-                        
-                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/patmat/SpaceEngine$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/patmat/SpaceEngine.html">C</a>
                     </div>
@@ -6631,10 +6629,6 @@
 
                 
 
-                 <!-- end != "package" -->
-
-            
-                
                  <!-- end != "package" -->
 
             
@@ -12313,63 +12307,9 @@ Space
                     </div>
                 </div><!-- end member -->
                 
-                <div id="implementability(tp)" class="member private">
+                <div id="inhabited(tp)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'implementability(tp)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                implementability
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tp:
-                                    </span>
-                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Implementability</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-implementability(tp)">
-                            <p>Checks if it's possible to create a trait/class which is a subtype of <code>tp</code>.</p>
-<ul>
-<li>doesn't handle member collisions (will not declare a type unimplementable because of one)</li>
-<li>expects that neither Any nor Object reach it
-(this is currently true due to both isSubType and and/or type simplification)</li>
-</ul>
-<p>See [[intersectUnrelatedAtomicTypes]].</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="inhabited(tpe)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'inhabited(tpe)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'inhabited(tp)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12391,7 +12331,7 @@ Space
                                 
                                 
                                     <span class="no-left">
-                                        tpe:
+                                        tp:
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
                                     
@@ -12421,11 +12361,14 @@ Space
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-inhabited(tpe)(ctx)">
+                        <div class="member-body-long" id ="long-body-inhabited(tp)(ctx)">
                             <p>Can this type be inhabited by a value?</p>
-<p>Intersection between singleton types and other types is always empty
-the singleton type is not a subtype of the other type.
-See patmat/i3573.scala for an example.</p>
+<p>Check is based on the following facts:</p>
+<ul>
+<li>single inheritance of classes</li>
+<li>final class cannot be extended</li>
+<li>intersection of a singleton type with another irrelevant type  (patmat/i3574.scala)</li>
+</ul>
 
                         </div>
                     </div>
