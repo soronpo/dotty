@@ -12140,6 +12140,60 @@
                     </div>
                 </div><!-- end member -->
                 
+                <div id="createBindSymbol()(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'createBindSymbol()(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                createBindSymbol
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Symbol</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-createBindSymbol()(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="createMemberSymbol()(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'createMemberSymbol()(ctx)');">[+]</span>
@@ -14461,7 +14515,10 @@ OwnerTree
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-scanTree(buf,mode)">
                             <p>Record all directly nested definitions and templates in current tree
-as <code>OwnerTree</code>s in <code>buf</code></p>
+as <code>OwnerTree</code>s in <code>buf</code>.
+A complication concerns member definitions. These are lexically nested in a
+Template node, but need to be listed separately in the OwnerTree of the enclosing class
+in order not to confuse owner chains.</p>
 
                         </div>
                     </div>
