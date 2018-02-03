@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-02 -->
+<!-- This page was last generated on 2018-02-03 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12160,6 +12160,38 @@ if (false) A else B   ==&gt; B</p>
 
             <div id="entity-members" class="entity-section ">
                 
+                <div id="collectBinders$" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'collectBinders$');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            object
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/FirstTransform/collectBinders$.html">collectBinders</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-collectBinders$">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="addCompanionPhases" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'addCompanionPhases');">[+]</span>
@@ -12295,7 +12327,7 @@ if (false) A else B   ==&gt; B</p>
                 
                 <div id="foldCondition(tree)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'foldCondition(tree)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'foldCondition(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12351,13 +12383,7 @@ if (false) A else B   ==&gt; B</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-foldCondition(tree)(ctx)">
-                            <p>Perform one of the following simplification if applicable:</p>
-<pre><code>true  &amp;&amp; y   ==&gt;  y
-false &amp;&amp; y   ==&gt;  false
-true  || y   ==&gt;  true
-false || y   ==&gt;  y
-</code></pre>
-
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12659,7 +12685,7 @@ instance, it is possible to print trees after a given phase using:</p>
                 
                 <div id="toTypeTree(tree)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'toTypeTree(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toTypeTree(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12706,13 +12732,19 @@ instance, it is possible to print trees after a given phase using:</p>
                         
 
                         
-                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#TypeTree">TypeTree</a></span>
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Tree.html">Tree</a>
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+<span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-toTypeTree(tree)(ctx)">
-                            
+                            <p>Replace type tree <code>t</code> of type <code>T</code> with <code>TypeTree(T)</code>, but record all
+nested Bind nodes in annotations. These are interpreted in TreeTypeMaps
+so that bound symbols can be properly copied.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
