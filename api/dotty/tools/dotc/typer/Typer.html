@@ -15802,6 +15802,78 @@ typedCases.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="typedInfixOp(tree,pt)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typedInfixOp(tree,pt)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedInfixOp
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/untpd$/InfixOp.html">InfixOp</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pt:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedInfixOp(tree,pt)(ctx)">
+                            <p>Translate infix operation expression <code>l op r</code> to</p>
+<p>l.op(r)   			    if <code>op</code> is left-associative
+{ val x = l; r.op(l) }  if <code>op</code> is right-associative call-by-value and <code>l</code> is impure
+r.op(l)                 if <code>op</code> is right-associative call-by-name or <code>l</code> is pure</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="typedInlined(tree,pt)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'typedInlined(tree,pt)(ctx)');">[+]</span>
