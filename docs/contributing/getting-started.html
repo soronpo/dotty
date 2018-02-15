@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-14 -->
+<!-- This page was last generated on 2018-02-15 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12092,10 +12092,11 @@ contain <code>1.8</code>. Work to support Java 9 is
 <a href="https://github.com/lampepfl/dotty/pull/3138">ongoing</a>.</p>
 <h2><a href="#compiling-and-running" id="compiling-and-running">Compiling and Running</a></h2>
 <p>Start by cloning the repository:</p>
-<pre><code class="language-bash">$ git clone --recursive https://github.com/lampepfl/dotty.git
+<pre><code class="language-bash">$ git clone --recursive --single-branch https://github.com/lampepfl/dotty.git
 $ cd dotty
 $ sbt managedSources # Needed for IDE import to succeed
 </code></pre>
+<p>Pass <code>--single-branch</code> to clone only the master branch, otherwise cloning will be <em>much</em> slower (details in <a href="https://github.com/lampepfl/dotty/issues/3236">issue #3236</a>).</p>
 <p>Dotty provides a standard sbt build: compiling, running and starting a repl can
 all be done from within sbt:</p>
 <pre><code class="language-bash">$ sbt
