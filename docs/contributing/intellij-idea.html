@@ -12096,33 +12096,35 @@ to select the model of the import and as the screenshot shows, select SBT.</p>
 <p>Next, you select the version of the JDK that this project relies on and verify that you have selected 1.8 (assuming
 its installed on your local machine). Otherwise, specify it by pressing <em>New</em>.</p>
 <p><img src="../../images/idea/idea-sdk.png" alt="" title="Select the JDK" /></p>
-<p>On the final window we must select which modules we can import. Here, we are presented with the full list of SBT projects
-that are defined in Dotty. You can either select all (expect performance degradation by IDEA if you select all) or
+<p>Next we must select which modules we can import. IDEA version 2017.1 and earlier presents the full list of SBT modules
+that are defined in Dotty. You can either select all (expect performance degradation if you select all) or
 select only the <code>dotty</code> module. In order to do that, unselect all modules and select on <code>dotty</code>. IDEA, then, automatically
 selects all the necessary dependencies and you press OK.</p>
 <p><img src="../../images/idea/idea-sbt.png" alt="" title="Select modules to import" /></p>
+<p>In IDEA version 2017.2 and later, wait for the project to load. Then right click on <code>dotty</code> in the project explorer
+and select <code>Load/Unload Modules...</code>. Select only <code>dotty</code>, accept when IDEA asks to add its dependencies and press OK.</p>
 <h2><a href="#runningdebugging" id="runningdebugging">Running/Debugging</a></h2>
-<p>To run the compiler you can do it either as an sbt command or via debugging the compiler.
-For the first option you can fire up sbt from the <code>Terminal</code> window of IDEA or you can do it externally.
-For example, to run a test you can write with or without flags:</p>
-<pre><code class="language-shell">$ dotc tests/pos/Arrays.scala
+<p>To run the compiler you can do it either as an sbt command or a shell script. Open an external terminal.
+For the first option, a test can be run as follows.</p>
+<pre><code class="language-shell">$ sbt
+&gt; dotc tests/pos/Arrays.scala
 </code></pre>
-<p>If you are interested in debugging the compiler you can enable the necessary agent on the JVM.
-This is done in two steps. For the first step you need to pass the
-necessary flag to the running VM. For convenience, this is already in comments on the <code>Build.scala</code> file under the
-<code>project</code> directory. The string you need to uncomment is the following:</p>
-<blockquote>
-<p><code>&quot;-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005&quot;</code></p>
-</blockquote>
-<p>Uncomment the line and reload the project file with the <code>reload</code> command on sbt.
-Now, each time you run <code>dotc</code> the compiler listens at the designated address and waits the agent to connect.
-For, the second step you need to create a configuration for Debug through IDEA:</p>
+<p>For the second option, the compiler can be run using a script in the <code>bin</code> directory:</p>
+<pre><code class="language-shell">$ ./bin/dotc tests/pos/Arrays.scala
+</code></pre>
+<p>If you are interested in debugging the compiler, you can use a remote debugging configuration.
+This is done by launching dotc's JVM with the JDWP agent loaded. To that end, run</p>
+<pre><code class="language-shell">$ ./bin/dotc -debug tests/pos/Arrays.scala
+</code></pre>
+<p>Then when dotc starts, it will suspend and wait for a debugger to connect on port <code>5005</code>.
+Next a configuration for Debug must be created in IDEA:</p>
 <blockquote>
 <p>Run &gt; Edit Configurations &gt; Add New Configuration &gt; (select) Remote</p>
 </blockquote>
 <p><img src="../../images/idea/idea-debug.png" alt="" title="Create a Debug Configuration" /></p>
-<p>Now every time you run <code>dotc</code> you can set your breakpoints and hit the <code>Debug dotty-debug</code> button (since we used that name for
-the sample configuration above). The default data on the configuration match the enabled agent on the VM so, probably,
+<p>Under <code>Search sources using module's classpath</code> select <code>dotty</code>. Set breakpoints as desired.
+Then hit the button whose tooltip says <code>Debug dotty-debug</code> (since we used <code>dotty-debug</code> for the name of
+the sample configuration above) in IDEA to connect the debugger to the JVM and begin debugging. The default data on the debug configuration matches the enabled agent on the VM so, probably,
 you will not need to change anything else.</p>
 
         </div>
