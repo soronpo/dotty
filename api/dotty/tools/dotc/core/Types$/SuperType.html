@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-19 -->
+<!-- This page was last generated on 2018-02-20 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12240,9 +12240,9 @@ by <code>super</code>.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="computeHash" class="member ">
+                <div id="computeHash(bs)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'computeHash');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'computeHash(bs)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12259,6 +12259,19 @@ by <code>super</code>.</p>
                         </span>
 
                         
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bs:
+                                    </span>
+                                    Binders
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
 
                         
 
@@ -12268,8 +12281,9 @@ by <code>super</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-computeHash">
-                            
+                        <div class="member-body-long" id ="long-body-computeHash(bs)">
+                            <p>Compute hashcode relative to enclosing binders <code>bs</code></p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12384,7 +12398,8 @@ by <code>super</code>.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-eql(that)">
-                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations.</p>
+                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations,
+except where a BindingType is involved. The latter demand a deep isomorphism check.</p>
 
                         </div>
                     </div>

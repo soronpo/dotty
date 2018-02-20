@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-19 -->
+<!-- This page was last generated on 2018-02-20 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12396,6 +12396,40 @@
                     </div>
                 </div><!-- end member -->
                 
+                <div id="myStableHash" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myStableHash');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                myStableHash
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Byte</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-myStableHash">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="prefix" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'prefix');">[+]</span>
@@ -12715,9 +12749,9 @@ prefix <code>pre</code>.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="computeHash" class="member ">
+                <div id="computeHash(bs)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'computeHash');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'computeHash(bs)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12734,6 +12768,19 @@ prefix <code>pre</code>.</p>
                         </span>
 
                         
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bs:
+                                    </span>
+                                    Binders
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
 
                         
 
@@ -12743,8 +12790,9 @@ prefix <code>pre</code>.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-computeHash">
-                            
+                        <div class="member-body-long" id ="long-body-computeHash(bs)">
+                            <p>Compute hashcode relative to enclosing binders <code>bs</code></p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13546,7 +13594,8 @@ The following normalizations are performed for type selections T#A:</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-eql(that)">
-                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations.</p>
+                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations,
+except where a BindingType is involved. The latter demand a deep isomorphism check.</p>
 
                         </div>
                     </div>
@@ -13832,6 +13881,63 @@ might depend on the given prefix.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isType">
                             
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="iso(that,bs)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'iso(that,bs)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                iso
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Any
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bs:
+                                    </span>
+                                    BinderPairs
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-iso(that,bs)">
+                            <p>Is <code>this</code> isomorphic to <code>that</code>, assuming pairs of matching binders <code>bs</code>?
+It is assumed that <code>this.ne(that)</code>.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -14247,6 +14353,41 @@ refinement type <code>T { X = U; ... }</code></p>
                         <div class="member-body-long" id ="long-body-signature(ctx)">
                             <p>The signature of the last known denotation, or if there is none, the
 signature of the symbol</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="stableHash" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'stableHash');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                stableHash
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-stableHash">
+                            <p>Is the <code>hash</code> of this type the same for all possible sequences of enclosing binders?</p>
 
                         </div>
                     </div>

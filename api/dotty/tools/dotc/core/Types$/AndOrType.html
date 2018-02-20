@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-19 -->
+<!-- This page was last generated on 2018-02-20 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12090,10 +12090,10 @@
                     
                 </span>
                 <span id="entity-modifiers">
-                    
+                    abstract
                 </span>
                 <span id="entity-kind">
-                    trait
+                    class
                 </span>
                 <span id="entity-name">
                     AndOrType
@@ -12105,7 +12105,7 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">Type</span>
+                    <span class="entity-super-type">CachedGroundType</span>
                     
                     
                     <span class="keyword">with</span>
@@ -12118,12 +12118,24 @@
 
             
 
-            <h1 class="section empty">
-                <span class="expand-button visibleinvisible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
+            <h1 class="section ">
+                <span class="expand-button visible" onclick="toggleMembersBody(this, 'constructors');">[-]</span>
                 Constructors
             </h1>
 
-            <div id="entity-constructors" class="entity-section empty">
+            <div id="entity-constructors" class="entity-section ">
+                
+                    
+                    <div class="member">
+                        <div class="member-title">
+                            <span class="member-name">AndOrType</span>
+                            <span class="no-left">(</span>
+                                
+                                
+                            <span class="no-left">)</span>
+                        </div>
+                    </div>
+                    
                 
             </div>
 
@@ -12259,6 +12271,54 @@ For OrTypes, it's the intersection.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="computeHash(bs)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'computeHash(bs)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                computeHash
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bs:
+                                    </span>
+                                    Binders
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-computeHash(bs)">
+                            <p>Compute hashcode relative to enclosing binders <code>bs</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="derivedAndOrType(tp1,tp2)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'derivedAndOrType(tp1,tp2)(ctx)');">[+]</span>
@@ -12327,6 +12387,55 @@ For OrTypes, it's the intersection.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="eql(that)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'eql(that)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                eql
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-eql(that)">
+                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations,
+except where a BindingType is involved. The latter demand a deep isomorphism check.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="isAnd" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'isAnd');">[+]</span>
@@ -12361,21 +12470,21 @@ For OrTypes, it's the intersection.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="myBaseClassesPeriod_=(x$1)" class="member private">
+                <div id="iso(that,bs)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'myBaseClassesPeriod_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'iso(that,bs)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private <accessor>
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                myBaseClassesPeriod_=
+                                iso
                             
                         </span>
 
@@ -12385,9 +12494,17 @@ For OrTypes, it's the intersection.</p>
                                 
                                 
                                     <span class="no-left">
-                                        x$1:
+                                        that:
                                     </span>
-                                    Period
+                                    Any
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bs:
+                                    </span>
+                                    BinderPairs
                                     
                                 
                             <span class="no-left">)</span>
@@ -12397,63 +12514,50 @@ For OrTypes, it's the intersection.</p>
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-myBaseClassesPeriod_=(x$1)">
-                            
+                        <div class="member-body-long" id ="long-body-iso(that,bs)">
+                            <p>Is <code>this</code> isomorphic to <code>that</code>, assuming pairs of matching binders <code>bs</code>?
+It is assumed that <code>this.ne(that)</code>.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="myBaseClasses_=(x$1)" class="member private">
+                <div id="stableHash" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'myBaseClasses_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'stableHash');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            private <accessor>
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                myBaseClasses_=
+                                stableHash
                             
                         </span>
 
                         
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-ClassSymbol
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
 
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: Boolean</span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-myBaseClasses_=(x$1)">
-                            
+                        <div class="member-body-long" id ="long-body-stableHash">
+                            <p>Is the <code>hash</code> of this type the same for all possible sequences of enclosing binders?</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->

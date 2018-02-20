@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-19 -->
+<!-- This page was last generated on 2018-02-20 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12858,72 +12858,6 @@ SingleDenotation
                     </div>
                 </div><!-- end member -->
                 
-                <div id="appliedTo(args)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'appliedTo(args)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                appliedTo
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        args:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-appliedTo(args)(ctx)">
-                            <p>The type representing</p>
-<p>T[U1, ..., Un]</p>
-<p>where</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="appliedTo(arg)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg)(ctx)');">[+]</span>
@@ -13048,6 +12982,72 @@ Type
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-appliedTo(arg1,arg2)(ctx)">
                             
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="appliedTo(args)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'appliedTo(args)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                appliedTo
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        args:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+Type
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-appliedTo(args)(ctx)">
+                            <p>The type representing</p>
+<p>T[U1, ..., Un]</p>
+<p>where</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13769,6 +13769,54 @@ ClassSymbol
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-classSymbols(ctx)">
                             <p>The least (wrt &lt;:&lt;) set of class symbols of which this type is a subtype</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="computeHash(bs)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'computeHash(bs)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                computeHash
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bs:
+                                    </span>
+                                    Binders
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-computeHash(bs)">
+                            <p>Compute hashcode relative to enclosing binders <code>bs</code></p>
 
                         </div>
                     </div>
@@ -14507,7 +14555,65 @@ layer of it. Otherwise the type itself.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-eql(that)">
-                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations.</p>
+                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations,
+except where a BindingType is involved. The latter demand a deep isomorphism check.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="equals(that,bs)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'equals(that,bs)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            final
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                equals
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Any
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bs:
+                                    </span>
+                                    BinderPairs
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-equals(that,bs)">
+                            <p>Compare <code>this == that</code>, assuming corresponding binders in <code>bs</code> are equal.
+The normal <code>equals</code> should be equivalent to <code>equals(that, null</code>)<code>. We usually override</code>equals<code>when we override</code>iso<code>except if the</code>equals` comes from a case class, so it already has the right definition anyway.</p>
 
                         </div>
                     </div>
@@ -16745,6 +16851,63 @@ Implemented like <code>isRef</code>, but follows more types: all type proxies as
                         <div class="member-body-long" id ="long-body-isVarArgsMethod(ctx)">
                             <p>Is this the type of a method that has a repeated parameter type as
 last parameter type?</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="iso(that,bs)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'iso(that,bs)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                iso
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Any
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bs:
+                                    </span>
+                                    BinderPairs
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-iso(that,bs)">
+                            <p>Is <code>this</code> isomorphic to <code>that</code>, assuming pairs of matching binders <code>bs</code>?
+It is assumed that <code>this.ne(that)</code>.</p>
 
                         </div>
                     </div>
@@ -19328,6 +19491,41 @@ re-evaluates all occurrences of And/OrType with &amp;/| because
 what was a union or intersection of type variables might be a simpler type
 after the type variables are instantiated. Finally, it
 maps poly params in the current constraint set back to their type vars.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="stableHash" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'stableHash');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                stableHash
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-stableHash">
+                            <p>Is the <code>hash</code> of this type the same for all possible sequences of enclosing binders?</p>
 
                         </div>
                     </div>
