@@ -12362,7 +12362,7 @@ foo(100)
 <pre><code class="language-scala">&lt;label&gt; def foo(i: Int) = dough(i)
 &lt;label&gt; def dough(i: Int) = if (i == 0) bar else foo(i-1)
 &lt;label&gt; def bar = 2
- foo(100)
+foo(100)
 </code></pre>
 <p>Proposed way to generate this pattern in backend is:</p>
 <pre><code class="language-scala">foo(100)
@@ -12377,7 +12377,7 @@ foo(100)
 </code></pre>
 <p>Unreachable jumps will be eliminated by local dead code analysis.
 After JVM is smart enough to remove next-line jumps</p>
-<p>Note that his phase Ychecking this phase required softening scoping rules
+<p>Note that Ychecking this phase requires softening scoping rules
 as it intentionally allowed to break scoping rules inside methods for labels.
 This is modified by setting <code>labelsReordered</code> flag in Phases.</p>
 
