@@ -6413,6 +6413,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/UnusedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/UnusedDecls.html">UnusedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">VCElideAllocations</a>
@@ -12308,13 +12326,13 @@
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-exprInParens">
-                            <p>Expr              ::=  [<code>implicit'] FunParams</code>=&gt;' Expr
+                            <p>Expr              ::=  [FunArgMods] FunParams =&gt;' Expr
 |  Expr1
 FunParams         ::=  Bindings
 |  id
 |  <code>_' ExprInParens ::= PostfixExpr</code>:' Type
 |  Expr
-BlockResult       ::=  [<code>implicit'] FunParams</code>=&gt;' Block
+BlockResult       ::=  [FunArgMods] FunParams =&gt;' Block
 |  Expr1
 Expr1             ::=  <code>if'</code>(' Expr <code>)' {nl} Expr [[semi] else Expr] |</code>if' Expr <code>then' Expr [[semi] else Expr] |</code>while' <code>(' Expr</code>)' {nl} Expr
 |  <code>while' Expr</code>do' Expr
@@ -16424,6 +16442,41 @@ If it is, returns the [[Position]] where the wildcard occurs.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="funArgMods" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'funArgMods');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                funArgMods
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: BitSet</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-funArgMods">
+                            <p>FunArgMods ::= { <code>implicit</code> | <code>unused</code> }</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="funParams(mods,location)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'funParams(mods,location)');">[+]</span>
@@ -16715,47 +16768,6 @@ If it is, returns the [[Position]] where the wildcard occurs.</p>
                         <div class="member-body-long" id ="long-body-implicitClosure(start,location,implicitMods)">
                             <p>Expr         ::= implicit id <code>=&gt;' Expr BlockResult ::= implicit id [</code>:' InfixType] `=&gt;' Block // Scala2 only</p>
 
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="implicitMods()" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'implicitMods()');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                implicitMods
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/untpd$/Modifiers.html">Modifiers</a></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-implicitMods()">
-                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -19159,9 +19171,11 @@ List
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-paramClauses(owner,ofCaseClass)">
-                            <p>ClsParamClauses   ::=  {ClsParamClause} [[nl] <code>('</code>implicit' ClsParams <code>)'] ClsParamClause ::= [nl]</code>(' [ClsParams] ')'
+                            <p>ClsParamClauses   ::=  {ClsParamClause} [[nl] <code>(' [FunArgMods] ClsParams</code>)']
+ClsParamClause    ::=  [nl] <code>(' [</code>unused'] [ClsParams] ')'
 ClsParams         ::=  ClsParam {<code>' ClsParam} ClsParam ::= {Annotation} [{Modifier} (</code>val' | <code>var') |</code>inline'] Param
-DefParamClauses   ::=  {DefParamClause} [[nl] <code>('</code>implicit' DefParams <code>)'] DefParamClause ::= [nl]</code>(' [DefParams] ')'
+DefParamClauses   ::=  {DefParamClause} [[nl] <code>(' [FunArgMods] DefParams</code>)']
+DefParamClause    ::=  [nl] <code>(' [</code>unused'] [DefParams] ')'
 DefParams         ::=  DefParam {<code>,' DefParam} DefParam ::= {Annotation} [</code>inline'] Param
 Param             ::=  id <code>:' ParamType [</code>=' Expr]</p>
 
@@ -21163,8 +21177,10 @@ returns a tree for type <code>Any</code> instead.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-typ()">
-                            <p>Type        ::=  [<code>implicit'] FunArgTypes</code>=&gt;' Type
-|  HkTypeParamClause <code>-&gt;' Type | InfixType FunArgTypes ::= InfixType |</code>(' [ FunArgType {<code>,' FunArgType } ]</code>)'
+                            <p>Type        ::=  [FunArgMods] FunArgTypes <code>=&gt;' Type | HkTypeParamClause</code>-&gt;' Type
+|  InfixType
+FunArgTypes ::=  InfixType
+|  <code>(' [ FunArgType {</code>,' FunArgType } ] `)'
 |  '(' TypedFunParam {',' TypedFunParam } ')'</p>
 
                         </div>

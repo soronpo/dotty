@@ -6413,6 +6413,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/UnusedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/UnusedDecls.html">UnusedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">C</a>
                     </div>
                     <a class="entity-name" href="../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">VCElideAllocations</a>
@@ -12162,9 +12180,10 @@ StableId          ::=  id
 ClassQualifier    ::=  ‘[’ id ‘]’
 </code></pre>
 <h3><a href="#types" id="types">Types</a></h3>
-<pre><code class="language-ebnf">Type              ::=  [‘implicit’] FunArgTypes ‘=&gt;’ Type                       Function(ts, t)
+<pre><code class="language-ebnf">Type              ::=  [FunArgMods] FunArgTypes ‘=&gt;’ Type                       Function(ts, t)
                     |  HkTypeParamClause ‘=&gt;’ Type                              TypeLambda(ps, t)
                     |  InfixType
+FunArgMods        ::=  { `implicit` | `unused` }
 FunArgTypes       ::=  InfixType
                     |  ‘(’ [ FunArgType {‘,’ FunArgType } ] ‘)’
                     |  '(' TypedFunParam {',' TypedFunParam } ')'
@@ -12196,9 +12215,9 @@ TypeBounds        ::=  [‘&gt;:’ Type] [‘&lt;:’ Type] | INT              
 TypeParamBounds   ::=  TypeBounds {‘&lt;%’ Type} {‘:’ Type}                        ContextBounds(typeBounds, tps)
 </code></pre>
 <h3><a href="#expressions" id="expressions">Expressions</a></h3>
-<pre><code class="language-ebnf">Expr              ::=  [‘implicit’] FunParams ‘=&gt;’ Expr                         Function(args, expr), Function(ValDef([implicit], id, TypeTree(), EmptyTree), expr)
+<pre><code class="language-ebnf">Expr              ::=  [FunArgMods] FunParams ‘=&gt;’ Expr                         Function(args, expr), Function(ValDef([implicit], id, TypeTree(), EmptyTree), expr)
                     |  Expr1
-BlockResult       ::=  [‘implicit’] FunParams ‘=&gt;’ Block
+BlockResult       ::=  [FunArgMods] FunParams ‘=&gt;’ Block
                     |  Expr1
 FunParams         ::=  Bindings
                     |  id
@@ -12299,7 +12318,7 @@ HkTypeParamClause ::=  ‘[’ HkTypeParam {‘,’ HkTypeParam} ‘]’
 HkTypeParam       ::=  {Annotation} [‘+’ | ‘-’] (Id[HkTypeParamClause] | ‘_’)
                        TypeBounds
 
-ClsParamClauses   ::=  {ClsParamClause} [[nl] ‘(’ ‘implicit’ ClsParams ‘)’]
+ClsParamClauses   ::=  {ClsParamClause} [[nl] ‘(’ [FunArgMods] ClsParams ‘)’]
 ClsParamClause    ::=  [nl] ‘(’ [ClsParams] ‘)’
 ClsParams         ::=  ClsParam {‘,’ ClsParam}
 ClsParam          ::=  {Annotation}                                             ValDef(mods, id, tpe, expr) -- point of mods on val/var
@@ -12307,7 +12326,7 @@ ClsParam          ::=  {Annotation}                                             
 Param             ::=  id ‘:’ ParamType [‘=’ Expr]
                     |  INT
 
-DefParamClauses   ::=  {DefParamClause} [[nl] ‘(’ ‘implicit’ DefParams ‘)’]
+DefParamClauses   ::=  {DefParamClause} [[nl] ‘(’ [FunArgMods] DefParams ‘)’]
 DefParamClause    ::=  [nl] ‘(’ [DefParams] ‘)’
 DefParams         ::=  DefParam {‘,’ DefParam}
 DefParam          ::=  {Annotation} [‘inline’] Param                            ValDef(mods, id, tpe, expr) -- point of mods at id.

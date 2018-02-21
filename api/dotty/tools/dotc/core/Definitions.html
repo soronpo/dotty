@@ -6413,6 +6413,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/UnusedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/UnusedDecls.html">UnusedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/VCElideAllocations.html">VCElideAllocations</a>
@@ -24456,9 +24474,9 @@ TermSymbol
                     </div>
                 </div><!-- end member -->
                 
-                <div id="FunctionClass(n,isImplicit)(ctx)" class="member ">
+                <div id="FunctionClass(n,isImplicit,isUnused)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionClass(n,isImplicit)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionClass(n,isImplicit,isUnused)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -24492,6 +24510,14 @@ TermSymbol
                                     </span>
                                     Boolean
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        isUnused:
+                                    </span>
+                                    Boolean
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -24518,7 +24544,7 @@ TermSymbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-FunctionClass(n,isImplicit)(ctx)">
+                        <div class="member-body-long" id ="long-body-FunctionClass(n,isImplicit,isUnused)(ctx)">
                             
                         </div>
                     </div>
@@ -24564,9 +24590,9 @@ Symbol
                     </div>
                 </div><!-- end member -->
                 
-                <div id="FunctionType(n,isImplicit)(ctx)" class="member ">
+                <div id="FunctionType(n,isImplicit,isUnused)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionType(n,isImplicit)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionType(n,isImplicit,isUnused)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -24600,6 +24626,14 @@ Symbol
                                     </span>
                                     Boolean
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        isUnused:
+                                    </span>
+                                    Boolean
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -24626,7 +24660,7 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-FunctionType(n,isImplicit)(ctx)">
+                        <div class="member-body-long" id ="long-body-FunctionType(n,isImplicit,isUnused)(ctx)">
                             
                         </div>
                     </div>
@@ -30192,6 +30226,8 @@ Type
 - FunctionN for 22 &gt; N &gt;= 0 remains as FunctionN
 - ImplicitFunctionN for N &gt; 22 becomes FunctionXXL
 - ImplicitFunctionN for 22 &gt; N &gt;= 0 becomes FunctionN
+- UnusedFunctionN becomes Function0
+- ImplicitUnusedFunctionN becomes Function0
 - anything else becomes a NoSymbol</p>
 
                         </div>
@@ -30245,6 +30281,8 @@ Type
 - FunctionN for 22 &gt; N &gt;= 0 remains as FunctionN
 - ImplicitFunctionN for N &gt; 22 becomes FunctionXXL
 - ImplicitFunctionN for 22 &gt; N &gt;= 0 becomes FunctionN
+- UnusedFunctionN becomes Function0
+- ImplicitUnusedFunctionN becomes Function0
 - anything else becomes a NoType</p>
 
                         </div>
@@ -30550,7 +30588,9 @@ Type
                         <div class="member-body-long" id ="long-body-isFunctionClass(cls)">
                             <p>Is a function class.
 - FunctionN for N &gt;= 0
-- ImplicitFunctionN for N &gt; 0</p>
+- ImplicitFunctionN for N &gt; 0
+- UnusedFunctionN for N &gt; 0
+- UnusedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -30660,7 +30700,8 @@ Type
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isImplicitFunctionClass(cls)">
                             <p>Is an implicit function class.
-- ImplicitFunctionN for N &gt; 0</p>
+- ImplicitFunctionN for N &gt; 0
+- UnusedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -31356,6 +31397,116 @@ Type
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isUnusedFunctionClass(cls)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isUnusedFunctionClass(cls)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isUnusedFunctionClass
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        cls:
+                                    </span>
+                                    Symbol
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isUnusedFunctionClass(cls)">
+                            <p>Is an unused function class.
+- UnusedFunctionN for N &gt; 0
+- UnusedImplicitFunctionN for N &gt; 0</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isUnusedFunctionType(tp)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isUnusedFunctionType(tp)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isUnusedFunctionType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isUnusedFunctionType(tp)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="isValueSubClass(sym1,sym2)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'isValueSubClass(sym1,sym2)');">[+]</span>
@@ -31953,7 +32104,7 @@ TypeRef
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-newFunctionNTrait(name)">
-                            <p>The trait FunctionN or ImplicitFunctionN, for some N</p>
+                            <p>The trait FunctionN, ImplicitFunctionN, UnusedFunctionN or UnusedImplicitFunction, for some N</p>
 
                         </div>
                     </div>
