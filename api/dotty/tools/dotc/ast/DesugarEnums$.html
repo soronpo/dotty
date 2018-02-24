@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-22 -->
+<!-- This page was last generated on 2018-02-24 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7428,6 +7428,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor trait" href="../../../../.././api/dotty/tools/dotc/typer/ReChecking.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/ReChecking.html">ReChecking</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/typer/ReTyper.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/ReTyper.html">ReTyper</a>
@@ -12366,67 +12384,6 @@ the apply's right hand side will be wrapped. For parents of the form</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="enumCaseIsLegal(tree)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumCaseIsLegal(tree)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                enumCaseIsLegal
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tree:
-                                    </span>
-                                    Tree
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-enumCaseIsLegal(tree)(ctx)">
-                            <p>Is enum case <code>tree</code> situated in a companion object of an enum class?</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="enumClass(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'enumClass(ctx)');">[+]</span>
@@ -12471,7 +12428,9 @@ the apply's right hand side will be wrapped. For parents of the form</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-enumClass(ctx)">
-                            <p>the enumeration class that is a companion of the current object</p>
+                            <p>The enumeration class that belongs to an enum case. This works no matter
+whether the case is still in the enum class or it has been transferred to the
+companion object.</p>
 
                         </div>
                     </div>
@@ -12934,9 +12893,9 @@ refers to pther type parameters.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="isLegalEnumCase(tree)(ctx)" class="member ">
+                <div id="isEnumCase(tree)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isLegalEnumCase(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isEnumCase(tree)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12948,7 +12907,7 @@ refers to pther type parameters.</p>
                         </span>
                         <span class="member-name ">
                             
-                                isLegalEnumCase
+                                isEnumCase
                             
                         </span>
 
@@ -12960,7 +12919,7 @@ refers to pther type parameters.</p>
                                     <span class="no-left">
                                         tree:
                                     </span>
-                                    MemberDef
+                                    Tree
                                     
                                 
                             <span class="no-left">)</span>
@@ -12988,8 +12947,8 @@ refers to pther type parameters.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isLegalEnumCase(tree)(ctx)">
-                            <p>Is this an enum case that's situated in a companion object of an enum class?</p>
+                        <div class="member-body-long" id ="long-body-isEnumCase(tree)(ctx)">
+                            <p>Is <code>tree</code> an (untyped) enum case?</p>
 
                         </div>
                     </div>

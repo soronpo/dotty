@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-22 -->
+<!-- This page was last generated on 2018-02-24 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7428,6 +7428,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor trait" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">ReChecking</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">C</a>
                     </div>
                     <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">ReTyper</a>
@@ -12080,122 +12098,48 @@
         </a>
         <hr/>
         <div id="doc-page-container">
-            <p>The compiler expands enum classes and cases to code that only uses
+            <p>The compiler expands enums and their cases to code that only uses
 Scala's other language features. As such, enums in Scala are
 convenient <em>syntactic sugar</em>, but they are not essential to understand
 Scala's core.</p>
 <p>We now explain the expansion of enums in detail. First,
 some terminology and notational conventions:</p>
 <ul>
-<li>We use <code>E</code> as a name of an enum class, and <code>C</code> as a name of an enum case that appears in the companion object of <code>E</code>.</li>
+<li>We use <code>E</code> as a name of an enum, and <code>C</code> as a name of a case that appears in <code>E</code>.</li>
 <li>
-<p>We use <code>&lt;...&gt;</code> for syntactic constructs that in some circumstances might be empty. For instance <code>&lt;body&gt;</code> represents either the body of a case between <code>{...}</code> or nothing at all.</p>
+<p>We use <code>&lt;...&gt;</code> for syntactic constructs that in some circumstances might be empty. For instance,
+<code>&lt;value-params&gt;</code> represents one or more a parameter lists <code>(...)</code> or nothing at all.</p>
 </li>
 <li>
 <p>Enum cases fall into three categories:</p>
 <ul>
 <li><em>Class cases</em> are those cases that are parameterized, either with a type parameter section <code>[...]</code> or with one or more (possibly empty) parameter sections <code>(...)</code>.</li>
-<li><em>Simple cases</em> are cases of a non-generic enum class that have neither parameters nor an extends clause or body. That is, they consist of a name only.</li>
+<li><em>Simple cases</em> are cases of a non-generic enum that have neither parameters nor an extends clause or body. That is, they consist of a name only.</li>
 <li><em>Value cases</em> are all cases that do not have a parameter section but that do have a (possibly generated) extends clause and/or a body.</li>
 </ul>
 </li>
 </ul>
 <p>Simple cases and value cases are collectively called <em>singleton cases</em>.</p>
 <p>The desugaring rules imply that class cases are mapped to case classes, and singleton cases are mapped to <code>val</code> definitions.</p>
-<p>There are eight desugaring rules. Rules (1) and (2) desugar enums and
-enum classes. Rules (3) and (4) define extends clauses for cases that
-are missing them. Rules (5 - 7) define how such expanded cases map
-into case classes, case objects or vals. Finally, rule (8) expands
-comma separated simple cases into a sequence of cases.</p>
+<p>There are eight desugaring rules. Rule (1) desugar enum definitions. Rules
+(2) and (3) desugar simple cases. Rules (4) to (6) define extends clauses for cases that
+are missing them. Rules (7) and (8) define how such cases with extends clauses
+map into case classes or vals.</p>
 <ol>
 <li>
 <p>An <code>enum</code> definition</p>
-<pre><code> enum E ... { &lt;cases&gt; }
+<pre><code> enum E ... { &lt;defs&gt; &lt;cases&gt; }
 </code></pre>
-<p>expands to an enum class and a companion object</p>
-<pre><code>enum class E ...
+<p>expands to a <code>sealed</code> <code>abstract</code> class that extends the <code>scala.Enum</code> trait and
+an associated companion object that contains the defined cases, expanded according
+to rules (2 - 8). The enum trait starts with a compiler-generated import that imports
+the names <code>&lt;caseIds&gt;</code> of all cases so that they can be used without prefix in the trait.</p>
+<pre><code>sealed abstract class E ... extends &lt;parents&gt; with scala.Enum {
+  import E.{ &lt;caseIds&gt; }
+  &lt;defs&gt;
+}
 object E { &lt;cases&gt; }
 </code></pre>
-</li>
-<li>
-<p>An enum class definition</p>
-<pre><code>enum class E ... extends &lt;parents&gt; ...
-</code></pre>
-<p>expands to a <code>sealed</code> <code>abstract</code> class that extends the <code>scala.Enum</code> trait:</p>
-<pre><code>sealed abstract class E ... extends &lt;parents&gt; with scala.Enum ...
-</code></pre>
-</li>
-<li>
-<p>If <code>E</code> is an enum class without type parameters, then a case in its companion object without an extends clause</p>
-<pre><code>case C &lt;params&gt; &lt;body&gt;
-</code></pre>
-<p>expands to</p>
-<pre><code>case C &lt;params&gt; &lt;body&gt; extends E
-</code></pre>
-</li>
-<li>
-<p>If <code>E</code> is an enum class with type parameters <code>Ts</code>, then a case in its
-companion object without an extends clause</p>
-<pre><code>case C &lt;params&gt; &lt;body&gt;
-</code></pre>
-<p>expands according to two alternatives, depending whether <code>C</code> has type
-parameters or not. If <code>C</code> has type parameters, they must have the same
-names and appear in the same order as the enum type parameters <code>Ts</code>
-(variances may be different, however). In this case</p>
-<pre><code>case C [Ts] &lt;params&gt; &lt;body&gt;
-</code></pre>
-<p>expands to</p>
-<pre><code>case C[Ts] &lt;params&gt; extends E[Ts] &lt;body&gt;
-</code></pre>
-<p>For the case where <code>C</code> does not have type parameters, assume <code>E</code>'s type
-parameters are</p>
-<pre><code>V1 T1 &gt; L1 &lt;: U1 ,   ... ,    Vn Tn &gt;: Ln &lt;: Un      (n &gt; 0)
-</code></pre>
-<p>where each of the variances <code>Vi</code> is either <code>'+'</code> or <code>'-'</code>. Then the case
-expands to</p>
-<pre><code>case C &lt;params&gt; extends E[B1, ..., Bn] &lt;body&gt;
-</code></pre>
-<p>where <code>Bi</code> is <code>Li</code> if <code>Vi = '+'</code> and <code>Ui</code> if <code>Vi = '-'</code>. It is an error if
-<code>Bi</code> refers to some other type   parameter <code>Tj (j = 0,..,n-1)</code>. It is also
-an error if <code>E</code> has type parameters that are non-variant.</p>
-</li>
-<li>
-<p>A class case</p>
-<pre><code>case C &lt;params&gt; ...
-</code></pre>
-<p>expands analogous to a final case class:</p>
-<pre><code>final case class C &lt;params&gt; ...
-</code></pre>
-<p>However, unlike for a regular case class, the return type of the associated
-<code>apply</code> method is a fully parameterized type instance of the enum class <code>E</code>
-itself instead of <code>C</code>.  Also the enum case defines an <code>enumTag</code> method of
-the form</p>
-<pre><code>def enumTag = n
-</code></pre>
-<p>where <code>n</code> is the ordinal number of the case in the companion object,
-starting from 0.</p>
-</li>
-<li>
-<p>A value case</p>
-<pre><code>case C extends &lt;parents&gt; &lt;body&gt;
-</code></pre>
-<p>expands to a value definition</p>
-<pre><code>val C = new &lt;parents&gt; { &lt;body&gt;; def enumTag = n; $values.register(this) }
-</code></pre>
-<p>where <code>n</code> is the ordinal number of the case in the companion object,
-starting from 0.  The statement <code>$values.register(this)</code> registers the value
-as one of the <code>enumValues</code> of the enumeration (see below). <code>$values</code> is a
-compiler-defined private value in the companion object.</p>
-</li>
-<li>
-<p>A simple case</p>
-<pre><code>case C
-</code></pre>
-<p>of an enum class <code>E</code> that does not take type parameters expands to</p>
-<pre><code>val C = $new(n, &quot;C&quot;)
-</code></pre>
-<p>Here, <code>$new</code> is a private method that creates an instance of of <code>E</code> (see
-below).</p>
 </li>
 <li>
 <p>A simple case consisting of a comma-separated list of enum names</p>
@@ -12207,6 +12151,76 @@ below).</p>
 <p>Any modifiers or annotations on the original case extend to all expanded
 cases.</p>
 </li>
+<li>
+<p>A simple case</p>
+<pre><code>case C
+</code></pre>
+<p>of an enum <code>E</code> that does not take type parameters expands to</p>
+<pre><code>val C = $new(n, &quot;C&quot;)
+</code></pre>
+<p>Here, <code>$new</code> is a private method that creates an instance of of <code>E</code> (see
+below).</p>
+</li>
+<li>
+<p>If <code>E</code> is an enum with type parameters</p>
+<pre><code> V1 T1 &gt; L1 &lt;: U1 ,   ... ,    Vn Tn &gt;: Ln &lt;: Un      (n &gt; 0)
+</code></pre>
+<p>where each of the variances <code>Vi</code> is either <code>'+'</code> or <code>'-'</code>, then a simple case</p>
+<pre><code> case C
+</code></pre>
+<p>expands to</p>
+<pre><code>case C extends E[B1, ..., Bn]
+</code></pre>
+<p>where <code>Bi</code> is <code>Li</code> if <code>Vi = '+'</code> and <code>Ui</code> if <code>Vi = '-'</code>. This result is then further
+rewritten with rule (7). Simple cases of enums with non-variant type
+parameters are not permitted.</p>
+</li>
+<li>
+<p>A class case without an extends clause</p>
+<pre><code> case C &lt;type-params&gt; &lt;value-params&gt;
+</code></pre>
+<p>of an enum <code>E</code> that does not take type parameters expands to</p>
+<pre><code> case C &lt;type-params&gt; &lt;value-params&gt; extends E
+</code></pre>
+<p>This result is then further rewritten with rule (8).</p>
+</li>
+<li>
+<p>If <code>E</code> is an enum with type parameters <code>Ts</code>, a class case with neither type parameters nor an extends clause</p>
+<pre><code> case C &lt;value-params&gt;
+</code></pre>
+<p>expands to</p>
+<pre><code> case C[Ts] &lt;value-params&gt; extends E[Ts]
+</code></pre>
+<p>This result is then further rewritten with rule (8). For class cases that have type parameters themselves, an extends clause needs to be given explicitly.</p>
+</li>
+<li>
+<p>A value case</p>
+<pre><code>case C extends &lt;parents&gt;
+</code></pre>
+<p>expands to a value definition in <code>E</code>'s companion object:</p>
+<pre><code>val C = new &lt;parents&gt; { &lt;body&gt;; def enumTag = n; $values.register(this) }
+</code></pre>
+<p>where <code>n</code> is the ordinal number of the case in the companion object,
+starting from 0.  The statement <code>$values.register(this)</code> registers the value
+as one of the <code>enumValues</code> of the enumeration (see below). <code>$values</code> is a
+compiler-defined private value in the companion object.</p>
+</li>
+<li>
+<p>A class case</p>
+<pre><code>case C &lt;params&gt; extends &lt;parents&gt;
+</code></pre>
+<p>expands analogous to a final case class in <code>E</code>'s companion object:</p>
+<pre><code>final case class C &lt;params&gt; extends &lt;parents&gt;
+</code></pre>
+<p>However, unlike for a regular case class, the return type of the associated
+<code>apply</code> method is a fully parameterized type instance of the enum class <code>E</code>
+itself instead of <code>C</code>.  Also the enum case defines an <code>enumTag</code> method of
+the form</p>
+<pre><code>def enumTag = n
+</code></pre>
+<p>where <code>n</code> is the ordinal number of the case in the companion object,
+starting from 0.</p>
+</li>
 </ol>
 <h3><a href="#equality" id="equality">Equality</a></h3>
 <p>An <code>enum</code> type contains a <code>scala.Eq</code> instance that restricts values of the <code>enum</code> type to
@@ -12216,7 +12230,7 @@ be compared only to other values of the same enum type. Furtermore, generic
 <pre><code>implicit def eqOption[T, U](implicit ev1: Eq[T, U]): Eq[Option[T], Option[U]] = Eq
 </code></pre>
 <h3><a href="#translation-of-enumerations" id="translation-of-enumerations">Translation of Enumerations</a></h3>
-<p>Non-generic enum classes <code>E</code> that define one or more singleton cases
+<p>Non-generic enums <code>E</code> that define one or more singleton cases
 are called <em>enumerations</em>. Companion objects of enumerations define
 the following additional members.</p>
 <ul>
@@ -12228,7 +12242,7 @@ representation is <code>s</code>.</li>
 <li>A method <code>enumValues</code> which returns an <code>Iterable[E]</code> of all singleton case
 values in <code>E</code>, in the order of their definitions.</li>
 </ul>
-<p>Companion objects that contain at least one simple case define in addition:</p>
+<p>Companion objects of enumerations that contain at least one simple case define in addition:</p>
 <ul>
 <li>
 <p>A private method <code>$new</code> which defines a new simple case value with given
@@ -12242,6 +12256,15 @@ follows.</p>
 </code></pre>
 </li>
 </ul>
+<h3><a href="#scopes-for-enum-cases" id="scopes-for-enum-cases">Scopes for Enum Cases</a></h3>
+<p>A case in an <code>enum</code> is treated similarly to a secondary constructor. It can access neither the enclosing <code>enum</code> using <code>this</code>, nor its value parameters or instance members using simple
+identifiers.</p>
+<p>Even though translated enum cases are located in the enum's companion object, referencing
+this object or its members via <code>this</code> or a simple identifier is also illegal. The compiler typechecks enum cases in the scope of the enclosing companion object but flags any such illegal accesses as errors.</p>
+<h3><a href="#other-rules" id="other-rules">Other Rules</a></h3>
+<p>A normal case class which is not produced from an enum case is not allowed to extend
+<code>scala.Enum</code>. This ensures that the only cases of an enum are the ones that are
+explictly declared in it.</p>
 
         </div>
     </div><!-- end content-body -->

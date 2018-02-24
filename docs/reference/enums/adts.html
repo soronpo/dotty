@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-22 -->
+<!-- This page was last generated on 2018-02-24 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7428,6 +7428,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor trait" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">ReChecking</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">C</a>
                     </div>
                     <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">ReTyper</a>
@@ -12084,23 +12102,23 @@
 types (ADTs) and their generalized version (GADTs). Here's an example
 how an <code>Option</code> type can be represented as an ADT:</p>
 <pre><code class="language-scala">enum Option[+T] {
-  case Some[+T](x: T)
+  case Some(x: T)
   case None
 }
 </code></pre>
-<p>This example introduces <code>Option</code> enum class with a covariant type
-parameter <code>T</code>, together with two cases, <code>Some</code> and <code>None</code>. <code>Some</code> is
-parameterized with a type parameter <code>T</code> and a value parameter <code>x</code>. It
-is a shorthand for writing a case class that extends <code>Option</code>. Since
-<code>None</code> is not parameterized it is treated as a normal enum value.</p>
+<p>This example introduces an <code>Option</code> enum with a covariant type
+parameter <code>T</code> consisting of two cases, <code>Some</code> and <code>None</code>. <code>Some</code> is
+parameterized with a value parameter <code>x</code>. It is a shorthand for writing a
+case class that extends <code>Option</code>. Since <code>None</code> is not parameterized, it
+is treated as a normal enum value.</p>
 <p>The <code>extends</code> clauses that were omitted in the example above can also
 be given explicitly:</p>
 <pre><code class="language-scala">enum Option[+T] {
-  case Some[+T](x: T) extends Option[T]
-  case None           extends Option[Nothing]
+  case Some(x: T) extends Option[T]
+  case None       extends Option[Nothing]
 }
 </code></pre>
-<p>Note that the parent type of <code>None</code> is inferred as
+<p>Note that the parent type of the <code>None</code> value is inferred as
 <code>Option[Nothing]</code>. Generally, all covariant type parameters of the enum
 class are minimized in a compiler-generated extends clause whereas all
 contravariant type parameters are maximized. If <code>Option</code> was non-variant,
@@ -12121,22 +12139,20 @@ exist, and can be unvealed by constructing them directly with a <code>new</code>
 <pre><code class="language-scala">scala&gt; new Option.Some(2)
 val res3: t2.Option.Some[Int] = Some(2)
 </code></pre>
-<p>As all other enums, ADTs can have methods on both the enum class and
-its companion object. For instance, here is <code>Option</code> again, with an
-<code>isDefined</code> method and an <code>Option(...)</code> constructor.</p>
-<pre><code class="language-scala">enum class Option[+T] {
-   def isDefined: Boolean
+<p>As all other enums, ADTs can define methods. For instance, here is <code>Option</code> again, with an
+<code>isDefined</code> method and an <code>Option(...)</code> constructor in its companion object.</p>
+<pre><code class="language-scala">enum Option[+T] {
+  case Some(x: T) extends Option[T]
+  case None
+
+  def isDefined: Boolean = this match {
+    case None =&gt; false
+    case some =&gt; true
+  }
 }
 object Option {
   def apply[T &gt;: Null](x: T): Option[T] =
     if (x == null) None else Some(x)
-
-  case Some[+T](x: T) {
-     def isDefined = true
-  }
-  case None {
-     def isDefined = false
-  }
 }
 </code></pre>
 <p>Enumerations and ADTs have been presented as two different
@@ -12153,24 +12169,21 @@ parameterized case that takes an RGB value.</p>
 }
 </code></pre>
 <h3><a href="#syntax-of-enums" id="syntax-of-enums">Syntax of Enums</a></h3>
-<p>Changes to the syntax fall in two categories: enum classes and cases inside enums.
+<p>Changes to the syntax fall in two categories: enum definitions and cases inside enums.
 The changes are specified below as deltas with respect to the Scala syntax given <a href="http://dotty.epfl.ch/docs/internals/syntax.html">here</a></p>
 <ol>
 <li>
-<p>Enum definitions and enum classes are defined as follows:</p>
-<pre><code>TmplDef ::=  `enum' `class’ ClassDef
-         |   `enum' EnumDef
-EnumDef ::=  id ClassConstr [`extends' [ConstrApps]]
-             [nl] `{’ EnumCaseStat {semi EnumCaseStat} `}’
+<p>Enum definitions are defined as follows:</p>
+<pre><code>TmplDef   ::=  `enum' EnumDef
+EnumDef   ::=  id ClassConstr [`extends' [ConstrApps]] EnumBody
+EnumBody  ::=  [nl] ‘{’ [SelfType] EnumStat {semi EnumStat} ‘}’
+EnumStat  ::=  TemplateStat
+            |  {Annotation [nl]} {Modifier} EnumCase
 </code></pre>
 </li>
 <li>
 <p>Cases of enums are defined as follows:</p>
-<pre><code>EnumCaseStat  ::=  {Annotation [nl]} {Modifier} EnumCase
-EnumCase      ::=  `case' (EnumClassDef | ObjectDef | ids)
-EnumClassDef  ::=  id [ClsTpeParamClause | ClsParamClause]
-                   ClsParamClauses TemplateOpt
-TemplateStat  ::=  ... | EnumCaseStat
+<pre><code>EnumCase  ::=  `case' (id ClassConstr [`extends' ConstrApps]] | ids)
 </code></pre>
 </li>
 </ol>

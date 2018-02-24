@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-02-22 -->
+<!-- This page was last generated on 2018-02-24 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7428,6 +7428,24 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor trait" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">T</a>
+                    </div>
+                    <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReChecking.html">ReChecking</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor class" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">C</a>
                     </div>
                     <a class="entity-name" href="../../.././api/dotty/tools/dotc/typer/ReTyper.html">ReTyper</a>
@@ -12087,18 +12105,9 @@
 </code></pre>
 <p>This defines a new <code>sealed</code> class, <code>Color</code>, with three values, <code>Color.Red</code>,
 <code>Color.Green</code>, <code>Color.Blue</code>.  The color values are members of <code>Color</code>s
-companion object. The <code>Color</code> definition above is equivalent to the
-following more explicit definition of an <em>enum class</em> and a companion
-object:</p>
-<pre><code class="language-scala">enum class Color
-object Color {
-  case Red
-  case Green
-  case Blue
-}
-</code></pre>
+companion object.</p>
 <h3><a href="#parameterized-enums" id="parameterized-enums">Parameterized enums</a></h3>
-<p>Enum classes can be parameterized.</p>
+<p>Enums can be parameterized.</p>
 <pre><code class="language-scala">enum Color(val rgb: Int) {
   case Red   extends Color(0xFF0000)
   case Green extends Color(0x00FF00)
@@ -12115,7 +12124,7 @@ val red: Color = Red
 scala&gt; red.enumTag
 val res0: Int = 0
 </code></pre>
-<p>The companion object of an enum class also defines three utility methods.
+<p>The companion object of an enum also defines three utility methods.
 The <code>enumValue</code> and <code>enumValueNamed</code> methods obtain an enum value
 by its tag or its name. The <code>enumValues</code> method returns all enum values
 defined in an enumeration in an <code>Iterable</code>.</p>
@@ -12127,18 +12136,12 @@ scala&gt; Color.enumValues
 val res3: collection.Iterable[Color] = MapLike(Red, Green, Blue)
 </code></pre>
 <h3><a href="#user-defined-members-of-enums" id="user-defined-members-of-enums">User-defined members of enums</a></h3>
-<p>It is possible to add your own definitions to an enum class or its
-companion object.  To make clear what goes where you need to use the
-longer syntax which defines an enum class alongside its companion
-object explicitly. In the following example, we define some methods in
-class <code>Planet</code> and a <code>main</code> method in its companion object.</p>
-<pre><code class="language-scala">enum class Planet(mass: Double, radius: Double) {
+<p>It is possible to add your own definitions to an enum. Example:</p>
+<pre><code class="language-scala">enum Planet(mass: Double, radius: Double) {
   private final val G = 6.67300E-11
   def surfaceGravity = G * mass / (radius * radius)
   def surfaceWeight(otherMass: Double) =  otherMass * surfaceGravity
-}
 
-object Planet {
   case MERCURY extends Planet(3.303e+23, 2.4397e6)
   case VENUS   extends Planet(4.869e+24, 6.0518e6)
   case EARTH   extends Planet(5.976e+24, 6.37814e6)
@@ -12147,7 +12150,10 @@ object Planet {
   case SATURN  extends Planet(5.688e+26, 6.0268e7)
   case URANUS  extends Planet(8.686e+25, 2.5559e7)
   case NEPTUNE extends Planet(1.024e+26, 2.4746e7)
-
+}
+</code></pre>
+<p>It is also possible to define an explicit companion object for an enum:</p>
+<pre><code class="language-scala">object Planet {
   def main(args: Array[String]) = {
     val earthWeight = args(0).toDouble
     val mass = earthWeight/EARTH.surfaceGravity
@@ -12157,7 +12163,7 @@ object Planet {
 }
 </code></pre>
 <h3><a href="#implementation" id="implementation">Implementation</a></h3>
-<p>Enum classes are represented as <code>sealed</code> classes that extend the <code>scala.Enum</code> trait.
+<p>Enums are represented as <code>sealed</code> classes that extend the <code>scala.Enum</code> trait.
 This trait defines a single method, <code>enumTag</code>:</p>
 <pre><code class="language-scala">package scala
 
@@ -12184,7 +12190,8 @@ definition of value <code>Color.Red</code> above would expand to:</p>
 <pre><code class="language-scala">val Red: Color = $new(0, &quot;Red&quot;)
 </code></pre>
 <h3><a href="#reference" id="reference">Reference</a></h3>
-<p>For more info, see <a href="https://github.com/lampepfl/dotty/issues/1970">Issue #1970</a>.</p>
+<p>For more info, see <a href="https://github.com/lampepfl/dotty/issues/1970">Issue #1970</a> and
+<a href="https://github.com/lampepfl/dotty/pull/4003">PR #4003</a>.</p>
 
         </div>
     </div><!-- end content-body -->
