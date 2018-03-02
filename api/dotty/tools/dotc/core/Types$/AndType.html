@@ -12099,7 +12099,12 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">AndOrType</span>
+                    <span class="entity-super-type">CachedGroundType</span>
+                    
+                    
+                    <span class="keyword">with</span>
+                    
+                    <span class="entity-super-type">ValueType</span>
                     
                     
                     <span class="keyword">with</span>
@@ -12153,6 +12158,77 @@
             </h1>
 
             <div id="entity-members" class="entity-section ">
+                
+                <div id="myBaseClasses" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myBaseClasses');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                myBaseClasses
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+ClassSymbol
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-myBaseClasses">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="myBaseClassesPeriod" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'myBaseClassesPeriod');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                myBaseClassesPeriod
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Period</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-myBaseClassesPeriod">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
                 
                 <div id="tp1" class="member ">
                     <div class="member-title">
@@ -12222,44 +12298,25 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="derivedAndOrType(tp1,tp2)(ctx)" class="member ">
+                <div id="baseClasses(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'derivedAndOrType(tp1,tp2)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'baseClasses(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override final
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                derivedAndOrType
+                                baseClasses
                             
                         </span>
 
                         
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tp1:
-                                    </span>
-                                    Type
-                                    
-                                        <span class="no-left">, </span>
-                                    
-                                
-                                    <span class="">
-                                        tp2:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
                             
                             <span class="no-left">(</span>
                                 
@@ -12279,13 +12336,65 @@
                         
 
                         
-                        <span class="no-left">: Type</span>
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+ClassSymbol
+<span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-derivedAndOrType(tp1,tp2)(ctx)">
+                        <div class="member-body-long" id ="long-body-baseClasses(ctx)">
+                            <p>Base classes of are the merge of the operand base classes.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="computeHash(bs)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'computeHash(bs)');">[+]</span>
+                        <span class="member-annotations">
                             
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                computeHash
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bs:
+                                    </span>
+                                    Binders
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-computeHash(bs)">
+                            <p>Compute hashcode relative to enclosing binders <code>bs</code></p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12426,24 +12535,37 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="isAnd" class="member ">
+                <div id="eql(that)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isAnd');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'eql(that)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            
+                            override
                         </span>
                         <span class="member-kind">
                             def
                         </span>
                         <span class="member-name ">
                             
-                                isAnd
+                                eql
                             
                         </span>
 
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        that:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
                         
 
                         
@@ -12454,8 +12576,10 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isAnd">
-                            
+                        <div class="member-body-long" id ="long-body-eql(that)">
+                            <p>Equality used for hash-consing; uses <code>eq</code> on all recursive invocations,
+except where a BindingType is involved. The latter demand a deep isomorphism check.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
