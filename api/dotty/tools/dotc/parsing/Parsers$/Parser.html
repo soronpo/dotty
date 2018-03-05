@@ -168,7 +168,7 @@
 </li>
 <li><a href="../../../../../.././docs/reference/named-typeargs.html">Named Type Arguments</a>
 </li>
-<li><a href="../../../../../.././docs/reference/ghost-terms.html">Ghost Terms</a>
+<li><a href="../../../../../.././docs/reference/erased-terms.html">Erased Terms</a>
 </li>
 <li><a href="../../../../../.././docs/reference/optimisations.html">Local Optimisations</a></li>
 </ul>
@@ -5220,6 +5220,24 @@
                 
 
                 
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -5486,24 +5504,6 @@
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/Getters.html">Getters</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">GhostDecls</a>
                 </li>
 
                 
@@ -16465,7 +16465,7 @@ If it is, returns the [[Position]] where the wildcard occurs.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-funArgMods">
-                            <p>FunArgMods ::= { <code>implicit</code> | <code>ghost</code> }</p>
+                            <p>FunArgMods ::= { <code>implicit</code> | <code>erased</code> }</p>
 
                         </div>
                     </div>
@@ -19166,10 +19166,10 @@ List
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-paramClauses(owner,ofCaseClass)">
                             <p>ClsParamClauses   ::=  {ClsParamClause} [[nl] <code>(' [FunArgMods] ClsParams</code>)']
-ClsParamClause    ::=  [nl] <code>(' [</code>ghost'] [ClsParams] ')'
+ClsParamClause    ::=  [nl] <code>(' [</code>erased'] [ClsParams] ')'
 ClsParams         ::=  ClsParam {<code>' ClsParam} ClsParam ::= {Annotation} [{Modifier} (</code>val' | <code>var') |</code>inline'] Param
 DefParamClauses   ::=  {DefParamClause} [[nl] <code>(' [FunArgMods] DefParams</code>)']
-DefParamClause    ::=  [nl] <code>(' [</code>ghost'] [DefParams] ')'
+DefParamClause    ::=  [nl] <code>(' [</code>erased'] [DefParams] ')'
 DefParams         ::=  DefParam {<code>,' DefParam} DefParam ::= {Annotation} [</code>inline'] Param
 Param             ::=  id <code>:' ParamType [</code>=' Expr]</p>
 

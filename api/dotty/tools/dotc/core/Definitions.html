@@ -168,7 +168,7 @@
 </li>
 <li><a href="../../../../.././docs/reference/named-typeargs.html">Named Type Arguments</a>
 </li>
-<li><a href="../../../../.././docs/reference/ghost-terms.html">Ghost Terms</a>
+<li><a href="../../../../.././docs/reference/erased-terms.html">Erased Terms</a>
 </li>
 <li><a href="../../../../.././docs/reference/optimisations.html">Local Optimisations</a></li>
 </ul>
@@ -5220,6 +5220,24 @@
                 
 
                 
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -5486,24 +5504,6 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">Getters</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">GhostDecls</a>
                 </li>
 
                 
@@ -24206,9 +24206,9 @@ TermSymbol
                     </div>
                 </div><!-- end member -->
                 
-                <div id="FunctionClass(n,isImplicit,isGhost)(ctx)" class="member ">
+                <div id="FunctionClass(n,isImplicit,isErased)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionClass(n,isImplicit,isGhost)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionClass(n,isImplicit,isErased)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -24246,7 +24246,7 @@ TermSymbol
                                     
                                 
                                     <span class="">
-                                        isGhost:
+                                        isErased:
                                     </span>
                                     Boolean
                                     
@@ -24276,7 +24276,7 @@ TermSymbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-FunctionClass(n,isImplicit,isGhost)(ctx)">
+                        <div class="member-body-long" id ="long-body-FunctionClass(n,isImplicit,isErased)(ctx)">
                             
                         </div>
                     </div>
@@ -24322,9 +24322,9 @@ Symbol
                     </div>
                 </div><!-- end member -->
                 
-                <div id="FunctionType(n,isImplicit,isGhost)(ctx)" class="member ">
+                <div id="FunctionType(n,isImplicit,isErased)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionType(n,isImplicit,isGhost)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'FunctionType(n,isImplicit,isErased)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -24362,7 +24362,7 @@ Symbol
                                     
                                 
                                     <span class="">
-                                        isGhost:
+                                        isErased:
                                     </span>
                                     Boolean
                                     
@@ -24392,7 +24392,7 @@ Symbol
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-FunctionType(n,isImplicit,isGhost)(ctx)">
+                        <div class="member-body-long" id ="long-body-FunctionType(n,isImplicit,isErased)(ctx)">
                             
                         </div>
                     </div>
@@ -29958,8 +29958,8 @@ Type
 - FunctionN for 22 &gt; N &gt;= 0 remains as FunctionN
 - ImplicitFunctionN for N &gt; 22 becomes FunctionXXL
 - ImplicitFunctionN for 22 &gt; N &gt;= 0 becomes FunctionN
-- GhostFunctionN becomes Function0
-- ImplicitGhostFunctionN becomes Function0
+- ErasedFunctionN becomes Function0
+- ImplicitErasedFunctionN becomes Function0
 - anything else becomes a NoSymbol</p>
 
                         </div>
@@ -30013,8 +30013,8 @@ Type
 - FunctionN for 22 &gt; N &gt;= 0 remains as FunctionN
 - ImplicitFunctionN for N &gt; 22 becomes FunctionXXL
 - ImplicitFunctionN for 22 &gt; N &gt;= 0 becomes FunctionN
-- GhostFunctionN becomes Function0
-- ImplicitGhostFunctionN becomes Function0
+- ErasedFunctionN becomes Function0
+- ImplicitErasedFunctionN becomes Function0
 - anything else becomes a NoType</p>
 
                         </div>
@@ -30276,6 +30276,116 @@ Type
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isErasedFunctionClass(cls)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isErasedFunctionClass(cls)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isErasedFunctionClass
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        cls:
+                                    </span>
+                                    Symbol
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isErasedFunctionClass(cls)">
+                            <p>Is an erased function class.
+- ErasedFunctionN for N &gt; 0
+- ErasedImplicitFunctionN for N &gt; 0</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isErasedFunctionType(tp)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'isErasedFunctionType(tp)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isErasedFunctionType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isErasedFunctionType(tp)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="isFunctionClass(cls)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isFunctionClass(cls)');">[+]</span>
@@ -30321,8 +30431,8 @@ Type
                             <p>Is a function class.
 - FunctionN for N &gt;= 0
 - ImplicitFunctionN for N &gt; 0
-- GhostFunctionN for N &gt; 0
-- GhostImplicitFunctionN for N &gt; 0</p>
+- ErasedFunctionN for N &gt; 0
+- ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -30389,116 +30499,6 @@ Type
                     </div>
                 </div><!-- end member -->
                 
-                <div id="isGhostFunctionClass(cls)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isGhostFunctionClass(cls)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                isGhostFunctionClass
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        cls:
-                                    </span>
-                                    Symbol
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isGhostFunctionClass(cls)">
-                            <p>Is an ghost function class.
-- GhostFunctionN for N &gt; 0
-- GhostImplicitFunctionN for N &gt; 0</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="isGhostFunctionType(tp)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'isGhostFunctionType(tp)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                isGhostFunctionType
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tp:
-                                    </span>
-                                    Type
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isGhostFunctionType(tp)(ctx)">
-                            
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="isImplicitFunctionClass(cls)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isImplicitFunctionClass(cls)');">[+]</span>
@@ -30543,7 +30543,7 @@ Type
                         <div class="member-body-long" id ="long-body-isImplicitFunctionClass(cls)">
                             <p>Is an implicit function class.
 - ImplicitFunctionN for N &gt; 0
-- GhostImplicitFunctionN for N &gt; 0</p>
+- ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -31788,7 +31788,7 @@ TypeRef
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-newFunctionNTrait(name)">
-                            <p>The trait FunctionN, ImplicitFunctionN, GhostFunctionN or GhostImplicitFunction, for some N</p>
+                            <p>The trait FunctionN, ImplicitFunctionN, ErasedFunctionN or ErasedImplicitFunction, for some N</p>
 
                         </div>
                     </div>

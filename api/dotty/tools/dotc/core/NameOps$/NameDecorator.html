@@ -168,7 +168,7 @@
 </li>
 <li><a href="../../../../../.././docs/reference/named-typeargs.html">Named Type Arguments</a>
 </li>
-<li><a href="../../../../../.././docs/reference/ghost-terms.html">Ghost Terms</a>
+<li><a href="../../../../../.././docs/reference/erased-terms.html">Erased Terms</a>
 </li>
 <li><a href="../../../../../.././docs/reference/optimisations.html">Local Optimisations</a></li>
 </ul>
@@ -5220,6 +5220,24 @@
                 
 
                 
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -5486,24 +5504,6 @@
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/Getters.html">Getters</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/GhostDecls.html">GhostDecls</a>
                 </li>
 
                 
@@ -12663,6 +12663,44 @@ followed by <code>kind</code> and the name.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isErasedFunction" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isErasedFunction');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isErasedFunction
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isErasedFunction">
+                            <p>Is a implicit function name
+- ErasedFunctionN for N &gt;= 1
+- ErasedImplicitFunctionN for N &gt;= 1
+- false otherwise</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="isFunction" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isFunction');">[+]</span>
@@ -12695,46 +12733,8 @@ followed by <code>kind</code> and the name.</p>
                             <p>Is a function name
 - FunctionN for N &gt;= 0
 - ImplicitFunctionN for N &gt;= 1
-- GhostFunctionN for N &gt;= 1
-- GhostImplicitFunctionN for N &gt;= 1
-- false otherwise</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="isGhostFunction" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isGhostFunction');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                isGhostFunction
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isGhostFunction">
-                            <p>Is a implicit function name
-- GhostFunctionN for N &gt;= 1
-- GhostImplicitFunctionN for N &gt;= 1
+- ErasedFunctionN for N &gt;= 1
+- ErasedImplicitFunctionN for N &gt;= 1
 - false otherwise</p>
 
                         </div>
@@ -12772,7 +12772,7 @@ followed by <code>kind</code> and the name.</p>
                         <div class="member-body-long" id ="long-body-isImplicitFunction">
                             <p>Is a implicit function name
 - ImplicitFunctionN for N &gt;= 1
-- GhostImplicitFunctionN for N &gt;= 1
+- ErasedImplicitFunctionN for N &gt;= 1
 - false otherwise</p>
 
                         </div>
@@ -13083,8 +13083,8 @@ followed by <code>kind</code> and the name.</p>
                             <p>Is a synthetic function name
 - FunctionN for N &gt; 22
 - ImplicitFunctionN for N &gt;= 1
-- GhostFunctionN for N &gt;= 1
-- GhostImplicitFunctionN for N &gt;= 1
+- ErasedFunctionN for N &gt;= 1
+- ErasedImplicitFunctionN for N &gt;= 1
 - false otherwise</p>
 
                         </div>
