@@ -12083,7 +12083,7 @@
             <p>Previously, an implicit value of type <code>Function1</code>, or any of its subtypes
 could be used as an implicit conversion. That is, the following code would compile
 even though it probably masks a type error:</p>
-<pre><code>implicit val m: Map[String, Int] = Map(1 -&gt; &quot;abc&quot;)
+<pre><code>implicit val m: Map[Int, String] = Map(1 -&gt; &quot;abc&quot;)
 
 val x: String = 1  // scalac: assigns &quot;abc&quot; to x
                    // Dotty: type error
