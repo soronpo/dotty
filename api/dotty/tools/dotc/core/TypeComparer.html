@@ -2627,10 +2627,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/TyperState$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/core/TyperState.html">C</a>
                     </div>
@@ -2639,6 +2641,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -7918,6 +7924,30 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentityMap.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentityMap.html">SimpleIdentityMap</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet.html">SimpleIdentitySet</a>
                 </li>
 
                 
@@ -15309,6 +15339,67 @@ that form part of a subtype derivation tree that's ultimately successful.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-showType(tp)(ctx)">
                             <p>Show type, handling type types better than the default</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="singletonInterval(tp1,tp2)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'singletonInterval(tp1,tp2)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                singletonInterval
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp1:
+                                    </span>
+                                    Type
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tp2:
+                                    </span>
+                                    Type
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-singletonInterval(tp1,tp2)">
+                            <p>If the range <code>tp1..tp2</code> consist of a single type, that type, otherwise NoType<code>. This is the case if</code>tp1 =:= tp2<code>, but also if</code>tp1 &lt;:&lt; tp2<code>,</code>tp1<code>is a singleton type, and</code>tp2<code>derives from</code>scala.Singleton` (or vice-versa). Examples of the latter case:</p>
+<p>&quot;name&quot;.type .. Singleton
+&quot;name&quot;.type .. String &amp; Singleton
+Singleton .. &quot;name&quot;.type
+String &amp; Singleton .. &quot;name&quot;.type</p>
+<p>All consist of the single type <code>&quot;name&quot;.type</code>.</p>
 
                         </div>
                     </div>

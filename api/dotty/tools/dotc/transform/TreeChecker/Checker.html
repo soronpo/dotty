@@ -2627,10 +2627,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/core/TyperState$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/core/TyperState.html">C</a>
                     </div>
@@ -2639,6 +2641,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -7937,6 +7943,30 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/util/SimpleIdentitySet.html">SimpleIdentitySet</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/util/SixteenNibbles$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/util/SixteenNibbles.html">C</a>
@@ -12260,9 +12290,9 @@ Phase
                     </div>
                 </div><!-- end member -->
                 
-                <div id="adapt(tree,pt)(ctx)" class="member ">
+                <div id="adapt(tree,pt,locked)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'adapt(tree,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'adapt(tree,pt,locked)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12296,6 +12326,14 @@ Phase
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        locked:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$.html#TypeVars">TypeVars</a>
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12322,8 +12360,41 @@ Phase
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-adapt(tree,pt)(ctx)">
-                            
+                        <div class="member-body-long" id ="long-body-adapt(tree,pt,locked)(ctx)">
+                            <p>Perform the following adaptations of expression, pattern or type <code>tree</code> wrt to
+given prototype <code>pt</code>:
+(1) Resolve overloading
+(2) Apply parameterless functions
+(3) Apply polymorphic types to fresh instances of their type parameters and
+store these instances in context.undetparams,
+unless followed by explicit type application.
+(4) Do the following to unapplied methods used as values:
+(4.1) If the method has only implicit parameters pass implicit arguments
+(4.2) otherwise, if <code>pt</code> is a function type and method is not a constructor,
+convert to function by eta-expansion,
+(4.3) otherwise, if the method is nullary with a result type compatible to <code>pt</code>
+and it is not a constructor, apply it to ()
+otherwise issue an error
+(5) Convert constructors in a pattern as follows:
+(5.1) If constructor refers to a case class factory, set tree's type to the unique
+instance of its primary constructor that is a subtype of the expected type.
+(5.2) If constructor refers to an extractor, convert to application of
+unapply or unapplySeq method.</p>
+<p>(6) Convert all other types to TypeTree nodes.
+(7) When in TYPEmode but not FUNmode or HKmode, check that types are fully parameterized
+(7.1) In HKmode, higher-kinded types are allowed, but they must have the expected kind-arity
+(8) When in both EXPRmode and FUNmode, add apply method calls to values of object type.
+(9) If there are undetermined type variables and not POLYmode, infer expression instance
+Then, if tree's type is not a subtype of expected type, try the following adaptations:
+(10) If the expected type is Byte, Short or Char, and the expression
+is an integer fitting in the range of that type, convert it to that type.
+(11) Widen numeric literals to their expected type, if necessary
+(12) When in mode EXPRmode, convert E to { E; () } if expected type is scala.Unit.
+(13) When in mode EXPRmode, apply AnnotationChecker conversion if expected type is annotated.
+(14) When in mode EXPRmode, apply a view
+If all this fails, error
+Parameters as for <code>typedUnadapted</code>.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12845,6 +12916,83 @@ case there's technically a leak which is not removed by the ascription.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isMethodType(pt)(ctx)">
                             <p>Check that all methods have MethodicType</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="simplify(tree,pt,locked)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'simplify(tree,pt,locked)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                simplify
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pt:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        locked:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$.html#TypeVars">TypeVars</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: tree.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-simplify(tree,pt,locked)(ctx)">
+                            <p>Interpolate and simplify the type of the given tree.</p>
 
                         </div>
                     </div>
@@ -13567,9 +13715,9 @@ of a helper value without having to do a change owner traversal of the expressio
                     </div>
                 </div><!-- end member -->
                 
-                <div id="typedUnadapted(tree,pt)(ctx)" class="member ">
+                <div id="typedUnadapted(tree,pt,locked)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedUnadapted(tree,pt)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'typedUnadapted(tree,pt,locked)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -13603,6 +13751,14 @@ of a helper value without having to do a change owner traversal of the expressio
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        locked:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Types$.html#TypeVars">TypeVars</a>
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -13629,8 +13785,9 @@ of a helper value without having to do a change owner traversal of the expressio
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-typedUnadapted(tree,pt)(ctx)">
-                            
+                        <div class="member-body-long" id ="long-body-typedUnadapted(tree,pt,locked)(ctx)">
+                            <p>Typecheck tree without adapting it, returning a typed tree.</p>
+
                         </div>
                     </div>
                 </div><!-- end member -->
