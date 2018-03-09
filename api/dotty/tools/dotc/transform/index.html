@@ -5556,24 +5556,6 @@
                 
 
                 
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfEvaluator.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfEvaluator.html">IsInstanceOfEvaluator</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
                 <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
@@ -13728,65 +13710,6 @@ if the identifer neither a global reference nor a reference to a parameter of th
 using the most precise overload available</li>
 <li><code>x.getClass</code> for getClass in primitives becomes <code>x.getClass</code> with getClass in class Object.</li>
 </ul>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="IsInstanceOfEvaluator" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'IsInstanceOfEvaluator');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            class
-                        </span>
-                        <span class="member-name ">
-                            
-                                <a href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfEvaluator.html">IsInstanceOfEvaluator</a>
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-IsInstanceOfEvaluator">
-                            <p>Implements partial evaluation of <code>sc.isInstanceOf[Sel]</code> according to:</p>
-<table>
-<thead>
-<tr><th align="right">Sel\sc</th><th align="center">trait</th><th align="center">class</th><th align="center">final class</th></tr>
-</thead>
-<tbody>
-<tr><td align="right">trait</td><td align="center">?</td><td align="center">?</td><td align="center">statically known</td></tr>
-<tr><td align="right">class</td><td align="center">?</td><td align="center">false if classes unrelated</td><td align="center">statically known</td></tr>
-<tr><td align="right">final class</td><td align="center">false if classes unrelated</td><td align="center">false if classes unrelated</td><td align="center">statically known</td></tr>
-</tbody>
-</table>
-<p>This is a generalized solution to raising an error on unreachable match
-cases and warnings on other statically known results of <code>isInstanceOf</code>.</p>
-<p>Steps taken:</p>
-<ol>
-<li><code>evalTypeTest</code> will establish the matrix and choose the appropriate
-handling for the case:
-<ul>
-<li>Sel/sc is a value class or scrutinee is <code>Any</code></li>
-<li><code>handleStaticallyKnown</code></li>
-<li><code>falseIfUnrelated</code> with <code>scrutinee &lt;:&lt; selector</code></li>
-<li><code>handleFalseUnrelated</code></li>
-<li>leave as is (<code>happens</code>)</li>
-</ul>
-</li>
-<li>Rewrite according to steps taken in 1</li>
-</ol>
 
                         </div>
                     </div>
