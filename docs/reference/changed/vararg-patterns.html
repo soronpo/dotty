@@ -12087,6 +12087,28 @@ supported:</p>
 <pre><code>/*!*/ case List(1, 2, xs @ _*)       // syntax error
 /*!*/ case List(1, 2, _*) =&gt; ...     // syntax error
 </code></pre>
+<p>Another change relates to extractors producing values with <code>T*</code> types, which can then be
+matched by vararg patterns. Previously, such extractors used an <code>unapplySeq</code> whereas now they use an <code>unapply</code> (in the long term, we plan to get rid of <code>unapplySeq</code> altogether, replacing all its usages with <code>unapply</code>).</p>
+<p>Example: Previously, this was correct:</p>
+<pre><code>class Person(val name: String, val children: Person *)
+object Person {
+  def unapplySeq(p: Person) = Some((p.name, p.children))
+}
+
+def childCount(p: Person) = p match {
+  case Person(_, ns @ _*) =&gt; ns.length
+}
+</code></pre>
+<p>Now, the equivalent program is written as follows:</p>
+<pre><code>class Person(val name: String, val children: Person *)
+object Person {
+  def unapply(p: Person) = Some((p.name, p.children))
+}
+
+def childCount(p: Person) = p match {
+  case Person(_, ns : _*) =&gt; ns.length
+}
+</code></pre>
 
         </div>
     </div><!-- end content-body -->
