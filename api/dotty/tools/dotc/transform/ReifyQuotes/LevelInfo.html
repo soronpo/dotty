@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-03-15 -->
+<!-- This page was last generated on 2018-03-16 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12129,44 +12129,6 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="enteredSyms" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enteredSyms');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            var
-                        </span>
-                        <span class="member-name ">
-                            
-                                enteredSyms
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: List
-<span class="no-left no-right">[</span>
-<a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-enteredSyms">
-                            <p>A stack of entered symbols, to be unwound after scope exit</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="levelOf" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'levelOf');">[+]</span>
@@ -12205,52 +12167,48 @@
                     </div>
                 </div><!-- end member -->
                 
-                <div id="enteredSyms_=(x$1)" class="member ">
+                <div id="lifters" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enteredSyms_=(x$1)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lifters');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
                         <span class="member-modifiers">
-                            <accessor>
+                            
                         </span>
                         <span class="member-kind">
-                            def
+                            val
                         </span>
                         <span class="member-name ">
                             
-                                enteredSyms_=
+                                lifters
                             
                         </span>
 
                         
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        x$1:
-                                    </span>
-                                    List
+
+                        
+
+                        
+                        <span class="no-left">: HashMap
 <span class="no-left no-right">[</span>
-<a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Unit</span>
+<a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a><span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#RefTree">RefTree</a><span class="right-arrow"> =&gt; </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-enteredSyms_=(x$1)">
-                            <p>A stack of entered symbols, to be unwound after scope exit</p>
+                        <div class="member-body-long" id ="long-body-lifters">
+                            <p>Register a reference defined in a quote but used in another quote nested in a splice.
+Returns a lifted version of the reference that needs to be used in its place.
+'{
+val x = ???
+{ ... '{ ... x ... } ... }.unary_~
+}
+Lifting the <code>x</code> in <code>{ ... '{ ... x ... } ... }.unary_~</code> will return a <code>x$1.unary_~</code> for which the <code>x$1</code>
+be created by some outer reifier.</p>
+<p>This transformation is only applied to definitions at staging level 1.</p>
+<p>See <code>needsLifting</code></p>
 
                         </div>
                     </div>

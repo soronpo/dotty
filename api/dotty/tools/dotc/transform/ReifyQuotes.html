@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-03-15 -->
+<!-- This page was last generated on 2018-03-16 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12103,6 +12103,36 @@
             <div id="entity-body" class="entity-section">
                 <p>Translates quoted terms and types to <code>unpickle</code> method calls.
 Checks that the phase consistency principle (PCP) holds.</p>
+<p>Transforms top level quote</p>
+<pre><code>'{ ...
+   val x1 = ???
+   val x2 = ???
+   ...
+   ~{ ... '{ ... x1 ... x2 ...} ... }
+   ...
+ }
+</code></pre>
+<p>to</p>
+<pre><code> unpickle(
+   [[ // PICKLED TASTY
+     ...
+     val x1 = ???
+     val x2 = ???
+     ...
+     Hole(0 | x1, x2)
+     ...
+   ]],
+   List(
+     (args: Seq[Any]) =&gt; {
+       val x1$1 = args(0).asInstanceOf[Expr[T]]
+       val x2$1 = args(1).asInstanceOf[Expr[T]] // can be asInstanceOf[Type[T]]
+       ...
+       { ... '{ ... x1$1.unary_~ ... x2$1.unary_~ ...} ... }
+     }
+   )
+ )
+</code></pre>
+<p>and then performs the same transformation on <code>'{ ... x1$1.unary_~ ... x2$1.unary_~ ...}</code>.</p>
 
             </div>
             
@@ -12200,68 +12230,6 @@ Checks that the phase consistency principle (PCP) holds.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="elimHoles(tree)(ctx)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'elimHoles(tree)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                elimHoles
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tree:
-                                    </span>
-                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-elimHoles(tree)(ctx)">
-                            <p>If <code>tree</code> has holes, convert it to a function taking a <code>Seq</code> of elements as arguments
-where each hole is replaced by the corresponding sequence element.</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="newTransformer(ctx)" class="member protected">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'newTransformer(ctx)');">[+]</span>
@@ -12344,59 +12312,6 @@ where each hole is replaced by the corresponding sequence element.</p>
 instance, it is possible to print trees after a given phase using:</p>
 <pre><code class="language-bash">$ ./bin/dotc -Xprint:&lt;phaseNameHere&gt; sourceFile.scala
 </code></pre>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="replaceHoles(paramRefs)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'replaceHoles(paramRefs)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                replaceHoles
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        paramRefs:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance/TreeMap.html">TreeMap</a></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-replaceHoles(paramRefs)">
-                            <p>Requiring that <code>paramRefs</code> consists of a single reference <code>seq</code> to a Seq[Any],
-a tree map that replaces each hole with index <code>n</code> with <code>seq(n)</code>, applied
-to any arguments in the hole.</p>
 
                         </div>
                     </div>
