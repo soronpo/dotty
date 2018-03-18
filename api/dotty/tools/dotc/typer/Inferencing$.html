@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-03-17 -->
+<!-- This page was last generated on 2018-03-18 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12267,6 +12267,102 @@ to their upper bound.</p>
                             <p>Following type aliases and stripping refinements and annotations, if one arrives at a
 class type reference where the class has a companion module, a reference to
 that companion module. Otherwise NoType</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="constrainPatternType(tp,pt)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'constrainPatternType(tp,pt)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                constrainPatternType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pt:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-constrainPatternType(tp,pt)(ctx)">
+                            <p>Derive information about a pattern type by comparing it with some variant of the
+static scrutinee type. We have the following situation in case of a (dynamic) pattern match:</p>
+<pre><code> StaticScrutineeType           PatternType
+                   \            /
+                DynamicScrutineeType
+</code></pre>
+<p>If <code>PatternType</code> is not a subtype of <code>StaticScrutineeType, there's no information to be gained. Now let's say we can prove that</code>PatternType &lt;: StaticScrutineeType`.</p>
+<pre><code>      StaticScrutineeType
+            |         \
+            |          \
+            |           \
+            |            PatternType
+            |          /
+         DynamicScrutineeType
+</code></pre>
+<p>What can we say about the relationship of parameter types between <code>PatternType</code> and
+<code>DynamicScrutineeType</code>?</p>
+<ul>
+<li>If <code>DynamicScrutineeType</code> refines the type parameters of <code>StaticScrutineeType</code>
+in the same way as <code>PatternType</code> (&quot;invariant refinement&quot;), the subtype test
+<code>PatternType &lt;:&lt; StaticScrutineeType</code> tells us all we need to know.</li>
+<li>Otherwise, if variant refinement is a possibility we can only make predictions
+about invariant parameters of <code>StaticScrutineeType</code>. Hence we do a subtype test
+where <code>PatternType &lt;: widenVariantParams(StaticScrutineeType)</code>, where <code>widenVariantParams</code>
+replaces all type argument of variant parameters with empty bounds.</li>
+</ul>
+<p>Invariant refinement can be assumed if <code>PatternType</code>'s class(es) are final or
+case classes (because of <code>RefChecks#checkCaseClassInheritanceInvariant</code>).</p>
 
                         </div>
                     </div>
