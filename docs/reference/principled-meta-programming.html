@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-03-18 -->
+<!-- This page was last generated on 2018-03-19 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12519,7 +12519,7 @@ language to quoted Scala code of type <code>Expr[Int]</code>.
 The compiler takes an environment that maps variable names to Scala <code>Expr</code>s.</p>
 <pre><code>def compile(e: Exp, env: Map[String, Expr[Int]]): Expr[Int] = e match {
   case Num(n) =&gt;
-    n
+    n.toExpr
   case Plus(e1, e2) =&gt;
     ’(~compile(e1, env) + ~compile(e2, env))
   case Var(x) =&gt;
@@ -12531,22 +12531,23 @@ The compiler takes an environment that maps variable names to Scala <code>Expr</
 <p>Running <code>compile(letExp, Map())</code> would yield the following Scala code:</p>
 <pre><code>’{ val y = 3; (2 + y) + 4 }
 </code></pre>
-<p>The body of the first clause, <code>case Num(n) =&gt; n</code>, looks suspicious. <code>n</code>
-is declared as an <code>Int</code>, yet the result of <code>compile</code> is declared to be
-<code>Expr[Int]</code>. Shouldn’t <code>n</code> be quoted? In fact this would not
+<p>The body of the first clause, <code>case Num(n) =&gt; n.toExpr</code>, looks suspicious. <code>n</code>
+is declared as an <code>Int</code>, yet it is conveted to an <code>Expr[Int]</code> with <code>toExpr</code>.
+Shouldn’t <code>n</code> be quoted? In fact this would not
 work since replacing <code>n</code> by <code>’n</code> in the clause would not be phase
 correct.</p>
-<p>What happens instead &quot;under the hood&quot; is an implicit conversion: <code>n</code>
-is expanded to <code>scala.quoted.Expr.toExpr(n)</code>. The <code>toExpr</code> conversion
-is defined in the companion object of class <code>Expr</code> as follows:</p>
-<pre><code>object Expr {
-  implicit def toExpr[T](x: T)(implicit ev: Liftable[T]): Expr[T] =
-    ev.toExpr(x)
+<p>What happens instead &quot;under the hood&quot; is an extension method <code>toExpr</code> is added: <code>n.toExpr</code>
+is expanded to <code>new scala.quoted.LiftExprOps(n).toExpr</code>. The <code>toExpr</code> extension
+is defined in the companion object of class <code>Liftable</code> as follows:</p>
+<pre><code>package object quoted {
+  implicit class LiftExprOps[T](val x: T) extends AnyVal {
+    def toExpr(implicit ev: Liftable[T]): Expr[T] = ev.toExpr(x)
+  }
 }
 </code></pre>
-<p>The conversion says that values of types implementing the <code>Liftable</code>
-type class can be converted (&quot;lifted&quot;) automatically to <code>Expr</code>
-values. Dotty comes with instance definitions of <code>Liftable</code> for
+<p>The extension says that values of types implementing the <code>Liftable</code> type class can be
+converted (&quot;lifted&quot;) to <code>Expr</code> values using <code>toExpr</code> when <code>scala.quoted._</code> is imported.
+Dotty comes with instance definitions of <code>Liftable</code> for
 several types including <code>Boolean</code>, <code>String</code>, and all primitive number
 types. For example, <code>Int</code> values can be converted to <code>Expr[Int]</code>
 values by wrapping the value in a <code>Literal</code> tree node. This makes use
@@ -12576,7 +12577,7 @@ tree machinery:</p>
 a <code>List</code> is liftable if its element type is:</p>
 <pre><code>implicit def ListIsLiftable[T: Liftable]: Liftable[List[T]] = new {
   def toExpr(xs: List[T]): Expr[List[T]] = xs match {
-    case x :: xs1 =&gt; ’(~implicitly[Liftable[T]].toExpr(x) :: ~toExpr(xs1))
+    case x :: xs1 =&gt; ’(~x.toExpr :: ~toExpr(xs1))
     case Nil =&gt; ’(Nil: List[T])
   }
 }
