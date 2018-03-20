@@ -5952,10 +5952,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">C</a>
                     </div>
@@ -5964,6 +5966,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -12129,6 +12135,53 @@
 
             <div id="entity-members" class="entity-section ">
                 
+                <div id="capturers" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'capturers');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            val
+                        </span>
+                        <span class="member-name ">
+                            
+                                capturers
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: HashMap
+<span class="no-left no-right">[</span>
+<a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a><span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#RefTree">RefTree</a><span class="right-arrow"> =&gt; </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-capturers">
+                            <p>Register a reference defined in a quote but used in another quote nested in a splice.
+Returns a version of the reference that needs to be used in its place.
+'{
+val x = ???
+{ ... '{ ... x ... } ... }.unary_~
+}
+Eta expanding the <code>x</code> in <code>{ ... '{ ... x ... } ... }.unary_~</code> will return a <code>x$1.unary_~</code> for which the <code>x$1</code>
+be created by some outer reifier.</p>
+<p>This transformation is only applied to definitions at staging level 1.</p>
+<p>See <code>isCaptured</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="levelOf" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'levelOf');">[+]</span>
@@ -12162,53 +12215,6 @@
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-levelOf">
                             <p>A map from locally defined symbols to the staging levels of their definitions</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="lifters" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lifters');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            val
-                        </span>
-                        <span class="member-name ">
-                            
-                                lifters
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                        <span class="no-left">: HashMap
-<span class="no-left no-right">[</span>
-<a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a><span class="">, </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#RefTree">RefTree</a><span class="right-arrow"> =&gt; </span><a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
-<span class="no-left">]</span></span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-lifters">
-                            <p>Register a reference defined in a quote but used in another quote nested in a splice.
-Returns a lifted version of the reference that needs to be used in its place.
-'{
-val x = ???
-{ ... '{ ... x ... } ... }.unary_~
-}
-Lifting the <code>x</code> in <code>{ ... '{ ... x ... } ... }.unary_~</code> will return a <code>x$1.unary_~</code> for which the <code>x$1</code>
-be created by some outer reifier.</p>
-<p>This transformation is only applied to definitions at staging level 1.</p>
-<p>See <code>needsLifting</code></p>
 
                         </div>
                     </div>

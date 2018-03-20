@@ -5952,10 +5952,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ReifyQuotes.html">C</a>
                     </div>
@@ -5964,6 +5966,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -12866,6 +12872,67 @@ Unit
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isCaptured(tree)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isCaptured(tree)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isCaptured
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#RefTree">RefTree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isCaptured(tree)(ctx)">
+                            <p>Returns true if this tree will be captured by <code>makeLambda</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="levelOK(sym)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'levelOK(sym)(ctx)');">[+]</span>
@@ -13152,7 +13219,7 @@ val x$1 = args(0).asInstanceOf[Expr[Any]] // or .asInstanceOf[Type[Any]]
 val y$1 = args(1).asInstanceOf[Expr[Any]] // or .asInstanceOf[Type[Any]]
 { ... '{ ... x$1.unary_~ ... y$1.unary_~ ... } ... }
 }</p>
-<p>See: <code>lift</code></p>
+<p>See: <code>capture</code></p>
 <p>At the same time register <code>embedded</code> trees <code>x</code> and <code>y</code> to place as arguments of the hole
 placed in the original code.
 '{
@@ -13226,67 +13293,6 @@ Hole(0 | x, y)
                     </div>
                 </div><!-- end member -->
                 
-                <div id="needsLifting(tree)(ctx)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'needsLifting(tree)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                needsLifting
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        tree:
-                                    </span>
-                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#RefTree">RefTree</a>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-needsLifting(tree)(ctx)">
-                            <p>Returns true if this tree will be lifted by <code>makeLambda</code></p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="nested(isQuote)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'nested(isQuote)');">[+]</span>
@@ -13331,6 +13337,85 @@ Hole(0 | x, y)
                         <div class="member-body-long" id ="long-body-nested(isQuote)">
                             <p>A nested reifier for a quote (if <code>isQuote = true</code>) or a splice (if not)</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="pickledQuote(body,splices,isType)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'pickledQuote(body,splices,isType)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                pickledQuote
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        body:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        splices:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        isType:
+                                    </span>
+                                    Boolean
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-pickledQuote(body,splices,isType)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13659,9 +13744,9 @@ or splices as a pair, after performing the <code>addTags</code> transform.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="transformWithLifter(tree)(lifter)(ctx)" class="member private">
+                <div id="transformWithCapturer(tree)(capturer)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformWithLifter(tree)(lifter)(ctx)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformWithCapturer(tree)(capturer)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -13673,7 +13758,7 @@ or splices as a pair, after performing the <code>addTags</code> transform.</p>
                         </span>
                         <span class="member-name ">
                             
-                                transformWithLifter
+                                transformWithCapturer
                             
                         </span>
 
@@ -13694,7 +13779,7 @@ or splices as a pair, after performing the <code>addTags</code> transform.</p>
                                 
                                 
                                     <span class="no-left">
-                                        lifter:
+                                        capturer:
                                     </span>
                                     ListBuffer
 <span class="no-left no-right">[</span>
@@ -13727,7 +13812,7 @@ or splices as a pair, after performing the <code>addTags</code> transform.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-transformWithLifter(tree)(lifter)(ctx)">
+                        <div class="member-body-long" id ="long-body-transformWithCapturer(tree)(capturer)(ctx)">
                             
                         </div>
                     </div>
