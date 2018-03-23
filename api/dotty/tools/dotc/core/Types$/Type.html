@@ -170,6 +170,8 @@
 </li>
 <li><a href="../../../../../.././docs/reference/erased-terms.html">Erased Terms</a>
 </li>
+<li><a href="../../../../../.././docs/reference/kind-polymorphism.html">Kind Polymorphism</a>
+</li>
 <li><a href="../../../../../.././docs/reference/optimisations.html">Local Optimisations</a></li>
 </ul>
 
@@ -12853,6 +12855,72 @@ SingleDenotation
                     </div>
                 </div><!-- end member -->
                 
+                <div id="appliedTo(args)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'appliedTo(args)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                appliedTo
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        args:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+Type
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-appliedTo(args)(ctx)">
+                            <p>The type representing</p>
+<p>T[U1, ..., Un]</p>
+<p>where</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="appliedTo(arg1,arg2)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'appliedTo(arg1,arg2)(ctx)');">[+]</span>
@@ -12977,72 +13045,6 @@ SingleDenotation
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-appliedTo(arg)(ctx)">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="appliedTo(args)(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'appliedTo(args)(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                appliedTo
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        args:
-                                    </span>
-                                    List
-<span class="no-left no-right">[</span>
-Type
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Type</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-appliedTo(args)(ctx)">
-                            <p>The type representing</p>
-<p>T[U1, ..., Un]</p>
-<p>where</p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -14357,9 +14359,9 @@ layer of it. Otherwise the type itself.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="ensureHK(ctx)" class="member ">
+                <div id="ensureLambdaSub(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ensureHK(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'ensureLambdaSub(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -14371,7 +14373,7 @@ layer of it. Otherwise the type itself.</p>
                         </span>
                         <span class="member-name ">
                             
-                                ensureHK
+                                ensureLambdaSub
                             
                         </span>
 
@@ -14400,8 +14402,8 @@ layer of it. Otherwise the type itself.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-ensureHK(ctx)">
-                            <p>If self is not higher-kinded, eta expand it.</p>
+                        <div class="member-body-long" id ="long-body-ensureLambdaSub(ctx)">
+                            <p>If self is not lambda-bound, eta expand it.</p>
 
                         </div>
                     </div>
@@ -15275,6 +15277,56 @@ Type
                     </div>
                 </div><!-- end member -->
                 
+                <div id="hasHigherKind(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'hasHigherKind(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                hasHigherKind
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-hasHigherKind(ctx)">
+                            <p>Is self type of kind != &quot;*&quot;?</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="hasSameKindAs(other)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'hasSameKindAs(other)(ctx)');">[+]</span>
@@ -15330,7 +15382,8 @@ Type
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-hasSameKindAs(other)(ctx)">
-                            <p>Do self and other have the same kinds (not counting bounds and variances)</p>
+                            <p>Do self and other have the same kinds (not counting bounds and variances)?
+Note: An any-kinded type &quot;has the same kind&quot; as any other type.</p>
 
                         </div>
                     </div>
@@ -15452,7 +15505,8 @@ compute hash and use it as the type's hashCode.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-hkResult(ctx)">
-                            <p>If self type is higher-kinded, its result type, otherwise NoType</p>
+                            <p>If self type is higher-kinded, its result type, otherwise NoType.
+Note: The hkResult of an any-kinded type is again AnyKind.</p>
 
                         </div>
                     </div>
@@ -15957,56 +16011,6 @@ from the ThisType of <code>symd</code>'s owner.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="isHK(ctx)" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isHK(ctx)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                isHK
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                <span class="no-left keyword">implicit</span>
-                                
-                                
-                                    <span class="no-left">
-                                        ctx:
-                                    </span>
-                                    Context
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Boolean</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-isHK(ctx)">
-                            <p>Is self type higher-kinded (i.e. of kind != &quot;*&quot;)?</p>
-
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
                 <div id="isImplicitMethod" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isImplicitMethod');">[+]</span>
@@ -16072,6 +16076,56 @@ from the ThisType of <code>symd</code>'s owner.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isJavaMethod">
                             <p>Is this a MethodType which is from Java</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isLambdaSub(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isLambdaSub(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isLambdaSub
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isLambdaSub(ctx)">
+                            <p>Is self type bounded by a type lambda or AnyKind?</p>
 
                         </div>
                     </div>
