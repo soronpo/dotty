@@ -12199,10 +12199,15 @@ object Test {
 }
 </code></pre>
 <h2><a href="#rules" id="rules">Rules</a></h2>
-<p>1) The <code>erased</code> modifier can appear:
-* At the start of a parameter block of a method, function or class
-* In a method definition
-* In a <code>val</code> definition (but not <code>lazy val</code> or <code>var</code>)</p>
+<ol>
+<li>The <code>erased</code> modifier can appear:
+<ul>
+<li>At the start of a parameter block of a method, function or class</li>
+<li>In a method definition</li>
+<li>In a <code>val</code> definition (but not <code>lazy val</code> or <code>var</code>)</li>
+</ul>
+</li>
+</ol>
 <pre><code class="language-scala">erased val x = ...
 erased def f = ...
 
@@ -12213,28 +12218,48 @@ def h(x: erased Int =&gt; Int) = ...
 
 class K(erased x: Int) { ... }
 </code></pre>
-<p>2) A reference to an <code>erased</code> definition can only be used
-* Inside the expression of argument to an <code>erased</code> parameter
-* Inside the body of an <code>erased</code> <code>val</code> or <code>def</code></p>
-<p>3) Functions
-* <code>(erased x1: T1, x2: T2, ..., xN: TN) =&gt; y : (erased T1, T2, ..., TN) =&gt; R</code>
-* <code>(implicit erased x1: T1, x2: T2, ..., xN: TN) =&gt; y : (implicit erased T1, T2, ..., TN) =&gt; R</code>
-* <code>implicit erased T1 =&gt; R &lt;:&lt; erased T1 =&gt; R</code>
-* <code>(implicit erased T1, T2) =&gt; R &lt;:&lt; (erased T1, T2) =&gt; R</code>
-*  ...</p>
+<ol>
+<li>A reference to an <code>erased</code> definition can only be used
+<ul>
+<li>Inside the expression of argument to an <code>erased</code> parameter</li>
+<li>Inside the body of an <code>erased</code> <code>val</code> or <code>def</code></li>
+</ul>
+</li>
+<li>Functions
+<ul>
+<li><code>(erased x1: T1, x2: T2, ..., xN: TN) =&gt; y : (erased T1, T2, ..., TN) =&gt; R</code></li>
+<li><code>(implicit erased x1: T1, x2: T2, ..., xN: TN) =&gt; y : (implicit erased T1, T2, ..., TN) =&gt; R</code></li>
+<li><code>implicit erased T1 =&gt; R &lt;:&lt; erased T1 =&gt; R</code></li>
+<li><code>(implicit erased T1, T2) =&gt; R &lt;:&lt; (erased T1, T2) =&gt; R</code></li>
+<li>...</li>
+</ul>
+</li>
+</ol>
 <p>Note that there is no subtype relation between <code>erased T =&gt; R</code> and <code>T =&gt; R</code> (or <code>implicit erased T =&gt; R</code> and <code>implicit T =&gt; R</code>)</p>
-<p>4) Eta expansion
-if <code>def f(erased x: T): U</code> then <code>f: (erased T) =&gt; U</code>.</p>
-<p>5) Erasure Semantics
-* All <code>erased</code> paramters are removed from the function
-* All argument to <code>erased</code> paramters are not passed to the function
-* All <code>erased</code> definitions are removed
-* All <code>(erased T1, T2, ..., TN) =&gt; R</code> and <code>(implicit erased T1, T2, ..., TN) =&gt; R</code> become <code>() =&gt; R</code></p>
-<p>6) Overloading
-Method with <code>erased</code> parameters will follow the normal overloading constraints after erasure.</p>
-<p>7) Overriding
-* Member definitions overidding each other must both be <code>erased</code> or not be <code>erased</code>
-* <code>def foo(x: T): U</code> cannot be overriden by <code>def foo(erased x: T): U</code> an viceversa</p>
+<ol>
+<li>Eta expansion</li>
+</ol>
+<p>if <code>def f(erased x: T): U</code> then <code>f: (erased T) =&gt; U</code>.</p>
+<ol>
+<li>Erasure Semantics
+<ul>
+<li>All <code>erased</code> paramters are removed from the function</li>
+<li>All argument to <code>erased</code> paramters are not passed to the function</li>
+<li>All <code>erased</code> definitions are removed</li>
+<li>All <code>(erased T1, T2, ..., TN) =&gt; R</code> and <code>(implicit erased T1, T2, ..., TN) =&gt; R</code> become <code>() =&gt; R</code></li>
+</ul>
+</li>
+<li>Overloading</li>
+</ol>
+<p>Method with <code>erased</code> parameters will follow the normal overloading constraints after erasure.</p>
+<ol>
+<li>Overriding
+<ul>
+<li>Member definitions overidding each other must both be <code>erased</code> or not be <code>erased</code></li>
+<li><code>def foo(x: T): U</code> cannot be overriden by <code>def foo(erased x: T): U</code> an viceversa</li>
+</ul>
+</li>
+</ol>
 
         </div>
     </div><!-- end content-body -->
