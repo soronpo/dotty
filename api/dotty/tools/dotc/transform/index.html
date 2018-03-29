@@ -3493,32 +3493,6 @@
         </li>
     
         <li class="index-entity entity-package">
-            <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/index.html">dotty.tools.dotc.interpreter</a></h1>
-            <ul class="package-entities">
-                <div id="cover-block"></div>
-            
-                
-
-                
-                <li class="">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">Interpreter</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-            </ul>
-        </li>
-    
-        <li class="index-entity entity-package">
             <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/parsing/index.html">dotty.tools.dotc.parsing</a></h1>
             <ul class="package-entities">
                 <div id="cover-block"></div>
@@ -15514,6 +15488,25 @@ Checks that the phase consistency principle (PCP) holds.</p>
  )
 </code></pre>
 <p>and then performs the same transformation on <code>'{ ... x1$1.unary_~ ... x2$1.unary_~ ...}</code>.</p>
+<p>For inline macro definitions we assume that we have a single ~ directly as the RHS.
+We will transform the definition from</p>
+<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
+</code></pre>
+<p>to</p>
+<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
+  val T1$1 = args(0).asInstanceOf[Type[T1]]
+  ...
+  val x1$1 = args(0).asInstanceOf[X]
+  ...
+  val y1$1 = args(1).asInstanceOf[Expr[Y]]
+  ...
+  { ... T1$1.unary_~ ... x ... '(y1$1.unary_~) ... }
+}
+</code></pre>
+<p>Note: the parameters of <code>foo</code> are kept for simple overloading resolution but they are not used in the body of <code>foo</code>.</p>
+<p>At inline site we will call reflectively the static method <code>foo</code> with dummy parameters, which will return a
+precompiled version of the function that will evaluate the <code>Expr[Z]</code> that <code>foo</code> produces. The lambda is then called
+at the inline site with the lifted arguments of the inlined call.</p>
 
                         </div>
                     </div>

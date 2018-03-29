@@ -3493,32 +3493,6 @@
         </li>
     
         <li class="index-entity entity-package">
-            <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/index.html">dotty.tools.dotc.interpreter</a></h1>
-            <ul class="package-entities">
-                <div id="cover-block"></div>
-            
-                
-
-                
-                <li class="">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">Interpreter</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-            </ul>
-        </li>
-    
-        <li class="index-entity entity-package">
             <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/parsing/index.html">dotty.tools.dotc.parsing</a></h1>
             <ul class="package-entities">
                 <div id="cover-block"></div>
@@ -12373,9 +12347,44 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="handleTargetException(tree,ex)(ctx)" class="member private">
+                <div id="Interpreter" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'handleTargetException(tree,ex)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'Interpreter');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/Splicer$/Interpreter.html">Interpreter</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-Interpreter">
+                            <p>Tree interpreter that can interpret calls to static methods with it's default arguments</p>
+<p>The interpreter assumes that all calls in the trees are to code that was
+previously compiled and is present in the classpath of the current context.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="evaluateLambda(lambda,args,pos)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'evaluateLambda(lambda,args,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12387,7 +12396,7 @@
                         </span>
                         <span class="member-name ">
                             
-                                handleTargetException
+                                evaluateLambda
                             
                         </span>
 
@@ -12397,17 +12406,31 @@
                                 
                                 
                                     <span class="no-left">
-                                        tree:
+                                        lambda:
                                     </span>
-                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    Seq
+<span class="no-left no-right">[</span>
+Any
+<span class="no-left">]</span><span class="right-arrow"> =&gt; </span>Object
                                     
                                         <span class="no-left">, </span>
                                     
                                 
                                     <span class="">
-                                        ex:
+                                        args:
                                     </span>
-                                    InvocationTargetException
+                                    Seq
+<span class="no-left no-right">[</span>
+Any
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pos:
+                                    </span>
+                                    Position
                                     
                                 
                             <span class="no-left">)</span>
@@ -12430,20 +12453,104 @@
                         
 
                         
-                        <span class="no-left">: Unit</span>
+                        <span class="no-left">: Option
+<span class="no-left no-right">[</span>
+Expr
+<span class="no-left no-right">[</span>
+Nothing<span class="bounds"> &lt;: </span>Any
+<span class="no-left">]</span>
+<span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-handleTargetException(tree,ex)(ctx)">
+                        <div class="member-body-long" id ="long-body-evaluateLambda(lambda,args,pos)(ctx)">
                             
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="reflectiveSplice(tree)(ctx)" class="member private">
+                <div id="getLiftedArgs(call,bindings)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'reflectiveSplice(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'getLiftedArgs(call,bindings)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                getLiftedArgs
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        call:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bindings:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+Any
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-getLiftedArgs(call,bindings)(ctx)">
+                            <p>Given the inline code and bindings, compute the lifted arguments that will be used to execute the macro
+- Type parameters are lifted to quoted.Types.TreeType
+- Inline parameters are listed as their value
+- Other parameters are lifted to quoted.Types.TreeExpr (may reference a binding)</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="reflectiveSplice(tree,call,bindings,pos)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'reflectiveSplice(tree,call,bindings,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12469,6 +12576,33 @@
                                     </span>
                                     <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        call:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bindings:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pos:
+                                    </span>
+                                    Position
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12495,16 +12629,15 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-reflectiveSplice(tree)(ctx)">
-                            <p>Splice the Tree for a Quoted expression which is constructed via a reflective call to the given method</p>
-
+                        <div class="member-body-long" id ="long-body-reflectiveSplice(tree,call,bindings,pos)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="splice(tree)(ctx)" class="member ">
+                <div id="splice(tree,call,bindings,pos)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'splice(tree)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'splice(tree,call,bindings,pos)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12530,6 +12663,33 @@
                                     </span>
                                     <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        call:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bindings:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pos:
+                                    </span>
+                                    Position
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12556,10 +12716,11 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-splice(tree)(ctx)">
+                        <div class="member-body-long" id ="long-body-splice(tree,call,bindings,pos)(ctx)">
                             <p>Splice the Tree for a Quoted expression. <code>~'(xyz)</code> becomes <code>xyz</code>
 and for <code>~xyz</code> the tree of <code>xyz</code> is interpreted for which the
 resulting expression is returned as a <code>Tree</code></p>
+<p>See: <code>ReifyQuotes</code></p>
 
                         </div>
                     </div>

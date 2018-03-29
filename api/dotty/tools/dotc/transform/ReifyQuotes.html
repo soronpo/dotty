@@ -3493,32 +3493,6 @@
         </li>
     
         <li class="index-entity entity-package">
-            <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/index.html">dotty.tools.dotc.interpreter</a></h1>
-            <ul class="package-entities">
-                <div id="cover-block"></div>
-            
-                
-
-                
-                <li class="">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/interpreter/Interpreter.html">Interpreter</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-            </ul>
-        </li>
-    
-        <li class="index-entity entity-package">
             <h1><a class="entity-name" href="../../../../.././api/dotty/tools/dotc/parsing/index.html">dotty.tools.dotc.parsing</a></h1>
             <ul class="package-entities">
                 <div id="cover-block"></div>
@@ -12346,6 +12320,11 @@
                     
                     <span class="entity-super-type">MacroTransformWithImplicits</span>
                     
+                    
+                    <span class="keyword">with</span>
+                    
+                    <span class="entity-super-type"><a href="../../../../.././api/dotty/tools/dotc/core/DenotTransformers$/InfoTransformer.html">InfoTransformer</a></span>
+                    
                 </div>
                 
             </div>
@@ -12384,6 +12363,25 @@ Checks that the phase consistency principle (PCP) holds.</p>
  )
 </code></pre>
 <p>and then performs the same transformation on <code>'{ ... x1$1.unary_~ ... x2$1.unary_~ ...}</code>.</p>
+<p>For inline macro definitions we assume that we have a single ~ directly as the RHS.
+We will transform the definition from</p>
+<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
+</code></pre>
+<p>to</p>
+<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
+  val T1$1 = args(0).asInstanceOf[Type[T1]]
+  ...
+  val x1$1 = args(0).asInstanceOf[X]
+  ...
+  val y1$1 = args(1).asInstanceOf[Expr[Y]]
+  ...
+  { ... T1$1.unary_~ ... x ... '(y1$1.unary_~) ... }
+}
+</code></pre>
+<p>Note: the parameters of <code>foo</code> are kept for simple overloading resolution but they are not used in the body of <code>foo</code>.</p>
+<p>At inline site we will call reflectively the static method <code>foo</code> with dummy parameters, which will return a
+precompiled version of the function that will evaluate the <code>Expr[Z]</code> that <code>foo</code> produces. The lambda is then called
+at the inline site with the lifted arguments of the inlined call.</p>
 
             </div>
             
@@ -12476,6 +12474,119 @@ Checks that the phase consistency principle (PCP) holds.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-Reifier">
                             <p>The main transformer class</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="macroReturnType(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'macroReturnType(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                macroReturnType
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-macroReturnType(ctx)">
+                            <p>Returns the type of the compiled macro as a lambda: Seq[Any] =&gt; Object</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="mayChange(sym)(ctx)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mayChange(sym)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                mayChange
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        sym:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-mayChange(sym)(ctx)">
+                            <p>Denotations with a symbol where <code>mayChange</code> is false are guaranteed to be
+unaffected by this transform, so <code>transformInfo</code> need not be run. This
+can save time, and more importantly, can help avoid forcing symbol completers.</p>
 
                         </div>
                     </div>
@@ -12612,6 +12723,74 @@ instance, it is possible to print trees after a given phase using:</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-run(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="transformInfo(tp,sym)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'transformInfo(tp,sym)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                transformInfo
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        sym:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-transformInfo(tp,sym)(ctx)">
                             
                         </div>
                     </div>
