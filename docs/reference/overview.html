@@ -12359,10 +12359,10 @@
             <p>This section gives an overview of the most important language additions in Scala 3.
 The new features address four major concerns:</p>
 <ul>
-<li><a href="consistency">Consistency</a> - improve orthogonality and eliminate restrictions.</li>
-<li><a href="safety">Safety</a> - enable precise domain modeling and safe refactoring.</li>
-<li><a href="ergonomics">Ergonomics</a> - support readable and concise code.</li>
-<li><a href="performance">Performance</a> - remove performance penalties for high-level code.</li>
+<li><a href="http://dotty.epfl.ch/docs/reference/overview.html#consistency">Consistency</a> - improve orthogonality and eliminate restrictions.</li>
+<li><a href="http://dotty.epfl.ch/docs/reference/overview.html#safety">Safety</a> - enable precise domain modeling and safe refactoring.</li>
+<li><a href="http://dotty.epfl.ch/docs/reference/overview.html#ergonomics">Ergonomics</a> - support readable and concise code.</li>
+<li><a href="http://dotty.epfl.ch/docs/reference/overview.html#performance">Performance</a> - remove performance penalties for high-level code.</li>
 </ul>
 <p>Scala 3 also drops a number of features that were used rarely, or where experience showed
 that they tended to cause problems. These are listed separately in the <a href="http://dotty.epfl.ch/docs">Dropped Features</a> section.</p>
@@ -12373,7 +12373,7 @@ that they tended to cause problems. These are listed separately in the <a href="
 <ul>
 <li>
 <p><a href="http://dotty.epfl.ch/docs/reference/intersection-types.html">Intersection types</a> <code>A &amp; B</code></p>
-<p>They replace compounds type <code>A with B</code> (the old syntax is kept for the moment but will
+<p>They replace compound types <code>A with B</code> (the old syntax is kept for the moment but will
 be deprecated in the future). Intersection types are one of the core features of DOT. They
 are commutative: <code>A &amp; B</code> and <code>B &amp; A</code> represent the same type.</p>
 </li>
@@ -12394,7 +12394,7 @@ to the result type of a function.</p>
 </li>
 <li>
 <p>Generic tuples</p>
-<p>(<a href="https://github.com/lampepfl/dotty/pull/2199">Pending</a>) Generic tuples treat a tuple with arbitrary elements as a nested sequence of pairs. E.g. <code>(a, b, c)</code> is shorthand <code>(a, (b, (c, ())))</code>. This lets us drop the current limit of 22 for maximal tuple length and allows generic programs over tuples analogous to what is done for <code>HList</code>s.</p>
+<p>(<a href="https://github.com/lampepfl/dotty/pull/2199">Pending</a>) Tuples with arbitrary numbers of elements are treated as sequences of nested pairs. E.g. <code>(a, b, c)</code> is shorthand for <code>(a, (b, (c, ())))</code>. This lets us drop the current limit of 22 for maximal tuple length and it allows generic programs over tuples analogous to what is currently done for <code>HList</code>.</p>
 </li>
 </ul>
 <p><a name="safety"></a></p>
@@ -12417,12 +12417,12 @@ to type-based refactoring. Normally, one would wish that one could change the ty
 of some value or operation in a large code base, fix all type errors, and obtain
 at the end a working program. But universal equality <code>==</code> works for all types.
 So what should conceptually be a type error would not be reported and
-runtime behavior would change instead. Multiversal equality closes that loophole.</p>
+runtime behavior might change instead. Multiversal equality closes that loophole.</p>
 </li>
 <li>
 <p>Null safety</p>
 <p>(Planned) Adding a <code>null</code> value to every type has been called a &quot;Billion Dollar Mistake&quot;
-by its creator, Tony Hoare. With the introduction of union types, we can now do better.
+by its inventor, Tony Hoare. With the introduction of union types, we can now do better.
 A type like <code>String</code> will not carry the <code>null</code> value. To express that a value can
 be <code>null</code>, one will use the union type <code>String | Null</code> instead. For backwards compatibility and Java interoperability, selecting on a value that's possibly <code>null</code> will still be permitted but will have a declared effect that a <code>NullPointerException</code> can be thrown (see next section).</p>
 </li>
