@@ -12420,6 +12420,14 @@ So what should conceptually be a type error would not be reported and
 runtime behavior might change instead. Multiversal equality closes that loophole.</p>
 </li>
 <li>
+<p>Restrict Implicit Conversions</p>
+<p>(<a href="https://github.com/lampepfl/dotty/pull/4229">Pending</a>)
+Implicit conversions are very easily mis-used, which makes them the cause of much suprising behavior.
+We now require a language feature import not only when an implicit conversion is defined
+but also when it is applied. This protects users of libraries that define implicit conversions
+from being bitten by unanticipated feature interactions.</p>
+</li>
+<li>
 <p>Null safety</p>
 <p>(Planned) Adding a <code>null</code> value to every type has been called a &quot;Billion Dollar Mistake&quot;
 by its inventor, Tony Hoare. With the introduction of union types, we can now do better.
