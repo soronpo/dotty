@@ -12358,12 +12358,14 @@
 serve as a technology preview that demonstrates new language features and the compiler supporting them.</p>
 <p>Dotty is the project name for technologies that are considered for inclusion in Scala 3. Scala has
 pioneered the fusion of object-oriented and functional programming in a typed setting. Scala 3 will
-be a big step towards realizing the full potential of these ideas. Its main objectives are to
-- become more opinionated by promoting programming idioms we found to work well,
-- simplify where possible,
-- eliminate inconsistencies and surprising behaviors,
-- build on strong foundations to ensure the design hangs well together,
-- consolidate language constructs to improve the language’s consistency, safety, ergonomics, and performance.</p>
+be a big step towards realizing the full potential of these ideas. Its main objectives are to</p>
+<ul>
+<li>become more opinionated by promoting programming idioms we found to work well,</li>
+<li>simplify where possible,</li>
+<li>eliminate inconsistencies and surprising behaviors,</li>
+<li>build on strong foundations to ensure the design hangs well together,</li>
+<li>consolidate language constructs to improve the language’s consistency, safety, ergonomics, and performance.</li>
+</ul>
 <p>You can learn more about Dotty on our <a href="https://dotty.epfl.ch">website</a>.</p>
 <!--more-->
 <p>This is our eighth scheduled release according to our <a href="https://dotty.epfl.ch/docs/usage/version-numbers.html">6-week release schedule</a>.
@@ -12374,10 +12376,15 @@ enums, introduced erased terms, improved IDE support and improved pattern matchi
 <p>Starting with Dotty 0.8.0, we will only support versions of sbt &gt;= 1.1.4. Migrating to sbt 1
 lets us use the new improved incremental compiler for Scala called <a href="https://github.com/sbt/zinc">Zinc</a>,
 and enables integration with tools such as <a href="https://scalacenter.github.io/bloop/">Bloop</a>.</p>
-<p>If you are already using Dotty with sbt 0.13, follow these simple steps to upgrade:
-- update sbt version to 1.1.4 in <code>project/build.properties</code>
-- update sbt-dotty plugin to the latest version: <code>addSbtPlugin(&quot;ch.epfl.lamp&quot; % &quot;sbt-dotty&quot; % &quot;0.2.2&quot;)</code>
-- replace usages of <code>.withDottyCompat()</code> by <code>.withDottyCompat(scalaVersion.value)</code></p>
+<p>If you are already using Dotty with sbt 0.13, follow these simple steps to upgrade:</p>
+<ul>
+<li>update sbt version to 1.1.4 in <code>project/build.properties</code></li>
+<li>update sbt-dotty plugin to the latest version:
+<pre><code class="language-scala">addSbtPlugin(&quot;ch.epfl.lamp&quot; % &quot;sbt-dotty&quot; % &quot;0.2.2&quot;)
+</code></pre>
+</li>
+<li>replace usages of <code>.withDottyCompat()</code> by <code>.withDottyCompat(scalaVersion.value)</code></li>
+</ul>
 <h3><a href="#unchecked-warnings-4045" id="unchecked-warnings-4045">Unchecked warnings <a href="https://github.com/lampepfl/dotty/pull/4045">#4045</a></a></h3>
 <p>Dotty now emits <code>unchecked</code> warnings like <code>scalac</code> whenever a type test is performed but cannot be
 fully checked at runtime because of type erasure. For example:</p>
