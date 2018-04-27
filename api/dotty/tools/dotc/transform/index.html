@@ -13545,7 +13545,7 @@ and <a href="https://github.com/lampepfl/dotty/issues/783">https://github.com/la
                             <p>Expand SAM closures that cannot be represented by the JVM as lambdas to anonymous classes.
 These fall into five categories</p>
 <ol>
-<li>Partial function closures, we need to generate a isDefinedAt method for these.</li>
+<li>Partial function closures, we need to generate isDefinedAt and applyOrElse methods for these.</li>
 <li>Closures implementing non-trait classes.</li>
 <li>Closures implementing classes that inherit from a class other than Object
 (a lambda cannot not be a run-time subtype of such a class)</li>
