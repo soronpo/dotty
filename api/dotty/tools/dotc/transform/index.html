@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-04-26 -->
+<!-- This page was last generated on 2018-04-27 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15585,7 +15585,6 @@ Checks that the phase consistency principle (PCP) holds.</p>
    val x2 = ???
    ...
    ~{ ... '{ ... x1 ... x2 ...} ... }
-   ~{ ... /* no references to xi */ ... }
    ...
  }
 </code></pre>
@@ -15597,7 +15596,6 @@ Checks that the phase consistency principle (PCP) holds.</p>
      val x2 = ???
      ...
      Hole(0 | x1, x2)
-     Hole(1 | )
      ...
    ]],
    List(
@@ -15606,8 +15604,7 @@ Checks that the phase consistency principle (PCP) holds.</p>
        val x2$1 = args(1).asInstanceOf[Expr[T]] // can be asInstanceOf[Type[T]]
        ...
        { ... '{ ... x1$1.unary_~ ... x2$1.unary_~ ...} ... }
-     },
-     { ... /* no references to xi */ ... } // optimized to not create lambda
+     }
    )
  )
 </code></pre>
@@ -15617,12 +15614,12 @@ We will transform the definition from</p>
 <pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
 </code></pre>
 <p>to</p>
-<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Object = { (args: Seq[Any]) =&gt; {
+<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
   val T1$1 = args(0).asInstanceOf[Type[T1]]
   ...
-  val x1$1 = args(..).asInstanceOf[X]
+  val x1$1 = args(0).asInstanceOf[X]
   ...
-  val y1$1 = args(..).asInstanceOf[Expr[Y]]
+  val y1$1 = args(1).asInstanceOf[Expr[Y]]
   ...
   { ... T1$1.unary_~ ... x ... '(y1$1.unary_~) ... }
 }
