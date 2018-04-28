@@ -20186,10 +20186,11 @@ OpInfo
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-refineStatSeq()">
-                            <p>RefineStatSeq    ::= RefineStat {semi RefineStat}
-RefineStat       ::= Dcl
-|
-(in reality we admit Defs and filter them out afterwards)</p>
+                            <p>RefineStatSeq    ::=  RefineStat {semi RefineStat}
+RefineStat       ::=  ‘val’ VarDcl
+|  ‘def’ DefDcl
+|  ‘type’ {nl} TypeDcl
+(in reality we admit Defs and vars and filter them out afterwards in <code>checkLegal</code>)</p>
 
                         </div>
                     </div>

@@ -12486,7 +12486,7 @@ ParamValueType    ::=  Type [‘*’]                                           
 TypeArgs          ::=  ‘[’ ArgTypes ‘]’                                         ts
 NamedTypeArg      ::=  id ‘=’ Type                                              NamedArg(id, t)
 NamedTypeArgs     ::=  ‘[’ NamedTypeArg {‘,’ NamedTypeArg} ‘]’                  nts
-Refinement        ::=  ‘{’ [Dcl] {semi [Dcl]} ‘}’                               ds
+Refinement        ::=  ‘{’ [RefineDcl] {semi [RefineDcl]} ‘}’                   ds
 TypeBounds        ::=  [‘&gt;:’ Type] [‘&lt;:’ Type] | INT                            TypeBoundsTree(lo, hi)
 TypeParamBounds   ::=  TypeBounds {‘&lt;%’ Type} {‘:’ Type}                        ContextBounds(typeBounds, tps)
 </code></pre>
@@ -12630,12 +12630,12 @@ ImportSelectors   ::=  ‘{’ {ImportSelector ‘,’} (ImportSelector | ‘_�
 ImportSelector    ::=  id [‘=&gt;’ id | ‘=&gt;’ ‘_’]                                  Ident(name), Pair(id, id)
 </code></pre>
 <h3><a href="#declarations-and-definitions" id="declarations-and-definitions">Declarations and Definitions</a></h3>
-<pre><code class="language-ebnf">Dcl               ::=  ‘val’ ValDcl
-                    |  ‘var’ VarDcl
+<pre><code class="language-ebnf">RefineDcl         ::=  ‘val’ VarDcl
                     |  ‘def’ DefDcl
                     |  ‘type’ {nl} TypeDcl
                     |  INT
-
+Dcl               ::=  RefineDcl
+                    |  ‘var’ VarDcl
 ValDcl            ::=  ids ‘:’ Type                                             PatDef(_, ids, tpe, EmptyTree)
 VarDcl            ::=  ids ‘:’ Type                                             PatDef(_, ids, tpe, EmptyTree)
 DefDcl            ::=  DefSig [‘:’ Type]                                        DefDef(_, name, tparams, vparamss, tpe, EmptyTree)
