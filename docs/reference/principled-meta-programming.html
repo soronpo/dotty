@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-05-04 -->
+<!-- This page was last generated on 2018-05-06 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12546,11 +12546,11 @@ is one quote and one splice between the use of <code>t</code> and its definition
 <p>To avoid clutter, the Scala implementation tries to convert any phase-incorrect
 reference to a type <code>T</code> to a type-splice, by rewriting <code>T</code> to <code>~implicitly[Type[T]]</code>.
 For instance, the user-level definition of <code>reflect</code>:</p>
-<pre><code>def reflect[T: Type, U](f: Expr[T] =&gt; Expr[U]) Expr[T =&gt; U] =
+<pre><code>def reflect[T: Type, U](f: Expr[T] =&gt; Expr[U]): Expr[T =&gt; U] =
   ’{ (x: T) =&gt; ~f(’(x)) }
 </code></pre>
 <p>would be rewritten to</p>
-<pre><code>def reflect[T: Type, U](f: Expr[T] =&gt; Expr[U]) Expr[T =&gt; U] =
+<pre><code>def reflect[T: Type, U](f: Expr[T] =&gt; Expr[U]): Expr[T =&gt; U] =
   ’{ (x: ~implicitly[Type[T]]) =&gt; ~f(’(x)) }
 </code></pre>
 <p>The <code>implicitly</code> query succeeds because there is an implicit value of
