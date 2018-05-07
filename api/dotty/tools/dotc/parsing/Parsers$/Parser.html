@@ -14708,6 +14708,53 @@ BlockStat    ::= Import
                     </div>
                 </div><!-- end member -->
                 
+                <div id="checkAndOrArgument(t)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkAndOrArgument(t)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                checkAndOrArgument
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        t:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-checkAndOrArgument(t)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="checkAssoc(offset,op1,op2,op2LeftAssoc)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'checkAssoc(offset,op1,op2,op2LeftAssoc)');">[+]</span>
@@ -14877,6 +14924,69 @@ List
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-checkVarArgsRules(vparamss)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="checkWildcard(t,wildOK,fallbackTree)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'checkWildcard(t,wildOK,fallbackTree)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                checkWildcard
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        t:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        wildOK:
+                                    </span>
+                                    Boolean
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        fallbackTree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-checkWildcard(t,wildOK,fallbackTree)">
                             
                         </div>
                     </div>
@@ -16567,9 +16677,9 @@ EnumCase ::= <code>case' (id ClassConstr [</code>extends' ConstrApps]] | ids)</p
                     </div>
                 </div><!-- end member -->
                 
-                <div id="findWildcardType(t)" class="member private">
+                <div id="findNonValueTypeTree(t,alsoNonValue)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'findWildcardType(t)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'findNonValueTypeTree(t,alsoNonValue)');">[+]</span>
                         <span class="member-annotations">
                             @tailrec 
                         </span>
@@ -16581,7 +16691,7 @@ EnumCase ::= <code>case' (id ClassConstr [</code>extends' ConstrApps]] | ids)</p
                         </span>
                         <span class="member-name ">
                             
-                                findWildcardType
+                                findNonValueTypeTree
                             
                         </span>
 
@@ -16595,6 +16705,14 @@ EnumCase ::= <code>case' (id ClassConstr [</code>extends' ConstrApps]] | ids)</p
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        alsoNonValue:
+                                    </span>
+                                    Boolean
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -16605,15 +16723,15 @@ EnumCase ::= <code>case' (id ClassConstr [</code>extends' ConstrApps]] | ids)</p
                         
                         <span class="no-left">: Option
 <span class="no-left no-right">[</span>
-Position
+<a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
 <span class="no-left">]</span></span>
                         
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-findWildcardType(t)">
-                            <p>Checks whether <code>t</code> is a wildcard type.
-If it is, returns the [[Position]] where the wildcard occurs.</p>
+                        <div class="member-body-long" id ="long-body-findNonValueTypeTree(t,alsoNonValue)">
+                            <p>Checks whether <code>t</code> represents a non-value type (wildcard types, or ByNameTypeTree).
+If it is, returns the [[Tree]] which immediately represents the non-value type.</p>
 
                         </div>
                     </div>
@@ -20109,9 +20227,9 @@ InfixExpr     ::= PrefixExpr
                     </div>
                 </div><!-- end member -->
                 
-                <div id="reduceStack(base,top,prec,leftAssoc,op2)" class="member ">
+                <div id="reduceStack(base,top,prec,leftAssoc,op2,isType)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'reduceStack(base,top,prec,leftAssoc,op2)');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'reduceStack(base,top,prec,leftAssoc,op2,isType)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -20172,6 +20290,14 @@ OpInfo
                                     </span>
                                     <a href="../../../../../.././api/dotty/tools/dotc/core/Names$/Name.html">Name</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        isType:
+                                    </span>
+                                    Boolean
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -20185,7 +20311,7 @@ OpInfo
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-reduceStack(base,top,prec,leftAssoc,op2)">
+                        <div class="member-body-long" id ="long-body-reduceStack(base,top,prec,leftAssoc,op2,isType)">
                             
                         </div>
                     </div>
@@ -20328,6 +20454,61 @@ RefineStat       ::=  ‘val’ VarDcl
                         <div class="member-body-long" id ="long-body-refinement()">
                             <p>Refinement ::= <code>{' RefineStatSeq</code>}'</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="rejectWildcard(t,fallbackTree)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'rejectWildcard(t,fallbackTree)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                rejectWildcard
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        t:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        fallbackTree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-rejectWildcard(t,fallbackTree)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
