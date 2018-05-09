@@ -5239,6 +5239,30 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields.html">CollectNullableFields</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/Constructors$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Constructors.html">C</a>
@@ -12633,6 +12657,47 @@ and number of bits currently used</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="lazyValNullables" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'lazyValNullables');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            var
+                        </span>
+                        <span class="member-name ">
+                            
+                                lazyValNullables
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: IdentityHashMap
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a><span class="">, </span>ListBuffer
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-lazyValNullables">
+                            <p>A map of lazy values to the fields they should null after initialization.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="addInFront(prefix,stats)" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'addInFront(prefix,stats)');">[+]</span>
@@ -12732,9 +12797,9 @@ and number of bits currently used</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="mkDefNonThreadSafeNonNullable(target,rhs)(ctx)" class="member ">
+                <div id="mkDefNonThreadSafeNonNullable(target,rhs,nullables)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkDefNonThreadSafeNonNullable(target,rhs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkDefNonThreadSafeNonNullable(target,rhs,nullables)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12768,6 +12833,17 @@ and number of bits currently used</p>
                                     </span>
                                     <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        nullables:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span>
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12794,22 +12870,24 @@ and number of bits currently used</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-mkDefNonThreadSafeNonNullable(target,rhs)(ctx)">
-                            <p>Create non-threadsafe lazy accessor for not-nullable types  equivalent to such code
-def methodSymbol() = {
-if (target eq null) {
-target = rhs
-target
-} else target
-}</p>
+                        <div class="member-body-long" id ="long-body-mkDefNonThreadSafeNonNullable(target,rhs,nullables)(ctx)">
+                            <p>Create non-threadsafe lazy accessor for not-nullable types  equivalent to such code</p>
+<pre><code>def methodSymbol() = {
+ if (target eq null) {
+   target = rhs
+   nullable = null
+   target
+ } else target
+}
+</code></pre>
 
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="mkNonThreadSafeDef(target,flag,rhs)(ctx)" class="member ">
+                <div id="mkNonThreadSafeDef(target,flag,rhs,nullables)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'mkNonThreadSafeDef(target,flag,rhs)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkNonThreadSafeDef(target,flag,rhs,nullables)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12851,6 +12929,17 @@ target
                                     </span>
                                     <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        nullables:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span>
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -12877,15 +12966,27 @@ target
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-mkNonThreadSafeDef(target,flag,rhs)(ctx)">
-                            
+                        <div class="member-body-long" id ="long-body-mkNonThreadSafeDef(target,flag,rhs,nullables)(ctx)">
+                            <p>Create non-threadsafe lazy accessor equivalent to such code</p>
+<pre><code>def methodSymbol() = {
+ if (flag) target
+ else {
+   target = rhs
+   flag = true
+   nullable = null
+   target
+   }
+ }
+}
+</code></pre>
+
                         </div>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock)(ctx)" class="member ">
+                <div id="mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock,nullables)(ctx)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock,nullables)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12999,6 +13100,17 @@ target
                                     </span>
                                     <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        nullables:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span>
+                                    
                                 
                             <span class="no-left">)</span>
                             
@@ -13025,38 +13137,169 @@ target
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock)(ctx)">
+                        <div class="member-body-long" id ="long-body-mkThreadSafeDef(methodSymbol,claz,ord,target,rhs,tp,offset,getFlag,stateMask,casFlag,setFlagState,waitOnLock,nullables)(ctx)">
                             <p>Create a threadsafe lazy accessor equivalent to such code</p>
-<p>def methodSymbol(): Int = {
-val result: Int = 0
-val retry: Boolean = true
-var flag: Long = 0L
-while retry do {
-flag = dotty.runtime.LazyVals.get(this, $claz.$OFFSET)
-dotty.runtime.LazyVals.STATE(flag, 0) match {
-case 0 =&gt;
-if dotty.runtime.LazyVals.CAS(this, $claz.$OFFSET, flag, 1, $ord) {
-try {result = rhs} catch {
-case x: Throwable =&gt;
-dotty.runtime.LazyVals.setFlag(this, $claz.$OFFSET, 0, $ord)
-throw x
+<pre><code>def methodSymbol(): Int = {
+ val result: Int = 0
+ val retry: Boolean = true
+ var flag: Long = 0L
+ while retry do {
+   flag = dotty.runtime.LazyVals.get(this, $claz.$OFFSET)
+   dotty.runtime.LazyVals.STATE(flag, 0) match {
+     case 0 =&gt;
+       if dotty.runtime.LazyVals.CAS(this, $claz.$OFFSET, flag, 1, $ord) {
+         try {result = rhs} catch {
+           case x: Throwable =&gt;
+             dotty.runtime.LazyVals.setFlag(this, $claz.$OFFSET, 0, $ord)
+             throw x
+         }
+         $target = result
+         dotty.runtime.LazyVals.setFlag(this, $claz.$OFFSET, 3, $ord)
+         retry = false
+         }
+     case 1 =&gt;
+       dotty.runtime.LazyVals.wait4Notification(this, $claz.$OFFSET, flag, $ord)
+     case 2 =&gt;
+       dotty.runtime.LazyVals.wait4Notification(this, $claz.$OFFSET, flag, $ord)
+     case 3 =&gt;
+       retry = false
+       result = $target
+     }
+   }
+ nullable = null
+ result
 }
-$target = result
-dotty.runtime.LazyVals.setFlag(this, $claz.$OFFSET, 3, $ord)
-retry = false
-}
-case 1 =&gt;
-dotty.runtime.LazyVals.wait4Notification(this, $claz.$OFFSET, flag, $ord)
-case 2 =&gt;
-dotty.runtime.LazyVals.wait4Notification(this, $claz.$OFFSET, flag, $ord)
-case 3 =&gt;
-retry = false
-result = $target
-}
-}
-result
-}</p>
+</code></pre>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="nullOut(nullables)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'nullOut(nullables)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                nullOut
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        nullables:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-nullOut(nullables)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="nullableFor(sym)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'nullableFor(sym)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                nullableFor
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        sym:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-nullableFor(sym)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13095,6 +13338,66 @@ instance, it is possible to print trees after a given phase using:</p>
 <pre><code class="language-bash">$ ./bin/dotc -Xprint:&lt;phaseNameHere&gt; sourceFile.scala
 </code></pre>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="prepareForUnit(tree)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'prepareForUnit(tree)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                prepareForUnit
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-prepareForUnit(tree)(ctx)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->

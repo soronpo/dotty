@@ -5239,6 +5239,30 @@
 
                     <div class="entity-kinds">
                         
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields.html">CollectNullableFields</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/Constructors$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Constructors.html">C</a>
@@ -12953,6 +12977,87 @@ classOf[D]    -&gt; Literal(Constant(erasure(D)))</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-CollectEntryPoints">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="CollectNullableFields" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'CollectNullableFields');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields.html">CollectNullableFields</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-CollectNullableFields">
+                            <p>Collect fields that can be nulled out after use in lazy initialization.</p>
+<p>This information is used during lazy val transformation to assign null to private
+fields that are only used within a lazy val initializer. This is not just an optimization,
+but is needed for correctness to prevent memory leaks. E.g.</p>
+<pre><code class="language-scala">class TestByNameLazy(byNameMsg: =&gt; String) {
+  lazy val byLazyValMsg = byNameMsg
+}
+</code></pre>
+<p>Here <code>byNameMsg</code> should be null out once <code>byLazyValMsg</code> is
+initialised.</p>
+<p>A field is nullable if all the conditions below hold:
+- belongs to a non trait-class
+- is private[this]
+- is not lazy
+- its type is nullable
+- is only used in a lazy val initializer
+- defined in the same class as the lazy val</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="CollectNullableFields$" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'CollectNullableFields$');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            object
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/CollectNullableFields$.html">CollectNullableFields</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-CollectNullableFields$">
                             
                         </div>
                     </div>
