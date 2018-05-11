@@ -2476,24 +2476,18 @@
                 
 
                 
-                <li class="hidden-by-default  with-companion ">
+                <li class="hidden-by-default ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
                         
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/core/SymbolLoaders$.html">O</a>
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/core/SymbolLoaders.html">C</a>
                     </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/SymbolLoaders.html">SymbolLoaders</a>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/core/SymbolLoaders$.html">SymbolLoaders</a>
                 </li>
 
                 
 
-                 <!-- end != "package" -->
-
-            
-                
                  <!-- end != "package" -->
 
             
@@ -12467,6 +12461,39 @@
 
             <div id="entity-members" class="entity-section ">
                 
+                <div id="PackageLoader" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'PackageLoader');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/core/SymbolLoaders$/PackageLoader.html">PackageLoader</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-PackageLoader">
+                            <p>Load contents of a package</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="SecondCompleter" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'SecondCompleter');">[+]</span>
@@ -12497,6 +12524,745 @@
                             <p>A marker trait for a completer that replaces the original
 Symbol loader for an unpickled root.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="binaryOnly(owner,name)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'binaryOnly(owner,name)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                binaryOnly
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        name:
+                                    </span>
+                                    String
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-binaryOnly(owner,name)(ctx)">
+                            <p>The package objects of scala and scala.reflect should always
+be loaded in binary if classfiles are available, even if sourcefiles
+are newer. Late-compiling these objects from source leads to compilation
+order issues.
+Note: We do a name-base comparison here because the method is called before we even
+have ReflectPackage defined.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterClass(owner,name,completer,flags,scope)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterClass(owner,name,completer,flags,scope)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterClass
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        name:
+                                    </span>
+                                    PreName
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completer:
+                                    </span>
+                                    SymbolLoader
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        flags:
+                                    </span>
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        scope:
+                                    </span>
+                                    Scope
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Symbol</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterClass(owner,name,completer,flags,scope)(ctx)">
+                            <p>Enter class with given <code>name</code> into scope of <code>owner</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterClassAndModule(owner,name,completer,flags,scope)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterClassAndModule(owner,name,completer,flags,scope)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterClassAndModule
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        name:
+                                    </span>
+                                    PreName
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completer:
+                                    </span>
+                                    SymbolLoader
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        flags:
+                                    </span>
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        scope:
+                                    </span>
+                                    Scope
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Unit</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterClassAndModule(owner,name,completer,flags,scope)(ctx)">
+                            <p>Enter class and module with given <code>name</code> into scope of <code>owner</code>
+and give them <code>completer</code> as type.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterModule
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        name:
+                                    </span>
+                                    PreName
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completer:
+                                    </span>
+                                    SymbolLoader
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        modFlags:
+                                    </span>
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        clsFlags:
+                                    </span>
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        scope:
+                                    </span>
+                                    Scope
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Symbol</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterModule(owner,name,completer,modFlags,clsFlags,scope)(ctx)">
+                            <p>Enter module with given <code>name</code> into scope of <code>owner</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterNew(owner,member,completer,scope)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'enterNew(owner,member,completer,scope)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterNew
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        member:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completer:
+                                    </span>
+                                    SymbolLoader
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        scope:
+                                    </span>
+                                    Scope
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Symbol</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterNew(owner,member,completer,scope)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterPackage(owner,pname,completer)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterPackage(owner,pname,completer)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterPackage
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pname:
+                                    </span>
+                                    TermName
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        completer:
+                                    </span>
+                                    <span>(</span>TermSymbol<span>, </span>ClassSymbol<span>) =&gt; </span>PackageLoader
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Symbol</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterPackage(owner,pname,completer)(ctx)">
+                            <p>Enter package with given <code>name</code> into scope of <code>owner</code>
+and give them <code>completer</code> as type.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="enterToplevelsFromSource(owner,name,src,scope)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'enterToplevelsFromSource(owner,name,src,scope)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                enterToplevelsFromSource
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        name:
+                                    </span>
+                                    PreName
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        src:
+                                    </span>
+                                    AbstractFile
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        scope:
+                                    </span>
+                                    Scope
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Unit</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-enterToplevelsFromSource(owner,name,src,scope)(ctx)">
+                            <p>If setting -scansource is set:
+Enter all toplevel classes and objects in file <code>src</code> into package <code>owner</code>, provided
+they are in the right package. Issue a warning if a class or object is in the wrong
+package, i.e. if the file path differs from the declared package clause.
+If -scansource is not set:
+Enter class and module with given <code>name</code> into scope of <code>owner</code>.</p>
+<p>All entered symbols are given a source completer of <code>src</code> as info.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="initializeFromClassPath(owner,classRep)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'initializeFromClassPath(owner,classRep)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                initializeFromClassPath
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        owner:
+                                    </span>
+                                    Symbol
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        classRep:
+                                    </span>
+                                    ClassRepresentation
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Unit</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-initializeFromClassPath(owner,classRep)(ctx)">
+                            <p>Initialize toplevel class and module symbols in <code>owner</code> from class path representation <code>classRep</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="needCompile(bin,src)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'needCompile(bin,src)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                needCompile
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bin:
+                                    </span>
+                                    AbstractFile
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        src:
+                                    </span>
+                                    AbstractFile
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-needCompile(bin,src)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
