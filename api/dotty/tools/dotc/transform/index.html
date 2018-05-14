@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-05-13 -->
+<!-- This page was last generated on 2018-05-14 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15799,6 +15799,9 @@ We will transform the definition from</p>
   { ... x1$1 .... '{ ... T1$1.unary_~ ... x1$1.toExpr.unary_~ ... y1$1.unary_~ ... } ... }
 }
 </code></pre>
+<p>Where <code>inline</code> parameters with type Boolean, Byte, Short, Int, Long, Float, Double, Char and String are
+passed as their actual runtime value. See <code>isStage0Value</code>. Other <code>inline</code> arguments such as functions are handled
+like <code>y1: Y</code>.</p>
 <p>Note: the parameters of <code>foo</code> are kept for simple overloading resolution but they are not used in the body of <code>foo</code>.</p>
 <p>At inline site we will call reflectively the static method <code>foo</code> with dummy parameters, which will return a
 precompiled version of the function that will evaluate the <code>Expr[Z]</code> that <code>foo</code> produces. The lambda is then called
