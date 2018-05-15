@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-05-14 -->
+<!-- This page was last generated on 2018-05-15 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12443,7 +12443,8 @@ object Logger {
 <p>The <code>Config</code> object contains a definition of an <code>inline</code> value
 <code>logging</code>. This means that <code>logging</code> is treated as a constant value,
 equivalent to its right-hand side <code>false</code>. The right-hand side of such
-an inline val must itself be a constant expression. Used in this way,
+an inline val must itself be a <a href="#the-definition-of-constant-expression">constant
+expression</a>. Used in this way,
 <code>inline</code> is equivalent to Java and Scala 2's <code>final</code>. <code>final</code> meaning
 &quot;constant&quot; is still supported in Dotty, but will be phased out.</p>
 <p>The <code>Logger</code> object contains a definition of an <code>inline</code> method <code>log</code>.
@@ -12526,9 +12527,15 @@ to method arguments and recursive methods.</p>
 it in backticks, i.e.</p>
 <pre><code>@`inline` def ...
 </code></pre>
+<h3><a href="#the-definition-of-constant-expression" id="the-definition-of-constant-expression">The definition of constant expression</a></h3>
+<p>Right-hand sides of inline values and of arguments for inline parameters
+must be constant expressions in the sense defined by the <a href="https://www.scala-lang.org/files/archive/spec/2.12/06-expressions.html#constant-expressions">SLS §
+6.24</a>,
+including &quot;platform-specific&quot; extensions such as constant folding of
+pure numeric computations.</p>
 <h3><a href="#reference" id="reference">Reference</a></h3>
 <p>For more info, see <a href="https://github.com/lampepfl/dotty/pull/1492">PR #1492</a> and
-<a href="http://docs.scala-lang.org/sips/pending/inline-meta.html">Scala SIP 28</a></p>
+<a href="http://docs.scala-lang.org/sips/pending/inline-meta.html">Scala SIP 28</a>.</p>
 
         </div>
     </div><!-- end content-body -->
