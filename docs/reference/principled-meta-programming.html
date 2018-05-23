@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-05-22 -->
+<!-- This page was last generated on 2018-05-23 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12692,9 +12692,12 @@ program that calls <code>assert</code>.</p>
     '{ if !(~expr) then throw new AssertionError(s&quot;failed assertion: ${~expr}&quot;) }
 }
 
-val program = {
-  val x = 1
-  Macros.assert(x != 0)
+// has to be in a different compilation unit that depends on Macros
+object App {
+  val program = {
+    val x = 1
+    Macros.assert(x != 0)
+  }
 }
 </code></pre>
 <p>Inlining the <code>assert</code> function would give the following program:</p>
