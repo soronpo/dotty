@@ -14092,13 +14092,14 @@ and <a href="https://github.com/lampepfl/dotty/issues/783">https://github.com/la
 These fall into five categories</p>
 <ol>
 <li>Partial function closures, we need to generate isDefinedAt and applyOrElse methods for these.</li>
-<li>Closures implementing non-trait classes.</li>
+<li>Closures implementing non-trait classes</li>
 <li>Closures implementing classes that inherit from a class other than Object
 (a lambda cannot not be a run-time subtype of such a class)</li>
 <li>Closures that implement traits which run initialization code.</li>
 <li>Closures that get synthesized abstract methods in the transformation pipeline. These methods can be
 (1) superaccessors, (2) outer references, (3) accessors for fields.</li>
 </ol>
+<p>However, implicit function types do not count as SAM types.</p>
 
                         </div>
                     </div>

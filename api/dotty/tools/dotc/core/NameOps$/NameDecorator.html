@@ -13084,7 +13084,7 @@ followed by <code>kind</code> and the name.</p>
                 
                 <div id="functionArity" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'functionArity');">[+]</span>
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'functionArity');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -13111,11 +13111,7 @@ followed by <code>kind</code> and the name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-functionArity">
-                            <p>Is a synthetic function name
-- N for FunctionN
-- N for ImplicitFunctionN (N &gt;= 1)
-- (-1) otherwise</p>
-
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -13335,10 +13331,7 @@ followed by <code>kind</code> and the name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isErasedFunction">
-                            <p>Is a implicit function name
-- ErasedFunctionN for N &gt;= 1
-- ErasedImplicitFunctionN for N &gt;= 1
-- false otherwise</p>
+                            <p>Is an erased function name, i.e. one of ErasedFunctionN, ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -13373,12 +13366,7 @@ followed by <code>kind</code> and the name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isFunction">
-                            <p>Is a function name
-- FunctionN for N &gt;= 0
-- ImplicitFunctionN for N &gt;= 1
-- ErasedFunctionN for N &gt;= 1
-- ErasedImplicitFunctionN for N &gt;= 1
-- false otherwise</p>
+                            <p>Is a function name, i.e one of FunctionN, ImplicitFunctionN for N &gt;= 0 or ErasedFunctionN, ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -13413,10 +13401,7 @@ followed by <code>kind</code> and the name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isImplicitFunction">
-                            <p>Is a implicit function name
-- ImplicitFunctionN for N &gt;= 1
-- ErasedImplicitFunctionN for N &gt;= 1
-- false otherwise</p>
+                            <p>Is an implicit function name, i.e one of ImplicitFunctionN for N &gt;= 0 or ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
@@ -13723,12 +13708,11 @@ followed by <code>kind</code> and the name.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isSyntheticFunction">
-                            <p>Is a synthetic function name
+                            <p>Is a synthetic function name, i.e. one of
 - FunctionN for N &gt; 22
-- ImplicitFunctionN for N &gt;= 1
-- ErasedFunctionN for N &gt;= 1
-- ErasedImplicitFunctionN for N &gt;= 1
-- false otherwise</p>
+- ImplicitFunctionN for N &gt;= 0
+- ErasedFunctionN for N &gt; 0
+- ErasedImplicitFunctionN for N &gt; 0</p>
 
                         </div>
                     </div>
