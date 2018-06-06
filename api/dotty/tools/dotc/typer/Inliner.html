@@ -13461,6 +13461,84 @@ proxies to this-references.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="dropUnusedDefs(bindings,tree)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'dropUnusedDefs(bindings,tree)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                dropUnusedDefs
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        bindings:
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#ValOrDefDef">ValOrDefDef</a>
+<span class="no-left">]</span>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <span class="no-right">(</span>
+List
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#ValOrDefDef">ValOrDefDef</a>
+<span class="no-left">]</span><span>, </span><a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+<span class="no-left">)</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-dropUnusedDefs(bindings,tree)(ctx)">
+                            <p>Drop any side-effect-free bindings that are unused in expansion or other reachable bindings.
+Inline def bindings that are used only once.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="inlined(pt)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'inlined(pt)');">[+]</span>
@@ -13575,6 +13653,84 @@ proxies to this-references.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="paramBindingDef(name,paramtp,arg,bindingsBuf)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'paramBindingDef(name,paramtp,arg,bindingsBuf)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                paramBindingDef
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        name:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Names$/Name.html">Name</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        paramtp:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        arg:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bindingsBuf:
+                                    </span>
+                                    ListBuffer
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#ValOrDefDef">ValOrDefDef</a>
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#ValOrDefDef">ValOrDefDef</a></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-paramBindingDef(name,paramtp,arg,bindingsBuf)">
+                            <p>A binding for the parameter of an inlined method. This is a <code>val</code> def for
+by-value parameters and a <code>def</code> def for by-name parameters. <code>val</code> defs inherit
+inline annotations from their parameters. The generated <code>def</code> is appended
+to <code>bindingsBuf</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="registerLeaf(tree)" class="member private">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'registerLeaf(tree)');">[+]</span>
@@ -13672,7 +13828,7 @@ inlined method, create a proxy symbol and bind the thistype to refer to the prox
 The proxy is not yet entered in <code>bindingsBuf</code>; that will come later.
 2.  If given type refers to a parameter, make <code>paramProxy</code> refer to the entry stored
 in <code>paramNames</code> under the parameter's name. This roundabout way to bind parameter
-references to proxies is done because  we not known a priori what the parameter
+references to proxies is done because  we don't know a priori what the parameter
 references of a method are (we only know the method's type, but that contains TypeParamRefs
 and MethodParams, not TypeRefs or TermRefs.</p>
 
