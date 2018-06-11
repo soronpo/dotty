@@ -12778,9 +12778,9 @@
 
             <div id="entity-members" class="entity-section ">
                 
-                <div id="MakeInlineable" class="member ">
+                <div id="MakeInlineableDirect" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MakeInlineable');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MakeInlineableDirect');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12792,7 +12792,7 @@
                         </span>
                         <span class="member-name ">
                             
-                                <a href="../../../../../.././api/dotty/tools/dotc/typer/Inliner$/InlineAccessors/MakeInlineable.html">MakeInlineable</a>
+                                <a href="../../../../../.././api/dotty/tools/dotc/typer/Inliner$/InlineAccessors/MakeInlineableDirect.html">MakeInlineableDirect</a>
                             
                         </span>
 
@@ -12804,9 +12804,100 @@
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-MakeInlineable">
-                            <p>A tree map which inserts accessors for all non-public term members accessed
-from inlined code. Accessors are collected in the <code>accessors</code> buffer.</p>
+                        <div class="member-body-long" id ="long-body-MakeInlineableDirect">
+                            <p>Direct approach: place the accessor with the accessed symbol. This has the
+advantage that we can re-use the receiver as is. But it is only
+possible if the receiver is essentially this or an outer this, which is indicated
+by the test that we can find a host for the accessor.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="MakeInlineableMap" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MakeInlineableMap');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            abstract
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../../.././api/dotty/tools/dotc/typer/Inliner$/InlineAccessors/MakeInlineableMap.html">MakeInlineableMap</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-MakeInlineableMap">
+                            <p>A tree map which inserts accessors for non-public term members accessed from inlined code.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="MakeInlineablePassing" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'MakeInlineablePassing');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            class
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../../.././api/dotty/tools/dotc/typer/Inliner$/InlineAccessors/MakeInlineablePassing.html">MakeInlineablePassing</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-MakeInlineablePassing">
+                            <p>Fallback approach if the direct approach does not work: Place the accessor method
+in the same class as the inlined method, and let it take the receiver as parameter.
+This is tricky, since we have to find a suitable type for the parameter, which might
+require additional type parameters for the inline accessor. An example is in the
+<code>TestPassing</code> class in test <code>run/inline/inlines_1</code>:</p>
+<p>class C[T](x: T) {
+private[inlines] def next[U](y: U): (T, U) = (x, y)
+}
+class TestPassing {
+inline def foo[A](x: A): (A, Int) = {
+val c = new C<a href="#">A</a>
+c.next(1)
+}
+inline def bar[A](x: A): (A, String) = {
+val c = new C<a href="#">A</a>
+c.next(&quot;&quot;)
+}</p>
+<p><code>C</code> could be compiled separately, so we cannot place the inline accessor in it.
+Instead, the inline accessor goes into <code>TestPassing</code> and takes the actual receiver
+type as argument:</p>
+<p>def inline$next$i1[A, U](x$0: C[A])(y: U): (A, U) =
+x$0.next<a href="#">U</a></p>
+<p>Since different calls might have different receiver types, we need to generate one
+such accessor per call, so they need to have unique names.</p>
 
                         </div>
                     </div>
@@ -12871,6 +12962,69 @@ from inlined code. Accessors are collected in the <code>accessors</code> buffer.
 from <code>tree</code>. Non-public type members are currently left as they are.
 This means that references to a private type will lead to typing failures
 on the code when it is inlined. Less than ideal, but hard to do better (see below).</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="passReceiverAsArg(name)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'passReceiverAsArg(name)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            override
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                passReceiverAsArg
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        name:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Names$/Name.html">Name</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-passReceiverAsArg(name)(ctx)">
+                            <p>If an inline accessor name wraps a unique inline name, this is taken as indication
+that the inline accessor takes its receiver as first parameter. Such accessors
+are created by MakeInlineablePassing.</p>
 
                         </div>
                     </div>
