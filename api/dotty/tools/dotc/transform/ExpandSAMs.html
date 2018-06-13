@@ -12963,7 +12963,7 @@ instance, it is possible to print trees after a given phase using:</p>
                 
                 <div id="toPartialFunction(tree,tpe)(ctx)" class="member private">
                     <div class="member-title">
-                        <span class="expand-button " onclick="toggleMemberBody(this, 'toPartialFunction(tree,tpe)(ctx)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'toPartialFunction(tree,tpe)(ctx)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -13024,7 +13024,37 @@ instance, it is possible to print trees after a given phase using:</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-toPartialFunction(tree,tpe)(ctx)">
-                            
+                            <p>A partial function literal:</p>
+<pre><code>val x: PartialFunction[A, B] = { case C1 =&gt; E1; ...; case Cn =&gt; En }
+</code></pre>
+<p>which desugars to:</p>
+<pre><code>val x: PartialFunction[A, B] = {
+  def $anonfun(x: A): B = x match { case C1 =&gt; E1; ...; case Cn =&gt; En }
+  closure($anonfun: PartialFunction[A, B])
+}
+</code></pre>
+<p>is expanded to an anomymous class:</p>
+<pre><code>val x: PartialFunction[A, B] = {
+  class $anon extends AbstractPartialFunction[A, B] {
+    final def isDefinedAt(x: A): Boolean = x match {
+      case C1 =&gt; true
+      ...
+      case Cn =&gt; true
+      case _  =&gt; false
+    }
+
+    final def applyOrElse[A1 &lt;: A, B1 &gt;: B](x: A1, default: A1 =&gt; B1): B1 = x match {
+      case C1 =&gt; E1
+      ...
+      case Cn =&gt; En
+      case _  =&gt; default(x)
+    }
+  }
+
+  new $anon
+}
+</code></pre>
+
                         </div>
                     </div>
                 </div><!-- end member -->
