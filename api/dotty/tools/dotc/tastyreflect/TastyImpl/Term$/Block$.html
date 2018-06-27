@@ -12808,6 +12808,67 @@
 
             <div id="entity-members" class="entity-section ">
                 
+                <div id="needsNormalization(tree)(ctx)" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'needsNormalization(tree)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                needsNormalization
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-needsNormalization(tree)(ctx)">
+                            <p>If it is the second statement of a loop or a closure. See: <code>normalizedLoops</code></p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="normalizedLoops(tree)(ctx)" class="member private">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'normalizedLoops(tree)(ctx)');">[+]</span>
@@ -12863,8 +12924,9 @@
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-normalizedLoops(tree)(ctx)">
-                            <p>Normilizes non Blocks.
-i) Put <code>while</code> and <code>doWhile</code> loops in thier own blocks: <code>{ def while$() = ...; while$() }</code></p>
+                            <p>Normalizes non Blocks.
+i) Put <code>while</code> and <code>doWhile</code> loops in their own blocks: <code>{ def while$() = ...; while$() }</code>
+ii) Put closures in their own blocks: <code>{ def anon$() = ...; closure(anon$, ...) }</code></p>
 
                         </div>
                     </div>
