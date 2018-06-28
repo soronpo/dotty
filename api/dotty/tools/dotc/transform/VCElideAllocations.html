@@ -12801,7 +12801,7 @@
 <p>For a value class V defined as:
 class V(val underlying: U) extends AnyVal
 we avoid unnecessary allocations:
-new V(u1) == new V(u2) =&gt; u1 == u2
+new V(u1) == new V(u2) =&gt; u1 == u2   provided V does not redefine <code>equals</code>
 (new V(u)).underlying() =&gt; u</p>
 
             </div>
