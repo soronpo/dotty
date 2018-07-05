@@ -12269,6 +12269,11 @@ to method arguments and recursive methods.</p>
 it in backticks, i.e.</p>
 <pre><code>@`inline` def ...
 </code></pre>
+<p>The Dotty compiler ignores <code>@inline</code> annotated definitions. To cross
+compile between both Dotty and Scalac, we introduce a new <code>@forceInline</code>
+annotation which is equivalent to the new <code>inline</code> modifier. Note that
+Scala 2 ignores the <code>@forceInLine</code> annotation, and one must use both
+annotations to inline across the two compilers (i.e. <code>@forceInline @inline</code>).</p>
 <h3><a href="#the-definition-of-constant-expression" id="the-definition-of-constant-expression">The definition of constant expression</a></h3>
 <p>Right-hand sides of inline values and of arguments for inline parameters
 must be constant expressions in the sense defined by the <a href="https://www.scala-lang.org/files/archive/spec/2.12/06-expressions.html#constant-expressions">SLS §
