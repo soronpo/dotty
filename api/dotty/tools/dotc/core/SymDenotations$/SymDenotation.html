@@ -17969,6 +17969,57 @@ nonexistent or incomplete.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="isNoInitsClass(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isNoInitsClass(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isNoInitsClass
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    Context
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isNoInitsClass(ctx)">
+                            <p>Is this a denotation of a class that does not have - either direct or inherited -
+initaliazion code?</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="isNotRuntimeClass(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'isNotRuntimeClass(ctx)');">[+]</span>
@@ -20964,9 +21015,9 @@ in all direct parent classes which are sealed.</p>
                     </div>
                 </div><!-- end member -->
                 
-                <div id="setNoInitsFlags(flags)" class="member ">
+                <div id="setNoInitsFlags(parentFlags,bodyFlags)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'setNoInitsFlags(flags)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'setNoInitsFlags(parentFlags,bodyFlags)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -20988,7 +21039,15 @@ in all direct parent classes which are sealed.</p>
                                 
                                 
                                     <span class="no-left">
-                                        flags:
+                                        parentFlags:
+                                    </span>
+                                    FlagSet
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        bodyFlags:
                                     </span>
                                     FlagSet
                                     
@@ -21005,8 +21064,8 @@ in all direct parent classes which are sealed.</p>
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-setNoInitsFlags(flags)">
-                            <p>Set applicable flags from <code>flags</code> which is a subset of {NoInits, PureInterface}</p>
+                        <div class="member-body-long" id ="long-body-setNoInitsFlags(parentFlags,bodyFlags)">
+                            <p>Set applicable flags in {NoInits, PureInterface}</p>
 
                         </div>
                     </div>
