@@ -14926,9 +14926,9 @@ In the latter case, combine <code>tp1</code> and <code>tp2</code> under a type l
                     </div>
                 </div><!-- end member -->
                 
-                <div id="matchingParams(lam1,lam2)" class="member ">
+                <div id="matchingMethodParams(tp1,tp2)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'matchingParams(lam1,lam2)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'matchingMethodParams(tp1,tp2)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -14940,7 +14940,7 @@ In the latter case, combine <code>tp1</code> and <code>tp2</code> under a type l
                         </span>
                         <span class="member-name ">
                             
-                                matchingParams
+                                matchingMethodParams
                             
                         </span>
 
@@ -14950,17 +14950,17 @@ In the latter case, combine <code>tp1</code> and <code>tp2</code> under a type l
                                 
                                 
                                     <span class="no-left">
-                                        lam1:
+                                        tp1:
                                     </span>
-                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/MethodOrPoly.html">MethodOrPoly</a>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/MethodType.html">MethodType</a>
                                     
                                         <span class="no-left">, </span>
                                     
                                 
                                     <span class="">
-                                        lam2:
+                                        tp2:
                                     </span>
-                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/MethodOrPoly.html">MethodOrPoly</a>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/MethodType.html">MethodType</a>
                                     
                                 
                             <span class="no-left">)</span>
@@ -14975,9 +14975,67 @@ In the latter case, combine <code>tp1</code> and <code>tp2</code> under a type l
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-matchingParams(lam1,lam2)">
-                            <p>Do lambda types <code>lam1</code> and <code>lam2</code> have parameters that have the same types
-and the same implicit status? (after renaming one set to the other)</p>
+                        <div class="member-body-long" id ="long-body-matchingMethodParams(tp1,tp2)">
+                            <p>Do the parameter types of <code>tp1</code> and <code>tp2</code> match in a way that allows <code>tp1</code>
+to override <code>tp2</code> ? This is the case if they're pairwise =:=, as a special
+case, we allow <code>Any</code> in Java methods to match <code>Object</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="matchingPolyParams(tp1,tp2)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'matchingPolyParams(tp1,tp2)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                matchingPolyParams
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tp1:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/PolyType.html">PolyType</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        tp2:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/PolyType.html">PolyType</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-matchingPolyParams(tp1,tp2)">
+                            <p>Do the parameter types of <code>tp1</code> and <code>tp2</code> match in a way that allows <code>tp1</code>
+to override <code>tp2</code> ? This is the case if they're pairwise &gt;:&gt;.</p>
 
                         </div>
                     </div>
