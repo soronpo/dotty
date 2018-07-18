@@ -11965,7 +11965,7 @@ val res3: t2.Option.Some[Int] = Some(2)
 <p>As all other enums, ADTs can define methods. For instance, here is <code>Option</code> again, with an
 <code>isDefined</code> method and an <code>Option(...)</code> constructor in its companion object.</p>
 <pre><code class="language-scala">enum Option[+T] {
-  case Some(x: T) extends Option[T]
+  case Some(x: T)
   case None
 
   def isDefined: Boolean = this match {
