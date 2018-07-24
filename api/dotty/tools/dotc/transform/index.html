@@ -6103,10 +6103,12 @@
                 
 
                 
-                <li class="hidden-by-default ">
+                <li class="hidden-by-default  with-companion ">
                 <!-- end li setter -->
 
                     <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/Getters$.html">O</a>
                         
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/Getters.html">C</a>
                     </div>
@@ -6115,6 +6117,10 @@
 
                 
 
+                 <!-- end != "package" -->
+
+            
+                
                  <!-- end != "package" -->
 
             
@@ -6463,24 +6469,6 @@
 
             
                 
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/NormalizeFlags.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/NormalizeFlags.html">NormalizeFlags</a>
-                </li>
-
-                
-
                  <!-- end != "package" -->
 
             
@@ -13458,6 +13446,8 @@ This is different from the implementation of value classes in Scala 2
 (see SIP-15) which uses <code>asInstanceOf</code> which does not typecheck.</p>
 <p>Finally, if the constructor of a value class is private pr protected
 it is widened to public.</p>
+<p>Also, drop the Local flag from all private[this] and protected[this] members
+that will be moved to the companion object.</p>
 
                         </div>
                     </div>
@@ -13920,7 +13910,41 @@ instanceD.getClass    -&gt; instanceD.getClass</p>
 <p>p.x = e
 --&gt;  p.x_=(e)</p>
 <p>No fields are generated yet. This is done later in phase Memoize.</p>
+<p>Also, drop the Local flag from all private[this] and protected[this] members.
+This allows subsequent code motions in Flatten.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="Getters$" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Getters$');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            object
+                        </span>
+                        <span class="member-name ">
+                            
+                                <a href="../../../../.././api/dotty/tools/dotc/transform/Getters$.html">Getters</a>
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-Getters$">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -14915,44 +14939,6 @@ are symbolic.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-NonLocalReturns$">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="NormalizeFlags" class="member ">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'NormalizeFlags');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            
-                        </span>
-                        <span class="member-kind">
-                            class
-                        </span>
-                        <span class="member-name ">
-                            
-                                <a href="../../../../.././api/dotty/tools/dotc/transform/NormalizeFlags.html">NormalizeFlags</a>
-                            
-                        </span>
-
-                        
-
-                        
-
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-NormalizeFlags">
-                            <ol>
-<li>Widens all private[this] and protected[this] qualifiers to just private/protected</li>
-<li>Sets PureInterface flag for traits that only have pure interface members and that
-do not have initialization code. A pure interface member is either an abstract
-or alias type definition or a deferred val or def.</li>
-</ol>
-
                         </div>
                     </div>
                 </div><!-- end member -->
