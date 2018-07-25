@@ -12169,6 +12169,62 @@ of the infos of the operand denotations.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="&$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, '&$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                &$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-&$default$3">
+                            <p>Form a denotation by conjoining with denotation <code>that</code>.</p>
+<p>NoDenotations are dropped. MultiDenotations are handled by merging
+parts with same signatures. SingleDenotations with equal signatures
+are joined as follows:</p>
+<p>In a first step, consider only those denotations which have symbols
+that are accessible from prefix <code>pre</code>.</p>
+<p>If there are several such denotations, try to pick one by applying the following
+three precedence rules in decreasing order of priority:</p>
+<ol>
+<li>Prefer denotations with more specific infos.</li>
+<li>If infos are equally specific, prefer denotations with concrete symbols over denotations
+with abstract symbols.</li>
+<li>If infos are equally specific and symbols are equally concrete,
+prefer denotations with symbols defined in subclasses
+over denotations with symbols defined in proper superclasses.</li>
+</ol>
+<p>If there is exactly one (preferred) accessible denotation, return it.</p>
+<p>If there is no preferred accessible denotation, return a JointRefDenotation
+with one of the operand symbols (unspecified which one), and an info which
+is the intersection (using <code>&amp;</code> or <code>safe_&amp;</code> if <code>safeIntersection</code> is true)
+of the infos of the operand denotations.</p>
+<p>If SingleDenotations with different signatures are joined, return NoDenotation.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="accessibleFrom(pre,superAccess)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'accessibleFrom(pre,superAccess)(ctx)');">[+]</span>
@@ -12232,6 +12288,42 @@ of the infos of the operand denotations.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-accessibleFrom(pre,superAccess)(ctx)">
+                            <p>The denotation made up from the alternatives of this denotation that
+are accessible from prefix <code>pre</code>, or NoDenotation if no accessible alternative exists.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="accessibleFrom$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'accessibleFrom$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                accessibleFrom$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-accessibleFrom$default$2">
                             <p>The denotation made up from the alternatives of this denotation that
 are accessible from prefix <code>pre</code>, or NoDenotation if no accessible alternative exists.</p>
 
@@ -12467,6 +12559,78 @@ are accessible from prefix <code>pre</code>, or NoDenotation if no accessible al
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-atSignature(sig,site,relaxed)(ctx)">
+                            <p>Resolve overloaded denotation to pick the ones with the given signature
+when seen from prefix <code>site</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="atSignature$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'atSignature$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                atSignature$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: NoPrefix.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-atSignature$default$2">
+                            <p>Resolve overloaded denotation to pick the ones with the given signature
+when seen from prefix <code>site</code>.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="atSignature$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'atSignature$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                atSignature$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-atSignature$default$3">
                             <p>Resolve overloaded denotation to pick the ones with the given signature
 when seen from prefix <code>site</code>.</p>
 
@@ -13838,6 +14002,80 @@ otherwise generate new synthetic names.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-requiredSymbol(p,source,generateStubs)(ctx)">
+                            <p>Return symbol in this denotation that satisfies the given predicate.
+if generateStubs is specified, return a stubsymbol if denotation is a missing ref.
+Throw a <code>TypeError</code> if predicate fails to disambiguate symbol or no alternative matches.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="requiredSymbol$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'requiredSymbol$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                requiredSymbol$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Null</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-requiredSymbol$default$2">
+                            <p>Return symbol in this denotation that satisfies the given predicate.
+if generateStubs is specified, return a stubsymbol if denotation is a missing ref.
+Throw a <code>TypeError</code> if predicate fails to disambiguate symbol or no alternative matches.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="requiredSymbol$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'requiredSymbol$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                requiredSymbol$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-requiredSymbol$default$3">
                             <p>Return symbol in this denotation that satisfies the given predicate.
 if generateStubs is specified, return a stubsymbol if denotation is a missing ref.
 Throw a <code>TypeError</code> if predicate fails to disambiguate symbol or no alternative matches.</p>

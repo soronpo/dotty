@@ -13120,14 +13120,16 @@ if the function is applied to an empty parameter list (), we try</p>
 <p>0th strategy: If <code>tree</code> overrides a nullary method, mark the prototype
 so that the argument is dropped and return <code>tree</code> itself.
 (but do this at most once per tree).</p>
-<p>After that, two strategies are tried, and the first that is successful is picked.
-If neither of the strategies are successful, continues with<code>fallBack</code>.</p>
+<p>After that, two strategies are tried, and the first that is successful is picked.</p>
 <p>1st strategy: Try to insert <code>.apply</code> so that the result conforms to prototype <code>pt</code>.
 This strategy is not tried if the prototype represents already
 another <code>.apply</code> or <code>.apply()</code> selection.</p>
 <p>2nd strategy: If tree is a select <code>qual.name</code>, try to insert an implicit conversion
 around the qualifier part <code>qual</code> so that the result conforms to the expected type
 with wildcard result type.</p>
+<p>If neither of the strategies are successful, continues with the <code>apply</code> result
+if an apply insertion was tried and <code>tree</code> has an <code>apply</code> method, or continues
+with <code>fallBack</code> otherwise. <code>fallBack</code> is supposed to always give an error.</p>
 
                         </div>
                     </div>

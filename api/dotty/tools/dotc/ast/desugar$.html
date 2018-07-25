@@ -12733,6 +12733,52 @@ def f$default$2[T](x: Int) = x + &quot;m&quot;</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="defDef$default$2" class="member private">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'defDef$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            private
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                defDef$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-defDef$default$2">
+                            <p>Expand context bounds to evidence params. E.g.,</p>
+<pre><code>def f[T &gt;: L &lt;: H : B](params)
+</code></pre>
+<p>==&gt;
+def f<a href="#">T &gt;: L &lt;: H</a>(implicit evidence$0: B[T])</p>
+<p>Expand default arguments to default getters. E.g,</p>
+<pre><code>def f[T: B](x: Int = 1)(y: String = x + &quot;m&quot;) = ...
+</code></pre>
+<p>==&gt;
+def f[T](x: Int)(y: String)(implicit evidence$0: B[T]) = ...
+def f$default$1[T] = 1
+def f$default$2[T](x: Int) = x + &quot;m&quot;</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="defTree(tree)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'defTree(tree)(ctx)');">[+]</span>
@@ -13040,6 +13086,41 @@ def f$default$2[T](x: Int) = x + &quot;m&quot;</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="derivedTypeParam$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'derivedTypeParam$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                derivedTypeParam$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: String</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-derivedTypeParam$default$2">
+                            <p>A type definition copied from <code>tdef</code> with a rhs typetree derived from it</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="derivedValDef(original,named,tpt,rhs,mods)(ctx)" class="member private">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'derivedValDef(original,named,tpt,rhs,mods)(ctx)');">[+]</span>
@@ -13319,7 +13400,69 @@ without duplicates</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-isDesugaredCaseClassMethodName(name)(ctx)">
-                            <p>Names of methods that are added unconditionally to case classes</p>
+                            <p>Is <code>name</code> the name of a method that is added unconditionally to case classes?</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="isRetractableCaseClassMethodName(name)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'isRetractableCaseClassMethodName(name)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                isRetractableCaseClassMethodName
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        name:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Names$/Name.html">Name</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-isRetractableCaseClassMethodName(name)(ctx)">
+                            <p>Is <code>name</code> the name of a method that can be invalidated as a compiler-generated
+case class method that clashes with a user-defined method?</p>
 
                         </div>
                     </div>
@@ -13487,6 +13630,90 @@ x$1 =&gt; (x$1 @unchecked) match { cases }</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="makeCaseLambda$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'makeCaseLambda$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                makeCaseLambda$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Int</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-makeCaseLambda$default$2">
+                            <p>If <code>nparams</code> == 1, expand partial function</p>
+<pre><code> { cases }
+</code></pre>
+<p>==&gt;
+x$1 =&gt; (x$1 @unchecked) match { cases }</p>
+<p>If <code>nparams</code> != 1, expand instead to</p>
+<pre><code> (x$1, ..., x$n) =&gt; (x$0, ..., x${n-1} @unchecked) match { cases }
+</code></pre>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="makeCaseLambda$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'makeCaseLambda$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                makeCaseLambda$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-makeCaseLambda$default$3">
+                            <p>If <code>nparams</code> == 1, expand partial function</p>
+<pre><code> { cases }
+</code></pre>
+<p>==&gt;
+x$1 =&gt; (x$1 @unchecked) match { cases }</p>
+<p>If <code>nparams</code> != 1, expand instead to</p>
+<pre><code> (x$1, ..., x$n) =&gt; (x$0, ..., x${n-1} @unchecked) match { cases }
+</code></pre>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="makeClosure(params,body,tpt,isImplicit)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'makeClosure(params,body,tpt,isImplicit)(ctx)');">[+]</span>
@@ -13569,6 +13796,48 @@ x$1 =&gt; (x$1 @unchecked) match { cases }</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-makeClosure(params,body,tpt,isImplicit)(ctx)">
+                            <p>Make closure corresponding to function.
+params =&gt; body
+==&gt;
+def $anonfun(params) = body
+Closure($anonfun)</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="makeClosure$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'makeClosure$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                makeClosure$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/TypeTree.html">TypeTree</a>
+<span class="no-left no-right">[</span>
+<a href="../../../../.././api/dotty/tools/dotc/ast/Trees$.html#Untyped">Untyped</a>
+<span class="no-left">]</span></span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-makeClosure$default$3">
                             <p>Make closure corresponding to function.
 params =&gt; body
 ==&gt;
@@ -13722,6 +13991,40 @@ Closure($anonfun)</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-makeImplicitParameters(tpts,forPrimaryConstructor)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="makeImplicitParameters$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'makeImplicitParameters$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                makeImplicitParameters$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-makeImplicitParameters$default$2">
                             
                         </div>
                     </div>

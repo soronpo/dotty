@@ -12145,6 +12145,78 @@ followed by the class parameters of its enclosing class.</p>
                     </div>
                 </div><!-- end member -->
                 
+                <div id="forwarder$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forwarder$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                forwarder$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-forwarder$default$3">
+                            <p>A forwarder expression which calls <code>derived</code>, passing along
+- if <code>abstractOverClass</code> the type parameters and enclosing class parameters of originalDef<code>, - the</code>this<code>of the enclosing class, - the value parameters of the original method</code>originalDef`.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="forwarder$default$4" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'forwarder$default$4');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                forwarder$default$4
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-forwarder$default$4">
+                            <p>A forwarder expression which calls <code>derived</code>, passing along
+- if <code>abstractOverClass</code> the type parameters and enclosing class parameters of originalDef<code>, - the</code>this<code>of the enclosing class, - the value parameters of the original method</code>originalDef`.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)');">[+]</span>
@@ -12216,6 +12288,46 @@ followed by the class parameters of its enclosing class.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-fullyParameterizedDef(derived,originalDef,abstractOverClass)(ctx)">
+                            <p>Given an instance method definition <code>originalDef</code>, return a
+fully parameterized method definition derived from <code>originalDef</code>, which
+has <code>derived</code> as symbol and <code>fullyParameterizedType(originalDef.symbol.info)</code>
+as info.
+<code>abstractOverClass</code> defines weather the DefDef should abstract over type parameters
+of class that contained original defDef</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="fullyParameterizedDef$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedDef$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                fullyParameterizedDef$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-fullyParameterizedDef$default$3">
                             <p>Given an instance method definition <code>originalDef</code>, return a
 fully parameterized method definition derived from <code>originalDef</code>, which
 has <code>derived</code> as symbol and <code>fullyParameterizedType(originalDef.symbol.info)</code>
@@ -12306,6 +12418,96 @@ of class that contained original defDef</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-fullyParameterizedType(info,clazz,abstractOverClass,liftThisType)(ctx)">
+                            <p>Converts the type <code>info</code> of a member of class <code>clazz</code> to a method type that
+takes the <code>this</code> of the class and any type parameters of the class
+as additional parameters. Example:</p>
+<p>class Foo[+A &lt;: AnyRef](val xs: List[A]) extends AnyVal {
+def baz[B &gt;: A](x: B): List[B] = ...
+}</p>
+<p>leads to:</p>
+<p>object Foo {
+def extension$baz[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef]($this: Foo[A])(x: B): List[B]
+}</p>
+<p>If a self type is present, $this has this self type as its type.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="fullyParameterizedType$default$3" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedType$default$3');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                fullyParameterizedType$default$3
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-fullyParameterizedType$default$3">
+                            <p>Converts the type <code>info</code> of a member of class <code>clazz</code> to a method type that
+takes the <code>this</code> of the class and any type parameters of the class
+as additional parameters. Example:</p>
+<p>class Foo[+A &lt;: AnyRef](val xs: List[A]) extends AnyVal {
+def baz[B &gt;: A](x: B): List[B] = ...
+}</p>
+<p>leads to:</p>
+<p>object Foo {
+def extension$baz[B &gt;: A &lt;: Any, A &gt;: Nothing &lt;: AnyRef]($this: Foo[A])(x: B): List[B]
+}</p>
+<p>If a self type is present, $this has this self type as its type.</p>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="fullyParameterizedType$default$4" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'fullyParameterizedType$default$4');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                fullyParameterizedType$default$4
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-fullyParameterizedType$default$4">
                             <p>Converts the type <code>info</code> of a member of class <code>clazz</code> to a method type that
 takes the <code>this</code> of the class and any type parameters of the class
 as additional parameters. Example:</p>

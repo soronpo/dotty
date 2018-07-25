@@ -14059,14 +14059,16 @@ if the function is applied to an empty parameter list (), we try</p>
 <p>0th strategy: If <code>tree</code> overrides a nullary method, mark the prototype
 so that the argument is dropped and return <code>tree</code> itself.
 (but do this at most once per tree).</p>
-<p>After that, two strategies are tried, and the first that is successful is picked.
-If neither of the strategies are successful, continues with<code>fallBack</code>.</p>
+<p>After that, two strategies are tried, and the first that is successful is picked.</p>
 <p>1st strategy: Try to insert <code>.apply</code> so that the result conforms to prototype <code>pt</code>.
 This strategy is not tried if the prototype represents already
 another <code>.apply</code> or <code>.apply()</code> selection.</p>
 <p>2nd strategy: If tree is a select <code>qual.name</code>, try to insert an implicit conversion
 around the qualifier part <code>qual</code> so that the result conforms to the expected type
 with wildcard result type.</p>
+<p>If neither of the strategies are successful, continues with the <code>apply</code> result
+if an apply insertion was tried and <code>tree</code> has an <code>apply</code> method, or continues
+with <code>fallBack</code> otherwise. <code>fallBack</code> is supposed to always give an error.</p>
 
                         </div>
                     </div>
@@ -14363,6 +14365,40 @@ exists, rewrite to <code>ctag(e)</code>.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-typed(tree,pt)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="typed$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typed$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typed$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: WildcardType.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typed$default$2">
                             
                         </div>
                     </div>
@@ -15456,10 +15492,7 @@ exists, rewrite to <code>ctag(e)</code>.</p>
                         
 
                         
-                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/DefDef.html">DefDef</a>
-<span class="no-left no-right">[</span>
-<a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
-<span class="no-left">]</span></span>
+                        <span class="no-left">: <a href="../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a></span>
                         
                     </div><!-- end member-title -->
 
@@ -15533,6 +15566,40 @@ exists, rewrite to <code>ctag(e)</code>.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-typedExpr(tree,pt)(ctx)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="typedExpr$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedExpr$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedExpr$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: WildcardType.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedExpr$default$2">
                             
                         </div>
                     </div>
@@ -16611,6 +16678,40 @@ r.op(l)                 if <code>op</code> is right-associative call-by-name or 
                     </div>
                 </div><!-- end member -->
                 
+                <div id="typedPattern$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedPattern$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedPattern$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: WildcardType.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedPattern$default$2">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="typedRefinedTypeTree(tree)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'typedRefinedTypeTree(tree)(ctx)');">[+]</span>
@@ -17467,6 +17568,40 @@ r.op(l)                 if <code>op</code> is right-associative call-by-name or 
                     </div>
                 </div><!-- end member -->
                 
+                <div id="typedType$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedType$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedType$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: WildcardType.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedType$default$2">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
                 <div id="typedTypeBoundsTree(tree,pt)(ctx)" class="member ">
                     <div class="member-title">
                         <span class="expand-button " onclick="toggleMemberBody(this, 'typedTypeBoundsTree(tree,pt)(ctx)');">[+]</span>
@@ -17940,6 +18075,40 @@ r.op(l)                 if <code>op</code> is right-associative call-by-name or 
                         <div class="member-body-long" id ="long-body-typedUnadapted(initTree,pt,locked)(ctx)">
                             <p>Typecheck tree without adapting it, returning a typed tree.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="typedUnadapted$default$2" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'typedUnadapted$default$2');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                typedUnadapted$default$2
+                            
+                        </span>
+
+                        
+
+                        
+
+                        
+                        <span class="no-left">: WildcardType.type</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-typedUnadapted$default$2">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
