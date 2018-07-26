@@ -158,7 +158,7 @@
 </li>
 <li><a href="../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
 </li>
-<li><a href="../../../../.././docs/reference/inline.html">Inline</a>
+<li><a href="../../../../.././docs/reference/inline.html">Inlining with Transparent</a>
 </li>
 <li><a href="../../../../.././docs/reference/principled-meta-programming.html">Meta Programming</a>
 </li>
@@ -5538,24 +5538,6 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">O</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">Checkable</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">ClassOf</a>
@@ -5661,24 +5643,6 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">CtxLazy</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">DropInlined</a>
                 </li>
 
                 
@@ -5805,24 +5769,6 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">ElimStaticThis</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
                 </li>
 
                 
@@ -6169,24 +6115,6 @@
 
             
                 
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">IsInstanceOfChecker</a>
-                </li>
-
-                
-
                  <!-- end != "package" -->
 
             
@@ -6611,6 +6539,30 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">ProtectedAccessors</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">PruneErasedDefs</a>
                 </li>
 
                 
@@ -7765,6 +7717,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">NoLift</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">PrepareTransparent</a>
                 </li>
 
                 
@@ -11973,12 +11943,12 @@ Checks that the phase consistency principle (PCP) holds.</p>
  )
 </code></pre>
 <p>and then performs the same transformation on <code>'{ ... x1$1.unary_~ ... x2$1.unary_~ ...}</code>.</p>
-<p>For inline macro definitions we assume that we have a single ~ directly as the RHS.
+<p>For transparent macro definitions we assume that we have a single ~ directly as the RHS.
 We will transform the definition from</p>
-<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
+<pre><code>transparent def foo[T1, ...] (transparent x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
 </code></pre>
 <p>to</p>
-<pre><code>inline def foo[T1, ...](inline x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
+<pre><code>transparent def foo[T1, ...] (transparent x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
   val T1$1 = args(0).asInstanceOf[Type[T1]]
   ...
   val x1$1 = args(0).asInstanceOf[X]
@@ -11988,8 +11958,8 @@ We will transform the definition from</p>
   { ... x1$1 .... '{ ... T1$1.unary_~ ... x1$1.toExpr.unary_~ ... y1$1.unary_~ ... } ... }
 }
 </code></pre>
-<p>Where <code>inline</code> parameters with type Boolean, Byte, Short, Int, Long, Float, Double, Char and String are
-passed as their actual runtime value. See <code>isStage0Value</code>. Other <code>inline</code> arguments such as functions are handled
+<p>Where <code>transparent</code> parameters with type Boolean, Byte, Short, Int, Long, Float, Double, Char and String are
+passed as their actual runtime value. See <code>isStage0Value</code>. Other <code>transparent</code> arguments such as functions are handled
 like <code>y1: Y</code>.</p>
 <p>Note: the parameters of <code>foo</code> are kept for simple overloading resolution but they are not used in the body of <code>foo</code>.</p>
 <p>At inline site we will call reflectively the static method <code>foo</code> with dummy parameters, which will return a

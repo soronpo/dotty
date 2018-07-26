@@ -158,7 +158,7 @@
 </li>
 <li><a href="../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
 </li>
-<li><a href="../../../../.././docs/reference/inline.html">Inline</a>
+<li><a href="../../../../.././docs/reference/inline.html">Inlining with Transparent</a>
 </li>
 <li><a href="../../../../.././docs/reference/principled-meta-programming.html">Meta Programming</a>
 </li>
@@ -5538,24 +5538,6 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">O</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">Checkable</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">ClassOf</a>
@@ -5661,24 +5643,6 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">CtxLazy</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">DropInlined</a>
                 </li>
 
                 
@@ -5805,24 +5769,6 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">ElimStaticThis</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
                 </li>
 
                 
@@ -6169,24 +6115,6 @@
 
             
                 
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">IsInstanceOfChecker</a>
-                </li>
-
-                
-
                  <!-- end != "package" -->
 
             
@@ -6611,6 +6539,30 @@
                         <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">ProtectedAccessors</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">PruneErasedDefs</a>
                 </li>
 
                 
@@ -7765,6 +7717,24 @@
                         <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">NoLift</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">PrepareTransparent</a>
                 </li>
 
                 
@@ -11943,7 +11913,7 @@ Any remaining type tests
 - have a reference type as receiver
 - can be translated directly to machine instructions</p>
 <p>Unfortunately this phase ended up being not Y-checkable unless types are erased. A cast to an ConstantType(3) or x.type
-cannot be rewritten before erasure.</p>
+cannot be rewritten before erasure. That's why TypeTestsCasts is called from Erasure.</p>
 
             </div>
             
@@ -11963,6 +11933,103 @@ cannot be rewritten before erasure.</p>
             </h1>
 
             <div id="entity-members" class="entity-section ">
+                
+                <div id="checkable(X,P,pos)(ctx)" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'checkable(X,P,pos)(ctx)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                checkable
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        X:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        P:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Types$/Type.html">Type</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        pos:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/util/Positions$/Position.html">Position</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        ctx:
+                                    </span>
+                                    <a href="../../../../.././api/dotty/tools/dotc/core/Contexts$/Context.html">Context</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Boolean</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-checkable(X,P,pos)(ctx)">
+                            <p>Whether <code>(x:X).isInstanceOf[P]</code> can be checked at runtime?</p>
+<p>First do the following substitution:
+(a) replace <code>T @unchecked</code> and pattern binder types (e.g., <code>_$1</code>) in P with WildcardType
+(b) replace pattern binder types (e.g., <code>_$1</code>) in X:
+- variance = 1  : hiBound
+- variance = -1 : loBound
+- variance = 0  : OrType(Any, Nothing) // TODO: use original type param bounds</p>
+<p>Then check:</p>
+<ol>
+<li>if <code>X &lt;:&lt; P</code>, TRUE</li>
+<li>if <code>P</code> is a singleton type, TRUE</li>
+<li>if <code>P</code> refers to an abstract type member or type parameter, FALSE</li>
+<li>if <code>P = Array[T]</code>, checkable(E, T) where <code>E</code> is the element type of <code>X</code>, defaults to <code>Any</code>.</li>
+<li>if <code>P</code> is <code>pre.F[Ts]</code> and <code>pre.F</code> refers to a class which is not <code>Array</code>:
+(a) replace <code>Ts</code> with fresh type variables <code>Xs</code>
+(b) constrain <code>Xs</code> with <code>pre.F[Xs] &lt;:&lt; X</code>
+(c) instantiate Xs and check <code>pre.F[Xs] &lt;:&lt; P</code></li>
+<li>if <code>P = T1 | T2</code> or <code>P = T1 &amp; T2</code>, checkable(X, T1) &amp;&amp; checkable(X, T2).</li>
+<li>if <code>P</code> is a refinement type, FALSE</li>
+<li>otherwise, TRUE</li>
+</ol>
+
+                        </div>
+                    </div>
+                </div><!-- end member -->
                 
                 <div id="interceptTypeApply(tree)(ctx)" class="member ">
                     <div class="member-title">

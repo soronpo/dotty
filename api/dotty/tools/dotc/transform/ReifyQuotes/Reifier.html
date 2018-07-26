@@ -158,7 +158,7 @@
 </li>
 <li><a href="../../../../../.././docs/reference/trait-parameters.html">Trait Parameters</a>
 </li>
-<li><a href="../../../../../.././docs/reference/inline.html">Inline</a>
+<li><a href="../../../../../.././docs/reference/inline.html">Inlining with Transparent</a>
 </li>
 <li><a href="../../../../../.././docs/reference/principled-meta-programming.html">Meta Programming</a>
 </li>
@@ -5538,24 +5538,6 @@
 
                     <div class="entity-kinds">
                         
-                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">O</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/Checkable$.html">Checkable</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ClassOf.html">ClassOf</a>
@@ -5661,24 +5643,6 @@
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/CtxLazy.html">CtxLazy</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/DropInlined.html">DropInlined</a>
                 </li>
 
                 
@@ -5805,24 +5769,6 @@
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ElimStaticThis.html">ElimStaticThis</a>
-                </li>
-
-                
-
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ErasedDecls.html">ErasedDecls</a>
                 </li>
 
                 
@@ -6169,24 +6115,6 @@
 
             
                 
-                 <!-- end != "package" -->
-
-            
-                
-
-                
-                <li class="hidden-by-default ">
-                <!-- end li setter -->
-
-                    <div class="entity-kinds">
-                        
-                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">C</a>
-                    </div>
-                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/IsInstanceOfChecker.html">IsInstanceOfChecker</a>
-                </li>
-
-                
-
                  <!-- end != "package" -->
 
             
@@ -6611,6 +6539,30 @@
                         <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">C</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/ProtectedAccessors.html">ProtectedAccessors</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default  with-companion ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs$.html">O</a>
+                        
+                        <a class="letter-anchor class" href="../../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">C</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/transform/PruneErasedDefs.html">PruneErasedDefs</a>
                 </li>
 
                 
@@ -7765,6 +7717,24 @@
                         <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">O</a>
                     </div>
                     <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/typer/NoLift$.html">NoLift</a>
+                </li>
+
+                
+
+                 <!-- end != "package" -->
+
+            
+                
+
+                
+                <li class="hidden-by-default ">
+                <!-- end li setter -->
+
+                    <div class="entity-kinds">
+                        
+                        <a class="letter-anchor object" href="../../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">O</a>
+                    </div>
+                    <a class="entity-name" href="../../../../../.././api/dotty/tools/dotc/typer/PrepareTransparent$.html">PrepareTransparent</a>
                 </li>
 
                 
@@ -12921,7 +12891,7 @@ Unit
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-levelOK(sym)(ctx)">
                             <p>Does the level of <code>sym</code> match the current level?
-An exception is made for inline vals in macros. These are also OK if their level
+An exception is made for transparent vals in macros. These are also OK if their level
 is one higher than the current level, because on execution such values
 are constant expression trees and we can pull out the constant from the tree.</p>
 
@@ -12984,7 +12954,7 @@ are constant expression trees and we can pull out the constant from the tree.</p
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-liftInlineParamValue(tree)(ctx)">
-                            <p>Takes a reference to an inline parameter <code>tree</code> and lifts it to an Expr</p>
+                            <p>Takes a reference to an transparent parameter <code>tree</code> and lifts it to an Expr</p>
 
                         </div>
                     </div>
@@ -13551,7 +13521,7 @@ core and splices as arguments.</p>
                         <div class="member-body-long" id ="long-body-splice(splice)(ctx)">
                             <p>If inside a quote, split the body of the splice into a core and a list of embedded quotes
 and make a hole from these parts. Otherwise issue an error, unless we
-are in the body of an inline method.</p>
+are in the body of a transparent method.</p>
 
                         </div>
                     </div>
@@ -13612,7 +13582,7 @@ are in the body of an inline method.</p>
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-spliceOutsideQuotes(pos)(ctx)">
-                            <p>Issue a &quot;splice outside quote&quot; error unless we ar in the body of an inline method</p>
+                            <p>Issue a &quot;splice outside quote&quot; error unless we ar in the body of a transparent method</p>
 
                         </div>
                     </div>
