@@ -15259,27 +15259,7 @@ Checks that the phase consistency principle (PCP) holds.</p>
 </code></pre>
 <p>and then performs the same transformation on <code>'{ ... x1$1.unary_~ ... x2$1.unary_~ ...}</code>.</p>
 <p>For transparent macro definitions we assume that we have a single ~ directly as the RHS.
-We will transform the definition from</p>
-<pre><code>transparent def foo[T1, ...] (transparent x1: X, ..., y1: Y, ....): Z = ~{ ... T1 ... x ... '(y) ... }
-</code></pre>
-<p>to</p>
-<pre><code>transparent def foo[T1, ...] (transparent x1: X, ..., y1: Y, ....): Seq[Any] =&gt; Object = { (args: Seq[Any]) =&gt; {
-  val T1$1 = args(0).asInstanceOf[Type[T1]]
-  ...
-  val x1$1 = args(0).asInstanceOf[X]
-  ...
-  val y1$1 = args(1).asInstanceOf[Expr[Y]]
-  ...
-  { ... x1$1 .... '{ ... T1$1.unary_~ ... x1$1.toExpr.unary_~ ... y1$1.unary_~ ... } ... }
-}
-</code></pre>
-<p>Where <code>transparent</code> parameters with type Boolean, Byte, Short, Int, Long, Float, Double, Char and String are
-passed as their actual runtime value. See <code>isStage0Value</code>. Other <code>transparent</code> arguments such as functions are handled
-like <code>y1: Y</code>.</p>
-<p>Note: the parameters of <code>foo</code> are kept for simple overloading resolution but they are not used in the body of <code>foo</code>.</p>
-<p>At inline site we will call reflectively the static method <code>foo</code> with dummy parameters, which will return a
-precompiled version of the function that will evaluate the <code>Expr[Z]</code> that <code>foo</code> produces. The lambda is then called
-at the inline site with the lifted arguments of the inlined call.</p>
+The Splicer is used to check that the RHS will be interpretable (with the <code>Splicer</code>) once inlined.</p>
 
                         </div>
                     </div>

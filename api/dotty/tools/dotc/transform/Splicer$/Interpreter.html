@@ -11840,7 +11840,7 @@
                     
                     <span class="keyword">extends</span>
                     
-                    <span class="entity-super-type">Object</span>
+                    <span class="entity-super-type"><a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html">AbstractInterpreter</a></span>
                     
                 </div>
                 
@@ -11848,9 +11848,7 @@
 
             
             <div id="entity-body" class="entity-section">
-                <p>Tree interpreter that can interpret calls to static methods with it's default arguments</p>
-<p>The interpreter assumes that all calls in the trees are to code that was
-previously compiled and is present in the classpath of the current context.</p>
+                <p>Tree interpreter that evaluates the tree</p>
 
             </div>
             
@@ -11944,6 +11942,46 @@ previously compiled and is present in the classpath of the current context.</p>
                         <div class="member-body-long" id ="long-body-StopInterpretation">
                             <p>Exception that stops interpretation if some issue is found</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="Result" class="member ">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'Result');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            
+                        </span>
+                        <span class="member-kind">
+                            type
+                        </span>
+                        <span class="member-name ">
+                            
+                                Result
+                            
+                        </span>
+
+                        
+
+                        
+                        
+                        
+                        <span class="type-alias">
+                            <span class="equals"> = </span>
+                            Object
+                        </span>
+                        
+                        
+
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-Result">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12046,57 +12084,6 @@ previously compiled and is present in the classpath of the current context.</p>
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-pos">
                             
-                        </div>
-                    </div>
-                </div><!-- end member -->
-                
-                <div id="defaultValue(clazz)" class="member private">
-                    <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'defaultValue(clazz)');">[+]</span>
-                        <span class="member-annotations">
-                            
-                        </span>
-                        <span class="member-modifiers">
-                            private
-                        </span>
-                        <span class="member-kind">
-                            def
-                        </span>
-                        <span class="member-name ">
-                            
-                                defaultValue
-                            
-                        </span>
-
-                        
-                            
-                            <span class="no-left">(</span>
-                                
-                                
-                                    <span class="no-left">
-                                        clazz:
-                                    </span>
-                                    Class
-<span class="no-left no-right">[</span>
-Nothing<span class="bounds"> &lt;: </span>Any
-<span class="no-left">]</span>
-                                    
-                                
-                            <span class="no-left">)</span>
-                            
-                        
-
-                        
-
-                        
-                        <span class="no-left">: Object</span>
-                        
-                    </div><!-- end member-title -->
-
-                    <div class="member-body">
-                        <div class="member-body-long" id ="long-body-defaultValue(clazz)">
-                            <p>Get the default value for the given class</p>
-
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12207,9 +12194,9 @@ Nothing<span class="bounds"> &lt;: </span>Any
                     </div>
                 </div><!-- end member -->
                 
-                <div id="interpretCallToSymbol(sym)(ct)" class="member ">
+                <div id="interpret(tree)(ct)" class="member ">
                     <div class="member-title">
-                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'interpretCallToSymbol(sym)(ct)');">[+]</span>
+                        <span class="expand-button visible" onclick="toggleMemberBody(this, 'interpret(tree)(ct)');">[+]</span>
                         <span class="member-annotations">
                             
                         </span>
@@ -12221,7 +12208,7 @@ Nothing<span class="bounds"> &lt;: </span>Any
                         </span>
                         <span class="member-name ">
                             
-                                interpretCallToSymbol
+                                interpret
                             
                         </span>
 
@@ -12231,9 +12218,9 @@ Nothing<span class="bounds"> &lt;: </span>Any
                                 
                                 
                                     <span class="no-left">
-                                        sym:
+                                        tree:
                                     </span>
-                                    <a href="../../../../../.././api/dotty/tools/dotc/core/Symbols$/Symbol.html">Symbol</a>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
                                     
                                 
                             <span class="no-left">)</span>
@@ -12267,10 +12254,315 @@ T
                     </div><!-- end member-title -->
 
                     <div class="member-body">
-                        <div class="member-body-long" id ="long-body-interpretCallToSymbol(sym)(ct)">
+                        <div class="member-body-long" id ="long-body-interpret(tree)(ct)">
                             <p>Returns the interpreted result of interpreting the code a call to the symbol with default arguments.
 Return Some of the result or None if some error happen during the interpretation.</p>
 
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="interpretLiteral(value)(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpretLiteral(value)(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                interpretLiteral
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        value:
+                                    </span>
+                                    Any
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-interpretLiteral(value)(env)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="interpretQuote(tree)(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpretQuote(tree)(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                interpretQuote
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-interpretQuote(tree)(env)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="interpretStaticMethodCall(fn,args)(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpretStaticMethodCall(fn,args)(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                interpretStaticMethodCall
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        fn:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                        <span class="no-left">, </span>
+                                    
+                                
+                                    <span class="">
+                                        args: =&gt;
+                                    </span>
+                                    List
+<span class="no-left no-right">[</span>
+Object
+<span class="no-left">]</span>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-interpretStaticMethodCall(fn,args)(env)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="interpretTastyContext()(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpretTastyContext()(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                interpretTastyContext
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-interpretTastyContext()(env)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="interpretTypeQuote(tree)(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'interpretTypeQuote(tree)(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                interpretTypeQuote
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-interpretTypeQuote(tree)(env)">
+                            
                         </div>
                     </div>
                 </div><!-- end member -->
@@ -12473,6 +12765,66 @@ Nothing<span class="bounds"> &lt;: </span>Any
 
                     <div class="member-body">
                         <div class="member-body-long" id ="long-body-stopIfRuntimeException(thunk)">
+                            
+                        </div>
+                    </div>
+                </div><!-- end member -->
+                
+                <div id="unexpectedTree(tree)(env)" class="member protected">
+                    <div class="member-title">
+                        <span class="expand-button " onclick="toggleMemberBody(this, 'unexpectedTree(tree)(env)');">[+]</span>
+                        <span class="member-annotations">
+                            
+                        </span>
+                        <span class="member-modifiers">
+                            protected
+                        </span>
+                        <span class="member-kind">
+                            def
+                        </span>
+                        <span class="member-name ">
+                            
+                                unexpectedTree
+                            
+                        </span>
+
+                        
+                            
+                            <span class="no-left">(</span>
+                                
+                                
+                                    <span class="no-left">
+                                        tree:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/ast/Trees$/Instance.html#Tree">Tree</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                            <span class="no-left">(</span>
+                                
+                                <span class="no-left keyword">implicit</span>
+                                
+                                
+                                    <span class="no-left">
+                                        env:
+                                    </span>
+                                    <a href="../../../../../.././api/dotty/tools/dotc/transform/Splicer$/AbstractInterpreter.html#Env">Env</a>
+                                    
+                                
+                            <span class="no-left">)</span>
+                            
+                        
+
+                        
+
+                        
+                        <span class="no-left">: Object</span>
+                        
+                    </div><!-- end member-title -->
+
+                    <div class="member-body">
+                        <div class="member-body-long" id ="long-body-unexpectedTree(tree)(env)">
                             
                         </div>
                     </div>
