@@ -11854,7 +11854,7 @@ The example below picks up all methods with the name <code>canOverwrite</code>:<
 <h2><a href="#integration-tests" id="integration-tests">Integration tests</a></h2>
 <p>These tests are Scala source files expected to compile with Dotty (pos tests),
 along with their expected output (run tests) or errors (neg tests).</p>
-<p>All of these tests are contained in the <code>./tests/*</code> directories and can be run with the <code>testCompilation</code> command.</p>
+<p>All of these tests are contained in the <code>./tests/*</code> directories and can be run with the <code>testCompilation</code> command. Tests in folders named <code>with-compiler</code> are an exception, see next section.</p>
 <p>Currently to run these tests you need to invoke from sbt:</p>
 <pre><code class="language-bash">$ sbt
 &gt; testCompilation
@@ -11867,6 +11867,11 @@ along with their expected output (run tests) or errors (neg tests).</p>
 <p>This will run both the test <code>./tests/pos/companions.scala</code> and
 <code>./tests/neg/companions.scala</code> since both of these match the given string.
 This also means that you could run <code>testCompilation</code> with no arguments to run all integration tests.</p>
+<h3><a href="#bootstrapped-only-tests" id="bootstrapped-only-tests">Bootstrapped-only tests</a></h3>
+<p>To run <code>testCompilation</code> on a bootstrapped Dotty compiler, use
+<code>dotty-compiler-bootstrapped/testCompilation</code> (with the same syntax as above).
+Some tests can only be run in bootstrapped compilers; that includes all tests
+with <code>with-compiler</code> in their name.</p>
 
         </div>
     </div><!-- end content-body -->
