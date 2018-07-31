@@ -11860,6 +11860,11 @@ to their own methods. I.e.</p>
 <p>is lifted to</p>
 <pre><code>{ def liftedTree$n() = try body catch handler; liftedTree$n() }
 </code></pre>
+<p>However, don't lift try's without catch expressions (try-finally).
+Lifting is needed only for try-catch expressions that are evaluated in a context
+where the stack might not be empty. <code>finally</code> does not attempt to continue evaluation
+after an exception, so the fact that values on the stack are 'lost' does not matter
+(copied from <a href="https://github.com/scala/scala/pull/922">https://github.com/scala/scala/pull/922</a>).</p>
 
             </div>
             
