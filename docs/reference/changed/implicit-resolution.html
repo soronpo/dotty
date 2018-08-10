@@ -12123,11 +12123,6 @@ where the type may still be inferred:</p>
 </code></pre>
 </li>
 <li>
-<p>Implicit parameters may not have singleton types.</p>
-<pre><code>/*!*/ def f(implicit x: y.type) // error `y.type` not allowed as type of implicit
-</code></pre>
-</li>
-<li>
 <p>Nesting is now taken into account for selecting an implicit.
 Consider for instance the following scenario:</p>
 <pre><code>def f(implicit i: C) = {
