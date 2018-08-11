@@ -1,4 +1,4 @@
-<!-- This page was last generated on 2018-08-10 -->
+<!-- This page was last generated on 2018-08-11 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12127,7 +12127,7 @@ m.turnedOn.turnedOn // ERROR
 </code></pre>
 <p>Note that in the code above the actual implicit arguments for <code>IsOff</code> are never used at runtime; they serve only to establish the right constraints at compile time.
 As these terms are never used at runtime there is not real need to have them around, but they still need to be
-present in some form in the generated code to be able to do separate compilation and retain binary compatiblity.</p>
+present in some form in the generated code to be able to do separate compilation and retain binary compatibility.</p>
 <h2><a href="#how-to-define-erased-terms" id="how-to-define-erased-terms">How to define erased terms?</a></h2>
 <p>Parameters of methods and functions can be declared as erased, placing <code>erased</code> at the start of the parameter list (like <code>implicit</code>).</p>
 <pre><code class="language-scala">def methodWithErasedEv(erased ev: Ev): Int = 42
@@ -12257,8 +12257,8 @@ class K(erased x: Int) { ... }
 </li>
 <li>Erasure Semantics
 <ul>
-<li>All <code>erased</code> paramters are removed from the function</li>
-<li>All argument to <code>erased</code> paramters are not passed to the function</li>
+<li>All <code>erased</code> parameters are removed from the function</li>
+<li>All argument to <code>erased</code> parameters are not passed to the function</li>
 <li>All <code>erased</code> definitions are removed</li>
 <li>All <code>(erased T1, T2, ..., TN) =&gt; R</code> and <code>(implicit erased T1, T2, ..., TN) =&gt; R</code> become <code>() =&gt; R</code></li>
 </ul>
@@ -12270,7 +12270,7 @@ class K(erased x: Int) { ... }
 <li>Overriding
 <ul>
 <li>Member definitions overidding each other must both be <code>erased</code> or not be <code>erased</code></li>
-<li><code>def foo(x: T): U</code> cannot be overriden by <code>def foo(erased x: T): U</code> an viceversa</li>
+<li><code>def foo(x: T): U</code> cannot be overridden by <code>def foo(erased x: T): U</code> an viceversa</li>
 </ul>
 </li>
 </ol>
