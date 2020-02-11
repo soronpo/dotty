@@ -11,7 +11,7 @@ package object ops {
      * val eq3: "1" == "1" = true
      * ```
      */
-    @infix type ==[X <: AnyVal & Singleton, Y <: AnyVal & Singleton] <: Boolean & Singleton
+    @infix type ==[X <: AnyVal, Y <: AnyVal] <: Boolean
 
     /** Inequality comparison of two singleton types.
      * ```scala
@@ -20,7 +20,7 @@ package object ops {
      * val eq3: "1" != "1" = false
      * ```
      */
-    @infix type !=[X <: AnyVal & Singleton, Y <: AnyVal & Singleton] <: Boolean & Singleton
+    @infix type !=[X <: AnyVal, Y <: AnyVal] <: Boolean
   }
 
   object string {
@@ -29,7 +29,7 @@ package object ops {
      *  val hello: "hello " + "world" = "hello world"
      *  ```
      */
-    @infix type +[X <: String & Singleton, Y <: String & Singleton] <: String & Singleton
+    @infix type +[X <: String, Y <: String] <: String
   }
 
   object int {
@@ -38,35 +38,35 @@ package object ops {
      *  val sum: 2 + 2 = 4
      *  ```
      */
-    @infix type +[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    @infix type +[X <: Int, Y <: Int] <: Int
 
     /** Subtraction of two `Int` singleton types.
      *  ```scala
      *  val sub: 4 - 2 = 2
      *  ```
      */
-    @infix type -[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    @infix type -[X <: Int, Y <: Int] <: Int
 
     /** Multiplication of two `Int` singleton types.
      *  ```scala
      *  val mul: 4 * 2 = 8
      *  ```
      */
-    @infix type *[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    @infix type *[X <: Int, Y <: Int] <: Int
 
     /** Integer division of two `Int` singleton types.
      *  ```scala
      *  val div: 5 / 2 = 2
      *  ```
      */
-    @infix type /[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    @infix type /[X <: Int, Y <: Int] <: Int
 
     /** Remainder of the division of `X` by `Y`.
     *  ```scala
      *  val mod: 5 % 2 = 1
      *  ```
      */
-    @infix type %[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    @infix type %[X <: Int, Y <: Int] <: Int
 
     /** Less-than comparison of two `Int` singleton types.
      *  ```scala
@@ -74,7 +74,7 @@ package object ops {
      *  val lt2: 2 < 4 = true
      *  ```
      */
-    @infix type <[X <: Int & Singleton, Y <: Int & Singleton] <: Boolean & Singleton
+    @infix type <[X <: Int, Y <: Int] <: Boolean
 
     /** Greater-than comparison of two `Int` singleton types.
      *  ```scala
@@ -82,7 +82,7 @@ package object ops {
      *  val gt2: 2 > 2 = false
      *  ```
      */
-    @infix type >[X <: Int & Singleton, Y <: Int & Singleton] <: Boolean & Singleton
+    @infix type >[X <: Int, Y <: Int] <: Boolean
 
     /** Greater-or-equal comparison of two `Int` singleton types.
      *  ```scala
@@ -90,7 +90,7 @@ package object ops {
      *  val ge2: 2 >= 3 = false
      *  ```
      */
-    @infix type >=[X <: Int & Singleton, Y <: Int & Singleton] <: Boolean & Singleton
+    @infix type >=[X <: Int, Y <: Int] <: Boolean
 
     /** Less-or-equal comparison of two `Int` singleton types.
      *  ```scala
@@ -98,14 +98,14 @@ package object ops {
      *  val lt2: 2 <= 2 = true
      *  ```
      */
-    @infix type <=[X <: Int & Singleton, Y <: Int & Singleton] <: Boolean & Singleton
+    @infix type <=[X <: Int, Y <: Int] <: Boolean
 
     /** Absolute value of an `Int` singleton type.
      *  ```scala
      *  val abs: Abs[-1] = 1
      *  ```
      */
-    type Abs[X <: Int & Singleton] <: Int & Singleton
+    type Abs[X <: Int] <: Int
 
     /** Negation of an `Int` singleton type.
      *  ```scala
@@ -113,28 +113,28 @@ package object ops {
      *  val neg2: Neg[1] = -1
      *  ```
      */
-    type Negate[X <: Int & Singleton] <: Int & Singleton
+    type Negate[X <: Int] <: Int
 
     /** Minimum of two `Int` singleton types.
      *  ```scala
      *  val min: Min[-1, 1] = -1
      *  ```
      */
-    type Min[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    type Min[X <: Int, Y <: Int] <: Int
 
     /** Maximum of two `Int` singleton types.
      *  ```scala
      *  val abs: Abs[-1] = 1
      *  ```
      */
-    type Max[X <: Int & Singleton, Y <: Int & Singleton] <: Int & Singleton
+    type Max[X <: Int, Y <: Int] <: Int
 
     /** String conversion of an `Int` singleton type.
      *  ```scala
      *  val abs: ToString[1] = "1"
      *  ```
      */
-    type ToString[X <: Int & Singleton] <: String & Singleton
+    type ToString[X <: Int] <: String
   }
 
   object boolean {
@@ -145,7 +145,7 @@ package object ops {
      *  val notTrue: ![true] = false
      *  ```
      */
-    type ![X <: Boolean & Singleton] <: Boolean & Singleton
+    type ![X <: Boolean] <: Boolean
 
     /** Exclusive disjunction of two `Boolean` singleton types.
      * ```scala
@@ -153,7 +153,7 @@ package object ops {
      * val b: false ^ true = true
      * ```
      */
-    @infix type ^[X <: Boolean & Singleton, Y <: Boolean & Singleton] <: Boolean & Singleton
+    @infix type ^[X <: Boolean, Y <: Boolean] <: Boolean
 
     /** Conjunction of two `Boolean` singleton types.
      *  ```scala
@@ -161,7 +161,7 @@ package object ops {
      *  val b: false && true = false
      *  ```
      */
-    @infix type &&[X <: Boolean & Singleton, Y <: Boolean & Singleton] <: Boolean & Singleton
+    @infix type &&[X <: Boolean, Y <: Boolean] <: Boolean
 
     /** Disjunction of two `Boolean` singleton types.
      * ```scala
@@ -169,6 +169,6 @@ package object ops {
      * val b: false || false = false
      * ```
      */
-    @infix type ||[X <: Boolean & Singleton, Y <: Boolean & Singleton] <: Boolean & Singleton
+    @infix type ||[X <: Boolean, Y <: Boolean] <: Boolean
   }
 }
