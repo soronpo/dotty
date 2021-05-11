@@ -2,12 +2,17 @@ package dotty.tools
 package backend
 package jvm
 
+import dotty.tools.dotc.core.Flags._
+import dotty.tools.dotc.core.Symbols._
+import dotty.tools.dotc.report
+
 /**
  * This trait contains code shared between GenBCode and GenASM that depends on types defined in
  * the compiler cake (Global).
  */
-final class BCodeAsmCommon[I <: BackendInterface](val interface: I) {
-  import interface._
+final class BCodeAsmCommon[I <: DottyBackendInterface](val interface: I) {
+  import interface.{_, given}
+  import DottyBackendInterface.symExtensions
 
   /**
    * True if `classSym` is an anonymous class or a local class. I.e., false if `classSym` is a
@@ -21,8 +26,8 @@ final class BCodeAsmCommon[I <: BackendInterface](val interface: I) {
     // always top-level. However, SI-8900 shows an example where the weak name-based implementation
     // of isDelambdafyFunction failed (for a function declared in a package named "lambda").
     classSym.isAnonymousClass || {
-      val originalOwnerLexicallyEnclosingClass = classSym.originalOwner.originalLexicallyEnclosingClass
-      originalOwnerLexicallyEnclosingClass != NoSymbol && !originalOwnerLexicallyEnclosingClass.isClass
+      val originalOwner = classSym.originalOwner
+      originalOwner != NoSymbol && !originalOwner.isClass
     }
   }
 
@@ -53,10 +58,10 @@ final class BCodeAsmCommon[I <: BackendInterface](val interface: I) {
     assert(classSym.isClass, classSym)
     def enclosingMethod(sym: Symbol): Option[Symbol] = {
       if (sym.isClass || sym == NoSymbol) None
-      else if (sym.isMethod) Some(sym)
-      else enclosingMethod(sym.originalOwner.originalLexicallyEnclosingClass)
+      else if (sym.is(Method)) Some(sym)
+      else enclosingMethod(sym.originalOwner)
     }
-    enclosingMethod(classSym.originalOwner.originalLexicallyEnclosingClass)
+    enclosingMethod(classSym.originalOwner)
   }
 
   /**
@@ -85,10 +90,10 @@ final class BCodeAsmCommon[I <: BackendInterface](val interface: I) {
   def enclosingMethodAttribute(classSym: Symbol, classDesc: Symbol => String, methodDesc: Symbol => String): Option[EnclosingMethodEntry] = {
     if (isAnonymousOrLocalClass(classSym)) {
       val methodOpt = enclosingMethodForEnclosingMethodAttribute(classSym)
-      debuglog(s"enclosing method for $classSym is $methodOpt (in ${methodOpt.map(_.enclClass)})")
+      report.debuglog(s"enclosing method for $classSym is $methodOpt (in ${methodOpt.map(_.enclosingClass)})")
       Some(EnclosingMethodEntry(
         classDesc(enclosingClassForEnclosingMethodAttribute(classSym)),
-        methodOpt.map(_.javaSimpleName.toString).orNull,
+        methodOpt.map(_.javaSimpleName).orNull,
         methodOpt.map(methodDesc).orNull))
     } else {
       None

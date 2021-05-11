@@ -5,43 +5,39 @@ package reporting
 import scala.annotation.internal.sharable
 
 import core.Contexts._
-import core.TypeError
-import util.{SourcePosition, NoSourcePosition}
-import core.Decorators.PhaseListDecorator
+import core.Decorators._
 import collection.mutable
 import core.Mode
 import dotty.tools.dotc.core.Symbols.{Symbol, NoSymbol}
-import diagnostic.messages._
-import diagnostic._
+import Diagnostic._
 import ast.{tpd, Trees}
 import Message._
 import core.Decorators._
+import util.NoSourcePosition
 
-import java.lang.System.currentTimeMillis
 import java.io.{ BufferedReader, PrintWriter }
-
 
 object Reporter {
   /** Convert a SimpleReporter into a real Reporter */
   def fromSimpleReporter(simple: interfaces.SimpleReporter): Reporter =
     new Reporter with UniqueMessagePositions with HideNonSensicalMessages {
-      override def doReport(m: MessageContainer)(implicit ctx: Context): Unit = m match {
-        case m: ConditionalWarning if !m.enablingOption.value =>
+      override def doReport(dia: Diagnostic)(using Context): Unit = dia match {
+        case dia: ConditionalWarning if !dia.enablingOption.value =>
         case _ =>
-          simple.report(m)
+          simple.report(dia)
       }
     }
 
   /** A reporter that ignores reports, and doesn't record errors */
   @sharable object NoReporter extends Reporter {
-    def doReport(m: MessageContainer)(implicit ctx: Context): Unit = ()
-    override def report(m: MessageContainer)(implicit ctx: Context): Unit = ()
+    def doReport(dia: Diagnostic)(using Context): Unit = ()
+    override def report(dia: Diagnostic)(using Context): Unit = ()
   }
 
-  type ErrorHandler = (MessageContainer, Context) => Unit
+  type ErrorHandler = (Diagnostic, Context) => Unit
 
   private val defaultIncompleteHandler: ErrorHandler =
-    (mc, ctx) => ctx.reporter.report(mc)(ctx)
+    (mc, ctx) => ctx.reporter.report(mc)(using ctx)
 
   /** Show prompt if `-Xprompt` is passed as a flag to the compiler */
   def displayPrompt(reader: BufferedReader, writer: PrintWriter): Unit = {
@@ -67,129 +63,6 @@ object Reporter {
   }
 }
 
-trait Reporting { this: Context =>
-
-  /** For sending messages that are printed only if -verbose is set */
-  def inform(msg: => String, pos: SourcePosition = NoSourcePosition): Unit =
-    if (this.settings.verbose.value) this.echo(msg, pos)
-
-  def echo(msg: => String, pos: SourcePosition = NoSourcePosition): Unit =
-    reporter.report(new Info(msg, pos))
-
-  def reportWarning(warning: Warning): Unit =
-    if (!this.settings.silentWarnings.value)
-      if (this.settings.XfatalWarnings.value)
-        warning match {
-          case warning: ConditionalWarning if !warning.enablingOption.value =>
-            reporter.report(warning) // conditional warnings that are not enabled are not fatal
-          case _ =>
-            reporter.report(warning.toError)
-        }
-      else reporter.report(warning)
-
-  def deprecationWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reportWarning(new DeprecationWarning(msg, pos))
-
-  def migrationWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reportWarning(new MigrationWarning(msg, pos))
-
-  def uncheckedWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reportWarning(new UncheckedWarning(msg, pos))
-
-  def featureWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reportWarning(new FeatureWarning(msg, pos))
-
-  def featureWarning(feature: String, featureDescription: String,
-      featureUseSite: Symbol, required: Boolean, pos: SourcePosition): Unit = {
-    val req = if (required) "needs to" else "should"
-    val fqname = s"scala.language.$feature"
-
-    val explain =
-      if (reporter.isReportedFeatureUseSite(featureUseSite)) ""
-      else {
-        reporter.reportNewFeatureUseSite(featureUseSite)
-        s"""
-           |See the Scala docs for value $fqname for a discussion
-           |why the feature $req be explicitly enabled.""".stripMargin
-      }
-
-    val msg = s"""$featureDescription $req be enabled
-                 |by adding the import clause 'import $fqname'
-                 |or by setting the compiler option -language:$feature.$explain""".stripMargin
-    if (required) error(msg, pos)
-    else reportWarning(new FeatureWarning(msg, pos))
-  }
-
-  def warning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reportWarning(new Warning(msg, addInlineds(pos)))
-
-  def strictWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit = {
-    val fullPos = addInlineds(pos)
-    if (this.settings.strict.value) error(msg, fullPos)
-    else reportWarning(
-      new ExtendMessage(() => msg)(_ + "\n(This would be an error under strict mode)")
-        .warning(fullPos))
-  }
-
-  def error(msg: => Message, pos: SourcePosition = NoSourcePosition, sticky: Boolean = false): Unit = {
-    val fullPos = addInlineds(pos)
-    reporter.report(if (sticky) new StickyError(msg, fullPos) else new Error(msg, fullPos))
-    if ctx.settings.YdebugError.value then Thread.dumpStack()
-  }
-
-  def error(ex: TypeError, pos: SourcePosition): Unit = {
-    error(ex.toMessage, pos, sticky = true)
-    if (ctx.settings.YdebugTypeError.value)
-      ex.printStackTrace
-  }
-
-  def errorOrMigrationWarning(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    if (ctx.scala2CompatMode) migrationWarning(msg, pos) else error(msg, pos)
-
-  def restrictionError(msg: => Message, pos: SourcePosition = NoSourcePosition): Unit =
-    reporter.report {
-      new ExtendMessage(() => msg)(m => s"Implementation restriction: $m").error(addInlineds(pos))
-    }
-
-  def incompleteInputError(msg: => Message, pos: SourcePosition = NoSourcePosition)(implicit ctx: Context): Unit =
-    reporter.incomplete(new Error(msg, pos))(ctx)
-
-  /** Log msg if settings.log contains the current phase.
-   *  See [[config.CompilerCommand#explainAdvanced]] for the exact meaning of
-   *  "contains" here.
-   */
-  def log(msg: => String, pos: SourcePosition = NoSourcePosition): Unit =
-    if (this.settings.Ylog.value.containsPhase(phase))
-      echo(s"[log ${ctx.phasesStack.reverse.mkString(" -> ")}] $msg", pos)
-
-  def debuglog(msg: => String): Unit =
-    if (ctx.debug) log(msg)
-
-  def informTime(msg: => String, start: Long): Unit = {
-    def elapsed = s" in ${currentTimeMillis - start}ms"
-    informProgress(msg + elapsed)
-  }
-
-  def informProgress(msg: => String): Unit =
-    inform("[" + msg + "]")
-
-  def logWith[T](msg: => String)(value: T): T = {
-    log(msg + " " + value)
-    value
-  }
-
-  def debugwarn(msg: => String, pos: SourcePosition = NoSourcePosition): Unit =
-    if (this.settings.Ydebug.value) warning(msg, pos)
-
-  private def addInlineds(pos: SourcePosition)(implicit ctx: Context) = {
-    def recur(pos: SourcePosition, inlineds: List[Trees.Tree[?]]): SourcePosition = inlineds match {
-      case inlined :: inlineds1 => pos.withOuter(recur(inlined.sourcePos, inlineds1))
-      case Nil => pos
-    }
-    recur(pos, tpd.enclosingInlineds)
-  }
-}
-
 /**
  * This interface provides methods to issue information, warning and
  * error messages.
@@ -198,7 +71,7 @@ abstract class Reporter extends interfaces.ReporterResult {
   import Reporter._
 
   /** Report a diagnostic */
-  def doReport(m: MessageContainer)(implicit ctx: Context): Unit
+  def doReport(dia: Diagnostic)(using Context): Unit
 
   /** Whether very long lines can be truncated.  This exists so important
    *  debugging information (like printing the classpath) is not rendered
@@ -252,9 +125,9 @@ abstract class Reporter extends interfaces.ReporterResult {
 
   /** Run `op` and return `true` if errors were reported by this reporter.
    */
-  def reportsErrorsFor(op: Context => Unit)(given ctx: Context): Boolean = {
+  def reportsErrorsFor(op: Context ?=> Unit)(using Context): Boolean = {
     val initial = errorCount
-    op(ctx)
+    op
     errorCount > initial
   }
 
@@ -267,25 +140,28 @@ abstract class Reporter extends interfaces.ReporterResult {
 
   var unreportedWarnings: Map[String, Int] = Map.empty
 
-  def report(m: MessageContainer)(implicit ctx: Context): Unit =
-    if (!isHidden(m)) {
-      doReport(m)(ctx.addMode(Mode.Printing))
-      m match {
-        case m: ConditionalWarning if !m.enablingOption.value =>
-          val key = m.enablingOption.name
+  def report(dia: Diagnostic)(using Context): Unit =
+    val isSummarized = dia match
+      case dia: ConditionalWarning => !dia.enablingOption.value
+      case _ => false
+    if isSummarized  // avoid isHidden test for summarized warnings so that message is not forced
+       || !isHidden(dia)
+    then
+      withMode(Mode.Printing)(doReport(dia))
+      dia match
+        case dia: ConditionalWarning if !dia.enablingOption.value =>
+          val key = dia.enablingOption.name
           unreportedWarnings =
             unreportedWarnings.updated(key, unreportedWarnings.getOrElse(key, 0) + 1)
-        case m: Warning => _warningCount += 1
-        case m: Error =>
-          errors = m :: errors
+        case dia: Warning => _warningCount += 1
+        case dia: Error =>
+          errors = dia :: errors
           _errorCount += 1
-        case m: Info => // nothing to do here
+        case dia: Info => // nothing to do here
         // match error if d is something else
-      }
-    }
 
-  def incomplete(m: MessageContainer)(implicit ctx: Context): Unit =
-    incompleteHandler(m, ctx)
+  def incomplete(dia: Diagnostic)(using Context): Unit =
+    incompleteHandler(dia, ctx)
 
   /** Summary of warnings and errors */
   def summary: String = {
@@ -300,9 +176,9 @@ abstract class Reporter extends interfaces.ReporterResult {
   }
 
   /** Print the summary of warnings and errors */
-  def printSummary(implicit ctx: Context): Unit = {
+  def printSummary(using Context): Unit = {
     val s = summary
-    if (s != "") ctx.echo(s)
+    if (s != "") report(new Info(s, NoSourcePosition))
   }
 
   /** Returns a string meaning "n elements". */
@@ -313,7 +189,7 @@ abstract class Reporter extends interfaces.ReporterResult {
   }
 
   /** Should this diagnostic not be reported at all? */
-  def isHidden(m: MessageContainer)(implicit ctx: Context): Boolean =
+  def isHidden(dia: Diagnostic)(using Context): Boolean =
     ctx.mode.is(Mode.Printing)
 
   /** Does this reporter contain errors that have yet to be reported by its outer reporter ?
@@ -322,9 +198,13 @@ abstract class Reporter extends interfaces.ReporterResult {
   def hasUnreportedErrors: Boolean = false
 
   /** If this reporter buffers messages, remove and return all buffered messages. */
-  def removeBufferedMessages(implicit ctx: Context): List[MessageContainer] = Nil
+  def removeBufferedMessages(using Context): List[Diagnostic] = Nil
 
   /** Issue all error messages in this reporter to next outer one, or make sure they are written. */
-  def flush()(implicit ctx: Context): Unit =
-    removeBufferedMessages.foreach(ctx.reporter.report)
+  def flush()(using Context): Unit =
+    val msgs = removeBufferedMessages
+    if msgs.nonEmpty then msgs.foreach(ctx.reporter.report)
+
+  /** If this reporter buffers messages, all buffered messages, otherwise Nil */
+  def pendingMessages(using Context): List[Diagnostic] = Nil
 }

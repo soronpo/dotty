@@ -20,7 +20,7 @@ object OverridingPairs {
   /** The cursor class
    *  @param base   the base class that contains the overriding pairs
    */
-  class Cursor(base: Symbol)(implicit ctx: Context) {
+  class Cursor(base: Symbol)(using Context) {
 
     private val self = base.thisType
 
@@ -33,14 +33,14 @@ object OverridingPairs {
      *  pair has already been treated in a parent class.
      *  This may be refined in subclasses. @see Bridges for a use case.
      */
-    protected def parents: Array[Symbol] = base.info.parents.toArray map (_.typeSymbol)
+    protected def parents: Array[Symbol] = base.info.parents.toArray.map(_.typeSymbol)
 
     /** Does `sym1` match `sym2` so that it qualifies as overriding.
      *  Types always match. Term symbols match if their membertypes
      *  relative to <base>.this do
      */
     protected def matches(sym1: Symbol, sym2: Symbol): Boolean =
-      sym1.isType || self.memberInfo(sym1).matches(self.memberInfo(sym2))
+      sym1.isType || sym1.asSeenFrom(self).matches(sym2.asSeenFrom(self))
 
     /** The symbols that can take part in an overriding pair */
     private val decls = {
@@ -64,12 +64,26 @@ object OverridingPairs {
       decls
     }
 
-    private val subParents = {
-      val subParents = newMutableSymbolMap[BitSet]
-      for (bc <- base.info.baseClasses)
-        subParents(bc) = BitSet(parents.indices.filter(parents(_).derivesFrom(bc)): _*)
-      subParents
-    }
+    /** Is `parent` a qualified sub-parent of `bc`?
+     *  @pre `parent` is a parent class of `base` and it derives from `bc`.
+     *  @return true if the `bc`-basetype of the parent's type is the same as
+     *               the `bc`-basetype of base. In that case, overriding checks
+     *               relative to `parent` already subsume overriding checks
+     *               relative to `base`. See neg/11719a.scala for where this makes
+     *               a difference.
+     */
+    protected def isSubParent(parent: Symbol, bc: Symbol)(using Context) =
+      bc.typeParams.isEmpty
+      || self.baseType(parent).baseType(bc) == self.baseType(bc)
+
+    private val subParents = MutableSymbolMap[BitSet]()
+
+    for bc <- base.info.baseClasses do
+      var bits = BitSet.empty
+      for i <- 0 until parents.length do
+        if parents(i).derivesFrom(bc) && isSubParent(parents(i), bc)
+        then bits += i
+      subParents(bc) = bits
 
     private def hasCommonParentAsSubclass(cls1: Symbol, cls2: Symbol): Boolean =
       (subParents(cls1) intersect subParents(cls2)).nonEmpty
@@ -78,7 +92,7 @@ object OverridingPairs {
      *  (maybe excluded because of hasCommonParentAsSubclass).
      *  These will not appear as overriding
      */
-    private val visited = new mutable.HashSet[Symbol]
+    private val visited = util.HashSet[Symbol]()
 
     /** The current entry candidate for overriding
      */
@@ -134,7 +148,7 @@ object OverridingPairs {
             case ex: TypeError =>
               // See neg/i1750a for an example where a cyclic error can arise.
               // The root cause in this example is an illegal "override" of an inner trait
-              ctx.error(ex, base.sourcePos)
+              report.error(ex, base.srcPos)
           }
         else {
           curEntry = curEntry.prev

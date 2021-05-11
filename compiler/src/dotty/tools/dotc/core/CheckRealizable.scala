@@ -6,6 +6,8 @@ import Contexts._, Types._, Symbols._, Names._, Flags._
 import Denotations.SingleDenotation
 import Decorators._
 import collection.mutable
+import config.SourceVersion.future
+import config.Feature.sourceVersion
 
 /** Realizability status */
 object CheckRealizable {
@@ -21,30 +23,30 @@ object CheckRealizable {
 
   object NotConcrete extends Realizability(" is not a concrete type")
 
-  class NotFinal(sym: Symbol)(implicit ctx: Context)
+  class NotFinal(sym: Symbol)(using Context)
   extends Realizability(i" refers to nonfinal $sym")
 
-  class HasProblemBounds(name: Name, info: Type)(implicit ctx: Context)
+  class HasProblemBounds(name: Name, info: Type)(using Context)
   extends Realizability(i" has a member $name with possibly conflicting bounds ${info.bounds.lo} <: ... <: ${info.bounds.hi}")
 
-  class HasProblemBaseArg(typ: Type, argBounds: TypeBounds)(implicit ctx: Context)
+  class HasProblemBaseArg(typ: Type, argBounds: TypeBounds)(using Context)
   extends Realizability(i" has a base type $typ with possibly conflicting parameter bounds ${argBounds.lo} <: ... <: ${argBounds.hi}")
 
-  class HasProblemBase(base1: Type, base2: Type)(implicit ctx: Context)
+  class HasProblemBase(base1: Type, base2: Type)(using Context)
   extends Realizability(i" has conflicting base types $base1 and $base2")
 
-  class HasProblemField(fld: SingleDenotation, problem: Realizability)(implicit ctx: Context)
+  class HasProblemField(fld: SingleDenotation, problem: Realizability)(using Context)
   extends Realizability(i" has a member $fld which is not a legal path\nsince ${fld.symbol.name}: ${fld.info}${problem.msg}")
 
-  class ProblemInUnderlying(tp: Type, problem: Realizability)(implicit ctx: Context)
+  class ProblemInUnderlying(tp: Type, problem: Realizability)(using Context)
   extends Realizability(i"s underlying type ${tp}${problem.msg}") {
     assert(problem != Realizable)
   }
 
-  def realizability(tp: Type)(implicit ctx: Context): Realizability =
+  def realizability(tp: Type)(using Context): Realizability =
     new CheckRealizable().realizability(tp)
 
-  def boundsRealizability(tp: Type)(implicit ctx: Context): Realizability =
+  def boundsRealizability(tp: Type)(using Context): Realizability =
     new CheckRealizable().boundsRealizability(tp)
 
   private val LateInitializedFlags = Lazy | Erased
@@ -59,7 +61,7 @@ object CheckRealizable {
   * In general, a realizable type can have multiple inhabitants, hence it need not be stable (in the sense of
   * Type.isStable).
   */
-class CheckRealizable(implicit ctx: Context) {
+class CheckRealizable(using Context) {
   import CheckRealizable._
 
   /** A set of all fields that have already been checked. Used
@@ -116,6 +118,7 @@ class CheckRealizable(implicit ctx: Context) {
     case tp =>
       def isConcrete(tp: Type): Boolean = tp.dealias match {
         case tp: TypeRef => tp.symbol.isClass
+        case tp: TypeParamRef => false
         case tp: TypeProxy => isConcrete(tp.underlying)
         case tp: AndType => isConcrete(tp.tp1) && isConcrete(tp.tp2)
         case tp: OrType  => isConcrete(tp.tp1) && isConcrete(tp.tp2)
@@ -146,21 +149,24 @@ class CheckRealizable(implicit ctx: Context) {
    */
   private def boundsRealizability(tp: Type) = {
 
-    val memberProblems =
+    val memberProblems = withMode(Mode.CheckBounds) {
       for {
         mbr <- tp.nonClassTypeMembers
         if !(mbr.info.loBound <:< mbr.info.hiBound)
       }
       yield new HasProblemBounds(mbr.name, mbr.info)
+    }
 
-    val refinementProblems =
+    val refinementProblems = withMode(Mode.CheckBounds) {
       for {
         name <- refinedNames(tp)
         if (name.isTypeName)
         mbr <- tp.member(name).alternatives
         if !(mbr.info.loBound <:< mbr.info.hiBound)
       }
-      yield new HasProblemBounds(name, mbr.info)
+      yield
+        new HasProblemBounds(name, mbr.info)
+    }
 
     def baseTypeProblems(base: Type) = base match {
       case AndType(base1, base2) =>
@@ -197,8 +203,8 @@ class CheckRealizable(implicit ctx: Context) {
           realizability(fld.info).mapError(r => new HasProblemField(fld, r))
         }
       }
-    if (ctx.settings.strict.value)
-      // check fields only under strict mode for now.
+    if sourceVersion.isAtLeast(future) then
+      // check fields only from version 3.x.
       // Reason: An embedded field could well be nullable, which means it
       // should not be part of a path and need not be checked; but we cannot recognize
       // this situation until we have a typesystem that tracks nullability.

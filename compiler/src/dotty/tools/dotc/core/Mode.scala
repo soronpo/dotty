@@ -41,10 +41,8 @@ object Mode {
    */
   val TypevarsMissContext: Mode = newMode(4, "TypevarsMissContext")
 
+  /** Are we looking for cyclic references? */
   val CheckCyclic: Mode = newMode(5, "CheckCyclic")
-
-  /** We are looking at the arguments of a supercall */
-  val InSuperCall: Mode = newMode(6, "InSuperCall")
 
   /** We are in a pattern alternative */
   val InPatternAlternative: Mode = newMode(7, "InPatternAlternative")
@@ -58,8 +56,8 @@ object Mode {
   /** Assume -language:strictEquality */
   val StrictEquality: Mode = newMode(9, "StrictEquality")
 
-  /** We are currently printing something: avoid to produce more logs about
-   *  the printing
+  /** We are currently printing something: avoid producing more logs about
+   *  the printing.
    */
   val Printing: Mode = newMode(10, "Printing")
 
@@ -71,6 +69,11 @@ object Mode {
 
   /** We are currently unpickling Scala2 info */
   val Scala2Unpickling: Mode = newMode(13, "Scala2Unpickling")
+
+  /** We are currently checking bounds to be non-empty, so we should not
+   *  do any widening when computing members of refined types.
+   */
+  val CheckBounds: Mode = newMode(14, "CheckBounds")
 
   /** Use Scala2 scheme for overloading and implicit resolution */
   val OldOverloadingResolution: Mode = newMode(15, "OldOverloadingResolution")
@@ -110,4 +113,18 @@ object Mode {
 
   /** Are we in a quote in a pattern? */
   val QuotedPattern: Mode = newMode(25, "QuotedPattern")
+
+  /** Are we typechecking the rhs of an extension method? */
+  val InExtensionMethod: Mode = newMode(26, "InExtensionMethod")
+
+  /** Are we resolving a TypeTest node? */
+  val InTypeTest: Mode = newMode(27, "InTypeTest")
+
+  /** Are we enforcing null safety? */
+  val SafeNulls = newMode(28, "SafeNulls")
+
+  /** We are typing the body of the condition of an `inline if` or the scrutinee of an `inline match`
+   *  This mode forces expansion of inline calls in those positions even during typing.
+   */
+  val ForceInline: Mode = newMode(29, "ForceInline")
 }

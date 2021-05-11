@@ -4,19 +4,23 @@ about: Report an issue about the Dotty Compiler (not bug or crash)
 title: ''
 labels:
 assignees: ''
-
 ---
 
-## minimized example
+## Compiler version
+
+If you're not sure what version you're using, run `print scalaVersion` from sbt
+(if you're running scalac manually, use `scalac -version` instead).
+
+## Minimized example
 
 ```Scala
 println("hello, world")
 ```
 
-## Compilation output
+## Output
 
 ```scala
-// TODO add compilation output here
+// TODO add output here
 ```
 
-## expectation
+## Expectation

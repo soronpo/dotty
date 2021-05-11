@@ -9,16 +9,20 @@ import scala.collection.mutable
 import scala.collection.JavaConverters._
 import dotty.tools.dotc.transform.SymUtils._
 import dotty.tools.dotc.interfaces
+import dotty.tools.dotc.report
+
 import dotty.tools.dotc.util.SourceFile
 import java.util.Optional
 
 import dotty.tools.dotc.core._
 import dotty.tools.dotc.sbt.ExtractDependencies
 import Contexts._
+import Phases._
 import Symbols._
 import Decorators._
 
 import java.io.DataOutputStream
+import java.nio.channels.ClosedByInterruptException
 
 import dotty.tools.tasty.{ TastyBuffer, TastyHeaderUnpickler }
 
@@ -32,7 +36,7 @@ import dotty.tools.io._
 class GenBCode extends Phase {
   def phaseName: String = GenBCode.name
 
-  private val superCallsMap = newMutableSymbolMap[Set[ClassSymbol]]
+  private val superCallsMap = new MutableSymbolMap[Set[ClassSymbol]]
   def registerSuperCall(sym: Symbol, calls: ClassSymbol): Unit = {
     val old = superCallsMap.getOrElse(sym, Set.empty)
     superCallsMap.update(sym, old + calls)
@@ -40,25 +44,30 @@ class GenBCode extends Phase {
 
   private var myOutput: AbstractFile = _
 
-  private def outputDir(implicit ctx: Context): AbstractFile = {
+  private def outputDir(using Context): AbstractFile = {
     if (myOutput eq null)
       myOutput = ctx.settings.outputDir.value
     myOutput
   }
 
-  def run(implicit ctx: Context): Unit = {
-    new GenBCodePipeline(new DottyBackendInterface(
-      outputDir, superCallsMap.toMap)(ctx))(ctx).run(ctx.compilationUnit.tpdTree)
-  }
+  private var myPrimitives: DottyPrimitives = null
 
-  override def runOn(units: List[CompilationUnit])(implicit ctx: Context): List[CompilationUnit] = {
+  def run(using Context): Unit =
+    if myPrimitives == null then myPrimitives = new DottyPrimitives(ctx)
+    new GenBCodePipeline(
+      DottyBackendInterface(outputDir, superCallsMap),
+      myPrimitives
+    ).run(ctx.compilationUnit.tpdTree)
+
+
+  override def runOn(units: List[CompilationUnit])(using Context): List[CompilationUnit] = {
     try super.runOn(units)
     finally myOutput match {
       case jar: JarArchive =>
         if (ctx.run.suspendedUnits.nonEmpty)
           // If we close the jar the next run will not be able to write on the jar.
           // But if we do not close it we cannot use it as part of the macro classpath of the suspended files.
-          ctx.error("Can not suspend and output to a jar at the same time. See suspension with -Xprint-suspension.")
+          report.error("Can not suspend and output to a jar at the same time. See suspension with -Xprint-suspension.")
         jar.close()
       case _ =>
     }
@@ -69,7 +78,8 @@ object GenBCode {
   val name: String = "genBCode"
 }
 
-class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context) extends BCodeSyncAndTry {
+class GenBCodePipeline(val int: DottyBackendInterface, val primitives: DottyPrimitives)(using Context) extends BCodeSyncAndTry {
+  import DottyBackendInterface.symExtensions
 
   private var tree: Tree = _
 
@@ -162,12 +172,12 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
             if (classSymbol.effectiveName.toString < dupClassSym.effectiveName.toString) (classSymbol, dupClassSym)
             else (dupClassSym, classSymbol)
           val same = classSymbol.effectiveName.toString == dupClassSym.effectiveName.toString
-          ctx.atPhase(ctx.typerPhase) {
+          atPhase(typerPhase) {
             if (same)
-              summon[Context].warning( // FIXME: This should really be an error, but then FromTasty tests fail
+              report.warning( // FIXME: This should really be an error, but then FromTasty tests fail
                 s"${cl1.show} and ${cl2.showLocated} produce classes that overwrite one another", cl1.sourcePos)
             else
-              summon[Context].warning(s"${cl1.show} differs only in case from ${cl2.showLocated}. " +
+              report.warning(s"${cl1.show} differs only in case from ${cl2.showLocated}. " +
                 "Such classes will overwrite one another on case-insensitive filesystems.", cl1.sourcePos)
           }
       }
@@ -183,8 +193,10 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
         else {
           try   { /*withCurrentUnit(item.cunit)*/(visit(item)) }
           catch {
+            case ex: InterruptedException =>
+              throw ex
             case ex: Throwable =>
-              println(s"Error while emitting ${int.sourceFileFor(item.cunit)}")
+              println(s"Error while emitting ${item.cunit.source.file.name}")
               throw ex
           }
         }
@@ -203,11 +215,11 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
 
       // -------------- mirror class, if needed --------------
       val mirrorC =
-        if (int.symHelper(claszSymbol).isTopLevelModuleClass) {
+        if (claszSymbol.isTopLevelModuleClass) {
           if (claszSymbol.companionClass == NoSymbol) {
             mirrorCodeGen.genMirrorClass(claszSymbol, cunit)
           } else {
-            ctx.log(s"No mirror class for module with linked class: ${claszSymbol.fullName}")
+            report.log(s"No mirror class for module with linked class: ${claszSymbol.showFullName}")
             null
           }
         } else null
@@ -222,28 +234,27 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
         for (binary <- ctx.compilationUnit.pickled.get(claszSymbol.asClass)) {
           val store = if (mirrorC ne null) mirrorC else plainC
           val tasty =
-            if (!ctx.settings.YemitTastyInClass.value) {
-              val outTastyFile = getFileForClassfile(outF, store.name, ".tasty")
-              val outstream = new DataOutputStream(outTastyFile.bufferedOutput)
-              try outstream.write(binary)
-              finally outstream.close()
+            val outTastyFile = getFileForClassfile(outF, store.name, ".tasty")
+            val outstream = new DataOutputStream(outTastyFile.bufferedOutput)
+            try outstream.write(binary())
+            catch case ex: ClosedByInterruptException =>
+              try
+                outTastyFile.delete() // don't leave an empty or half-written tastyfile around after an interrupt
+              catch case _: Throwable =>
+              throw ex
+            finally outstream.close()
 
-              val uuid = new TastyHeaderUnpickler(binary).readHeader()
-              val lo = uuid.getMostSignificantBits
-              val hi = uuid.getLeastSignificantBits
+            val uuid = new TastyHeaderUnpickler(binary()).readHeader()
+            val lo = uuid.getMostSignificantBits
+            val hi = uuid.getLeastSignificantBits
 
-              // TASTY attribute is created but only the UUID bytes are stored in it.
-              // A TASTY attribute has length 16 if and only if the .tasty file exists.
-              val buffer = new TastyBuffer(16)
-              buffer.writeUncompressedLong(lo)
-              buffer.writeUncompressedLong(hi)
-              buffer.bytes
-            } else {
-              // Create an empty file to signal that a tasty section exist in the corresponding .class
-              // This is much cheaper and simpler to check than doing classfile parsing
-              getFileForClassfile(outF, store.name, ".hasTasty")
-              binary
-            }
+            // TASTY attribute is created but only the UUID bytes are stored in it.
+            // A TASTY attribute has length 16 if and only if the .tasty file exists.
+            val buffer = new TastyBuffer(16)
+            buffer.writeUncompressedLong(lo)
+            buffer.writeUncompressedLong(hi)
+            buffer.bytes
+
           val dataAttr = createJAttribute(nme.TASTYATTR.mangledString, tasty, 0, tasty.length)
           store.visitAttribute(dataAttr)
         }
@@ -259,7 +270,7 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
             getFileForClassfile(outF, cls.name, ".class")
           } catch {
             case e: FileConflictException =>
-              ctx.error(s"error writing ${cls.name}: ${e.getMessage}")
+              report.error(s"error writing ${cls.name}: ${e.getMessage}")
               null
           }
         } else null
@@ -267,7 +278,7 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
 
       // ----------- compiler and sbt's callbacks
 
-      val (fullClassName, isLocal) = ctx.atPhase(ctx.sbtExtractDependenciesPhase) {
+      val (fullClassName, isLocal) = atPhase(sbtExtractDependenciesPhase) {
         (ExtractDependencies.classNameAsString(claszSymbol), claszSymbol.isLocal)
       }
 
@@ -323,11 +334,13 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
           val insn = iter.next()
           insn match {
             case indy: InvokeDynamicInsnNode
-                // No need to check the exact bsmArgs because we only generate
-                // altMetafactory indy calls for serializable lambdas.
-                if indy.bsm == BCodeBodyBuilder.lambdaMetaFactoryAltMetafactoryHandle =>
-              val implMethod = indy.bsmArgs(1).asInstanceOf[Handle]
-              indyLambdaBodyMethods += implMethod
+              if indy.bsm == BCodeBodyBuilder.lambdaMetaFactoryAltMetafactoryHandle =>
+                import java.lang.invoke.LambdaMetafactory.FLAG_SERIALIZABLE
+                val metafactoryFlags = indy.bsmArgs(3).asInstanceOf[Integer].toInt
+                val isSerializable = (metafactoryFlags & FLAG_SERIALIZABLE) != 0
+                if isSerializable then
+                  val implMethod = indy.bsmArgs(1).asInstanceOf[Handle]
+                  indyLambdaBodyMethods += implMethod
             case _ =>
           }
         }
@@ -417,6 +430,8 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
               addLambdaDeserialize(plainNode, serializableLambdas)
             addToQ3(item)
           } catch {
+            case ex: InterruptedException =>
+              throw ex
             case ex: Throwable =>
               println(s"Error while emitting ${item.plain.classNode.name}")
               throw ex
@@ -530,7 +545,7 @@ class GenBCodePipeline(val int: DottyBackendInterface)(implicit val ctx: Context
         case PackageDef(_, stats) => stats foreach gen
         case ValDef(name, tpt, rhs) => () // module val not emitted
         case cd: TypeDef         =>
-          q1 add Item1(arrivalPos, cd, int.currentUnit)
+          q1 add Item1(arrivalPos, cd, int.ctx.compilationUnit)
           arrivalPos += 1
       }
     }

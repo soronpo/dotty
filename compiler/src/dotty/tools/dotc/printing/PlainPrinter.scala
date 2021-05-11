@@ -3,7 +3,9 @@ package printing
 
 import core._
 import Texts._, Types._, Flags._, Names._, Symbols._, NameOps._, Constants._, Denotations._
-import Contexts.Context, Scopes.Scope, Denotations.Denotation, Annotations.Annotation
+import StdNames._
+import Contexts._
+import Scopes.Scope, Denotations.Denotation, Annotations.Annotation
 import StdNames.nme
 import ast.Trees._
 import typer.Implicits._
@@ -11,36 +13,33 @@ import typer.ImportInfo
 import Variances.varianceSign
 import util.SourcePosition
 import java.lang.Integer.toOctalString
-import config.Config.summarizeDepth
 import scala.util.control.NonFatal
 import scala.annotation.switch
 
 class PlainPrinter(_ctx: Context) extends Printer {
-  protected implicit def ctx: Context = _ctx.addMode(Mode.Printing)
+  /** The context of all public methods in Printer and subclasses.
+   *  Overridden in RefinedPrinter.
+   */
+  protected def curCtx: Context = _ctx.addMode(Mode.Printing)
+  protected given [DummyToEnforceDef]: Context = curCtx
+
   protected def printDebug = ctx.settings.YprintDebug.value
 
   private var openRecs: List[RecType] = Nil
 
   protected def maxToTextRecursions: Int = 100
 
-  protected final def controlled(op: => Text): Text =
-    if (ctx.base.toTextRecursions < maxToTextRecursions && ctx.base.toTextRecursions < maxSummarized)
-      try {
-        ctx.base.toTextRecursions += 1
-        op
-      }
-      finally
-        ctx.base.toTextRecursions -= 1
-    else {
-      if (ctx.base.toTextRecursions >= maxToTextRecursions)
-        recursionLimitExceeded()
-      "..."
-    }
+  protected def showUniqueIds = ctx.settings.uniqid.value || Printer.debugPrintUnique
 
-  protected def recursionLimitExceeded(): Unit = {
-    ctx.warning("Exceeded recursion depth attempting to print.")
-    if (ctx.debug) Thread.dumpStack()
-  }
+  protected final def limiter: MessageLimiter = ctx.property(MessageLimiter).get
+
+  protected def controlled(op: => Text): Text = limiter.controlled(op)
+
+  def Str(str: String, lineRange: LineRange = EmptyLineRange): Str =
+    limiter.register(str)
+    Texts.Str(str, lineRange)
+
+  given stringToText: Conversion[String, Text] = Str(_)
 
   /** If true, tweak output so it is the same before and after pickling */
   protected def homogenizedView: Boolean = ctx.settings.YtestPickler.value
@@ -50,19 +49,23 @@ class PlainPrinter(_ctx: Context) extends Printer {
     if (homogenizedView)
       tp match {
         case tp: ThisType if tp.cls.is(Package) && !tp.cls.isEffectiveRoot =>
-          ctx.requiredPackage(tp.cls.fullName).termRef
+          requiredPackage(tp.cls.fullName).termRef
         case tp: TypeVar if tp.isInstantiated =>
           homogenize(tp.instanceOpt)
         case AndType(tp1, tp2) =>
           homogenize(tp1) & homogenize(tp2)
         case OrType(tp1, tp2) =>
           homogenize(tp1) | homogenize(tp2)
+        case AnnotatedType(parent, annot)
+        if !ctx.mode.is(Mode.Type) && annot.symbol == defn.UncheckedVarianceAnnot =>
+          homogenize(parent)
         case tp: SkolemType =>
           homogenize(tp.info)
         case tp: LazyRef =>
           homogenize(tp.ref)
-        case AppliedType(tycon, args) =>
-          tycon.dealias.appliedTo(args)
+        case tp @ AppliedType(tycon, args) =>
+          if (defn.isCompiletimeAppliedType(tycon.typeSymbol)) tp.tryCompiletimeConstantFold
+          else tycon.dealias.appliedTo(args)
         case _ =>
           tp
       }
@@ -90,7 +93,10 @@ class PlainPrinter(_ctx: Context) extends Printer {
     || (sym.name == nme.PACKAGE)               // package
   )
 
-  def nameString(name: Name): String = name.toString
+  def nameString(name: Name): String =
+    if (name eq tpnme.FromJavaObject) && !printDebug
+    then nameString(tpnme.Object)
+    else name.toString
 
   def toText(name: Name): Text = Str(nameString(name))
 
@@ -111,7 +117,8 @@ class PlainPrinter(_ctx: Context) extends Printer {
   /** Pretty-print comma-separated type arguments for a constructor to be inserted among parentheses or brackets
     * (hence with `GlobalPrec` precedence).
     */
-  protected def argsText(args: List[Type]): Text = atPrec(GlobalPrec) { Text(args.map(arg => argText(arg) ), ", ") }
+  protected def argsText(args: List[Type]): Text =
+    atPrec(GlobalPrec) { Text(args.map(arg => argText(arg) ), ", ") }
 
   /** The longest sequence of refinement types, starting at given type
    *  and following parents.
@@ -123,11 +130,13 @@ class PlainPrinter(_ctx: Context) extends Printer {
     })
 
   /** Direct references to these symbols are printed without their prefix for convenience.
-   *  They are either aliased in scala.Predef or in the scala package object.
+   *  They are either aliased in scala.Predef or in the scala package object, as well as `Object`
    */
   private lazy val printWithoutPrefix: Set[Symbol] =
     (defn.ScalaPredefModule.termRef.typeAliasMembers
       ++ defn.ScalaPackageObject.termRef.typeAliasMembers).map(_.info.classSymbol).toSet
+    + defn.ObjectClass
+    + defn.FromJavaObjectSymbol
 
   def toText(tp: Type): Text = controlled {
     homogenize(tp) match {
@@ -145,7 +154,7 @@ class PlainPrinter(_ctx: Context) extends Printer {
         else
           toTextPrefix(tp.prefix) ~ selectionString(tp)
       case tp: TermParamRef =>
-        ParamRefNameString(tp) ~ ".type"
+        ParamRefNameString(tp) ~ lambdaHash(tp.binder) ~ ".type"
       case tp: TypeParamRef =>
         ParamRefNameString(tp) ~ lambdaHash(tp.binder)
       case tp: SingletonType =>
@@ -169,18 +178,21 @@ class PlainPrinter(_ctx: Context) extends Printer {
       case MatchType(bound, scrutinee, cases) =>
         changePrec(GlobalPrec) {
           def caseText(tp: Type): Text = tp match {
+            case tp: HKTypeLambda => caseText(tp.resultType)
             case defn.MatchCase(pat, body) => "case " ~ toText(pat) ~ " => " ~ toText(body)
             case _ => "case " ~ toText(tp)
           }
           def casesText = Text(cases.map(caseText), "\n")
-            atPrec(InfixPrec) { toText(scrutinee) } ~
-            keywordStr(" match ") ~ "{" ~ casesText ~ "}" ~
-            (" <: " ~ toText(bound) provided !bound.isAny)
+          atPrec(InfixPrec) { toText(scrutinee) } ~
+          keywordStr(" match ") ~ "{" ~ casesText ~ "}" ~
+          (" <: " ~ toText(bound) provided !bound.isAny)
         }.close
+      case tp: PreviousErrorType if ctx.settings.XprintTypes.value =>
+        "<error>" // do not print previously reported error message because they may try to print this error type again recuresevely
       case tp: ErrorType =>
-        s"<error ${tp.msg.msg}>"
+        s"<error ${tp.msg.rawMessage}>"
       case tp: WildcardType =>
-        if (tp.optBounds.exists) "(?" ~ toTextRHS(tp.bounds) ~ ")" else "?"
+        if (tp.optBounds.exists) "<?" ~ toTextRHS(tp.bounds) ~ ">" else "<?>"
       case NoType =>
         "<notype>"
       case NoPrefix =>
@@ -188,7 +200,7 @@ class PlainPrinter(_ctx: Context) extends Printer {
       case tp: MethodType =>
         changePrec(GlobalPrec) {
           "("
-          ~ keywordText("given ").provided(tp.isContextualMethod)
+          ~ keywordText("using ").provided(tp.isContextualMethod)
           ~ keywordText("erased ").provided(tp.isErasedMethod)
           ~ keywordText("implicit ").provided(tp.isImplicitMethod && !tp.isContextualMethod)
           ~ paramsText(tp)
@@ -208,15 +220,18 @@ class PlainPrinter(_ctx: Context) extends Printer {
           toTextGlobal(tp.resultType)
         }
       case AnnotatedType(tpe, annot) =>
-        toTextLocal(tpe) ~ " " ~ toText(annot)
+        if annot.symbol == defn.InlineParamAnnot || annot.symbol == defn.ErasedParamAnnot then toText(tpe)
+        else toTextLocal(tpe) ~ " " ~ toText(annot)
       case tp: TypeVar =>
         if (tp.isInstantiated)
           toTextLocal(tp.instanceOpt) ~ (Str("^") provided printDebug)
         else {
           val constr = ctx.typerState.constraint
           val bounds =
-            if (constr.contains(tp)) ctx.addMode(Mode.Printing).typeComparer.fullBounds(tp.origin)
-            else TypeBounds.empty
+            if constr.contains(tp) then
+              withMode(Mode.Printing)(TypeComparer.fullBounds(tp.origin))
+            else
+              TypeBounds.empty
           if (bounds.isTypeAlias) toText(bounds.lo) ~ (Str("^") provided printDebug)
           else if (ctx.settings.YshowVarBounds.value) "(" ~ toText(tp.origin) ~ "?" ~ toText(bounds) ~ ")"
           else toText(tp.origin)
@@ -236,12 +251,13 @@ class PlainPrinter(_ctx: Context) extends Printer {
   def toTextSingleton(tp: SingletonType): Text =
     "(" ~ toTextRef(tp) ~ " : " ~ toTextGlobal(tp.underlying) ~ ")"
 
-  protected def paramsText(tp: LambdaType): Text = {
-    def paramText(name: Name, tp: Type) = toText(name) ~ toTextRHS(tp)
-    Text(tp.paramNames.lazyZip(tp.paramInfos).map(paramText), ", ")
+  protected def paramsText(lam: LambdaType): Text = {
+    def paramText(name: Name, tp: Type) =
+      toText(name) ~ lambdaHash(lam) ~ toTextRHS(tp)
+    Text(lam.paramNames.lazyZip(lam.paramInfos).map(paramText), ", ")
   }
 
-  protected def ParamRefNameString(name: Name): String = name.toString
+  protected def ParamRefNameString(name: Name): String = nameString(name)
 
   protected def ParamRefNameString(param: ParamRef): String =
     ParamRefNameString(param.binder.paramNames(param.paramNum))
@@ -251,20 +267,22 @@ class PlainPrinter(_ctx: Context) extends Printer {
 
   /** If -uniqid is set, the hashcode of the lambda type, after a # */
   protected def lambdaHash(pt: LambdaType): Text =
-    if (ctx.settings.uniqid.value)
+    if (showUniqueIds)
       try "#" + pt.hashCode
       catch { case ex: NullPointerException => "" }
     else ""
 
   /** If -uniqid is set, the unique id of symbol, after a # */
   protected def idString(sym: Symbol): String =
-    if (ctx.settings.uniqid.value || Printer.debugPrintUnique) "#" + sym.id else ""
+    if (showUniqueIds || Printer.debugPrintUnique) "#" + sym.id else ""
 
   def nameString(sym: Symbol): String =
     simpleNameString(sym) + idString(sym) // + "<" + (if (sym.exists) sym.owner else "") + ">"
 
   def fullNameString(sym: Symbol): String =
-    if (sym.isRoot || sym == NoSymbol || sym.owner.isEffectiveRoot)
+    if (sym eq defn.FromJavaObjectSymbol) && !printDebug then
+      fullNameString(defn.ObjectClass)
+    else if sym.isRoot || sym == NoSymbol || sym.owner.isEffectiveRoot then
       nameString(sym)
     else
       fullNameString(fullNameOwner(sym)) + "." + nameString(sym)
@@ -309,7 +327,7 @@ class PlainPrinter(_ctx: Context) extends Printer {
   }
 
   /** The string representation of this type used as a prefix, including separator */
-  protected def toTextPrefix(tp: Type): Text = controlled {
+  def toTextPrefix(tp: Type): Text = controlled {
     homogenize(tp) match {
       case NoPrefix => ""
       case tp: SingletonType => toTextRef(tp) ~ "."
@@ -318,7 +336,7 @@ class PlainPrinter(_ctx: Context) extends Printer {
   }
 
   protected def isOmittablePrefix(sym: Symbol): Boolean =
-    defn.UnqualifiedOwnerTypes.exists(_.symbol == sym) || isEmptyPrefix(sym)
+    defn.unqualifiedOwnerTypes.exists(_.symbol == sym) || isEmptyPrefix(sym)
 
   protected def isEmptyPrefix(sym: Symbol): Boolean =
     sym.isEffectiveRoot || sym.isAnonymousClass || sym.name.isReplWrapperName
@@ -362,7 +380,7 @@ class PlainPrinter(_ctx: Context) extends Printer {
             " = " ~ toText(tp.alias)
           case TypeBounds(lo, hi) =>
             (if (lo isRef defn.NothingClass) Text() else " >: " ~ toText(lo))
-            ~ (if hi.isAny then Text() else " <: " ~ toText(hi))
+            ~ (if hi.isAny || (!printDebug && hi.isFromJavaObject) then Text() else " <: " ~ toText(hi))
         tparamStr ~ binder
       case tp @ ClassInfo(pre, cls, cparents, decls, selfInfo) =>
         val preText = toTextLocal(pre)
@@ -403,13 +421,15 @@ class PlainPrinter(_ctx: Context) extends Printer {
       if (sym.isClass) "package object class"
       else "package object"
     else if (sym.isAnonymousClass) "anonymous class"
-    else if (flags.is(ModuleClass)) "module class"
-    else if (flags.is(ModuleVal)) "module"
+    else if (flags.is(ModuleClass)) "object class"
+    else if (flags.is(ModuleVal)) "object"
     else if (flags.is(Trait)) "trait"
     else if (sym.isClass) "class"
     else if (sym.isType) "type"
     else if (sym.isGetter) "getter"
     else if (sym.isSetter) "setter"
+    else if sym.is(Param) then "parameter"
+    else if sym.is(Given) then "given instance"
     else if (flags.is(Lazy)) "lazy value"
     else if (flags.is(Mutable)) "variable"
     else if (sym.isClassConstructor && sym.isPrimaryConstructor) "primary constructor"
@@ -512,7 +532,8 @@ class PlainPrinter(_ctx: Context) extends Printer {
     case ClazzTag => "classOf[" ~ toText(const.typeValue) ~ "]"
     case CharTag => literalText(s"'${escapedChar(const.charValue)}'")
     case LongTag => literalText(const.longValue.toString + "L")
-    case EnumTag => literalText(const.symbolValue.name.toString)
+    case DoubleTag => literalText(const.doubleValue.toString + "d")
+    case FloatTag => literalText(const.floatValue.toString + "f")
     case _ => literalText(String.valueOf(const.value))
   }
 
@@ -570,17 +591,6 @@ class PlainPrinter(_ctx: Context) extends Printer {
         if sel.isGiven then "given" else sel.name.show
       case _ => "{...}"
     s"import $exprStr.$selectorStr"
-
-  private var maxSummarized = Int.MaxValue
-
-  def summarized[T](depth: Int)(op: => T): T = {
-    val saved = maxSummarized
-    maxSummarized = ctx.base.toTextRecursions + depth
-    try op
-    finally maxSummarized = saved
-  }
-
-  def summarized[T](op: => T): T = summarized(summarizeDepth)(op)
 
   def plain: PlainPrinter = this
 

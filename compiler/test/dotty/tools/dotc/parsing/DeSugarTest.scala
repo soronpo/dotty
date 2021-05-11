@@ -31,11 +31,11 @@ class DeSugarTest extends ParserTest {
       finally curMode = saved
     }
 
-    def transform(tree: Tree, mode: Mode)(implicit ctx: Context): Tree = withMode(mode) { transform(tree) }
-    def transform(trees: List[Tree], mode: Mode)(implicit ctx: Context): List[Tree] = withMode(mode) { transform(trees) }
+    def transform(tree: Tree, mode: Mode)(using Context): Tree = withMode(mode) { transform(tree) }
+    def transform(trees: List[Tree], mode: Mode)(using Context): List[Tree] = withMode(mode) { transform(trees) }
 
-    override def transform(tree: Tree)(implicit ctx: Context): Tree = {
-      val tree1 = desugar(tree)(ctx.withModeBits(curMode))
+    override def transform(tree: Tree)(using Context): Tree = {
+      val tree1 = desugar(tree)(using ctx.withModeBits(curMode))
       tree1 match {
         case TypedSplice(t) =>
           tree1
@@ -59,8 +59,8 @@ class DeSugarTest extends ParserTest {
           cpy.UnApply(tree1)(transform(fun, Expr), transform(implicits), transform(patterns))
         case tree1 @ ValDef(name, tpt, _) =>
           cpy.ValDef(tree1)(name, transform(tpt, Type), transform(tree1.rhs))
-        case tree1 @ DefDef(name, tparams, vparamss, tpt, _) =>
-          cpy.DefDef(tree1)(name, transformSub(tparams), vparamss mapConserve (transformSub(_)), transform(tpt, Type), transform(tree1.rhs))
+        case tree1 @ DefDef(name, paramss, tpt, _) =>
+          cpy.DefDef(tree1)(name, transformParamss(paramss), transform(tpt, Type), transform(tree1.rhs))
         case tree1 @ TypeDef(name, rhs) =>
           cpy.TypeDef(tree1)(name, transform(rhs, Type))
         case impl @ Template(constr, parents, self, _) =>

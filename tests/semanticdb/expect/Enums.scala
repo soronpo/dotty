@@ -1,5 +1,5 @@
 object Enums:
-  import <:<._
+  import <:<.*
 
   enum Colour:
     import Colour.Red
@@ -8,16 +8,16 @@ object Enums:
   enum Directions:
     case North, East, South, West
 
-  enum Suits derives Eql:
+  enum Suits derives CanEqual:
     case Hearts, Spades, Clubs, Diamonds
 
   object Suits:
-    def (suit: Suits).isRed: Boolean =
+    extension (suit: Suits) def isRed: Boolean =
       suit == Hearts || suit == Diamonds
 
-    def (suit: Suits).isBlack: Boolean = suit match
-      case Spades | Diamonds => true
-      case _                 => false
+    extension (suit: Suits) def isBlack: Boolean = suit match
+      case Spades | Clubs => true
+      case _              => false
 
   enum WeekDays:
     case Monday
@@ -47,14 +47,14 @@ object Enums:
     case Refl[C]() extends (C <:< C)
 
   object <:< :
-    given [T] as (T <:< T) = Refl()
+    given [T]: (T <:< T) = Refl()
 
-  def [A, B](opt: Option[A]) unwrap(using ev: A <:< Option[B]): Option[B] = ev match
+  extension [A, B](opt: Option[A]) def unwrap(using ev: A <:< Option[B]): Option[B] = ev match
     case Refl() => opt.flatMap(identity[Option[B]])
 
   val some1 = Some(Some(1)).unwrap
 
-  enum Planet(mass: Double, radius: Double) extends java.lang.Enum[Planet]:
+  enum Planet(mass: Double, radius: Double) extends Enum[Planet]:
     private final val G = 6.67300E-11
     def surfaceGravity = G * mass / (radius * radius)
     def surfaceWeight(otherMass: Double) = otherMass * surfaceGravity

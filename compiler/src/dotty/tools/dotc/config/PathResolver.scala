@@ -24,7 +24,7 @@ object PathResolver {
    */
   def makeAbsolute(cp: String): String = ClassPath.map(cp, x => Path(x).toAbsolute.path)
 
-  /** pretty print class path 
+  /** pretty print class path
    */
   def ppcp(s: String): String = split(s) match {
     case Nil      => ""
@@ -51,7 +51,7 @@ object PathResolver {
     def scalaHome: String           = propOrEmpty("scala.home")
     def scalaExtDirs: String        = propOrEmpty("scala.ext.dirs")
 
-    /** The java classpath and whether to use it. 
+    /** The java classpath and whether to use it.
      */
     def javaUserClassPath: String   = propOrElse("java.class.path", "")
     def useJavaClassPath: Boolean    = propOrFalse("scala.usejavacp")
@@ -128,13 +128,13 @@ object PathResolver {
       )
   }
 
-  def fromPathString(path: String)(implicit ctx: Context): ClassPath = {
+  def fromPathString(path: String)(using Context): ClassPath = {
     val settings = ctx.settings.classpath.update(path)
-    new PathResolver()(ctx.fresh.setSettings(settings)).result
+    new PathResolver()(using ctx.fresh.setSettings(settings)).result
   }
 
   /** Show values in Environment and Defaults when no argument is provided.
-   *  Otherwise, show values in Calculated as if those options had been given 
+   *  Otherwise, show values in Calculated as if those options had been given
    *  to a scala runner.
    */
   def main(args: Array[String]): Unit =
@@ -142,12 +142,11 @@ object PathResolver {
       println(Environment)
       println(Defaults)
     }
-    else {
-      implicit val ctx = (new ContextBase).initialCtx
+    else inContext(ContextBase().initialCtx) {
       val ArgsSummary(sstate, rest, errors, warnings) =
-        ctx.settings.processArguments(args.toList, true)
+        ctx.settings.processArguments(args.toList, true, ctx.settingsState)
       errors.foreach(println)
-      val pr = new PathResolver()(ctx.fresh.setSettings(sstate))
+      val pr = new PathResolver()(using ctx.fresh.setSettings(sstate))
       println(" COMMAND: 'scala %s'".format(args.mkString(" ")))
       println("RESIDUAL: 'scala %s'\n".format(rest.mkString(" ")))
 
@@ -160,12 +159,12 @@ object PathResolver {
 
 import PathResolver.{Defaults, ppcp}
 
-class PathResolver(implicit ctx: Context) {
-  import ctx.base.settings
+class PathResolver(using c: Context) {
+  import c.base.settings
 
   private val classPathFactory = new ClassPathFactory
 
-  private def cmdLineOrElse(name: String, alt: String) = 
+  private def cmdLineOrElse(name: String, alt: String) =
     commandLineFor(name) match {
       case Some("") | None => alt
       case Some(x)         => x
@@ -178,7 +177,6 @@ class PathResolver(implicit ctx: Context) {
     case "extdirs"            => settings.extdirs.value
     case "classpath" | "cp"   => settings.classpath.value
     case "sourcepath"         => settings.sourcepath.value
-    case "priorityclasspath"  => settings.priorityclasspath.value
   }
 
   /** Calculated values based on any given command line options, falling back on
@@ -192,7 +190,6 @@ class PathResolver(implicit ctx: Context) {
     def javaUserClassPath: String   = if (useJavaClassPath) Defaults.javaUserClassPath else ""
     def scalaBootClassPath: String  = cmdLineOrElse("bootclasspath", Defaults.scalaBootClassPath)
     def scalaExtDirs: String        = cmdLineOrElse("extdirs", Defaults.scalaExtDirs)
-    def priorityClassPath: String   = cmdLineOrElse("priorityclasspath", "")
     /** Scaladoc doesn't need any bootstrapping, otherwise will create errors such as:
      * [scaladoc] ../scala-trunk/src/reflect/scala/reflect/macros/Reifiers.scala:89: error: object api is not a member of package reflect
      * [scaladoc] case class ReificationException(val pos: reflect.api.PositionApi, val msg: String) extends Throwable(msg)
@@ -209,25 +206,25 @@ class PathResolver(implicit ctx: Context) {
     import classPathFactory._
 
     // Assemble the elements!
-    // priority class path takes precedence
-    def basis: List[Traversable[ClassPath]] = List(
-      classesInExpandedPath(priorityClassPath),     // 0. The priority class path (for testing).
-      JrtClassPath.apply(),                         // 1. The Java 9 classpath (backed by the jrt:/ virtual system, if available)
-      classesInPath(javaBootClassPath),             // 2. The Java bootstrap class path.
-      contentsOfDirsInPath(javaExtDirs),            // 3. The Java extension class path.
-      classesInExpandedPath(javaUserClassPath),     // 4. The Java application class path.
-      classesInPath(scalaBootClassPath),            // 5. The Scala boot class path.
-      contentsOfDirsInPath(scalaExtDirs),           // 6. The Scala extension class path.
-      classesInExpandedPath(userClassPath),         // 7. The Scala application class path.
-      sourcesInPath(sourcePath)                     // 8. The Scala source path.
-    )
+    def basis: List[Traversable[ClassPath]] =
+      val release = Option(ctx.settings.release.value).filter(_.nonEmpty)
+
+      List(
+        JrtClassPath(release),                        // 1. The Java 9+ classpath (backed by the jrt:/ virtual system, if available)
+        classesInPath(javaBootClassPath),             // 2. The Java bootstrap class path.
+        contentsOfDirsInPath(javaExtDirs),            // 3. The Java extension class path.
+        classesInExpandedPath(javaUserClassPath),     // 4. The Java application class path.
+        classesInPath(scalaBootClassPath),            // 5. The Scala boot class path.
+        contentsOfDirsInPath(scalaExtDirs),           // 6. The Scala extension class path.
+        classesInExpandedPath(userClassPath),         // 7. The Scala application class path.
+        sourcesInPath(sourcePath)                     // 8. The Scala source path.
+      )
 
     lazy val containers: List[ClassPath] = basis.flatten.distinct
 
     override def toString: String = """
       |object Calculated {
       |  scalaHome            = %s
-      |  priorityClassPath    = %s
       |  javaBootClassPath    = %s
       |  javaExtDirs          = %s
       |  javaUserClassPath    = %s
@@ -237,7 +234,7 @@ class PathResolver(implicit ctx: Context) {
       |  userClassPath        = %s
       |  sourcePath           = %s
       |}""".trim.stripMargin.format(
-        scalaHome, ppcp(priorityClassPath),
+        scalaHome,
         ppcp(javaBootClassPath), ppcp(javaExtDirs), ppcp(javaUserClassPath),
         useJavaClassPath,
         ppcp(scalaBootClassPath), ppcp(scalaExtDirs), ppcp(userClassPath),
@@ -264,4 +261,3 @@ class PathResolver(implicit ctx: Context) {
 
   def asURLs: Seq[java.net.URL] = result.asURLs
 }
-

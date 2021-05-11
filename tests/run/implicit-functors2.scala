@@ -3,14 +3,14 @@ object Utils {
   type Const[c] = [t] =>> c
 }
 
-import Utils._
+import Utils.*
 
 abstract class ErasedInstances { type FT }
 class ErasedProductInstances(override val toString: String) extends ErasedInstances
 class ErasedCoproductInstances(override val toString: String) extends ErasedInstances
 
 object K1 {
-  type Instances[F[_[_]], T[_]] = ErasedInstances { type FT = F[T] ; type C = F }
+  type Instances[F[_[_]], T[_]] = ErasedInstances { type FT = F[T] ; type C[X[_]] = F[X] }
 }
 
 class Functor[F[_]](override val toString: String)
@@ -29,14 +29,14 @@ object Functor {
 
 sealed trait Opt[+A]
 object Opt {
-  implicit def optInstances[F[_[_]]](implicit fs: F[Sm], fn: F[[t] =>> Nn.type]): ErasedCoproductInstances { type FT = F[Opt] ; type C = F } =
-    new ErasedCoproductInstances(s"optInstances($fs, $fn)") { type FT = F[Opt] ; type C = F }
+  implicit def optInstances[F[_[_]]](implicit fs: F[Sm], fn: F[[t] =>> Nn.type]): ErasedCoproductInstances { type FT = F[Opt] ; type C[X[_]] = F[X] } =
+    new ErasedCoproductInstances(s"optInstances($fs, $fn)") { type FT = F[Opt] ; type C[X[_]] = F[X] }
 }
 
 case class Sm[+A](value: A) extends Opt[A]
 object Sm {
-  implicit def smInstances[F[_[_]]](implicit fi: F[Id]): ErasedProductInstances { type FT = F[Sm] ; type C = F } =
-    new ErasedProductInstances(s"smInstances($fi)") { type FT = F[Sm] ; type C = F }
+  implicit def smInstances[F[_[_]]](implicit fi: F[Id]): ErasedProductInstances { type FT = F[Sm] ; type C[X[_]] = F[X] } =
+    new ErasedProductInstances(s"smInstances($fi)") { type FT = F[Sm] ; type C[X[_]] = F[X] }
 }
 
 case object Nn extends Opt[Nothing]

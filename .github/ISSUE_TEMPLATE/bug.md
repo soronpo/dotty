@@ -7,16 +7,21 @@ assignees: ''
 
 ---
 
-## minimized code
+## Compiler version
+
+If you're not sure what version you're using, run `print scalaVersion` from sbt
+(if you're running scalac manually, use `scalac -version` instead).
+
+## Minimized code
 
 ```Scala
 println("hello, world")
 ```
 
-## Compilation output
+## Output
 
 ```scala
-// TODO add compilation output here
+// TODO add output here
 ```
 
-## expectation
+## Expectation

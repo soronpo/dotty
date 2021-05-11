@@ -1,9 +1,9 @@
 package example
 
-import scala.language/*->scalaShadowing::language.*/.implicitConversions/*->scalaShadowing::language.implicitConversions.*/
+import scala.language/*->scala::language.*/.implicitConversions/*->scala::language.implicitConversions.*/
 
 class ImplicitConversion/*<-example::ImplicitConversion#*/ {
-  import ImplicitConversion/*->example::ImplicitConversion.*/._
+  import ImplicitConversion/*->example::ImplicitConversion.*/.*
   implicit def string2Number/*<-example::ImplicitConversion#string2Number().*/(
       string/*<-example::ImplicitConversion#string2Number().(string)*/: String/*->scala::Predef.String#*/
   ): Int/*->scala::Int#*/ = 42
@@ -21,10 +21,10 @@ class ImplicitConversion/*<-example::ImplicitConversion#*/ {
   val x/*<-example::ImplicitConversion#x.*/: Int/*->scala::Int#*/ = /*->example::ImplicitConversion#string2Number().*/message/*->example::ImplicitConversion#message.*/
 
   // interpolators
-  s"/*->scala::StringContext.apply().*/Hello $message/*->example::ImplicitConversion#message.*/ $number/*->example::ImplicitConversion#number.*//*->scala::StringContext#s().*/"
+  s"/*->scala::StringContext.apply().*/Hello $message/*->example::ImplicitConversion#message.*/ $number/*->example::ImplicitConversion#number.*/"/*->scala::StringContext#s().*/
   /*->scala::Predef.augmentString().*/s"""/*->scala::StringContext.apply().*/Hello
      |$message/*->example::ImplicitConversion#message.*/
-     |$number/*->example::ImplicitConversion#number.*//*->scala::StringContext#s().*/""".stripMargin/*->scala::collection::StringOps#stripMargin(+1).*/
+     |$number/*->example::ImplicitConversion#number.*/"""/*->scala::StringContext#s().*/.stripMargin/*->scala::collection::StringOps#stripMargin(+1).*/
 
   val a/*<-example::ImplicitConversion#a.*/: Int/*->scala::Int#*/ = /*->scala::Char.char2int().*/char/*->example::ImplicitConversion#char.*/
   val b/*<-example::ImplicitConversion#b.*/: Long/*->scala::Long#*/ = /*->scala::Char.char2long().*/char/*->example::ImplicitConversion#char.*/

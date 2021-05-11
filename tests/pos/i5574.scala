@@ -1,12 +1,12 @@
-import scala.compiletime._
+import scala.compiletime.*
 
 object i5574 {
   class Box[F[_]]
 
-  inline def foo[T] <: Any =
+  transparent inline def foo[T]: Any =
     inline erasedValue[T] match {
       case _: Box[f] =>
-        type t = f
+        type t[X] = f[X]
         23
     }
 

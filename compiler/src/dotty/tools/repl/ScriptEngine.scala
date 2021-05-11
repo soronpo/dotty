@@ -1,7 +1,7 @@
 package dotty.tools
 package repl
 
-import java.io.Reader
+import java.io.{Reader, StringWriter}
 import javax.script.{AbstractScriptEngine, Bindings, ScriptContext, ScriptEngine => JScriptEngine, ScriptEngineFactory, ScriptException, SimpleBindings}
 import dotc.core.StdNames.str
 
@@ -24,7 +24,7 @@ class ScriptEngine extends AbstractScriptEngine {
       "-color:never",
       "-Xrepl-disable-display"
     ), Console.out, None)
-  private val rendering = new Rendering
+  private val rendering = new Rendering(Some(getClass.getClassLoader))
   private var state: State = driver.initialState
 
   def getFactory: ScriptEngineFactory = new ScriptEngine.Factory
@@ -37,14 +37,27 @@ class ScriptEngine extends AbstractScriptEngine {
     val vid = state.valIndex
     state = driver.run(script)(state)
     val oid = state.objectIndex
-    Class.forName(s"${str.REPL_SESSION_LINE}$oid", true, rendering.classLoader()(state.context))
+    Class.forName(s"${str.REPL_SESSION_LINE}$oid", true, rendering.classLoader()(using state.context))
       .getDeclaredMethods.find(_.getName == s"${str.REPL_RES_PREFIX}$vid")
       .map(_.invoke(null))
       .getOrElse(null)
   }
 
   @throws[ScriptException]
-  def eval(reader: Reader, context: ScriptContext): Object = throw new UnsupportedOperationException
+  def eval(reader: Reader, context: ScriptContext): Object = eval(stringFromReader(reader), context)
+
+  private val buffer = new Array[Char](8192)
+
+  def stringFromReader(in: Reader) = {
+    val out = new StringWriter
+    var n = in.read(buffer)
+    while (n > -1) {
+      out.write(buffer, 0, n)
+      n = in.read(buffer)
+    }
+    in.close
+    out.toString
+  }
 }
 
 object ScriptEngine {

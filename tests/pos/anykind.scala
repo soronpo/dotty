@@ -7,7 +7,7 @@ object Test {
   // PoC of controlled KindPolymorphism in Scala
   //
   // The idea is NOT to provide universal kind-polymorphism that would be a bad idea anyway
-  // but to bring a "controlled" kind-polymorphism relying on accepted kinds defined by typeclass implicits
+  // but to bring a "controlled" kind-polymorphism relying on accepted kinds defined by type class implicits
   // Thus, kind-polymorphism is strictly scoped to your domain and is what you expect to be, nothing else.
   //
   // `Ykind-polymorphism` flag aims at deferring just a bit Scalac type inference when encountering AnyKind higher bounds
@@ -16,7 +16,7 @@ object Test {
   //
   // Here are code-samples that work now:
   //    - basic kind polymorphism controlled by implicits
-  //    - Kindness proofs based on typeclasses (specially SameKind)
+  //    - Kindness proofs based on type classes (specially SameKind)
   //    - Kind-Polymorphic list (on type & value) (2 different implementations)
   //    - Some weird cases we don't want the compiler to authorize
 
@@ -56,11 +56,11 @@ object Test {
   object Kinder extends KinderLowerImplicits {
     type Aux[MA, M0 <: AnyKind, Args0 <: HList] = Kinder[MA] { type M = M0; type Args = Args0 }
 
-    implicit def kinder2[M0[_, _], A0, B0]: Kinder.Aux[M0[A0, B0], M0, A0 :: B0 :: HNil] = new Kinder[M0[A0, B0]] { type M[t, u] = M0[t, u]; type Args = A0 :: B0 :: HNil }
     implicit def kinder1[M0[_], A0]: Kinder.Aux[M0[A0], M0, A0 :: HNil] = new Kinder[M0[A0]] { type M[t] = M0[t]; type Args = A0 :: HNil }
   }
 
   trait KinderLowerImplicits {
+    implicit def kinder2[M0[_, _], A0, B0]: Kinder.Aux[M0[A0, B0], M0, A0 :: B0 :: HNil] = new Kinder[M0[A0, B0]] { type M[t, u] = M0[t, u]; type Args = A0 :: B0 :: HNil }
     implicit def kinder0[A]: Kinder.Aux[A, A, HNil] = new Kinder[A] { type M = A; type Args = HNil }
   }
 

@@ -1,4 +1,4 @@
-import scala.quoted._
+import scala.quoted.*
 
 object Test {
   def main(args: Array[String]): Unit = {
@@ -10,5 +10,5 @@ object Test {
 }
 
 class Unrolled(arr: Array[Int]) extends AnyVal {
-  inline def foreach(f: => Int => Unit): Unit = Macro.unrolledForeach(3, arr, f)
+  inline def foreach(inline f: Int => Unit): Unit = Macro.unrolledForeach(3, arr, f)
 }

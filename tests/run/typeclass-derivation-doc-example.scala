@@ -1,13 +1,9 @@
-import scala.deriving._
-import scala.compiletime.{erasedValue, summonFrom}
-
-inline def summon[T]: T = summonFrom {
-  case t: T => t
-}
+import scala.deriving.*
+import scala.compiletime.{erasedValue, summonInline}
 
 inline def summonAll[T <: Tuple]: List[Eq[_]] = inline erasedValue[T] match {
-  case _: Unit => Nil
-  case _: (t *: ts) => summon[Eq[t]] :: summonAll[ts]
+  case _: EmptyTuple => Nil
+  case _: (t *: ts) => summonInline[Eq[t]] :: summonAll[ts]
 }
 
 trait Eq[T] {
@@ -15,7 +11,7 @@ trait Eq[T] {
 }
 
 object Eq {
-  given Eq[Int] {
+  given Eq[Int] with {
     def eqv(x: Int, y: Int) = x == y
   }
 
@@ -50,12 +46,12 @@ object Eq {
 }
 
 enum Opt[+T] derives Eq {
-  case Sm(t: T)
+  case Sm[T](t: T) extends Opt[T]
   case Nn
 }
 
 object Test extends App {
-  import Opt._
+  import Opt.*
   val eqoi = summon[Eq[Opt[Int]]]
   assert(eqoi.eqv(Sm(23), Sm(23)))
   assert(!eqoi.eqv(Sm(23), Sm(13)))

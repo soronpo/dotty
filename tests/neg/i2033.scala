@@ -1,10 +1,10 @@
-import java.io._
-import collection._
+import java.io.*
+import collection.*
 object Test {
   def check(obj: AnyRef): Unit = {
     val bos = new ByteArrayOutputStream()
     val out = new ObjectOutputStream(println)
-    val arr = bos toByteArray ()
+    val arr = bos toByteArray ()  // error
     val in = (())
     val deser = ()
     val lhs = mutable LinkedHashSet ()

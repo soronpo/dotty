@@ -16,46 +16,43 @@ abstract class MacroTransform extends Phase {
 
   import ast.tpd._
 
-  override def run(implicit ctx: Context): Unit = {
+  override def run(using Context): Unit = {
     val unit = ctx.compilationUnit
-    unit.tpdTree = newTransformer.transform(unit.tpdTree)(ctx.withPhase(transformPhase))
+    unit.tpdTree = atPhase(transformPhase)(newTransformer.transform(unit.tpdTree))
   }
 
-  protected def newTransformer(implicit ctx: Context): Transformer
+  protected def newTransformer(using Context): Transformer
 
   /** The phase in which the transformation should be run.
    *  By default this is the phase given by the this macro transformer,
    *  but it could be overridden to be the phase following that one.
    */
-  protected def transformPhase(implicit ctx: Context): Phase = this
+  protected def transformPhase(using Context): Phase = this
 
   class Transformer extends TreeMap(cpy = cpyBetweenPhases) {
 
-    protected def localCtx(tree: Tree)(implicit ctx: Context): FreshContext = {
-      val sym = tree.symbol
-      val owner = if (sym.is(PackageVal)) sym.moduleClass else sym
-      ctx.fresh.setTree(tree).setOwner(owner)
-    }
+    protected def localCtx(tree: Tree)(using Context): FreshContext = 
+      ctx.fresh.setTree(tree).setOwner(localOwner(tree))
 
-    def transformStats(trees: List[Tree], exprOwner: Symbol)(implicit ctx: Context): List[Tree] = {
+    override def transformStats(trees: List[Tree], exprOwner: Symbol)(using Context): List[Tree] = {
       def transformStat(stat: Tree): Tree = stat match {
         case _: Import | _: DefTree => transform(stat)
-        case _ => transform(stat)(ctx.exprContext(stat, exprOwner))
+        case _ => transform(stat)(using ctx.exprContext(stat, exprOwner))
       }
       flatten(trees.mapconserve(transformStat(_)))
     }
 
-    override def transform(tree: Tree)(implicit ctx: Context): Tree =
+    override def transform(tree: Tree)(using Context): Tree =
       try
         tree match {
           case EmptyValDef =>
             tree
           case _: PackageDef | _: MemberDef =>
-            super.transform(tree)(localCtx(tree))
+            super.transform(tree)(using localCtx(tree))
           case impl @ Template(constr, parents, self, _) =>
             cpy.Template(tree)(
               transformSub(constr),
-              transform(parents)(ctx.superCallContext),
+              transform(parents)(using ctx.superCallContext),
               Nil,
               transformSelf(self),
               transformStats(impl.body, tree.symbol))
@@ -64,11 +61,11 @@ abstract class MacroTransform extends Phase {
         }
       catch {
         case ex: TypeError =>
-          ctx.error(ex, tree.sourcePos)
+          report.error(ex, tree.srcPos)
           tree
       }
 
-    def transformSelf(vd: ValDef)(implicit ctx: Context): ValDef =
+    def transformSelf(vd: ValDef)(using Context): ValDef =
       cpy.ValDef(vd)(tpt = transform(vd.tpt))
   }
 }

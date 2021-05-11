@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Tail {
@@ -12,7 +11,7 @@ class Tail {
 
   @Setup
   def setup(): Unit = {
-    tuple = "elem" *: ()
+    tuple = "elem" *: Tuple()
 
     for (i <- 1 until size)
       tuple = "elem" *: tuple
@@ -22,7 +21,7 @@ class Tail {
 
   @Benchmark
   def tupleTail(): Tuple = {
-    DynamicTuple.dynamicTail(tuple)
+    runtime.Tuples.tail(tuple)
   }
 
   @Benchmark

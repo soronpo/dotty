@@ -4,11 +4,13 @@ package transform
 import core._
 import dotty.tools.dotc.transform.MegaPhase._
 import Flags._
-import Contexts.Context
+import Contexts._
 import Symbols._
 import dotty.tools.dotc.ast.tpd
 import Decorators._
-import reporting.diagnostic.messages._
+import reporting._
+
+import dotty.tools.dotc.transform.SymUtils._
 
 /** A transformer that check that requirements of Static fields\methods are implemented:
   *  1. Only objects can have members annotated with `@static`
@@ -27,51 +29,36 @@ class CheckStatic extends MiniPhase {
 
   override def phaseName: String = CheckStatic.name
 
-  override def transformTemplate(tree: tpd.Template)(implicit ctx: Context): tpd.Tree = {
+  override def transformTemplate(tree: tpd.Template)(using Context): tpd.Tree = {
     val defns = tree.body.collect{case t: ValOrDefDef => t}
     var hadNonStaticField = false
     for (defn <- defns)
-      if (defn.symbol.hasAnnotation(ctx.definitions.ScalaStaticAnnot)) {
-        if (!ctx.owner.is(Module))
-          ctx.error(StaticFieldsOnlyAllowedInObjects(defn.symbol), defn.sourcePos)
+      if (defn.symbol.isScalaStatic) {
+        if (!ctx.owner.isStaticOwner)
+          report.error(StaticFieldsOnlyAllowedInObjects(defn.symbol), defn.srcPos)
+          defn.symbol.resetFlag(JavaStatic)
 
         if (defn.isInstanceOf[ValDef] && hadNonStaticField)
-          ctx.error(StaticFieldsShouldPrecedeNonStatic(defn.symbol, defns), defn.sourcePos)
+          report.error(StaticFieldsShouldPrecedeNonStatic(defn.symbol, defns), defn.srcPos)
 
         val companion = ctx.owner.companionClass
         def clashes = companion.asClass.membersNamed(defn.name)
 
         if (!companion.exists)
-          ctx.error(MissingCompanionForStatic(defn.symbol), defn.sourcePos)
+          report.error(MissingCompanionForStatic(defn.symbol), defn.srcPos)
         else if (clashes.exists)
-          ctx.error(MemberWithSameNameAsStatic(), defn.sourcePos)
+          report.error(MemberWithSameNameAsStatic(), defn.srcPos)
         else if (defn.symbol.is(Flags.Mutable) && companion.is(Flags.Trait))
-          ctx.error(TraitCompanionWithMutableStatic(), defn.sourcePos)
+          report.error(TraitCompanionWithMutableStatic(), defn.srcPos)
         else if (defn.symbol.is(Flags.Lazy))
-          ctx.error(LazyStaticField(), defn.sourcePos)
+          report.error(LazyStaticField(), defn.srcPos)
         else if (defn.symbol.allOverriddenSymbols.nonEmpty)
-          ctx.error(StaticOverridingNonStaticMembers(), defn.sourcePos)
+          report.error(StaticOverridingNonStaticMembers(), defn.srcPos)
       }
       else hadNonStaticField = hadNonStaticField || defn.isInstanceOf[ValDef]
 
     tree
   }
-
-  override def transformSelect(tree: tpd.Select)(implicit ctx: Context): tpd.Tree =
-    if (tree.symbol.hasAnnotation(defn.ScalaStaticAnnot)) {
-      val symbolWhitelist = tree.symbol.ownersIterator.flatMap(x => if (x.is(Flags.Module)) List(x, x.companionModule) else List(x)).toSet
-      def isSafeQual(t: Tree): Boolean = // follow the desugared paths created by typer
-        t match {
-          case t: This => true
-          case t: Select => isSafeQual(t.qualifier) && symbolWhitelist.contains(t.symbol)
-          case t: Ident => symbolWhitelist.contains(t.symbol)
-          case t: Block => t.stats.forall(tpd.isPureExpr) && isSafeQual(t.expr)
-        }
-      if (isSafeQual(tree.qualifier))
-        ref(tree.symbol)
-      else tree
-    }
-    else tree
 }
 
 object CheckStatic {

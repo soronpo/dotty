@@ -1,10 +1,10 @@
-def myMacroImpl(a: quoted.Expr[_])(using qctx: quoted.QuoteContext) = {
-  import qctx.tasty.{_, given}
+def myMacroImpl(a: quoted.Expr[_])(using qctx: quoted.Quotes) = {
+  import scala.quoted.quotes.reflect.*
   def typed[A] = {
-    implicit val t: quoted.Type[A] = a.unseal.tpe.widen.seal.asInstanceOf[quoted.Type[A]]
+    implicit val t: quoted.Type[A] = a.asTerm.tpe.widen.asType.asInstanceOf[quoted.Type[A]]
     '{
-      type T = $t
-      ${a.unseal.seal.cast[T]}
+      type T = A
+      ${a.asTerm.asExprOf[T]}
     }
   }
 
@@ -12,6 +12,6 @@ def myMacroImpl(a: quoted.Expr[_])(using qctx: quoted.QuoteContext) = {
 }
 
 
-inline def myMacro(a: => Any) = ${
+inline transparent def myMacro(a: => Any) = ${
   myMacroImpl('a)
 }

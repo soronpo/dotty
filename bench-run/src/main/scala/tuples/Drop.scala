@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Drop {
@@ -13,7 +12,7 @@ class Drop {
 
   @Setup
   def setup(): Unit = {
-    tuple = ()
+    tuple = Tuple()
     half = size / 2
 
     for (i <- 1 to size)
@@ -24,7 +23,7 @@ class Drop {
 
   @Benchmark
   def tupleDrop(): Tuple = {
-    DynamicTuple.dynamicDrop(tuple, half)
+    runtime.Tuples.drop(tuple, half)
   }
 
   @Benchmark

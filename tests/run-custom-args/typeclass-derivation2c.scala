@@ -1,8 +1,8 @@
 import scala.collection.mutable
 import scala.annotation.tailrec
-import scala.compiletime.summonFrom
+import scala.compiletime.summonInline
 
-// Simulation of an alternative typeclass derivation scheme proposed in #6153
+// Simulation of an alternative type class derivation scheme proposed in #6153
 
 // -- Classes and Objects of the Derivation Framework ----------------------------------
 
@@ -55,9 +55,7 @@ object Deriving {
       type CaseLabel <: String
 
       /** The represented value */
-      inline def singletonValue = summonFrom {
-        case ev: ValueOf[T] => ev.value
-      }
+      inline def singletonValue = summonInline[ValueOf[T]].value
     }
   }
 
@@ -74,7 +72,7 @@ object Deriving {
   def productElement[T](x: Any, idx: Int) =
     x.asInstanceOf[Product].productElement(idx).asInstanceOf[T]
 }
-import Deriving._
+import Deriving.*
 
 // -- Example Datatypes ---------------------------------------------------------
 
@@ -90,7 +88,7 @@ object Lst {
       case Nil => 1
     }
     inline override def numberOfCases = 2
-    inline override def alternative(n: Int) <: Generic[_ <: Lst[T]] =
+    transparent inline override def alternative(n: Int): Generic[_ <: Lst[T]] =
       inline n match {
         case 0 => Cons.GenericCons[T]
         case 1 => Nil.GenericNil
@@ -155,7 +153,7 @@ object Either {
       case x: Right[_] => 1
     }
     inline override def numberOfCases = 2
-    inline override def alternative(n: Int) <: Generic[_ <: Either[L, R]] =
+    inline override def alternative(n: Int): _ <: Generic[_ <: Either[L, R]] =
       inline n match {
         case 0 => Left.GenericLeft[L]
         case 1 => Right.GenericRight[R]
@@ -174,28 +172,28 @@ case class Right[R](elem: R) extends Either[Nothing, R]
 object Left extends Generic.Product[Left[_]] {
   def fromProduct(p: Product): Left[_] = Left(productElement[Any](p, 0))
   implicit def GenericLeft[L]: Generic.Product[Left[L]] {
-    type ElemTypes = L *: Unit
+    type ElemTypes = L *: EmptyTuple
     type CaseLabel = "Left"
-    type ElemLabels = "x" *: Unit
+    type ElemLabels = "x" *: EmptyTuple
   } = this.asInstanceOf
 }
 
 object Right extends Generic.Product[Right[_]] {
   def fromProduct(p: Product): Right[_] = Right(productElement[Any](p, 0))
   implicit def GenericRight[R]: Generic.Product[Right[R]] {
-    type ElemTypes = R *: Unit
+    type ElemTypes = R *: EmptyTuple
     type CaseLabel = "Right"
-    type ElemLabels = "x" *: Unit
+    type ElemLabels = "x" *: EmptyTuple
   } = this.asInstanceOf
 }
 
 // -- Type classes ------------------------------------------------------------
 
-// Everything here is hand-written by the authors of the derivable typeclasses
+// Everything here is hand-written by the authors of the derivable type classes
 // The same schema is used throughout.
 //
-//  - A typeclass implements an inline `derived` method, given a `Generic` instance.
-//  - Each implemented typeclass operation `xyz` calls 4 inline helper methods:
+//  - A type class implements an inline `derived` method, given a `Generic` instance.
+//  - Each implemented type class operation `xyz` calls 4 inline helper methods:
 //      1. `xyzCases` for sums,
 //      2. `xyzProduct` for products,
 //      3. `xyzElems` stepping through the elements of a product,
@@ -205,7 +203,7 @@ object Right extends Generic.Product[Right[_]] {
 //    the second parameter list contains parameters that show up in the
 //    generated code. (This is done just to make things clearer).
 
-// Equality typeclass
+// Equality type class
 trait Eq[T] {
   def eql(x: T, y: T): Boolean
 }
@@ -213,16 +211,14 @@ trait Eq[T] {
 object Eq {
   import scala.compiletime.erasedValue
 
-  inline def tryEql[T](x: T, y: T) = summonFrom {
-    case eq: Eq[T] => eq.eql(x, y)
-  }
+  inline def tryEql[T](x: T, y: T) = summonInline[Eq[T]].eql(x, y)
 
   inline def eqlElems[Elems <: Tuple](n: Int)(x: Any, y: Any): Boolean =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryEql[elem](productElement[elem](x, n), productElement[elem](y, n)) &&
         eqlElems[elems1](n + 1)(x, y)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -257,7 +253,7 @@ object Eq {
   }
 }
 
-// Pickling typeclass
+// Pickling type class
 trait Pickler[T] {
   def pickle(buf: mutable.ListBuffer[Int], x: T): Unit
   def unpickle(buf: mutable.ListBuffer[Int]): T
@@ -268,16 +264,15 @@ object Pickler {
 
   def nextInt(buf: mutable.ListBuffer[Int]): Int = try buf.head finally buf.trimStart(1)
 
-  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit = summonFrom {
-    case pkl: Pickler[T] => pkl.pickle(buf, x)
-  }
+  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit =
+    summonInline[Pickler[T]].pickle(buf, x)
 
   inline def pickleElems[Elems <: Tuple](n: Int)(buf: mutable.ListBuffer[Int], x: Any): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryPickle[elem](buf, productElement[elem](x, n))
         pickleElems[elems1](n + 1)(buf, x)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def pickleProduct[T](g: Generic.Product[T])(buf: mutable.ListBuffer[Int], x: Any): Unit =
@@ -293,16 +288,14 @@ object Pickler {
       }
     else pickleCases[T](g, n + 1)(buf, x, ord)
 
-  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonFrom {
-    case pkl: Pickler[T] => pkl.unpickle(buf)
-  }
+  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonInline[Pickler[T]].unpickle(buf)
 
   inline def unpickleElems[Elems <: Tuple](n: Int)(buf: mutable.ListBuffer[Int], elems: Array[AnyRef]): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         elems(n) = tryUnpickle[elem](buf).asInstanceOf[AnyRef]
         unpickleElems[elems1](n + 1)(buf, elems)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def unpickleProduct[T](g: Generic.Product[T])(buf: mutable.ListBuffer[Int]): T = {
@@ -358,9 +351,7 @@ trait Show[T] {
 object Show {
   import scala.compiletime.{erasedValue, constValue}
 
-  inline def tryShow[T](x: T): String = summonFrom {
-    case s: Show[T] => s.show(x)
-  }
+  inline def tryShow[T](x: T): String = summonInline[Show[T]].show(x)
 
   inline def showElems[Elems <: Tuple, Labels <: Tuple](n: Int)(x: Any): List[String] =
     inline erasedValue[Elems] match {
@@ -371,7 +362,7 @@ object Show {
             val actual = tryShow(productElement[elem](x, n))
             s"$formal = $actual" :: showElems[elems1, labels1](n + 1)(x)
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
         Nil
     }
 

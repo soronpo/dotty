@@ -18,7 +18,7 @@ A `Denotation` is the result of a name lookup during a given period
   may be `NoSymbol` (the two variants have symbols).
 * Non-overloaded denotations have an `info`
 
-Denotations of methods have a signature ([Signature.scala:7]), which
+Denotations of methods have a signature ([Signature1]), which
 uniquely identifies overloaded methods.
 
 #### Denotation vs. SymDenotation ####
@@ -44,18 +44,18 @@ only be applied if an implicit `Context` is in scope.
 
 ### Symbol ###
 * `Symbol` instances have a `SymDenotation`
-* Most symbol properties in scalac are now in the denotation (in dotc)
+* Most symbol properties in the Scala 2 compiler are now in the denotation (in the Scala 3 compiler).
 
 Most of the `isFooBar` properties in scalac don't exist anymore in dotc. Use
 flag tests instead, for example:
 
 ```scala
-if (sym.isPackageClass)         // scalac
-if (sym is Flags.PackageClass)  // dotc (*)
+if (sym.isPackageClass)         // Scala 2
+if (sym is Flags.PackageClass)  // Scala 3 (*)
 ```
 
 `(*)` Symbols are implicitly converted to their denotation, see above. Each
-`SymDeotation` has flags that can be queried using the `is` method.
+`SymDenotation` has flags that can be queried using the `is` method.
 
 ### Flags ###
 * Flags are instances of the value class `FlagSet`, which encapsulates a

@@ -5,7 +5,7 @@ object Foo {
   println(summon)  // error
 }
 
-import scala.deriving._
+import scala.deriving.*
 import scala.compiletime.erasedValue
 
 inline def summon[T](using t:T): T = t match {
@@ -13,7 +13,7 @@ inline def summon[T](using t:T): T = t match {
 }
 
 inline def summonAll[T <: Tuple]: List[Eq[_]] = inline erasedValue[T] match {
-  case _: Unit => Nil
+  case _: EmptyTuple => Nil
   case _: (t *: ts) => summon[Eq[t]] :: summonAll[ts]  // error
 }
 
@@ -22,7 +22,7 @@ trait Eq[T] {
 }
 
 object Eq {
-  given Eq[Int] {
+  given Eq[Int] with {
     def eqv(x: Int, y: Int) = x == y
   }
 
@@ -58,6 +58,6 @@ object Eq {
 
 
 enum Opt[+T] derives Eq {
-  case Sm(t: T)
+  case Sm[T](t: T) extends Opt[T]
   case Nn
 }

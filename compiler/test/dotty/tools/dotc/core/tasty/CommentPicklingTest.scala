@@ -5,7 +5,7 @@ import dotty.tools.dotc.ast.tpd.TreeOps
 import dotty.tools.dotc.{Driver, Main}
 import dotty.tools.dotc.core.Comments.CommentsContext
 import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.core.Decorators.PreNamedString
+import dotty.tools.dotc.core.Decorators.{toTermName, toTypeName}
 import dotty.tools.dotc.core.Mode
 import dotty.tools.dotc.core.Names.Name
 import dotty.tools.dotc.interfaces.Diagnostic.ERROR
@@ -61,7 +61,7 @@ class CommentPicklingTest {
     compileAndUnpickle(sources) { (trees, ctx) =>
       findTreeNamed(treeName)(trees, ctx) match {
         case Some(md: tpd.MemberDef) =>
-          val symbol = md.symbol(ctx)
+          val symbol = md.symbol(using ctx)
           val comment = for { docCtx <- ctx.docCtx
                               comment <- docCtx.docstring(symbol) } yield comment.raw
           assertEquals(expectedComment, comment)
@@ -82,7 +82,7 @@ class CommentPicklingTest {
     Directory.inTempDirectory { tmp =>
       val sourceFiles = sources.zipWithIndex.map {
         case (src, id) =>
-          val path = tmp./(File("Src$id.scala")).toAbsolute
+          val path = tmp./(File(s"Src$id.scala")).toAbsolute
           path.writeAll(src)
           path.toString
       }
@@ -107,12 +107,12 @@ class CommentPicklingTest {
   private class UnpicklingDriver extends Driver {
     override def initCtx = super.initCtx.addMode(Mode.ReadComments)
     def unpickle[T](args: Array[String], files: List[File])(fn: (List[tpd.Tree], Context) => T): T = {
-      implicit val (_, ctx: Context) = setup(args, initCtx)
+      implicit val ctx: Context = setup(args, initCtx).map(_._2).getOrElse(initCtx)
       ctx.initialize()
       val trees = files.flatMap { f =>
         val unpickler = new DottyUnpickler(f.toByteArray())
         unpickler.enter(roots = Set.empty)
-        unpickler.rootTrees(ctx)
+        unpickler.rootTrees(using ctx)
       }
       fn(trees, ctx)
     }

@@ -11,8 +11,9 @@ object Properties {
     prop == null || prop == "TRUE"
   }
 
-  /** Are we running on the Drone CI? */
-  val isRunByDrone: Boolean = sys.env.isDefinedAt("DRONE")
+  /** Are we running on the CI? */
+  val isRunByCI: Boolean = sys.env.isDefinedAt("DOTTY_CI_RUN")
+  || sys.env.isDefinedAt("DRONE")  // TODO remove this when we drop Drone
 
   /** Tests should run interactive? */
   val testsInteractive: Boolean = propIsNullOrTrue("dotty.tests.interactive")
@@ -47,6 +48,9 @@ object Properties {
   /** dotty-library jar */
   def dottyLibrary: String = sys.props("dotty.tests.classes.dottyLibrary")
 
+  /** dotty-library-js jar */
+  def dottyLibraryJS: String = sys.props("dotty.tests.classes.dottyLibraryJS")
+
   /** dotty-compiler jar */
   def dottyCompiler: String = sys.props("dotty.tests.classes.dottyCompiler")
 
@@ -73,4 +77,7 @@ object Properties {
 
   /** jline-reader jar */
   def jlineReader: String = sys.props("dotty.tests.classes.jlineReader")
+
+  /** scalajs-library jar */
+  def scalaJSLibrary: String = sys.props("dotty.tests.classes.scalaJSLibrary")
 }

@@ -2,7 +2,7 @@ package dotty.tools
 package dotc
 package parsing
 
-import scala.internal.Chars._
+import util.Chars._
 
 abstract class CharArrayReader { self =>
 
@@ -10,7 +10,7 @@ abstract class CharArrayReader { self =>
   protected def startFrom: Int = 0
 
   /** Switch whether unicode should be decoded */
-  protected def decodeUni: Boolean = true
+  protected def decodeUni: Boolean = false
 
   /** An error routine to call on bad unicode escapes \\uxxxx. */
   protected def error(msg: String, offset: Int): Unit

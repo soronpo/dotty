@@ -1,10 +1,10 @@
 package example
 
-import scala.language/*->scalaShadowing::language.*/.implicitConversions/*->scalaShadowing::language.implicitConversions.*/
+import scala.language/*->scala::language.*/.implicitConversions/*->scala::language.implicitConversions.*/
 
 class Synthetic/*<-example::Synthetic#*/ {
   List/*->scala::package.List.*//*->scala::collection::IterableFactory#apply().*/(1).map/*->scala::collection::immutable::List#map().*/(_ +/*->scala::Int#`+`(+4).*/ 2)
-  /*->scala::Predef.intArrayOps().*/Array/*->scala::Array.*/.empty/*->scala::Array.empty().*/[Int/*->scala::Int#*/]/*->scala::reflect::ClassTag.apply().*//*->java::lang::Integer#TYPE.*/.headOption/*->scala::collection::ArrayOps#headOption().*/
+  /*->scala::Predef.intArrayOps().*/Array/*->scala::Array.*/.empty/*->scala::Array.empty().*/[Int/*->scala::Int#*/]/*->scala::reflect::ClassTag.apply().*/.headOption/*->scala::collection::ArrayOps#headOption().*/
   /*->scala::Predef.augmentString().*/"fooo".stripPrefix/*->scala::collection::StringOps#stripPrefix().*/("o")
 
   // See https://github.com/scalameta/scalameta/issues/977

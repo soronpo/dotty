@@ -6,6 +6,8 @@ import scala.tools.asm
 import scala.annotation.switch
 import scala.collection.mutable
 import Primitives.{NE, EQ, TestOp, ArithmeticOp}
+import scala.tools.asm.tree.MethodInsnNode
+import dotty.tools.dotc.report
 
 /*
  *  A high-level facade to the ASM API for bytecode generation.
@@ -15,27 +17,49 @@ import Primitives.{NE, EQ, TestOp, ArithmeticOp}
  *
  */
 trait BCodeIdiomatic {
-  val int: BackendInterface
+  val int: DottyBackendInterface
   final lazy val bTypes = new BTypesFromSymbols[int.type](int)
 
-  import int._
+  import int.{_, given}
   import bTypes._
   import coreBTypes._
 
-  lazy val classfileVersion: Int = targetPlatform match {
-    case "jvm-1.5"     => asm.Opcodes.V1_5
-    case "jvm-1.6"     => asm.Opcodes.V1_6
-    case "jvm-1.7"     => asm.Opcodes.V1_7
-    case "jvm-1.8"     => asm.Opcodes.V1_8
+
+
+  lazy val target =
+    val releaseValue = Option(ctx.settings.release.value).filter(_.nonEmpty)
+    val targetValue = Option(ctx.settings.Xtarget.value).filter(_.nonEmpty)
+    val defaultTarget = "8"
+    (releaseValue, targetValue) match
+      case (Some(release), None) => release
+      case (None, Some(target)) => target
+      case (Some(release), Some(_)) =>
+        report.warning(s"The value of ${ctx.settings.Xtarget.name} was overridden by ${ctx.settings.release.name}")
+        release
+      case (None, None) => "8" // least supported version by default
+
+
+  // Keep synchronized with `minTargetVersion` and `maxTargetVersion` in ScalaSettings
+  lazy val classfileVersion: Int = target match {
+    case "8"  => asm.Opcodes.V1_8
+    case "9"  => asm.Opcodes.V9
+    case "10" => asm.Opcodes.V10
+    case "11" => asm.Opcodes.V11
+    case "12" => asm.Opcodes.V12
+    case "13" => asm.Opcodes.V13
+    case "14" => asm.Opcodes.V14
+    case "15" => asm.Opcodes.V15
+    case "16" => asm.Opcodes.V16
+    case "17" => asm.Opcodes.V17
   }
 
   lazy val majorVersion: Int = (classfileVersion & 0xFF)
   lazy val emitStackMapFrame = (majorVersion >= 50)
 
-  val extraProc: Int = GenBCodeOps.mkFlags(
-    asm.ClassWriter.COMPUTE_MAXS,
-    if (emitStackMapFrame) asm.ClassWriter.COMPUTE_FRAMES else 0
-  )
+  val extraProc: Int =
+    import GenBCodeOps.addFlagIf
+    asm.ClassWriter.COMPUTE_MAXS
+      .addFlagIf(emitStackMapFrame, asm.ClassWriter.COMPUTE_FRAMES)
 
   lazy val JavaStringBuilderClassName = jlStringBuilderRef.internalName
 
@@ -104,7 +128,7 @@ trait BCodeIdiomatic {
    */
   abstract class JCodeMethodN {
 
-    def jmethod: asm.MethodVisitor
+    def jmethod: asm.tree.MethodNode
 
     import asm.Opcodes;
 
@@ -394,20 +418,26 @@ trait BCodeIdiomatic {
 
     // can-multi-thread
     final def invokespecial(owner: String, name: String, desc: String, itf: Boolean): Unit = {
-      jmethod.visitMethodInsn(Opcodes.INVOKESPECIAL, owner, name, desc, itf)
+      emitInvoke(Opcodes.INVOKESPECIAL, owner, name, desc, itf)
     }
     // can-multi-thread
     final def invokestatic(owner: String, name: String, desc: String, itf: Boolean): Unit = {
-      jmethod.visitMethodInsn(Opcodes.INVOKESTATIC, owner, name, desc, itf)
+      emitInvoke(Opcodes.INVOKESTATIC, owner, name, desc, itf)
     }
     // can-multi-thread
     final def invokeinterface(owner: String, name: String, desc: String): Unit = {
-      jmethod.visitMethodInsn(Opcodes.INVOKEINTERFACE, owner, name, desc, true)
+      emitInvoke(Opcodes.INVOKEINTERFACE, owner, name, desc, itf = true)
     }
     // can-multi-thread
     final def invokevirtual(owner: String, name: String, desc: String): Unit = {
-      jmethod.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, false)
+      emitInvoke(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf = false)
     }
+
+    def emitInvoke(opcode: Int, owner: String, name: String, desc: String, itf: Boolean): Unit = {
+      val node = new MethodInsnNode(opcode, owner, name, desc, itf)
+      jmethod.instructions.add(node)
+    }
+
 
     // can-multi-thread
     final def goTo(label: asm.Label): Unit = { jmethod.visitJumpInsn(Opcodes.GOTO, label) }
@@ -575,6 +605,11 @@ trait BCodeIdiomatic {
     final def checkCast(tk: RefBType): Unit = {
       // TODO ICode also requires: but that's too much, right? assert(!isBoxedType(tk),     "checkcast on boxed type: " + tk)
       jmethod.visitTypeInsn(Opcodes.CHECKCAST, tk.classOrArrayType)
+    }
+
+    def abort(msg: String): Nothing = {
+      report.error(msg)
+      throw new RuntimeException(msg)
     }
 
   } // end of class JCodeMethodN

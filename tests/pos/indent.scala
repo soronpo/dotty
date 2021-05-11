@@ -1,4 +1,4 @@
-object Test
+object Test:
 
   locally {
     var x = 0
@@ -19,16 +19,16 @@ object Test
         println("world")
         33
     val y1 =
-      if x > 0
+      if x > 0 then
         1
       else
         2
     val y2 =
-      if (y > 0) && y < 0
+      if (y > 0) && y < 0 then
         1
       else
         2
-    def (x: Int).gt(y: Int) = x > y
+    extension (x: Int) def gt(y: Int) = x > y
     val y3 =
       if (1) max 10 gt 0
 
@@ -50,6 +50,10 @@ object Test
       val y = x * x
       y * y
   }
+
+  val gg = (x: Int) ?=>
+    val y = x + 1
+    y
 
   xs.map {
     x =>
@@ -78,26 +82,30 @@ object Test
     x < 10
   do ()
 
-class Test2
+class Test2:
   self =>
-  def foo = 1
+  def foo(x: Int) =
+    if x < 0 then throw
+      val ex = new AssertionError()
+      ex
+    x
 
   val x =
     new Test2 {
-      override def foo = 2
+      override def foo(x: Int) = 2
     }
   end x
 end Test2
 
-class Test3
+class Test3:
  self =>
   def foo = 1
 
 import collection.mutable.HashMap
 
-class Coder(words: List[String])
+class Coder(words: List[String]):
 
-  class Foo
+  class Foo:
     println()
   end Foo
 
@@ -138,5 +146,5 @@ class Coder(words: List[String])
       }
 end Coder
 
-object Test22
+object Test22:
   def foo: Int = 22

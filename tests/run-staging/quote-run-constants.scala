@@ -1,48 +1,47 @@
 
-import scala.quoted.autolift.{given _}
 
-import scala.quoted._
-import scala.quoted.staging._
+import scala.quoted.*
+import scala.quoted.staging.*
 
 object Test {
   def main(args: Array[String]): Unit = {
-    given Toolbox = Toolbox.make(getClass.getClassLoader)
-    def runAndPrint[T](expr: QuoteContext ?=> Expr[T]): Unit = println(run(expr))
+    given Compiler = Compiler.make(getClass.getClassLoader)
+    def runAndPrint[T](expr: Quotes ?=> Expr[T]): Unit = println(run(expr))
 
-    runAndPrint(true)
-    runAndPrint('a')
-    runAndPrint('\n')
-    runAndPrint('"')
-    runAndPrint('\'')
-    runAndPrint('\\')
-    runAndPrint(1)
-    runAndPrint(2)
-    runAndPrint(3L)
-    runAndPrint(4.0f)
-    runAndPrint(5.0d)
-    runAndPrint("xyz")
+    runAndPrint(Expr(true))
+    runAndPrint(Expr('a'))
+    runAndPrint(Expr('\n'))
+    runAndPrint(Expr('"'))
+    runAndPrint(Expr('\''))
+    runAndPrint(Expr('\\'))
+    runAndPrint(Expr(1))
+    runAndPrint(Expr(2))
+    runAndPrint(Expr(3L))
+    runAndPrint(Expr(4.0f))
+    runAndPrint(Expr(5.0d))
+    runAndPrint(Expr("xyz"))
 
     println("======")
 
-    withQuoteContext {
+    withQuotes {
       def show[T](expr: Expr[T]): Unit = println(expr.show)
 
-      show(true)
-      show('a')
-      show('\n')
-      show('"')
-      show('\'')
-      show('\\')
-      show(1)
-      show(2)
-      show(3L)
-      show(4.0f)
-      show(5.0d)
-      show("xyz")
-      show("\n\\\"'")
-      show(
+      show(Expr(true))
+      show(Expr('a'))
+      show(Expr('\n'))
+      show(Expr('"'))
+      show(Expr('\''))
+      show(Expr('\\'))
+      show(Expr(1))
+      show(Expr(2))
+      show(Expr(3L))
+      show(Expr(4.0f))
+      show(Expr(5.0d))
+      show(Expr("xyz"))
+      show(Expr("\n\\\"'"))
+      show(Expr(
         """abc
-         xyz""")
+         xyz"""))
     }
   }
 }

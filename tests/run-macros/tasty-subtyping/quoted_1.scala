@@ -1,23 +1,22 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
 object Macros {
 
   inline def isTypeEqual[T, U]: Boolean =
-    ${isTypeEqualImpl('[T], '[U])}
+    ${isTypeEqualImpl[T, U]}
 
   inline def isSubTypeOf[T, U]: Boolean =
-    ${isSubTypeOfImpl('[T], '[U])}
+    ${isSubTypeOfImpl[T, U]}
 
-  def isTypeEqualImpl[T, U](t: Type[T], u: Type[U])(using qctx: QuoteContext) : Expr[Boolean] = {
-    import qctx.tasty.{_, given _}
-    val isTypeEqual = t.unseal.tpe =:= u.unseal.tpe
-    isTypeEqual
+  def isTypeEqualImpl[T: Type, U: Type](using Quotes) : Expr[Boolean] = {
+    import quotes.reflect.*
+    val isTypeEqual = TypeRepr.of[T] =:= TypeRepr.of[U]
+    Expr(isTypeEqual)
   }
 
-  def isSubTypeOfImpl[T, U](t: Type[T], u: Type[U])(using qctx: QuoteContext) : Expr[Boolean] = {
-    import qctx.tasty.{_, given _}
-    val isTypeEqual = t.unseal.tpe <:< u.unseal.tpe
-    isTypeEqual
+  def isSubTypeOfImpl[T: Type, U: Type](using Quotes) : Expr[Boolean] = {
+    import quotes.reflect.*
+    val isTypeEqual = TypeRepr.of[T] <:< TypeRepr.of[U]
+    Expr(isTypeEqual)
   }
 }

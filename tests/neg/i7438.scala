@@ -1,7 +1,7 @@
 type Tr[+A]
-inline def (tr: Tr[A]).map[A, B](f: A => B): Tr[B] = ???
+extension [A, B](tr: Tr[A]) inline def map(f: A => B): Tr[B] = ???
 
-def (d: Double).func: None.type => Some[Double] = ???
+extension (d: Double) def func: None.type => Some[Double] = ???
 
 def run[A](query: None.type => Some[A]): Some[A] = ???
 

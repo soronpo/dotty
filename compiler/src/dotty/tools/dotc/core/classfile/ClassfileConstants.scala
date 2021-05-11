@@ -341,7 +341,7 @@ object ClassfileConstants {
       case JAVA_ACC_PRIVATE    => Private
       case JAVA_ACC_PROTECTED  => Protected
       case JAVA_ACC_FINAL      => Final
-      case JAVA_ACC_SYNTHETIC  => Synthetic
+      case JAVA_ACC_SYNTHETIC  => SyntheticArtifact
       case JAVA_ACC_STATIC     => JavaStatic
       case JAVA_ACC_ENUM       => Enum
       case JAVA_ACC_ABSTRACT   => if (isClass) Abstract else Deferred
@@ -362,6 +362,7 @@ object ClassfileConstants {
       res = addFlag(res, nflags & JAVA_ACC_FINAL)
       res = addFlag(res, nflags & JAVA_ACC_SYNTHETIC)
       res = addFlag(res, nflags & JAVA_ACC_STATIC)
+      res = addFlag(res, nflags & JAVA_ACC_ENUM)
       res = addFlag(res, nflags & JAVA_ACC_ABSTRACT)
       res = addFlag(res, nflags & JAVA_ACC_INTERFACE)
       res

@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Zip {
@@ -14,8 +13,8 @@ class Zip {
 
   @Setup
   def setup(): Unit = {
-    tuple1 = ()
-    tuple2 = ()
+    tuple1 = Tuple()
+    tuple2 = Tuple()
 
     for (i <- 1 to size) {
       tuple1 = "el" *: tuple1
@@ -28,7 +27,7 @@ class Zip {
 
   @Benchmark
   def tupleZip(): Tuple = {
-    DynamicTuple.dynamicZip(tuple1, tuple2)
+    runtime.Tuples.zip(tuple1, tuple2)
   }
 
   @Benchmark

@@ -1,18 +1,15 @@
-/* NSC -- new Scala compiler
- * Copyright 2005-2012 LAMP/EPFL
- * @author  Martin Odersky
- */
-
 package dotty.tools
 package backend.jvm
 
 import dotc.ast.Trees.Select
 import dotc.ast.tpd._
 import dotc.core._
-import Contexts.Context
+import Contexts._
 import Names.TermName, StdNames._
 import Types.{JavaArrayType, UnspecifiedErrorType, Type}
 import Symbols.{Symbol, NoSymbol}
+import dotc.report
+import dotc.util.ReadOnlyMap
 
 import scala.annotation.threadUnsafe
 import scala.collection.immutable
@@ -35,10 +32,10 @@ import scala.collection.immutable
  *
  * Inspired from the `scalac` compiler.
  */
-class DottyPrimitives(ctx: Context) {
+class DottyPrimitives(ictx: Context) {
   import dotty.tools.backend.ScalaPrimitivesOps._
 
-  @threadUnsafe private lazy val primitives: immutable.Map[Symbol, Int] = init
+  @threadUnsafe private lazy val primitives: ReadOnlyMap[Symbol, Int] = init
 
   /** Return the code for the given symbol. */
   def getPrimitive(sym: Symbol): Int = {
@@ -54,7 +51,7 @@ class DottyPrimitives(ctx: Context) {
    * @param tpe The type of the receiver object. It is used only for array
    *            operations
    */
-  def getPrimitive(app: Apply, tpe: Type)(implicit ctx: Context): Int = {
+  def getPrimitive(app: Apply, tpe: Type)(using Context): Int = {
     val fun = app.fun.symbol
     val defn = ctx.definitions
     val code = app.fun match {
@@ -71,7 +68,7 @@ class DottyPrimitives(ctx: Context) {
       case defn.ArrayOf(el) => el
       case JavaArrayType(el) => el
       case _ =>
-        ctx.error(s"expected Array $tpe")
+        report.error(s"expected Array $tpe")
         UnspecifiedErrorType
     }
 
@@ -122,12 +119,12 @@ class DottyPrimitives(ctx: Context) {
   }
 
   /** Initialize the primitive map */
-  private def init: immutable.Map[Symbol, Int]  = {
+  private def init: ReadOnlyMap[Symbol, Int]  = {
 
-    implicit val ctx = this.ctx
+    given Context = ictx
 
     import Symbols.defn
-    val primitives = Symbols.newMutableSymbolMap[Int]
+    val primitives = Symbols.MutableSymbolMap[Int](512)
 
     /** Add a primitive operation to the map */
     def addPrimitive(s: Symbol, code: Int): Unit = {
@@ -135,10 +132,10 @@ class DottyPrimitives(ctx: Context) {
       primitives(s) = code
     }
 
-    def addPrimitives(cls: Symbol, method: TermName, code: Int)(implicit ctx: Context): Unit = {
+    def addPrimitives(cls: Symbol, method: TermName, code: Int)(using Context): Unit = {
       val alts = cls.info.member(method).alternatives.map(_.symbol)
       if (alts.isEmpty)
-        ctx.error(s"Unknown primitive method $cls.$method")
+        report.error(s"Unknown primitive method $cls.$method")
       else alts foreach (s =>
         addPrimitive(s,
           s.info.paramInfoss match {
@@ -398,17 +395,19 @@ class DottyPrimitives(ctx: Context) {
     addPrimitives(DoubleClass, nme.UNARY_-, NEG)
 
 
-    primitives.toMap
+    primitives
   }
 
-  def isPrimitive(fun: Tree): Boolean = {
-    (primitives contains fun.symbol(ctx)) ||
-      (fun.symbol(ctx) == NoSymbol // the only trees that do not have a symbol assigned are array.{update,select,length,clone}}
-       && (fun match {
-        case Select(_, StdNames.nme.clone_) => false // but array.clone is NOT a primitive op.
-        case _ => true
-      }))
-  }
+  def isPrimitive(sym: Symbol): Boolean =
+    primitives.contains(sym)
 
+  def isPrimitive(fun: Tree): Boolean =
+    given Context = ictx
+    primitives.contains(fun.symbol)
+    || (fun.symbol == NoSymbol // the only trees that do not have a symbol assigned are array.{update,select,length,clone}}
+        && {
+          fun match
+            case Select(_, StdNames.nme.clone_) => false // but array.clone is NOT a primitive op.
+            case _ => true
+        })
 }
-

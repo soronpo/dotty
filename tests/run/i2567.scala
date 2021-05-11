@@ -1,6 +1,6 @@
 class TC
 
-given tc : TC
+given tc: TC()
 
 class Foo(using TC) {
   println("hi")

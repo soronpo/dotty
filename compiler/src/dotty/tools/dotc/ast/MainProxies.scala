@@ -26,7 +26,7 @@ import ast.Trees._
  */
 object MainProxies {
 
-  def mainProxies(stats: List[tpd.Tree])(given Context): List[untpd.Tree] = {
+  def mainProxies(stats: List[tpd.Tree])(using Context): List[untpd.Tree] = {
     import tpd._
     def mainMethods(stats: List[Tree]): List[Symbol] = stats.flatMap {
       case stat: DefDef if stat.symbol.hasAnnotation(defn.MainAnnot) =>
@@ -40,14 +40,14 @@ object MainProxies {
   }
 
   import untpd._
-  def mainProxy(mainFun: Symbol)(given ctx: Context): List[TypeDef] = {
+  def mainProxy(mainFun: Symbol)(using Context): List[TypeDef] = {
     val mainAnnotSpan = mainFun.getAnnotation(defn.MainAnnot).get.tree.span
     def pos = mainFun.sourcePos
     val argsRef = Ident(nme.args)
 
     def addArgs(call: untpd.Tree, mt: MethodType, idx: Int): untpd.Tree =
       if (mt.isImplicitMethod) {
-        ctx.error(s"@main method cannot have implicit parameters", pos)
+        report.error(s"@main method cannot have implicit parameters", pos)
         call
       }
       else {
@@ -65,7 +65,7 @@ object MainProxies {
         mt.resType match {
           case restpe: MethodType =>
             if (mt.paramInfos.lastOption.getOrElse(NoType).isRepeatedParam)
-              ctx.error(s"varargs parameter of @main method must come last", pos)
+              report.error(s"varargs parameter of @main method must come last", pos)
             addArgs(call1, restpe, idx + args.length)
           case _ =>
             call1
@@ -74,7 +74,7 @@ object MainProxies {
 
     var result: List[TypeDef] = Nil
     if (!mainFun.owner.isStaticOwner)
-      ctx.error(s"@main method is not statically accessible", pos)
+      report.error(s"@main method is not statically accessible", pos)
     else {
       var call = ref(mainFun.termRef)
       mainFun.info match {
@@ -82,9 +82,9 @@ object MainProxies {
         case mt: MethodType =>
           call = addArgs(call, mt, 0)
         case _: PolyType =>
-          ctx.error(s"@main method cannot have type parameters", pos)
+          report.error(s"@main method cannot have type parameters", pos)
         case _ =>
-          ctx.error(s"@main can only annotate a method", pos)
+          report.error(s"@main can only annotate a method", pos)
       }
       val errVar = Ident(nme.error)
       val handler = CaseDef(
@@ -94,12 +94,12 @@ object MainProxies {
       val body = Try(call, handler :: Nil, EmptyTree)
       val mainArg = ValDef(nme.args, TypeTree(defn.ArrayType.appliedTo(defn.StringType)), EmptyTree)
         .withFlags(Param)
-      val mainMeth = DefDef(nme.main, Nil, (mainArg :: Nil) :: Nil, TypeTree(defn.UnitType), body)
+      val mainMeth = DefDef(nme.main, (mainArg :: Nil) :: Nil, TypeTree(defn.UnitType), body)
         .withFlags(JavaStatic)
       val mainTempl = Template(emptyConstructor, Nil, Nil, EmptyValDef, mainMeth :: Nil)
       val mainCls = TypeDef(mainFun.name.toTypeName, mainTempl)
-        .withFlags(Final)
-      if (!ctx.reporter.hasErrors) result = mainCls.withSpan(mainAnnotSpan) :: Nil
+        .withFlags(Final | Invisible)
+      if (!ctx.reporter.hasErrors) result = mainCls.withSpan(mainAnnotSpan.toSynthetic) :: Nil
     }
     result
   }

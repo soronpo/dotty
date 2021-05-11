@@ -9,7 +9,7 @@ class X5[A >: _ with X5[_]] // error
 class X6[A >: X6[_] with _] // error
 
 class A1 extends _ // error
-class A2 extends _ with _ // error // error
+class A2 extends _ with _ // error
 class A3 extends Base with _ // error
 class A4 extends _ with Base // error
 

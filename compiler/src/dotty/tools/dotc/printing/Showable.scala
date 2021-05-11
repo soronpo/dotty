@@ -20,14 +20,17 @@ trait Showable extends Any {
   def fallbackToText(printer: Printer): Text = toString
 
   /** The string representation of this showable element. */
-  def show(implicit ctx: Context): String = toText(ctx.printer).show
+  def show(using Context): String = toText(ctx.printer).show
+
+  /** The string representation with each line after the first one indented
+   *  by the given given margin (in spaces).
+   */
+  def showIndented(margin: Int)(using Context): String = show.replace("\n", "\n" + " " * margin)
 
   /** The summarized string representation of this showable element.
    *  Recursion depth is limited to some smallish value. Default is
    *  Config.summarizeDepth.
    */
-  def showSummary(depth: Int)(implicit ctx: Context): String =
-    ctx.printer.summarized(depth)(show)
-
-  def showSummary(implicit ctx: Context): String = showSummary(summarizeDepth)
+  def showSummary(depth: Int = summarizeDepth)(using Context): String =
+    show(using ctx.fresh.setProperty(MessageLimiter, SummarizeMessageLimiter(depth)))
 }

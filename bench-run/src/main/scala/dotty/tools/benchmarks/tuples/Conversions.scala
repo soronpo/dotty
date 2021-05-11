@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Conversions {
@@ -13,7 +12,7 @@ class Conversions {
 
   @Setup
   def setup(): Unit = {
-    tuple = ()
+    tuple = Tuple()
 
     for (i <- 1 to size)
       tuple = "elem" *: tuple
@@ -24,27 +23,27 @@ class Conversions {
 
   @Benchmark
   def tupleToArray(): Array[Object] = {
-    DynamicTuple.dynamicToArray(tuple)
+    runtime.Tuples.toArray(tuple)
   }
 
   @Benchmark
   def tupleToIArray(): IArray[Object] = {
-    DynamicTuple.dynamicToIArray(tuple)
+    runtime.Tuples.toIArray(tuple)
   }
 
   @Benchmark
   def tupleFromArray(): Tuple = {
-    DynamicTuple.dynamicFromArray(array)
+    runtime.Tuples.fromArray(array)
   }
 
   @Benchmark
   def tupleFromIArray(): Tuple = {
-    DynamicTuple.dynamicFromIArray(iarray)
+    runtime.Tuples.fromIArray(iarray)
   }
 
   @Benchmark
   def productToArray(): Array[Object] = {
-    DynamicTuple.productToArray(tuple.asInstanceOf[Product])
+    runtime.Tuples.productToArray(tuple.asInstanceOf[Product])
   }
 
   @Benchmark

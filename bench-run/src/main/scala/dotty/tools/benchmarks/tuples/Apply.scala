@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Apply {
@@ -14,7 +13,7 @@ class Apply {
   def setup(): Unit = {
     val size = sizeAndIndex.split(' ')(0).toInt
     index = sizeAndIndex.split(' ')(1).toInt
-    tuple = "elem" *: ()
+    tuple = "elem" *: Tuple()
 
     for (i <- 1 until size)
       tuple = "elem" *: tuple
@@ -22,7 +21,7 @@ class Apply {
 
   @Benchmark
   def tupleApply(): Any = {
-    DynamicTuple.dynamicApply(tuple, index)
+    runtime.Tuples.apply(tuple, index)
   }
 
   @Benchmark

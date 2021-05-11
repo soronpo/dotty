@@ -1,4 +1,4 @@
-object Test
+object Test:
 
 	if true then
 		println(1)   // ok
@@ -7,9 +7,9 @@ object Test
 	  println(4)   // error
  else ()         // error
 
-	object Test2
+	object Test2:
 
 	    if true then
 	      1
-	  else 2 // error // error
+	  else 2 // error
 

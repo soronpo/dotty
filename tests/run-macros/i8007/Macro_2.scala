@@ -1,13 +1,13 @@
-import scala.deriving._
-import scala.quoted._
-import scala.quoted.matching._
+import scala.deriving.*
+import scala.quoted.*
+
 
 object Macro2 {
 
-  def mirrorFields[T](t: Type[T])(using qctx: QuoteContext): List[String] =
+  def mirrorFields[T](using t: Type[T])(using Quotes): List[String] =
     t match {
-      case '[$field *: $fields] => field.show.substring(1, field.show.length-1) :: mirrorFields(fields)
-      case '[Unit] => Nil
+      case '[field *: fields] => Type.show[field].substring(1, Type.show[field].length-1) :: mirrorFields[fields]
+      case '[EmptyTuple] => Nil
     }
 
   trait JsonEncoder[T] {
@@ -20,17 +20,17 @@ object Macro2 {
           def encode(elem: T): String = body(elem)
         }
 
-    def derived[T: Type](ev: Expr[Mirror.Of[T]])(using qctx: QuoteContext): Expr[JsonEncoder[T]] = {
-      import qctx.tasty.{_, given}
+    def derived[T: Type](ev: Expr[Mirror.Of[T]])(using Quotes): Expr[JsonEncoder[T]] = {
+      import quotes.reflect.*
 
       val fields = ev match {
-        case '{ $m: Mirror.ProductOf[T] { type MirroredElemLabels = $t } } =>
-          mirrorFields(t)
+        case '{ $m: Mirror.ProductOf[T] { type MirroredElemLabels = labels } } =>
+          mirrorFields[labels]
       }
 
       val body: Expr[T] => Expr[String] = elem =>
         fields.reverse.foldLeft(Expr("")){ (acc, field) =>
-          val res = Select.unique(elem.unseal, field).seal
+          val res = Select.unique(elem.asTerm, field).asExpr
           '{ $res.toString + " " + $acc }
         }
 
@@ -42,11 +42,11 @@ object Macro2 {
 
   inline def test2[T](value: =>T): Unit = ${ test2Impl('value) }
 
-  def test2Impl[T: Type](value: Expr[T])(using qctx: QuoteContext): Expr[Unit] = {
-    import qctx.tasty.{_, given}
+  def test2Impl[T: Type](value: Expr[T])(using Quotes): Expr[Unit] = {
+    import quotes.reflect.*
 
-    val mirrorTpe = '[Mirror.Of[T]]
-    val mirrorExpr = summonExpr(using mirrorTpe).get
+    val mirrorTpe = Type.of[Mirror.Of[T]]
+    val mirrorExpr = Expr.summon(using mirrorTpe).get
     val derivedInstance = JsonEncoder.derived(mirrorExpr)
 
     '{

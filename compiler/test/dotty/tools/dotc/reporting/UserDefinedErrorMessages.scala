@@ -3,7 +3,6 @@ package dotc
 package reporting
 
 import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.reporting.diagnostic.messages._
 import org.junit.Assert._
 import org.junit.Test
 
@@ -24,8 +23,7 @@ class UserDefinedErrorMessages extends ErrorMessagesTest {
         |}
       """.stripMargin
     }.expect { (itcx, messages) =>
-      import diagnostic.NoExplanation
-      implicit val ctx: Context = itcx
+      given Context = itcx
 
       assertMessageCount(1, messages)
       val (m: NoExplanation) :: Nil = messages
@@ -49,8 +47,7 @@ class UserDefinedErrorMessages extends ErrorMessagesTest {
         |}
       """.stripMargin
     }.expect { (itcx, messages) =>
-      import diagnostic.NoExplanation
-      implicit val ctx: Context = itcx
+      given Context = itcx
 
       assertMessageCount(1, messages)
       val (m: NoExplanation) :: Nil = messages
@@ -75,8 +72,7 @@ class UserDefinedErrorMessages extends ErrorMessagesTest {
         |}
       """.stripMargin
     }.expect { (itcx, messages) =>
-      import diagnostic.NoExplanation
-      implicit val ctx: Context = itcx
+      given Context = itcx
 
       assertMessageCount(1, messages)
       val (m: NoExplanation) :: Nil = messages
@@ -98,8 +94,7 @@ class UserDefinedErrorMessages extends ErrorMessagesTest {
         |}
       """.stripMargin
     }.expect { (itcx, messages) =>
-      import diagnostic.NoExplanation
-      implicit val ctx: Context = itcx
+      given Context = itcx
 
       assertMessageCount(1, messages)
       val (m: NoExplanation) :: Nil = messages
@@ -121,8 +116,7 @@ class UserDefinedErrorMessages extends ErrorMessagesTest {
         |}
       """.stripMargin
     }.expect { (itcx, messages) =>
-      import diagnostic.NoExplanation
-      implicit val ctx: Context = itcx
+      given Context = itcx
 
       assertMessageCount(1, messages)
       val (m: NoExplanation) :: Nil = messages

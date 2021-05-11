@@ -2,10 +2,10 @@ object Test extends App {
 
   class TC
 
-  given stringListOps(using TC) as Object {
+  given stringListOps(using TC): Object with {
     type T = List[String]
-    def (x: T).foo(y: T) = (x ++ y, summon[TC])
-    def (x: T).bar(y: Int) = (x(0)(y), summon[TC])
+    extension (x: T) def foo(y: T) = (x ++ y, summon[TC])
+    extension (x: T) def bar(y: Int) = (x(0)(y), summon[TC])
   }
 
   def test(using TC) = {
@@ -16,30 +16,30 @@ object Test extends App {
   test(using TC())
 
   object A {
-    extension listOps on [T](xs: List[T]) {
+    extension [T](xs: List[T]) {
       def second: T = xs.tail.head
       def third: T = xs.tail.tail.head
       def concat(ys: List[T]) = xs ++ ys
     }
-    extension polyListOps on [T, U](xs: List[T]) {
-      def zipp(ys: List[U]): List[(T, U)] = xs.zip(ys)
+    extension [T](xs: List[T]) {
+      def zipp[U](ys: List[U]): List[(T, U)] = xs.zip(ys)
     }
-    extension on (xs: List[Int]) {
+    extension (xs: List[Int]) {
       def prod = (1 /: xs)(_ * _)
     }
   }
 
   object B {
-    import A.{given _}
+    import A.*
     val xs = List(1, 2, 3)
-    assert(xs.second[Int] == 2)
+    assert(xs.second == 2)
     assert(xs.third == 3)
-    assert(A.listOps.second[Int](xs) == 2)
-    assert(A.listOps.third(xs) == 3)
+    assert(A.second[Int](xs) == 2)
+    assert(A.third(xs) == 3)
     assert(xs.prod == 6)
     assert(xs.concat(xs).length == 6)
     assert(xs.zipp(xs).map(_ + _).prod == 36)
-    assert(xs.zipp[Int, Int](xs).map(_ + _).prod == 36)
+    assert(xs.zipp[Int](xs).map(_ + _).prod == 36)
   }
 }
 

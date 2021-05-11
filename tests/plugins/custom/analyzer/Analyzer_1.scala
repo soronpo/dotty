@@ -1,6 +1,6 @@
-// Similar code resides in scripted tests, which only runs on nightly:
+// Similar code resides in scripted tests:
 //
-// sbt-dotty/sbt-test/sbt-dotty/analyzer-plugin/plugin
+// sbt-test/analyzer-plugin/plugin
 //
 // You may want to change the code there too
 
@@ -8,24 +8,24 @@ package analyzer
 
 import scala.language.implicitConversions
 
-import dotty.tools.dotc._
-import core._
+import dotty.tools.dotc.*
+import core.*
 import Contexts.Context
-import plugins._
+import plugins.*
 import Phases.Phase
 import ast.tpd
 import transform.MegaPhase.MiniPhase
-import Decorators._
-import Symbols.Symbol
+import Decorators.*
+import Symbols.{Symbol, requiredPackage}
 import Constants.Constant
-import Types._
-import transform.{ReifyQuotes, FirstTransform}
+import Types.*
+import transform.{PickleQuotes, FirstTransform}
 
 class SetDefTree extends PluginPhase {
-  import tpd._
+  import tpd.*
 
   override val phaseName: String = SetDefTree.name
-  override def runsAfter: Set[String] = Set(ReifyQuotes.name)
+  override def runsAfter: Set[String] = Set(PickleQuotes.name)
   override def runsBefore: Set[String] = Set(FirstTransform.name)
     // don't allow plugins to change tasty
     // research plugins can still change the phase plan at will
@@ -42,7 +42,7 @@ object SetDefTree {
 }
 
 class InitChecker extends PluginPhase with StandardPlugin {
-  import tpd._
+  import tpd.*
 
   val name: String = "initChecker"
   override val description: String = "checks that under -Yretain-trees we may get tree for all symbols"
@@ -56,7 +56,7 @@ class InitChecker extends PluginPhase with StandardPlugin {
 
   private def checkDef(tree: Tree)(implicit ctx: Context): Tree = {
     if (tree.symbol.defTree.isEmpty)
-      ctx.error("cannot get tree for " + tree.show, tree.sourcePos)
+      report.error("cannot get tree for " + tree.show, tree.sourcePos)
     tree
   }
 
@@ -67,23 +67,23 @@ class InitChecker extends PluginPhase with StandardPlugin {
   private def checkRef(tree: Tree)(implicit ctx: Context): Tree =
     if (!checkable(tree.symbol)) tree
     else {
-      val helloPkgSym = ctx.requiredPackage("hello").moduleClass
-      val libPkgSym = ctx.requiredPackage("lib").moduleClass
+      val helloPkgSym = requiredPackage("hello").moduleClass
+      val libPkgSym = requiredPackage("lib").moduleClass
       val enclosingPkg = tree.symbol.enclosingPackageClass
 
       if (enclosingPkg == helloPkgSym) {  // source code
         checkDef(tree)
-        ctx.warning("tree: " + tree.symbol.defTree.show)
+        report.warning("tree: " + tree.symbol.defTree.show)
       }
       else if (enclosingPkg == libPkgSym) { // tasty from library
         checkDef(tree)
         // check that all sub-definitions have trees set properly
         // make sure that are no cycles in the code
         transformAllDeep(tree.symbol.defTree)
-        ctx.warning("tree: " + tree.symbol.defTree.show)
+        report.warning("tree: " + tree.symbol.defTree.show)
       }
       else {
-        ctx.warning(tree.symbol.toString + " is neither in lib nor hello, owner = " + enclosingPkg, tree.sourcePos)
+        report.warning(tree.symbol.toString + " is neither in lib nor hello, owner = " + enclosingPkg, tree.sourcePos)
       }
       tree
     }

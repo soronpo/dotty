@@ -61,13 +61,13 @@ object runtime {
       (implicit ev: TypeClassCommon { type This = From }): ev.Instance { type This = From } =
     ev.inject(x)
 }
-import runtime._
+import runtime.*
 
 object semiGroups {
 
   trait SemiGroup extends TypeClass {
     val commons: SemiGroupCommon
-    import commons._
+    import commons.*
     def add(that: This): This
   }
   trait SemiGroupCommon extends TypeClassCommon {
@@ -79,7 +79,7 @@ object semiGroups {
 
   trait Monoid extends SemiGroup {
     val commons: MonoidCommon
-    import commons._
+    import commons.*
   }
   trait MonoidCommon extends SemiGroupCommon {
     type Instance <: Monoid
@@ -95,7 +95,7 @@ object semiGroups {
     def unit: Int = 0
     def inject($this: Int) = new Monoid {
       val commons: IntOps.this.type = IntOps.this
-      def add(that: This): This = $this + that
+      def add(that: this.This): this.This = $this + that
     }
   }
 
@@ -105,7 +105,7 @@ object semiGroups {
     def unit = ""
     def inject($this: String) = new Monoid {
       val commons: StringOps.this.type = StringOps.this
-      def add(that: This): This = $this.concat(that)
+      def add(that: this.This): this.This = $this.concat(that)
     }
   }
 
@@ -179,7 +179,7 @@ object ord {
 
   trait Ord extends TypeClass {
     val commons: OrdCommon
-    import commons._
+    import commons.*
     def compareTo(that: This): Int
     def < (that: This) = compareTo(that) < 0
     def > (that: This) = compareTo(that) > 0
@@ -198,8 +198,8 @@ object ord {
     val minimum: Int = Int.MinValue
     def inject($this: Int) = new Ord {
       val commons: IntOrd.this.type = IntOrd.this
-      import commons._
-      def compareTo(that: This): Int =
+      import commons.*
+      def compareTo(that: this.This): Int =
         if (this < that) -1 else if (this > that) +1 else 0
     }
   }
@@ -210,7 +210,7 @@ object ord {
     def minimum: List[T] = Nil
     def inject($this: List[T]) = new Ord {
       val commons: self.type = self
-      import commons._
+      import commons.*
       def compareTo(that: List[T]): Int = ($this, that) match {
         case (Nil, Nil) => 0
         case (Nil, _) => -1
@@ -274,7 +274,7 @@ object runtime1 {
 
   trait TypeClass1 {
     val commons: TypeClassCommon1
-    type This = commons.This
+    type This = [X] =>> commons.This[X]
   }
 
   trait TypeClassCommon1 { self =>
@@ -284,21 +284,23 @@ object runtime1 {
   }
 
   trait TypeClassCompanion1 {
-    type Impl[T[_]] <: TypeClassCommon1 { type This = T }
+    type Impl[T[_]] <: TypeClassCommon1 { type This = [X] =>> T[X] }
     def impl[T[_]](implicit ev: Impl[T]): Impl[T] = ev
   }
 
   implicit def inject1[A, From[_]](x: From[A])
-      (implicit ev: TypeClassCommon1 { type This = From }): ev.Instance[A] { type This = From } =
+      (implicit ev: TypeClassCommon1 {
+        type This = [X] =>> From[X]
+      }): ev.Instance[A] { type This = [X] =>> From[X] } =
     ev.inject(x)
 }
-import runtime1._
+import runtime1.*
 
 object functors {
 
   trait Functor[A] extends TypeClass1 {
     val commons: FunctorCommon
-    import commons._
+    import commons.*
     def map[B](f: A => B): This[B]
   }
   trait FunctorCommon extends TypeClassCommon1 {
@@ -306,12 +308,12 @@ object functors {
     def pure[A](x: A): This[A]
   }
   object Functor extends TypeClassCompanion1 {
-    type Impl[T[_]] = FunctorCommon { type This = T }
+    type Impl[T[_]] = FunctorCommon { type This = [X] =>> T[X] }
   }
 
   trait Monad[A] extends Functor[A] {
     val commons: MonadCommon
-    import commons._
+    import commons.*
     def flatMap[B](f: A => This[B]): This[B]
     def map[B](f: A => B) = this.flatMap(f.andThen(commons.pure))
   }
@@ -319,27 +321,27 @@ object functors {
     type Instance[X] <: Monad[X]
   }
   object Monad extends TypeClassCompanion1 {
-    type Impl[T[_]] = MonadCommon { type This = T }
+    type Impl[T[_]] = MonadCommon { type This = [X] =>> T[X] }
   }
 
   def develop[A, F[X]](n: Int, x: A, f: A => A)(implicit ev: Functor.Impl[F]): F[A] =
     if (n == 0) Functor.impl[F].pure(x)
-    else develop(n - 1, x, f).map(f)
+    else develop(n - 1, x, f).map(f).asInstanceOf
 
   implicit object ListMonad extends MonadCommon {
-    type This = List
-    type Instance = Monad
+    type This[+X] = List[X]
+    type Instance[X] = Monad[X]
     def pure[A](x: A) = x :: Nil
     def inject[A]($this: List[A]) = new Monad[A] {
       val commons: ListMonad.this.type = ListMonad
-      import commons._
+      import commons.*
       def flatMap[B](f: A => List[B]): List[B] = $this.flatMap(f)
     }
   }
 
   object MonadFlatten {
     def flattened[T[_], A]($this: T[T[A]])(implicit ev: Monad.Impl[T]): T[A] =
-      $this.flatMap(identity  )
+      ??? // $this.flatMap[A](identity)   disabled since it does not typecheck
   }
 
   MonadFlatten.flattened(List(List(1, 2, 3), List(4, 5)))

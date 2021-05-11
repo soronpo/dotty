@@ -1,24 +1,21 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
-import scala.quoted.matching._
+
 
 object Macros {
 
   implicit inline def testMacro: Unit = ${impl}
 
-  def impl(using QuoteContext): Expr[Unit] = {
+  def impl(using Quotes): Expr[Unit] = {
 
     val buff = new StringBuilder
     def stagedPrintln(x: Any): Unit = buff append java.util.Objects.toString(x) append "\n"
 
-    Expr(3) match { case Const(n) => stagedPrintln(n) }
-    '{4} match { case Const(n) => stagedPrintln(n) }
-    '{"abc"} match { case Const(n) => stagedPrintln(n) }
-    '{null} match { case Const(n) => stagedPrintln(n) }
+    Expr(3) match { case Expr(n) => stagedPrintln(n) }
+    '{4} match { case Expr(n) => stagedPrintln(n) }
+    '{"abc"} match { case Expr(n) => stagedPrintln(n) }
+    '{null} match { case '{null} => stagedPrintln(null) }
 
-    '{new Object} match { case Const(n) => println(n); case _ => stagedPrintln("OK") }
-
-    '{print(${buff.result()})}
+    '{print(${Expr(buff.result())})}
   }
 }

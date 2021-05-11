@@ -1,17 +1,17 @@
-import scala.quoted._
+import scala.quoted.*
 import scala.language.implicitConversions
 
 object Macro {
 
-  implicit inline def (strCtx: => StringContext).f3(args: =>Any*): String = ${FIntepolator.apply('strCtx, 'args)}
+  extension (strCtx: => StringContext) implicit inline def f3(args: =>Any*): String = ${FIntepolator.apply('strCtx, 'args)}
 
 }
 
 object FIntepolator {
-  def apply(strCtxExpr: Expr[StringContext], argsExpr: Expr[Seq[Any]])(using qctx: QuoteContext) : Expr[String] = {
-    import qctx.tasty.{_, given _}
-    error("there are no args", argsExpr.unseal.underlyingArgument.pos)
-    '{ ($strCtxExpr).s($argsExpr: _*) }
+  def apply(strCtxExpr: Expr[StringContext], argsExpr: Expr[Seq[Any]])(using Quotes) : Expr[String] = {
+    import quotes.reflect.*
+    report.error("there are no args", argsExpr.asTerm.underlyingArgument.pos)
+    '{ ($strCtxExpr).s($argsExpr*) }
   }
 
 }

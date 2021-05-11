@@ -1,7 +1,7 @@
 
-import Term._
-import Pattern._
-import Type._
+import Term.*
+import Pattern.*
+import Type.*
 
 type Gamma = Set[EnvVar]
 type Delta = Set[EnvVar]
@@ -25,7 +25,7 @@ object Name {
 }
 
 
-enum Term
+enum Term:
   case Nat(n: Int)
   case Ref(name: Name)
   case Lambda(name: Name, tpe: Type, body: Term)
@@ -37,7 +37,7 @@ enum Term
   case Fix(term: Term)
 
 
-enum Pattern
+enum Pattern:
   case PNat(n: Int)
   case PRef(name: Name)
   case PApp(fun: Pattern, arg: Pattern)
@@ -46,7 +46,7 @@ enum Pattern
   case PFun(name: Name)
 
 
-enum Type
+enum Type:
   case NatType
   case LambdaType(arg: Type, res: Type)
   case BoxType(inner: Type)
@@ -101,7 +101,7 @@ def typeChecks(g: Gamma)(level: 0 | 1)(term: Term): Option[Type] =
       for LambdaType(t1, t2) <- typeChecks(g)(0)(t) yield t2 // T-Fix
     case _ => None
   if res.isEmpty then
-    println(s"Failed to type $term at level $level with enviroment $g")
+    println(s"Failed to type $term at level $level with environment $g")
   res
 
 
@@ -177,7 +177,7 @@ def matchPat(scrutinee: Term, pat: Pattern): Option[Term => Term] =
 
 
 def subst(body: Term, name: Name, term: Term): Term =
-  val substitutedTerm = refresh(term) // Could also be done within the substitution to ensure globaly unique names
+  val substitutedTerm = refresh(term) // Could also be done within the substitution to ensure globally unique names
   // def substitutedTerm = refresh(term) // Alternative with globally unique names
   def subst(body: Term): Term =
     body match

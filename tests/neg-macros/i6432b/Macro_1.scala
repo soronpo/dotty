@@ -1,17 +1,16 @@
 
-import scala.quoted._
-import scala.quoted.autolift.{given _}
-import scala.quoted.matching._
+import scala.quoted.*
+
 
 object Macro {
-  inline def (sc: => StringContext).foo(args: String*): Unit = ${ impl('sc) }
+  extension (inline sc: StringContext) inline def foo(args: String*): Unit = ${ impl('sc) }
 
-  def impl(sc: Expr[StringContext])(using qctx: QuoteContext) : Expr[Unit] = {
-    import qctx.tasty.{_, given _}
+  def impl(sc: Expr[StringContext])(using Quotes) : Expr[Unit] = {
+    import quotes.reflect.*
     sc match {
-      case '{ StringContext(${ExprSeq(parts)}: _*) } =>
-        for (part @ Const(s) <- parts)
-          error(s, part.unseal.pos)
+      case '{ StringContext(${Varargs(parts)}*) } =>
+        for (part @ Expr(s) <- parts)
+          report.error(s, part.asTerm.pos)
     }
     '{}
   }

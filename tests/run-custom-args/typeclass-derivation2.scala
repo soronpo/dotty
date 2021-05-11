@@ -1,13 +1,13 @@
 import scala.collection.mutable
 import scala.annotation.tailrec
 
-// A typeclass derivation encoding using Shape/Shaped scheme, now superseded by
+// A type class derivation encoding using Shape/Shaped scheme, now superseded by
 // typeclass-derivation2a
 object TypeLevel {
   /** @param caseLabels The case and element labels of the described ADT as encoded strings.
   */
   class ReflectedClass(labelsStr: String) {
-    import ReflectedClass._
+    import ReflectedClass.*
 
     /** A mirror of case with ordinal number `ordinal` and elements as given by `Product` */
     def mirror(ordinal: Int, product: Product): Mirror =
@@ -109,7 +109,7 @@ object TypeLevel {
     case Case[T, Elems <: Tuple]()
   }
 
-  /** Every generic derivation starts with a typeclass instance of this type.
+  /** Every generic derivation starts with a type class instance of this type.
    *  It informs that type `T` has shape `S` and also implements runtime reflection on `T`.
    */
   abstract class Shaped[T, S <: Shape] extends Reflected[T]
@@ -124,13 +124,13 @@ object TypeLevel {
 
 // An algebraic datatype
 enum Lst[+T] { // derives Eq, Pickler, Show
-  case Cons(hd: T, tl: Lst[T])
+  case Cons[T](hd: T, tl: Lst[T]) extends Lst[T]
   case Nil
 }
 
 object Lst {
   // common compiler-generated infrastructure
-  import TypeLevel._
+  import TypeLevel.*
 
   type Shape[T] = Shape.Cases[(
     Shape.Case[Cons[T], (T, Lst[T])],
@@ -165,7 +165,7 @@ case class Pair[T](x: T, y: T) // derives Eq, Pickler, Show
 
 object Pair {
   // common compiler-generated infrastructure
-  import TypeLevel._
+  import TypeLevel.*
 
   type Shape[T] = Shape.Case[Pair[T], (T, T)]
 
@@ -191,11 +191,11 @@ case class Left[L](x: L) extends Either[L, Nothing]
 case class Right[R](x: R) extends Either[Nothing, R]
 
 object Either {
-  import TypeLevel._
+  import TypeLevel.*
 
   type Shape[L, R] = Shape.Cases[(
-    Shape.Case[Left[L], L *: Unit],
-    Shape.Case[Right[R], R *: Unit]
+    Shape.Case[Left[L], L *: EmptyTuple],
+    Shape.Case[Right[R], R *: EmptyTuple]
   )]
 
   val reflectedClass = new ReflectedClass("Left\000x\001Right\000x")
@@ -218,25 +218,23 @@ object Either {
   implicit def derived$Show[L: Show, R: Show]: Show[Either[L, R]] = Show.derived
 }
 
-// A typeclass
+// A type class
 trait Eq[T] {
   def eql(x: T, y: T): Boolean
 }
 
 object Eq {
   import scala.compiletime.{erasedValue, error, summonFrom}
-  import TypeLevel._
+  import TypeLevel.*
 
-  inline def tryEql[T](x: T, y: T) = summonFrom {
-    case eq: Eq[T] => eq.eql(x, y)
-  }
+  inline def tryEql[T](x: T, y: T) = summonInline[Eq[T]].eql(x, y)
 
   inline def eqlElems[Elems <: Tuple](xm: Mirror, ym: Mirror, n: Int): Boolean =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryEql[elem](xm(n).asInstanceOf, ym(n).asInstanceOf) &&
         eqlElems[elems1](xm, ym, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -253,7 +251,7 @@ object Eq {
           case _ =>
             error("invalid call to eqlCases: one of Alts is not a subtype of T")
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
         false
     }
 
@@ -276,28 +274,26 @@ object Eq {
   }
 }
 
-// Another typeclass
+// Another type class
 trait Pickler[T] {
   def pickle(buf: mutable.ListBuffer[Int], x: T): Unit
   def unpickle(buf: mutable.ListBuffer[Int]): T
 }
 
 object Pickler {
-  import scala.compiletime.{erasedValue, constValue, error, summonFrom}
-  import TypeLevel._
+  import scala.compiletime.{erasedValue, constValue, error, summonInline}
+  import TypeLevel.*
 
   def nextInt(buf: mutable.ListBuffer[Int]): Int = try buf.head finally buf.trimStart(1)
 
-  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit = summonFrom {
-    case pkl: Pickler[T] => pkl.pickle(buf, x)
-  }
+  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit = summonInline[Pickler[T]].pickle(buf, x)
 
   inline def pickleElems[Elems <: Tuple](buf: mutable.ListBuffer[Int], elems: Mirror, n: Int): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryPickle[elem](buf, elems(n).asInstanceOf[elem])
         pickleElems[elems1](buf, elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def pickleCase[T, Elems <: Tuple](r: Reflected[T], buf: mutable.ListBuffer[Int], x: T): Unit =
@@ -318,19 +314,17 @@ object Pickler {
           case _ =>
             error("invalid pickleCases call: one of Alts is not a subtype of T")
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
-  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonFrom {
-    case pkl: Pickler[T] => pkl.unpickle(buf)
-  }
+  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonInline[Pickler[T]].unpickle(buf)
 
   inline def unpickleElems[Elems <: Tuple](buf: mutable.ListBuffer[Int], elems: Array[AnyRef], n: Int): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         elems(n) = tryUnpickle[elem](buf).asInstanceOf[AnyRef]
         unpickleElems[elems1](buf, elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def unpickleCase[T, Elems <: Tuple](r: Reflected[T], buf: mutable.ListBuffer[Int], ordinal: Int): T = {
@@ -374,17 +368,15 @@ object Pickler {
   }
 }
 
-// A third typeclass, making use of labels
+// A third type class, making use of labels
 trait Show[T] {
   def show(x: T): String
 }
 object Show {
   import scala.compiletime.{erasedValue, error, summonFrom}
-  import TypeLevel._
+  import TypeLevel.*
 
-  inline def tryShow[T](x: T): String = summonFrom {
-    case s: Show[T] => s.show(x)
-  }
+  inline def tryShow[T](x: T): String = summonInline[Show[T]].show(x)
 
   inline def showElems[Elems <: Tuple](elems: Mirror, n: Int): List[String] =
     inline erasedValue[Elems] match {
@@ -392,7 +384,7 @@ object Show {
         val formal = elems.elementLabel(n)
         val actual = tryShow[elem](elems(n).asInstanceOf)
         s"$formal = $actual" :: showElems[elems1](elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         Nil
     }
 
@@ -415,7 +407,7 @@ object Show {
           case _ =>
             error("invalid call to showCases: one of Alts is not a subtype of T")
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
         throw new MatchError(x)
     }
 
@@ -435,7 +427,7 @@ object Show {
 
 // Tests
 object Test extends App {
-  import TypeLevel._
+  import TypeLevel.*
   val eq = implicitly[Eq[Lst[Int]]]
   val xs = Lst.Cons(11, Lst.Cons(22, Lst.Cons(33, Lst.Nil)))
   val ys = Lst.Cons(11, Lst.Cons(22, Lst.Nil))

@@ -1,3 +1,4 @@
+import language.experimental.namedTypeArguments
 object Test extends App {
   // Types
   type F0 = [T] => List[T] => Option[T]
@@ -94,4 +95,6 @@ object Test extends App {
   // Parens handling
   val tt1: [T] => (T => T) = [T] =>  (x: T) => x
   val tt2: [T] =>  T => T =  [T] => ((x: T) => x)
+  val tt3: [T] =>  T => T =  [T] => { (x: T) => x }
+  val tt4: [T] =>  T => T =  [T] => (x: T) => { x }
 }

@@ -97,8 +97,11 @@ abstract class Printer {
    */
   def toText(sym: Symbol): Text
 
-  /** Textual representation of singeton type reference */
+  /** Textual representation of singleton type reference */
   def toTextRef(tp: SingletonType): Text
+
+  /** Textual representation of a prefix of some reference, ending in `.` or `#` */
+  def toTextPrefix(tp: Type): Text
 
   /** Textual representation of symbol's declaration */
   def dclText(sym: Symbol): Text
@@ -166,11 +169,6 @@ abstract class Printer {
   /** Render elements within lowest precedence */
   def toTextGlobal(elems: Traversable[Showable], sep: String): Text =
     atPrec(GlobalPrec) { toText(elems, sep) }
-
-  /** Perform string or text-producing operation `op` so that only a
-   *  summarized text with given recursion depth is shown
-   */
-  def summarized[T](depth: Int)(op: => T): T
 
   /** A plain printer without any embellishments */
   def plain: Printer

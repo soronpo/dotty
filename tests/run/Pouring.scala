@@ -8,7 +8,7 @@ class Pouring(capacity: Vector[Int]):
       case Fill(g) => content.updated(g, capacity(g))
       case Pour(from, to) =>
         val amount = content(from) min (capacity(to) - content(to))
-        def (s: Content).adjust(g: Glass, delta: Int) = s.updated(g, s(g) + delta)
+        extension (s: Content) def adjust(g: Glass, delta: Int) = s.updated(g, s(g) + delta)
         content.adjust(from, -amount).adjust(to, amount)
 
     case Empty(glass: Glass)
@@ -18,6 +18,7 @@ class Pouring(capacity: Vector[Int]):
 
   val moves =
     val glasses = 0 until capacity.length
+
        (for g <- glasses yield Move.Empty(g))
     ++ (for g <- glasses yield Move.Fill(g))
     ++ (for g1 <- glasses; g2 <- glasses if g1 != g2 yield Move.Pour(g1, g2))

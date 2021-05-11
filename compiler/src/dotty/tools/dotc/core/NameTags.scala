@@ -17,13 +17,6 @@ object NameTags extends TastyFormat.NameTags {
 
   final val INITIALIZER = 26    // A mixin initializer method
 
-  final val AVOIDCLASH = 27     // Adds a suffix to avoid a name clash;
-                                // Used in FirstTransform for synthesized companion objects of classes
-                                // if they would clash with another value.
-
-  final val DIRECT = 28         // Used by ShortCutImplicits for the name of methods that
-                                // implement implicit function result types directly.
-
   final val FIELD = 29          // Used by Memoize to tag the name of a class member field.
 
   final val EXTMETH = 30        // Used by ExtensionMethods for the name of an extension method
@@ -34,7 +27,9 @@ object NameTags extends TastyFormat.NameTags {
   final val IMPLMETH = 32       // Used to define methods in implementation classes
                                 // (can probably be removed).
 
-  final val CACHE = 33          // Used as a cache for the rhs of an alias implicit.
+  final val PARAMACC = 33       // Used for a private parameter alias
+
+  final val SETTER = 34         // A synthesized += suffix.
 
   def nameTagToString(tag: Int): String = tag match {
     case UTF8 => "UTF8"
@@ -51,13 +46,14 @@ object NameTags extends TastyFormat.NameTags {
     case INLINEACCESSOR => "INLINEACCESSOR"
     case PROTECTEDACCESSOR => "PROTECTEDACCESSOR"
     case INITIALIZER => "INITIALIZER"
-    case AVOIDCLASH => "AVOIDCLASH"
-    case DIRECT => "DIRECT"
     case FIELD => "FIELD"
     case EXTMETH => "EXTMETH"
+    case IMPLMETH => "IMPLMETH"
+    case PARAMACC => "PARAMACC"
     case ADAPTEDCLOSURE => "ADAPTEDCLOSURE"
     case OBJECTCLASS => "OBJECTCLASS"
 
     case SIGNED => "SIGNED"
+    case TARGETSIGNED => "TARGETSIGNED"
   }
 }

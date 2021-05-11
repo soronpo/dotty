@@ -1,5 +1,5 @@
-{
-  val t: scala.quoted.Type[scala.Predef.String] = scala.internal.quoted.CompileTime.typeQuote[scala.Predef.String]
+((q: scala.quoted.Quotes) ?=> {
+  val t: scala.quoted.Type[scala.Predef.String] = scala.quoted.Type.of[scala.Predef.String](q)
 
   (t: scala.quoted.Type[scala.Predef.String])
-}
+})

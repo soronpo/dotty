@@ -1,17 +1,17 @@
-import scala.quoted._
-import scala.quoted.matching._
+import scala.quoted.*
+
 
 
 object Macros {
 
-  inline def (self: => StringContext) xyz(inline args: String*): String = ${impl('self, 'args)}
+  extension (inline self: StringContext) inline def xyz(inline args: String*): String = ${impl('self, 'args)}
 
-  private def impl(self: Expr[StringContext], args: Expr[Seq[String]])(using QuoteContext): Expr[String] = {
+  private def impl(self: Expr[StringContext], args: Expr[Seq[String]])(using Quotes): Expr[String] = {
     (self, args) match {
-      case ('{ StringContext(${ExprSeq(parts)}: _*) }, ExprSeq(args1)) =>
-        val strParts = parts.map { case Const(str) => str.reverse }
-        val strArgs = args1.map { case Const(str) => str }
-        Expr(StringContext(strParts: _*).s(strArgs: _*))
+      case ('{ StringContext(${Varargs(parts)}*) }, Varargs(args1)) =>
+        val strParts = parts.map(_.valueOrError.reverse)
+        val strArgs = args1.map(_.valueOrError)
+        Expr(StringContext(strParts*).s(strArgs*))
       case _ => ???
     }
 

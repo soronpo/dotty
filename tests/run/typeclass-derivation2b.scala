@@ -1,8 +1,8 @@
 import scala.collection.mutable
 import scala.annotation.tailrec
 
-// Simulation of typeclass derivation encoding that's currently implemented.
-// The real typeclass derivation is tested in typeclass-derivation3.scala.
+// Simulation of type class derivation encoding that's currently implemented.
+// The real type class derivation is tested in typeclass-derivation3.scala.
 object TypeLevel {
 
   object EmptyProduct extends Product {
@@ -26,7 +26,7 @@ object TypeLevel {
 
   abstract class GenericSum[S] extends Generic[S] {
     def ordinal(x: S): Int
-    def alternative(n: Int): GenericProduct[_ <: S] = ???
+    inline def alternative(inline n: Int): GenericProduct[_ <: S]
   }
 
   abstract class GenericProduct[P] extends Generic[P] {
@@ -41,7 +41,7 @@ sealed trait Lst[+T] // derives Eq, Pickler, Show
 
 object Lst {
   // common compiler-generated infrastructure
-  import TypeLevel._
+  import TypeLevel.*
 
   class GenericLst[T] extends GenericSum[Lst[T]] {
     override type Shape = (Cons[T], Nil.type)
@@ -49,7 +49,7 @@ object Lst {
       case x: Cons[_] => 0
       case Nil => 1
     }
-    inline override def alternative(inline n: Int) <: GenericProduct[_ <: Lst[T]] =
+    transparent inline def alternative(inline n: Int): GenericProduct[_ <: Lst[T]] =
       inline n match {
         case 0 => Cons.GenericCons[T]
         case 1 => Nil.GenericNil
@@ -72,7 +72,7 @@ object Lst {
   }
   case object Nil extends Lst[Nothing] {
     class GenericNil extends GenericProduct[Nil.type] {
-      type Shape = Unit
+      type Shape = EmptyTuple
       def toProduct(x: Nil.type): Product = EmptyProduct
       def fromProduct(p: Product): Nil.type = Nil
     }
@@ -85,18 +85,16 @@ object Lst {
   //implicit def derived$Show[T: Show]: Show[Lst[T]] = Show.derived
 }
 
-// A typeclass
+// A type class
 trait Eq[T] {
   def eql(x: T, y: T): Boolean
 }
 
 object Eq {
-  import scala.compiletime.{erasedValue, summonFrom}
-  import TypeLevel._
+  import scala.compiletime.{erasedValue, summonInline}
+  import TypeLevel.*
 
-  inline def tryEql[T](x: T, y: T) = summonFrom {
-    case eq: Eq[T] => eq.eql(x, y)
-  }
+  inline def tryEql[T](x: T, y: T) = summonInline[Eq[T]].eql(x, y)
 
   inline def eqlElems[Elems <: Tuple](x: Product, y: Product, n: Int): Boolean =
     inline erasedValue[Elems] match {
@@ -105,7 +103,7 @@ object Eq {
           x.productElement(n).asInstanceOf[elem],
           y.productElement(n).asInstanceOf[elem]) &&
         eqlElems[elems1](x, y, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -121,7 +119,7 @@ object Eq {
                 0)
           }
         else eqlCases[T, alts1](x, y, genSum, ord, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         false
     }
 
@@ -143,7 +141,7 @@ object Eq {
 }
 
 object Test extends App {
-  import TypeLevel._
+  import TypeLevel.*
   val eq = implicitly[Eq[Lst[Int]]]
   val xs = Lst.Cons(11, Lst.Cons(22, Lst.Cons(33, Lst.Nil)))
   val ys = Lst.Cons(11, Lst.Cons(22, Lst.Nil))
@@ -167,7 +165,7 @@ case class Pair[T](x: T, y: T) // derives Eq, Pickler, Show
 
 object Pair {
   // common compiler-generated infrastructure
-  import TypeLevel._
+  import TypeLevel.*
 
   val genericClass = new GenericClass("Pair\000x\000y")
   import genericClass.mirror
@@ -195,14 +193,14 @@ case class Left[L](x: L) extends Either[L, Nothing]
 case class Right[R](x: R) extends Either[Nothing, R]
 
 object Either {
-  import TypeLevel._
+  import TypeLevel.*
 
   val genericClass = new GenericClass("Left\000x\001Right\000x")
   import genericClass.mirror
 
   private type ShapeOf[L, R] = Shape.Cases[(
-    Shape.Case[Left[L], L *: Unit],
-    Shape.Case[Right[R], R *: Unit]
+    Shape.Case[Left[L], L *: EmptyTuple],
+    Shape.Case[Right[R], R *: EmptyTuple]
   )]
 
   implicit def GenericEither[L, R]: Generic[Either[L, R]] { type Shape = ShapeOf[L, R] } =
@@ -224,14 +222,14 @@ object Either {
   implicit def derived$Show[L: Show, R: Show]: Show[Either[L, R]] = Show.derived
 }
 
-// A typeclass
+// A type class
 trait Eq[T] {
   def eql(x: T, y: T): Boolean
 }
 
 object Eq {
   import scala.compiletime.erasedValue
-  import TypeLevel._
+  import TypeLevel.*
 
   inline def tryEql[T](x: T, y: T) = summonFrom {
     case eq: Eq[T] => eq.eql(x, y)
@@ -242,7 +240,7 @@ object Eq {
       case _: (elem *: elems1) =>
         tryEql[elem](xm(n).asInstanceOf, ym(n).asInstanceOf) &&
         eqlElems[elems1](xm, ym, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -251,7 +249,7 @@ object Eq {
       case _: (Shape.Case[alt, elems] *: alts1) =>
         if (xm.ordinal == n) eqlElems[elems](xm, ym, 0)
         else eqlCases[alts1](xm, ym, n + 1)
-     case _: Unit =>
+     case _: EmptyTuple =>
         false
     }
 
@@ -274,7 +272,7 @@ object Eq {
   }
 }
 
-// Another typeclass
+// Another type class
 trait Pickler[T] {
   def pickle(buf: mutable.ListBuffer[Int], x: T): Unit
   def unpickle(buf: mutable.ListBuffer[Int]): T
@@ -282,7 +280,7 @@ trait Pickler[T] {
 
 object Pickler {
   import scala.compiletime.{erasedValue, constValue}
-  import TypeLevel._
+  import TypeLevel.*
 
   def nextInt(buf: mutable.ListBuffer[Int]): Int = try buf.head finally buf.trimStart(1)
 
@@ -295,7 +293,7 @@ object Pickler {
       case _: (elem *: elems1) =>
         tryPickle[elem](buf, elems(n).asInstanceOf[elem])
         pickleElems[elems1](buf, elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def pickleCases[Alts <: Tuple](buf: mutable.ListBuffer[Int], xm: Mirror, n: Int): Unit =
@@ -303,7 +301,7 @@ object Pickler {
       case _: (Shape.Case[alt, elems] *: alts1) =>
         if (xm.ordinal == n) pickleElems[elems](buf, xm, 0)
         else pickleCases[alts1](buf, xm, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonFrom {
@@ -315,7 +313,7 @@ object Pickler {
       case _: (elem *: elems1) =>
         elems(n) = tryUnpickle[elem](buf).asInstanceOf[AnyRef]
         unpickleElems[elems1](buf, elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def unpickleCase[T, Elems <: Tuple](gen: Generic[T], buf: mutable.ListBuffer[Int], ordinal: Int): T = {
@@ -363,13 +361,13 @@ object Pickler {
   }
 }
 
-// A third typeclass, making use of labels
+// A third type class, making use of labels
 trait Show[T] {
   def show(x: T): String
 }
 object Show {
   import scala.compiletime.erasedValue
-  import TypeLevel._
+  import TypeLevel.*
 
   inline def tryShow[T](x: T): String = summonFrom {
     case s: Show[T] => s.show(x)
@@ -381,7 +379,7 @@ object Show {
         val formal = elems.elementLabel(n)
         val actual = tryShow[elem](elems(n).asInstanceOf)
         s"$formal = $actual" :: showElems[elems1](elems, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         Nil
     }
 
@@ -390,7 +388,7 @@ object Show {
       case _: (Shape.Case[alt, elems] *: alts1) =>
         if (xm.ordinal == n) showElems[elems](xm, 0).mkString(", ")
         else showCases[alts1](xm, n + 1)
-      case _: Unit =>
+      case _: EmptyTuple =>
         throw new MatchError(xm)
     }
 
@@ -414,7 +412,7 @@ object Show {
 
 // Tests
 object Test extends App {
-  import TypeLevel._
+  import TypeLevel.*
   val eq = implicitly[Eq[Lst[Int]]]
   val xs = Lst.Cons(11, Lst.Cons(22, Lst.Cons(33, Lst.Nil)))
   val ys = Lst.Cons(11, Lst.Cons(22, Lst.Nil))

@@ -1,20 +1,19 @@
-import scala.quoted._
-import scala.quoted.show.SyntaxHighlight.ANSI
+import scala.quoted.*
 
 object api {
-  inline def (inline x: String) reflect : String =
+  extension (inline x: String) inline def reflect : String =
     ${ reflImpl('x) }
 
-  private def reflImpl(x: Expr[String])(using qctx: QuoteContext) : Expr[String] = {
-    import qctx.tasty.{_, given _}
+  private def reflImpl(x: Expr[String])(using Quotes) : Expr[String] = {
+    import quotes.reflect.*
     Expr(x.show)
   }
 
-  inline def (x: => String) reflectColor : String =
+  extension (x: => String) inline def reflectColor : String =
     ${ reflImplColor('x) }
 
-  private def reflImplColor(x: Expr[String])(using qctx: QuoteContext) : Expr[String] = {
-    import qctx.tasty.{_, given _}
-    Expr(x.show(ANSI))
+  private def reflImplColor(x: Expr[String])(using Quotes) : Expr[String] = {
+    import quotes.reflect.*
+    Expr(x.asTerm.show(using Printer.TreeAnsiCode))
   }
 }

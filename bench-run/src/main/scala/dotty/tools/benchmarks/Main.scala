@@ -8,6 +8,7 @@ import org.openjdk.jmh.runner.options._
 import java.util.concurrent.TimeUnit
 
 import scala.io.Source
+import scala.util.Using
 
 object Bench {
   def main(args: Array[String]): Unit = {
@@ -42,7 +43,6 @@ object Bench {
       .measurementTime(TimeValue.milliseconds(500))
       .forks(forks)
       .include(args1(0))
-      .resultFormat(ResultFormatType.CSV)
 
     if (args1.length > 1 && args1(1) != "--") {
       for ((param, values) <- paramsFromFile("inputs/" ++ args1(1)))
@@ -50,7 +50,7 @@ object Bench {
     }
 
     if (args1.length > 2) {
-      builder = builder.result(args1(2))
+      builder = builder.resultFormat(ResultFormatType.CSV).result(args1(2))
     }
 
     val runner = new Runner(builder.build)
@@ -58,7 +58,7 @@ object Bench {
   }
 
   def paramsFromFile(file: String): Array[(String, Array[String])] = {
-    Source.fromFile(file).getLines.toArray.map { l =>
+    Using(Source.fromFile(file))(_.getLines.toArray).get.map { l =>
       val Array(param, values) = l split ':'
       (param, values split ',')
     }

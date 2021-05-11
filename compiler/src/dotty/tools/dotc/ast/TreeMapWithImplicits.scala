@@ -1,10 +1,12 @@
-package dotty.tools.dotc.ast
+package dotty.tools.dotc
+package ast
 
-import dotty.tools.dotc.ast.Trees._
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.Flags._
-import dotty.tools.dotc.core.Symbols._
-import dotty.tools.dotc.core.TypeError
+import Trees._
+import core.Contexts._
+import core.ContextOps.enter
+import core.Flags._
+import core.Symbols._
+import core.TypeError
 
 import scala.annotation.tailrec
 
@@ -16,7 +18,7 @@ import scala.annotation.tailrec
 class TreeMapWithImplicits extends tpd.TreeMap {
   import tpd._
 
-  def transformSelf(vd: ValDef)(implicit ctx: Context): ValDef =
+  def transformSelf(vd: ValDef)(using Context): ValDef =
     cpy.ValDef(vd)(tpt = transform(vd.tpt))
 
   /** Transform statements, while maintaining import contexts and expression contexts
@@ -24,11 +26,11 @@ class TreeMapWithImplicits extends tpd.TreeMap {
    *   - be tail-recursive where possible
    *   - don't re-allocate trees where nothing has changed
    */
-  def transformStats(stats: List[Tree], exprOwner: Symbol)(implicit ctx: Context): List[Tree] = {
+  override def transformStats(stats: List[Tree], exprOwner: Symbol)(using Context): List[Tree] = {
 
-    @tailrec def traverse(curStats: List[Tree])(implicit ctx: Context): List[Tree] = {
+    @tailrec def traverse(curStats: List[Tree])(using Context): List[Tree] = {
 
-      def recur(stats: List[Tree], changed: Tree, rest: List[Tree])(implicit ctx: Context): List[Tree] =
+      def recur(stats: List[Tree], changed: Tree, rest: List[Tree])(using Context): List[Tree] =
         if (stats eq curStats) {
           val rest1 = transformStats(rest, exprOwner)
           changed match {
@@ -48,9 +50,9 @@ class TreeMapWithImplicits extends tpd.TreeMap {
             case stat: Import => ctx.importContext(stat, stat.symbol)
             case _ => ctx
           }
-          val stat1 = transform(stat)(statCtx)
-          if (stat1 ne stat) recur(stats, stat1, rest)(restCtx)
-          else traverse(rest)(restCtx)
+          val stat1 = transform(stat)(using statCtx)
+          if (stat1 ne stat) recur(stats, stat1, rest)(using restCtx)
+          else traverse(rest)(using restCtx)
         case nil =>
           stats
       }
@@ -58,7 +60,7 @@ class TreeMapWithImplicits extends tpd.TreeMap {
     traverse(stats)
   }
 
-  private def nestedScopeCtx(defs: List[Tree])(implicit ctx: Context): Context = {
+  private def nestedScopeCtx(defs: List[Tree])(using Context): Context = {
     val nestedCtx = ctx.fresh.setNewScope
     defs foreach {
       case d: DefTree if d.symbol.isOneOf(GivenOrImplicit) => nestedCtx.enter(d.symbol)
@@ -67,12 +69,13 @@ class TreeMapWithImplicits extends tpd.TreeMap {
     nestedCtx
   }
 
-  private def patternScopeCtx(pattern: Tree)(implicit ctx: Context): Context = {
+  private def patternScopeCtx(pattern: Tree)(using Context): Context = {
     val nestedCtx = ctx.fresh.setNewScope
     new TreeTraverser {
-      def traverse(tree: Tree)(implicit ctx: Context): Unit = {
+      def traverse(tree: Tree)(using Context): Unit = {
         tree match {
-          case d: DefTree if d.symbol.isOneOf(GivenOrImplicit) => nestedCtx.enter(d.symbol)
+          case d: DefTree if d.symbol.isOneOf(GivenOrImplicit) =>
+            nestedCtx.enter(d.symbol)
           case _ =>
         }
         traverseChildren(tree)
@@ -81,44 +84,44 @@ class TreeMapWithImplicits extends tpd.TreeMap {
     nestedCtx
   }
 
-  override def transform(tree: Tree)(implicit ctx: Context): Tree = {
-    def localCtx =
-      if (tree.hasType && tree.symbol.exists) ctx.withOwner(tree.symbol) else ctx
+  override def transform(tree: Tree)(using Context): Tree = {
     try tree match {
-      case tree: Block =>
-        super.transform(tree)(nestedScopeCtx(tree.stats))
+      case Block(stats, expr) =>
+        inContext(nestedScopeCtx(stats)) {
+          if stats.exists(_.isInstanceOf[Import]) then
+            // need to transform stats and expr together to account for import visibility
+            val stats1 = transformStats(stats :+ expr, ctx.owner)
+            cpy.Block(tree)(stats1.init, stats1.last)
+          else super.transform(tree)
+        }
       case tree: DefDef =>
-        implicit val ctx = localCtx
-        cpy.DefDef(tree)(
-          tree.name,
-          transformSub(tree.tparams),
-          tree.vparamss mapConserve (transformSub(_)),
-          transform(tree.tpt),
-          transform(tree.rhs)(nestedScopeCtx(tree.vparamss.flatten)))
-      case EmptyValDef =>
-        tree
-      case _: PackageDef | _: MemberDef =>
-        super.transform(tree)(localCtx)
+        inContext(localCtx(tree)) {
+          cpy.DefDef(tree)(
+            tree.name,
+            transformParamss(tree.paramss),
+            transform(tree.tpt),
+            transform(tree.rhs)(using nestedScopeCtx(tree.paramss.flatten)))
+        }
       case impl @ Template(constr, parents, self, _) =>
         cpy.Template(tree)(
           transformSub(constr),
-          transform(parents)(ctx.superCallContext),
+          transform(parents)(using ctx.superCallContext),
           Nil,
           transformSelf(self),
           transformStats(impl.body, tree.symbol))
       case tree: CaseDef =>
-        val patCtx = patternScopeCtx(tree.pat)(ctx)
+        val patCtx = patternScopeCtx(tree.pat)(using ctx)
         cpy.CaseDef(tree)(
           transform(tree.pat),
-          transform(tree.guard)(patCtx),
-          transform(tree.body)(patCtx)
+          transform(tree.guard)(using patCtx),
+          transform(tree.body)(using patCtx)
         )
       case _ =>
         super.transform(tree)
     }
     catch {
       case ex: TypeError =>
-        ctx.error(ex, tree.sourcePos)
+        report.error(ex, tree.srcPos)
         tree
     }
   }

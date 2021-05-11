@@ -1,7 +1,6 @@
 package dotty.tools.benchmarks.tuples
 
 import org.openjdk.jmh.annotations._
-import scala.runtime.DynamicTuple
 
 @State(Scope.Thread)
 class Map {
@@ -12,7 +11,7 @@ class Map {
 
   @Setup
   def setup(): Unit = {
-    tuple = ()
+    tuple = Tuple()
 
     for (i <- 1 to size)
       tuple = "elem" *: tuple
@@ -30,7 +29,7 @@ class Map {
 
   @Benchmark
   def tupleMap(): Tuple = {
-    DynamicTuple.dynamicMap[Tuple, Id](tuple, [T] => (x:T) => x.asInstanceOf[String].updated(0, 'a').asInstanceOf[T])
+    runtime.Tuples.map[Id](tuple, [T] => (x:T) => x.asInstanceOf[String].updated(0, 'a').asInstanceOf[T])
   }
 
   @Benchmark

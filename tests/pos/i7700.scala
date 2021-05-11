@@ -4,9 +4,9 @@ trait Show[-A]:
   def show(a: A): String
 
 object Macros:
-  inline def (sc: StringContext).show(args: =>Any*): String = ???
+  extension (sc: StringContext) inline def show(args: =>Any*): String = ???
 
 object Show:
-  def[A] (a: A) show(using S: Show[A]): String = S.show(a)
+  extension [A] (a: A) def show(using S: Show[A]): String = S.show(a)
 
   export Macros.show

@@ -5,7 +5,7 @@ package parsing
 import org.junit.Test
 import org.junit.Assert._
 
-import ast.untpd.modsDeco
+import ast.Trees.mods
 import ast.untpd._
 import ast.{ Trees => d }
 import Parsers.Parser
@@ -14,32 +14,32 @@ import core.Contexts._
 import core.Flags
 
 object ModifiersParsingTest {
-  implicit val ctx: Context = (new ContextBase).initialCtx
+  given Context = (new ContextBase).initialCtx
 
   def parse(code: String): Tree = {
     val (_, stats) = new Parser(SourceFile.virtual("<meta>", code)).templateStatSeq()
     stats match { case List(stat) => stat; case stats => Thicket(stats) }
   }
 
-  implicit class TreeDeco(val code: Tree) extends AnyVal {
+  extension (code: Tree) {
     def firstConstrValDef: ValDef = code match {
       case d.TypeDef(_, d.Template(constr, _, _, _)) =>
-        constr.vparamss.head.head
+        constr.termParamss.head.head
     }
 
     def firstTypeParam: TypeDef = code match {
       case d.TypeDef(_, d.Template(constr, _, _, _)) =>
-        constr.tparams.head
+        constr.leadingTypeParams.head
     }
 
     def defParam(i: Int): ValDef = code match {
-      case d.DefDef(_, _, vparamss, _, _) =>
-        vparamss.head.toArray.apply(i)
+      case code @ d.DefDef(_, _, _, _) =>
+        code.termParamss.head.toArray.apply(i)
     }
 
     def defParam(i: Int, j: Int): ValDef = code match {
-      case d.DefDef(_, _, vparamss, _, _) =>
-        vparamss.toArray.apply(i).toArray.apply(j)
+      case code @ d.DefDef(_, _, _, _) =>
+        code.termParamss.toArray.apply(i).toArray.apply(j)
     }
 
     def funParam(i: Int): Tree = code match {
@@ -74,7 +74,7 @@ object ModifiersParsingTest {
 
 
 class ModifiersParsingTest {
-  import ModifiersParsingTest._
+  import ModifiersParsingTest.{_, given}
 
 
   @Test def valDef = {

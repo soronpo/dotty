@@ -5,7 +5,7 @@ import dotty.tools.languageserver.util.actions._
 import dotty.tools.languageserver.util.embedded.CodeMarker
 import dotty.tools.languageserver.util.server.{TestFile, TestServer}
 
-import dotty.tools.dotc.reporting.diagnostic.ErrorMessageID
+import dotty.tools.dotc.reporting.ErrorMessageID
 import dotty.tools.dotc.util.Signatures.Signature
 
 import org.eclipse.lsp4j.{ CompletionItem, CompletionItemKind, DocumentHighlightKind, Diagnostic, DiagnosticSeverity }
@@ -237,7 +237,7 @@ class CodeTester(projects: List[Project]) {
 
   private def doAction(action: Action): this.type = {
     try {
-      action.execute()(given testServer, testServer.client, positions)
+      action.execute()(using testServer, testServer.client, positions)
     } catch {
       case ex: AssertionError =>
         val sourcesStr =
@@ -252,7 +252,7 @@ class CodeTester(projects: List[Project]) {
             |
             |$sourcesStr
             |
-            |while executing action: ${action.show(given positions)}
+            |while executing action: ${action.show(using positions)}
             |
           """.stripMargin
         val assertionError = new AssertionError(msg + ex.getMessage)

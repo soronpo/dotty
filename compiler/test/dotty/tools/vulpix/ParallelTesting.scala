@@ -2,27 +2,32 @@ package dotty
 package tools
 package vulpix
 
-import java.io.{File => JFile}
+import java.io.{File => JFile, IOException}
 import java.lang.System.{lineSeparator => EOL}
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
 import java.nio.file.{Files, NoSuchFileException, Path, Paths}
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.{HashMap, Timer, TimerTask}
 import java.util.concurrent.{TimeUnit, TimeoutException, Executors => JExecutors}
 
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.{Random, Try, Failure => TryFailure, Success => TrySuccess}
+import scala.util.{Random, Try, Failure => TryFailure, Success => TrySuccess, Using}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
+import scala.collection.mutable.ListBuffer
 
 import dotc.{Compiler, Driver}
 import dotc.core.Contexts._
 import dotc.decompiler
+import dotc.report
 import dotc.interfaces.Diagnostic.ERROR
 import dotc.reporting.{Reporter, TestReporter}
-import dotc.reporting.diagnostic.MessageContainer
+import dotc.reporting.Diagnostic
+import dotc.config.Config
 import dotc.util.DiffUtil
+import io.AbstractFile
 import dotty.tools.vulpix.TestConfiguration.defaultOptions
 
 /** A parallel testing suite whose goal is to integrate nicely with JUnit
@@ -32,7 +37,6 @@ import dotty.tools.vulpix.TestConfiguration.defaultOptions
  *  test suite itself runs with a high level of concurrency.
  */
 trait ParallelTesting extends RunnerOrchestration { self =>
-
   import ParallelTesting._
 
   /** If the running environment supports an interactive terminal, each `Test`
@@ -81,6 +85,13 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       else self
     }
 
+    def withoutFlags(flags1: String*): TestSource = self match {
+      case self: JointCompilationSource =>
+        self.copy(flags = flags.without(flags1: _*))
+      case self: SeparateCompilationSource =>
+        self.copy(flags = flags.without(flags1: _*))
+    }
+
     /** Generate the instructions to redo the test from the command line */
     def buildInstructions(errors: Int, warnings: Int): String = {
       val sb = new StringBuilder
@@ -94,7 +105,7 @@ trait ParallelTesting extends RunnerOrchestration { self =>
             |the test can be reproduced by running from SBT (prefix it with ./bin/ if you
             |want to run from the command line):""".stripMargin
       )
-      sb.append("\n\ndotc ")
+      sb.append("\n\nscalac ")
       flags.all.foreach { arg =>
         if (lineLen > maxLen) {
           sb.append(delimiter)
@@ -109,9 +120,9 @@ trait ParallelTesting extends RunnerOrchestration { self =>
         case source: JointCompilationSource => {
           source.sourceFiles.map(_.getPath).foreach { path =>
             sb.append(delimiter)
-            sb += '''
+            sb += '\''
             sb.append(path)
-            sb += '''
+            sb += '\''
             sb += ' '
           }
           sb.toString + "\n\n"
@@ -123,9 +134,9 @@ trait ParallelTesting extends RunnerOrchestration { self =>
             files.map(_.getPath).foreach { path =>
               fsb.append(delimiter)
               lineLen = 8
-              fsb += '''
+              fsb += '\''
               fsb.append(path)
-              fsb += '''
+              fsb += '\''
               fsb += ' '
             }
             fsb.append("\n\n")
@@ -221,8 +232,10 @@ trait ParallelTesting extends RunnerOrchestration { self =>
      */
     final def checkFile(testSource: TestSource): Option[JFile] = (testSource match {
       case ts: JointCompilationSource =>
-        ts.files.collectFirst { case f if !f.isDirectory => new JFile(f.getPath.replaceFirst("\\.scala$", ".check")) }
-
+        ts.files.collectFirst {
+          case f if !f.isDirectory =>
+            new JFile(f.getPath.replaceFirst("\\.(scala|java)$", ".check"))
+        }
       case ts: SeparateCompilationSource =>
         Option(new JFile(ts.dir.getPath + ".check"))
     }).filter(_.exists)
@@ -417,21 +430,15 @@ trait ParallelTesting extends RunnerOrchestration { self =>
      *  if it did, the test should automatically fail.
      */
     protected def tryCompile(testSource: TestSource)(op: => Unit): Unit =
-      try {
-        val testing = s"Testing ${testSource.title}"
-        summaryReport.echoToLog(testing)
-        if (!isInteractive) realStdout.println(testing)
-        op
-      } catch {
-        case e: Throwable => {
+      try op
+      catch
+        case e: Throwable =>
           // if an exception is thrown during compilation, the complete test
           // run should fail
           failTestSource(testSource)
           e.printStackTrace()
           registerCompletion()
           throw e
-        }
-      }
 
     protected def compile(files0: Array[JFile], flags0: TestFlags, suppressErrors: Boolean, targetDir: JFile): TestReporter = {
       val flags = flags0.and("-d", targetDir.getPath)
@@ -446,7 +453,7 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       def compileWithJavac(fs: Array[String]) = if (fs.nonEmpty) {
         val fullArgs = Array(
           "javac",
-          "-encoding", "UTF-8",
+          "-encoding", StandardCharsets.UTF_8.name,
         ) ++ flags.javacFlags ++ fs
 
         val process = Runtime.getRuntime.exec(fullArgs)
@@ -466,11 +473,11 @@ trait ParallelTesting extends RunnerOrchestration { self =>
           private def ntimes(n: Int)(op: Int => Reporter): Reporter =
             (1 to n).foldLeft(emptyReporter) ((_, i) => op(i))
 
-          override def doCompile(comp: Compiler, files: List[String])(implicit ctx: Context) =
+          override def doCompile(comp: Compiler, files: List[AbstractFile])(using Context) =
             ntimes(times) { run =>
               val start = System.nanoTime()
               val rep = super.doCompile(comp, files)
-              ctx.echo(s"\ntime run $run: ${(System.nanoTime - start) / 1000000}ms")
+              report.echo(s"\ntime run $run: ${(System.nanoTime - start) / 1000000}ms")
               rep
             }
         }
@@ -498,11 +505,7 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       tastyOutput.mkdir()
       val flags = flags0 and ("-d", tastyOutput.getPath) and "-from-tasty"
 
-      def tastyFileToClassName(f: JFile): String = {
-        val pathStr = targetDir.toPath.relativize(f.toPath).toString.replace(JFile.separatorChar, '.')
-        pathStr.stripSuffix(".tasty").stripSuffix(".hasTasty")
-      }
-      val classes = flattenFiles(targetDir).filter(isTastyFile).map(tastyFileToClassName)
+      val classes = flattenFiles(targetDir).filter(isTastyFile).map(_.toString)
 
       val reporter =
         TestReporter.reporter(realStdout, logLevel =
@@ -539,11 +542,18 @@ trait ParallelTesting extends RunnerOrchestration { self =>
         }
 
         pool.shutdown()
+
         if (!pool.awaitTermination(20, TimeUnit.MINUTES)) {
+          val remaining = new ListBuffer[TestSource]
+          filteredSources.lazyZip(eventualResults).foreach { (src, res) =>
+            if (!res.isDone)
+              remaining += src
+          }
+
           pool.shutdownNow()
           System.setOut(realStdout)
           System.setErr(realStderr)
-          throw new TimeoutException("Compiling targets timed out")
+          throw new TimeoutException(s"Compiling targets timed out, remaining targets: ${remaining.mkString(", ")}")
         }
 
         eventualResults.foreach { x =>
@@ -587,6 +597,28 @@ trait ParallelTesting extends RunnerOrchestration { self =>
 
   private final class PosTest(testSources: List[TestSource], times: Int, threadLimit: Option[Int], suppressAllOutput: Boolean)(implicit summaryReport: SummaryReporting)
   extends Test(testSources, times, threadLimit, suppressAllOutput)
+
+  private final class RewriteTest(testSources: List[TestSource], checkFiles: Map[JFile, JFile], times: Int, threadLimit: Option[Int], suppressAllOutput: Boolean)(implicit summaryReport: SummaryReporting)
+  extends Test(testSources, times, threadLimit, suppressAllOutput) {
+    private def verifyOutput(testSource: TestSource, reporters: Seq[TestReporter], logger: LoggedRunnable) = {
+      testSource.sourceFiles.foreach { file =>
+        if checkFiles.contains(file) then
+          val checkFile = checkFiles(file)
+          val actual = {
+            val source = Source.fromFile(file, StandardCharsets.UTF_8.name)
+            try source.getLines().toList
+            finally source.close()
+          }
+          diffTest(testSource, checkFile, actual, reporters, logger)
+      }
+
+      // check that the rewritten code compiles
+      new CompilationTest(testSource).checkCompile()
+    }
+
+    override def onSuccess(testSource: TestSource, reporters: Seq[TestReporter], logger: LoggedRunnable) =
+      verifyOutput(testSource, reporters, logger)
+  }
 
   private final class RunTest(testSources: List[TestSource], times: Int, threadLimit: Option[Int], suppressAllOutput: Boolean)(implicit summaryReport: SummaryReporting)
   extends Test(testSources, times, threadLimit, suppressAllOutput) {
@@ -632,12 +664,15 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       lazy val (errorMap, expectedErrors) = getErrorMapAndExpectedCount(testSource.sourceFiles.toIndexedSeq)
       lazy val actualErrors = reporters.foldLeft(0)(_ + _.errorCount)
       def hasMissingAnnotations = getMissingExpectedErrors(errorMap, reporters.iterator.flatMap(_.errors))
+      def showErrors = "-> following the errors:\n" +
+        reporters.flatMap(_.allErrors.map(e => e.pos.line.toString + ": " + e.message)).mkString(start = "at ", sep = "\n at ", end = "")
 
-      if (compilerCrashed) Some(s"Compiler crashed when compiling: ${testSource.title}"                                                             )
-      else if (actualErrors == 0) Some(s"\nNo errors found when compiling neg test $testSource"                                                            )
-      else if (expectedErrors != actualErrors) Some(s"\nWrong number of errors encountered when compiling $testSource, expected: $expectedErrors, actual: $actualErrors")
-      else if (hasMissingAnnotations) Some(s"\nErrors found on incorrect row numbers when compiling $testSource"                                               )
-      else if (!errorMap.isEmpty) Some(s"\nExpected error(s) have {<error position>=<unreported error>}: $errorMap"                                        )
+      if (compilerCrashed) Some(s"Compiler crashed when compiling: ${testSource.title}")
+      else if (actualErrors == 0) Some(s"\nNo errors found when compiling neg test $testSource")
+      else if (expectedErrors == 0) Some(s"\nNo errors expected/defined in $testSource -- use // error or // nopos-error")
+      else if (expectedErrors != actualErrors) Some(s"\nWrong number of errors encountered when compiling $testSource\nexpected: $expectedErrors, actual: $actualErrors " + showErrors)
+      else if (hasMissingAnnotations) Some(s"\nErrors found on incorrect row numbers when compiling $testSource\n$showErrors")
+      else if (!errorMap.isEmpty) Some(s"\nExpected error(s) have {<error position>=<unreported error>}: $errorMap")
       else None
     }
 
@@ -656,37 +691,46 @@ trait ParallelTesting extends RunnerOrchestration { self =>
     def getErrorMapAndExpectedCount(files: Seq[JFile]): (HashMap[String, Integer], Int) = {
       val errorMap = new HashMap[String, Integer]()
       var expectedErrors = 0
-      files.filter(_.getName.endsWith(".scala")).foreach { file =>
-        Source.fromFile(file, "UTF-8").getLines().zipWithIndex.foreach { case (line, lineNbr) =>
-          val errors = line.toSeq.sliding("// error".length).count(_.unwrap == "// error")
-          if (errors > 0)
-            errorMap.put(s"${file.getPath}:${lineNbr}", errors)
+      files.filter(isSourceFile).foreach { file =>
+        Using(Source.fromFile(file, StandardCharsets.UTF_8.name)) { source =>
+          source.getLines.zipWithIndex.foreach { case (line, lineNbr) =>
+            val errors = line.toSeq.sliding("// error".length).count(_.unwrap == "// error")
+            if (errors > 0)
+              errorMap.put(s"${file.getPath}:$lineNbr", errors)
 
-          val noposErrors = line.toSeq.sliding("// nopos-error".length).count(_.unwrap == "// nopos-error")
-          if (noposErrors > 0) {
-            val nopos = errorMap.get("nopos")
-            val existing: Integer = if (nopos eq null) 0 else nopos
-            errorMap.put("nopos", noposErrors + existing)
+            val noposErrors = line.toSeq.sliding("// nopos-error".length).count(_.unwrap == "// nopos-error")
+            if (noposErrors > 0) {
+              val nopos = errorMap.get("nopos")
+              val existing: Integer = if (nopos eq null) 0 else nopos
+              errorMap.put("nopos", noposErrors + existing)
+            }
+
+            val anyposErrors = line.toSeq.sliding("// anypos-error".length).count(_.unwrap == "// anypos-error")
+            if (anyposErrors > 0) {
+              val anypos = errorMap.get("anypos")
+              val existing: Integer = if (anypos eq null) 0 else anypos
+              errorMap.put("anypos", anyposErrors + existing)
+            }
+
+            val possibleTypos = List("//error" -> "// error", "//nopos-error" -> "// nopos-error", "//anypos-error" -> "// anypos-error")
+            for ((possibleTypo, expected) <- possibleTypos) {
+              if (line.contains(possibleTypo))
+                echo(s"Warning: Possible typo in error tag in file ${file.getCanonicalPath}:$lineNbr: found `$possibleTypo` but expected `$expected`")
+            }
+
+            expectedErrors += anyposErrors + noposErrors + errors
           }
-
-          val possibleTypos = List("//error" -> "// error" , "//nopos-error" -> "// nopos-error")
-          for ((possibleTypo, expected) <- possibleTypos) {
-            if (line.contains(possibleTypo))
-              echo(s"Warning: Possible typo in error tag in file ${file.getCanonicalPath}:$lineNbr: found `$possibleTypo` but expected `$expected`")
-          }
-
-          expectedErrors += noposErrors + errors
-        }
+        }.get
       }
 
       (errorMap, expectedErrors)
     }
 
-    def getMissingExpectedErrors(errorMap: HashMap[String, Integer], reporterErrors: Iterator[MessageContainer]) = !reporterErrors.forall { error =>
+    def getMissingExpectedErrors(errorMap: HashMap[String, Integer], reporterErrors: Iterator[Diagnostic]) = !reporterErrors.forall { error =>
       val pos1 = error.pos.nonInlined
       val key = if (pos1.exists) {
         def toRelative(path: String): String =  // For some reason, absolute paths leak from the compiler itself...
-          path.split("/").dropWhile(_ != "tests").mkString("/")
+          path.split(JFile.separatorChar).dropWhile(_ != "tests").mkString(JFile.separator)
         val fileName = toRelative(pos1.source.file.toString)
         s"$fileName:${pos1.line}"
 
@@ -694,15 +738,21 @@ trait ParallelTesting extends RunnerOrchestration { self =>
 
       val errors = errorMap.get(key)
 
+      def missing = { echo(s"Error reported in ${pos1.source}, but no annotation found") ; false }
+
       if (errors ne null) {
         if (errors == 1) errorMap.remove(key)
         else errorMap.put(key, errors - 1)
         true
       }
-      else {
-        echo(s"Error reported in ${pos1.source}, but no annotation found")
-        false
-      }
+      else if key == "nopos" then
+        missing
+      else
+        errorMap.get("anypos") match
+          case null  => missing
+          case 1     => errorMap.remove("anypos") ; true
+          case slack => if slack < 1 then missing
+                        else errorMap.put("anypos", slack - 1) ; true
     }
   }
 
@@ -905,6 +955,33 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       this
     }
 
+    /** Tests `-rewrite`, which makes sure that the rewritten files still compile
+     *  and agree with the expected result (if specified).
+     *
+     *  Check files are only supported for joint compilation sources.
+     */
+    def checkRewrites()(implicit summaryReport: SummaryReporting): this.type = {
+      // use the original check file, to simplify update of check files
+      var checkFileMap = Map.empty[JFile, JFile]
+
+      // copy source file to targets, as they will be changed
+      val copiedTargets = targets.map {
+        case target @ JointCompilationSource(_, files, _, outDir, _, _) =>
+          val files2 = files.map { f =>
+            val dest = copyToDir(outDir, f)
+            val checkFile = new JFile(f.getPath.replaceFirst("\\.scala$", ".check"))
+            if (checkFile.exists) checkFileMap = checkFileMap.updated(dest, checkFile)
+            dest
+          }
+          target.copy(files = files2)
+        case target @ SeparateCompilationSource(_, dir, _, outDir) =>
+          target.copy(dir = copyToDir(outDir, dir))
+      }
+
+      val test = new RewriteTest(copiedTargets, checkFileMap, times, threadLimit, shouldFail || shouldSuppressOutput).executeTestSuite()
+      this
+    }
+
     /** Deletes output directories and files */
     private def cleanup(): this.type = {
       if (shouldDelete) delete()
@@ -934,20 +1011,6 @@ trait ParallelTesting extends RunnerOrchestration { self =>
       if (file.isDirectory) file.listFiles.map(copyToDir(target.toFile, _))
       target.toFile
     }
-
-    /** Builds a new `CompilationTest` where we have copied the target files to
-     *  the out directory. This is needed for tests that modify the original
-     *  source, such as `-rewrite` tests
-     */
-    def copyToTarget(): CompilationTest = new CompilationTest (
-      targets.map {
-        case target @ JointCompilationSource(_, files, _, outDir, _, _) =>
-          target.copy(files = files.map(copyToDir(outDir,_)))
-        case target @ SeparateCompilationSource(_, dir, _, outDir) =>
-          target.copy(dir = copyToDir(outDir, dir))
-      },
-      times, shouldDelete, threadLimit, shouldFail, shouldSuppressOutput
-    )
 
     /** Builds a `CompilationTest` which performs the compilation `i` times on
      *  each target
@@ -1307,5 +1370,5 @@ object ParallelTesting {
   }
 
   def isTastyFile(f: JFile): Boolean =
-    f.getName.endsWith(".hasTasty") || f.getName.endsWith(".tasty")
+    f.getName.endsWith(".tasty")
 }

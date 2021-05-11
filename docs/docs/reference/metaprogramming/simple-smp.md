@@ -1,10 +1,10 @@
 ---
 layout: doc-page
-title: "The Meta-theory of Symmetric Meta-programming"
+title: "The Meta-theory of Symmetric Metaprogramming"
 ---
 
 This note presents a simplified variant of
-[principled meta-programming](./macros.md)
+[principled metaprogramming](./macros.md)
 and sketches its soundness proof. The variant treats only dialogues
 between two stages. A program can have quotes which can contain
 splices (which can contain quotes, which can contain splices, and so
@@ -123,9 +123,9 @@ Proof by structural induction over terms.
 
 To prove (1):
 
- - the cases for variables, lambdas and applications are as in STL.
+ - the cases for variables, lambdas and applications are as in [STLC](https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus).
  - If `t = ’t2`, then by inversion we have ` ’ E1 |- t2: T2` for some type `T2`.
-   By the second I.H., we have one of:
+   By the second [induction hypothesis](https://en.wikipedia.org/wiki/Mathematical_induction) (I.H.), we have one of:
    - `t2 = u`, hence `’t2` is a value,
    - `t2 ==> t3`, hence `’t2 --> ’t3`.
  - The case `t = ~t2` is not typable.
@@ -138,11 +138,11 @@ To prove (2):
  - If `t = t1 t2` then one of three cases applies:
 
    - `t1` and `t2` are a simple term, then `t` is as well a simple term.
-   - `t1` is not a simple term. Then by the second IH, `t1 ==> t12`, hence `t ==> t12 t2`.
-   - `t1` is a simple term but `t2` is not. Then by the second IH. `t2 ==> t22`, hence `t ==> t1 t22`.
+   - `t1` is not a simple term. Then by the second I.H., `t1 ==> t12`, hence `t ==> t12 t2`.
+   - `t1` is a simple term but `t2` is not. Then by the second I.H. `t2 ==> t22`, hence `t ==> t1 t22`.
 
  - The case `t = ’t2` is not typable.
- - If `t = ~t2` then by inversion we have `E2 ~  |- t2: ’T2`, for some some type `T2`.
+ - If `t = ~t2` then by inversion we have `E2 ~  |- t2: ’T2`, for some type `T2`.
    By the first I.H., we have one of
 
    - `t2 = v`. Since `t2: ’T2`, we must have `v = ’u`, for some simple term `u`, hence `t = ~’u`.

@@ -30,7 +30,7 @@ trait DottyTest extends ContextEscapeDetection {
     initializeCtx(ctx)
     // when classpath is changed in ctx, we need to re-initialize to get the
     // correct classpath from PathResolver
-    base.initialize()(ctx)
+    base.initialize()(using ctx)
     ctx
   }
 
@@ -42,7 +42,7 @@ trait DottyTest extends ContextEscapeDetection {
   protected def initializeCtx(fc: FreshContext): Unit = {
     fc.setSetting(fc.settings.encoding, "UTF8")
     fc.setSetting(fc.settings.classpath, TestConfiguration.basicClasspath)
-    fc.setSetting(fc.settings.YerasedTerms, true)
+    fc.setSetting(fc.settings.language, List("experimental.erasedDefinitions"))
     fc.setProperty(ContextDoc, new ContextDocstrings)
   }
 
@@ -54,7 +54,7 @@ trait DottyTest extends ContextEscapeDetection {
       val lastGroup = allPhases.find(x => x.contains(targetPhase)).get.takeWhile(x => !(x eq targetPhase))
       val checker = new Phase {
         def phaseName = "assertionChecker"
-        override def run(implicit ctx: Context): Unit = assertion(ctx.compilationUnit.tpdTree, ctx)
+        override def run(using ctx: Context): Unit = assertion(ctx.compilationUnit.tpdTree, ctx)
       }
       val lastGroupAppended = List(lastGroup ::: targetPhase :: Nil)
 
@@ -65,7 +65,7 @@ trait DottyTest extends ContextEscapeDetection {
   def checkCompile(checkAfterPhase: String, source: String)(assertion: (tpd.Tree, Context) => Unit): Context = {
     val c = compilerWithChecker(checkAfterPhase)(assertion)
     val run = c.newRun
-    run.compileFromStrings(source)
+    run.compileFromStrings(List(source))
     run.runContext
   }
 
@@ -77,10 +77,10 @@ trait DottyTest extends ContextEscapeDetection {
   def checkTypes(source: String, typeStringss: List[List[String]])(assertion: (List[List[Type]], Context) => Unit): Unit = {
     val dummyName = "x_x_x"
     val vals = typeStringss.flatten.zipWithIndex.map{case (s, x)=> s"val ${dummyName}$x: $s = ???"}.mkString("\n")
-    val gatheredSource = s" ${source}\n object A$dummyName {$vals}"
+    val gatheredSource = s"${source}\nobject A$dummyName {$vals}"
     checkCompile("typer", gatheredSource) {
       (tree, context) =>
-        implicit val ctx = context
+        given Context = context
         val findValDef: (List[tpd.ValDef], tpd.Tree) => List[tpd.ValDef] =
           (acc , tree) =>  {
             tree match {

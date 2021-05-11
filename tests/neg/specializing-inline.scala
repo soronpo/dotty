@@ -2,9 +2,9 @@ object Test {
 
   inline def h(x: Boolean) = if (x) 1 else ""
   val z = h(true)
-  val zc: Int = z
+  val zc: Int = z // error
 
-  inline def g <: Any = 1
+  transparent inline def g: Any = 1
   val y = g
   val yc: Int = y // OK
 

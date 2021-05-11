@@ -1,7 +1,7 @@
 import scala.collection.mutable
 import scala.annotation.tailrec
 
-// Simulation of an alternative typeclass derivation scheme
+// Simulation of an alternative type class derivation scheme
 
 // -- Classes and Objects of the Derivation Framework ----------------------------------
 
@@ -69,7 +69,7 @@ object Deriving {
   def productElement[T](x: Any, idx: Int) =
     x.asInstanceOf[Product].productElement(idx).asInstanceOf[T]
 }
-import Deriving._
+import Deriving.*
 
 sealed trait Lst[+T] // derives Eq, Pickler, Show
 
@@ -108,9 +108,9 @@ object Lst extends Mirror.Sum {
 
     implicit def mirror: Mirror.Singleton {
       type _MonoType = Nil.type
-      type ElemTypes = Unit
+      type ElemTypes = EmptyTuple
       type CaseLabel = "Nil"
-      type ElemLabels = Unit
+      type ElemLabels = EmptyTuple
     } = this.asInstanceOf
   }
 
@@ -173,9 +173,9 @@ object Left extends Mirror.Product {
   def _fromProduct(p: Product): Left[_] = Left(productElement[Any](p, 0))
   implicit def mirror[L]: Mirror.Product {
     type _MonoType = Left[L]
-    type ElemTypes = L *: Unit
+    type ElemTypes = L *: EmptyTuple
     type CaseLabel = "Left"
-    type ElemLabels = "x" *: Unit
+    type ElemLabels = "x" *: EmptyTuple
   } = this.asInstanceOf
 }
 
@@ -184,31 +184,29 @@ object Right extends Mirror.Product {
   def _fromProduct(p: Product): Right[_] = Right(productElement[Any](p, 0))
   implicit def mirror[R]: Mirror.Product {
     type _MonoType = Right[R]
-    type ElemTypes = R *: Unit
+    type ElemTypes = R *: EmptyTuple
     type CaseLabel = "Right"
-    type ElemLabels = "x" *: Unit
+    type ElemLabels = "x" *: EmptyTuple
   } = this.asInstanceOf
 }
 
-// --------------- Equality typeclass ---------------------------------
+// --------------- Equality type class ---------------------------------
 
 trait Eq[T] {
   def eql(x: T, y: T): Boolean
 }
 
 object Eq {
-  import scala.compiletime.{erasedValue, summonFrom}
+  import scala.compiletime.{erasedValue, summonFrom, summonInline}
 
-  inline def tryEql[T](x: T, y: T) = summonFrom {
-    case eq: Eq[T] => eq.eql(x, y)
-  }
+  inline def tryEql[T](x: T, y: T) = summonInline[Eq[T]].eql(x, y)
 
   inline def eqlElems[Elems <: Tuple](n: Int)(x: Any, y: Any): Boolean =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryEql[elem](productElement[elem](x, n), productElement[elem](y, n)) &&
         eqlElems[elems1](n + 1)(x, y)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -223,7 +221,7 @@ object Eq {
             case m: Mirror.ProductOf[`alt`] => eqlElems[m.ElemTypes](0)(x, y)
           }
         else eqlCases[alts1](n + 1)(x, y, ord)
-      case _: Unit =>
+      case _: EmptyTuple =>
         false
     }
 
@@ -243,7 +241,7 @@ object Eq {
   }
 }
 
-// ----------- Another typeclass -----------------------------------
+// ----------- Another type class -----------------------------------
 
 trait Pickler[T] {
   def pickle(buf: mutable.ListBuffer[Int], x: T): Unit
@@ -251,20 +249,19 @@ trait Pickler[T] {
 }
 
 object Pickler {
-  import scala.compiletime.{erasedValue, constValue, summonFrom}
+  import scala.compiletime.{erasedValue, constValue, summonFrom, summonInline}
 
   def nextInt(buf: mutable.ListBuffer[Int]): Int = try buf.head finally buf.trimStart(1)
 
-  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit = summonFrom {
-    case pkl: Pickler[T] => pkl.pickle(buf, x)
-  }
+  inline def tryPickle[T](buf: mutable.ListBuffer[Int], x: T): Unit =
+    summonInline[Pickler[T]].pickle(buf, x)
 
   inline def pickleElems[Elems <: Tuple](n: Int)(buf: mutable.ListBuffer[Int], x: Any): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         tryPickle[elem](buf, productElement[elem](x, n))
         pickleElems[elems1](n + 1)(buf, x)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def pickleCases[Alts <: Tuple](n: Int)(buf: mutable.ListBuffer[Int], x: Any, ord: Int): Unit =
@@ -275,19 +272,18 @@ object Pickler {
             case m: Mirror.ProductOf[`alt`] => pickleElems[m.ElemTypes](0)(buf, x)
           }
         else pickleCases[alts1](n + 1)(buf, x, ord)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
-  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T = summonFrom {
-    case pkl: Pickler[T] => pkl.unpickle(buf)
-  }
+  inline def tryUnpickle[T](buf: mutable.ListBuffer[Int]): T =
+    summonInline[Pickler[T]].unpickle(buf)
 
   inline def unpickleElems[Elems <: Tuple](n: Int)(buf: mutable.ListBuffer[Int], elems: ArrayProduct): Unit =
     inline erasedValue[Elems] match {
       case _: (elem *: elems1) =>
         elems(n) = tryUnpickle[elem](buf).asInstanceOf[AnyRef]
         unpickleElems[elems1](n + 1)(buf, elems)
-      case _: Unit =>
+      case _: EmptyTuple =>
     }
 
   inline def unpickleCase[T, Elems <: Tuple](buf: mutable.ListBuffer[Int], m: Mirror.ProductOf[T]): T = {
@@ -310,7 +306,7 @@ object Pickler {
               unpickleCase[`alt` & T, m.ElemTypes](buf, m)
           }
         else unpickleCases[T, alts1](n + 1)(buf, ord)
-      case _: Unit =>
+      case _: EmptyTuple =>
         throw new IndexOutOfBoundsException(s"unexpected ordinal number: $ord")
     }
 
@@ -340,17 +336,15 @@ object Pickler {
   }
 }
 
-// ----------- A third typeclass, making use of labels --------------------------
+// ----------- A third type class, making use of labels --------------------------
 
 trait Show[T] {
   def show(x: T): String
 }
 object Show {
-  import scala.compiletime.{erasedValue, constValue, summonFrom}
+  import scala.compiletime.{erasedValue, constValue, summonFrom, summonInline}
 
-  inline def tryShow[T](x: T): String = summonFrom {
-    case s: Show[T] => s.show(x)
-  }
+  inline def tryShow[T](x: T): String = summonInline[Show[T]].show(x)
 
   inline def showElems[Elems <: Tuple, Labels <: Tuple](n: Int)(x: Any): List[String] =
     inline erasedValue[Elems] match {
@@ -361,7 +355,7 @@ object Show {
             val actual = tryShow(productElement[elem](x, n))
             s"$formal = $actual" :: showElems[elems1, labels1](n + 1)(x)
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
         Nil
   }
 
@@ -382,7 +376,7 @@ object Show {
               showCase(x, m)
           }
         else showCases[alts1](n + 1)(x, ord)
-      case _: Unit =>
+      case _: EmptyTuple =>
         throw new MatchError(x)
     }
 

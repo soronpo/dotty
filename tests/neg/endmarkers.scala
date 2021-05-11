@@ -1,4 +1,4 @@
-object Test
+object Test:
 
   locally {
     var x = 0
@@ -9,7 +9,7 @@ object Test
       x += 1
       x < 10
     do ()
-  end while      // error: misaligned end marker
+  end while      // warning: line indented too far to the left
   }
 
   def f(x: Int): Int =
@@ -43,11 +43,11 @@ object Test
     x < 10
   do ()
 
-class Test2
+class Test2:
   self =>
   def foo = 1
 
-  object x
+  object x:
     new Test2 {
       override def foo = 2
       end new               // error: misaligned end marker
@@ -56,16 +56,16 @@ class Test2
   end Test2                 // error: misaligned end marker
 end Test2
 
-class Test3
+class Test3:
  self =>
   def foo = 1
  end Test3  // error: misaligned end marker
 
 import collection.mutable.HashMap
 
-class Coder(words: List[String])
+class Coder(words: List[String]):
 
-  class Foo
+  class Foo:
     println()
     end Foo  // error: misaligned end marker
 

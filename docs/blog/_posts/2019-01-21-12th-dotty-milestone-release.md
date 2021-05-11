@@ -92,7 +92,7 @@ We also connect the new lower-level reflection layer to the existing principled 
 - `unseal` that unseals an `Expr[T]` (non traversable code) into a `Term` and
 - `seal` that seals back a `Term` into an `Expr[T]`.
 
-Read the [relevant documentation](https://dotty.epfl.ch/docs/reference/metaprogramming/tasty-reflect.html) to learn how to go from quotes and splices to TASTys Reflect trees and back .
+Read the [relevant documentation](https://dotty.epfl.ch/docs/reference/metaprogramming/reflection.html) to learn how to go from quotes and splices to TASTys Reflect trees and back .
 
 ### Alignments with the Scala Improvement Process
 
@@ -139,7 +139,7 @@ Releases are available for download on the _Releases_
 section of the Dotty repository:
 [https://github.com/lampepfl/dotty/releases](https://github.com/lampepfl/dotty/releases)
 
-For MacOs users, we also provide a [homebrew](https://brew.sh/) package that can be installed by
+For macOS users, we also provide a [homebrew](https://brew.sh/) package that can be installed by
 running:
 
 ```shell

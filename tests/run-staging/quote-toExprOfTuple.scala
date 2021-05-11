@@ -1,13 +1,13 @@
 
-import scala.quoted._
-import scala.quoted.staging._
+import scala.quoted.*
+import scala.quoted.staging.*
 
 object Test {
-  given Toolbox = Toolbox.make(getClass.getClassLoader)
+  given Compiler = Compiler.make(getClass.getClassLoader)
   def main(args: Array[String]): Unit = {
     for (n <- 0 to 25) {
       prev = 0
-      println(run { Expr.ofTuple(Seq.fill(n)('{next})) })
+      println(run { Expr.ofTupleFromSeq(Seq.fill(n)('{next})) })
     }
   }
   var prev = 0

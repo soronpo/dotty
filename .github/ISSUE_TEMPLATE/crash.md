@@ -1,19 +1,24 @@
 ---
 name: "\U0001F4A5 Crash report"
-about: Report a Dotty Compiler compiler crash
+about: Report a Dotty compiler crash
 title: ''
 labels: itype:bug, itype:crash
 assignees: ''
 
 ---
 
-## minimized code
+## Compiler version
+
+If you're not sure what version you're using, run `print scalaVersion` from sbt
+(if you're running scalac manually, use `scalac -version` instead).
+
+## Minimized code
 
 ```Scala
 println("hello, world")
 ```
 
-## Crash output (click arrow to expand)
+## Output (click arrow to expand)
 <details>
 
 ```scala

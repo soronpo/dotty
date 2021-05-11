@@ -3,11 +3,11 @@ package repl
 
 import dotc.CompilationUnit
 import dotc.ast.untpd
-import dotc.core.Contexts.Context
+import dotc.core.Contexts._
 import dotc.core.StdNames.str
 import dotc.parsing.Parsers.Parser
 import dotc.parsing.Tokens
-import dotc.reporting.diagnostic.MessageContainer
+import dotc.reporting.Diagnostic
 import dotc.util.SourceFile
 
 import scala.annotation.internal.sharable
@@ -20,7 +20,7 @@ case class Parsed(source: SourceFile, trees: List[untpd.Tree]) extends ParseResu
 
 /** A parsing result containing syntax `errors` */
 case class SyntaxErrors(sourceCode: String,
-                        errors: List[MessageContainer],
+                        errors: List[Diagnostic],
                         trees: List[untpd.Tree]) extends ParseResult
 
 /** Parsed result is simply a newline */
@@ -40,6 +40,9 @@ sealed trait Command extends ParseResult
 
 /** An unknown command that will not be handled by the REPL */
 case class UnknownCommand(cmd: String) extends Command
+
+/** An ambiguous prefix that matches multiple commands */
+case class AmbiguousCommand(cmd: String, matchingCommands: List[String]) extends Command
 
 /** `:load <path>` interprets a scala file as if entered line-by-line into
  *  the REPL
@@ -87,6 +90,7 @@ case object Reset extends Command {
 /** `:quit` exits the repl */
 case object Quit extends Command {
   val command: String = ":quit"
+  val alias: String = ":exit"
 }
 
 /** `:help` shows the different commands implemented by the Dotty repl */
@@ -99,7 +103,7 @@ case object Help extends Command {
       |:load <path>             interpret lines in a file
       |:quit                    exit the interpreter
       |:type <expression>       evaluate the type of the given expression
-      |:doc <expression>        print the documentation for the given expresssion
+      |:doc <expression>        print the documentation for the given expression
       |:imports                 show import history
       |:reset                   reset the repl to its initial state, forgetting all session entries
     """.stripMargin
@@ -109,64 +113,73 @@ object ParseResult {
 
   @sharable private val CommandExtract = """(:[\S]+)\s*(.*)""".r
 
-  private def parseStats(implicit ctx: Context): List[untpd.Tree] = {
+  private def parseStats(using Context): List[untpd.Tree] = {
     val parser = new Parser(ctx.source)
     val stats = parser.blockStatSeq()
     parser.accept(Tokens.EOF)
     stats
   }
 
+  private val commands: List[(String, String => ParseResult)] = List(
+    Quit.command -> (_ => Quit),
+    Quit.alias -> (_ => Quit),
+    Help.command -> (_  => Help),
+    Reset.command -> (_  => Reset),
+    Imports.command -> (_  => Imports),
+    Load.command -> (arg => Load(arg)),
+    TypeOf.command -> (arg => TypeOf(arg)),
+    DocOf.command -> (arg => DocOf(arg))
+  )
+
   def apply(source: SourceFile)(implicit state: State): ParseResult = {
     val sourceCode = source.content().mkString
     sourceCode match {
       case "" => Newline
-      case CommandExtract(cmd, arg) => cmd match {
-        case Quit.command => Quit
-        case Help.command => Help
-        case Reset.command => Reset
-        case Imports.command => Imports
-        case Load.command => Load(arg)
-        case TypeOf.command => TypeOf(arg)
-        case DocOf.command => DocOf(arg)
-        case _ => UnknownCommand(cmd)
+      case CommandExtract(cmd, arg) => {
+        val matchingCommands = commands.filter((command, _) => command.startsWith(cmd))
+        matchingCommands match {
+          case Nil => UnknownCommand(cmd)
+          case (_, f) :: Nil => f(arg)
+          case multiple => AmbiguousCommand(cmd, multiple.map(_._1))
+        }
       }
       case _ =>
-        implicit val ctx: Context = state.context
+        inContext(state.context) {
+          val reporter = newStoreReporter
+          val stats = parseStats(using state.context.fresh.setReporter(reporter).withSource(source))
 
-        val reporter = newStoreReporter
-        val stats = parseStats(state.context.fresh.setReporter(reporter).withSource(source))
-
-        if (reporter.hasErrors)
-          SyntaxErrors(
-            sourceCode,
-            reporter.removeBufferedMessages,
-            stats)
-        else
-          Parsed(source, stats)
+          if (reporter.hasErrors)
+            SyntaxErrors(
+              sourceCode,
+              reporter.removeBufferedMessages,
+              stats)
+          else
+            Parsed(source, stats)
+        }
     }
   }
 
   def apply(sourceCode: String)(implicit state: State): ParseResult =
-    apply(SourceFile.virtual(str.REPL_SESSION_LINE + (state.objectIndex + 1), sourceCode))
+    apply(SourceFile.virtual(str.REPL_SESSION_LINE + (state.objectIndex + 1), sourceCode, maybeIncomplete = true))
 
   /** Check if the input is incomplete.
    *
    *  This can be used in order to check if a newline can be inserted without
    *  having to evaluate the expression.
    */
-  def isIncomplete(sourceCode: String)(implicit ctx: Context): Boolean =
+  def isIncomplete(sourceCode: String)(using Context): Boolean =
     sourceCode match {
       case CommandExtract(_) | "" => false
       case _ => {
         val reporter = newStoreReporter
-        val source   = SourceFile.virtual("<incomplete-handler>", sourceCode)
+        val source   = SourceFile.virtual("<incomplete-handler>", sourceCode, maybeIncomplete = true)
         val unit     = CompilationUnit(source, mustExist = false)
         val localCtx = ctx.fresh
                           .setCompilationUnit(unit)
                           .setReporter(reporter)
         var needsMore = false
         reporter.withIncompleteHandler((_, _) => needsMore = true) {
-          parseStats(localCtx)
+          parseStats(using localCtx)
         }
         !reporter.hasErrors && needsMore
       }

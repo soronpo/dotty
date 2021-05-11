@@ -8,6 +8,8 @@ import asm._
 import asm.tree._
 
 import scala.tools.asm.Opcodes
+import scala.jdk.CollectionConverters._
+import Opcodes._
 
 class TestBCode extends DottyBytecodeTest {
   import ASMConverters._
@@ -559,6 +561,93 @@ class TestBCode extends DottyBytecodeTest {
     }
   }
 
+  /* Test that vals in traits cause appropriate `releaseFence()` calls to be emitted. */
+
+  private def checkReleaseFence(releaseFenceExpected: Boolean, outputClassName: String, source: String): Unit = {
+    checkBCode(source) { dir =>
+      val clsIn = dir.lookupName(outputClassName, directory = false)
+      val clsNode = loadClassNode(clsIn.input)
+      val method = getMethod(clsNode, "<init>")
+
+      val hasReleaseFence = instructionsFromMethod(method).exists {
+        case Invoke(_, _, "releaseFence", _, _) => true
+        case _ => false
+      }
+
+      assertEquals(source, releaseFenceExpected, hasReleaseFence)
+    }
+  }
+
+  @Test def testInsertReleaseFence(): Unit = {
+    // An empty trait does not cause a releaseFence.
+    checkReleaseFence(false, "Bar.class",
+      """trait Foo {
+        |}
+        |class Bar extends Foo
+      """.stripMargin)
+
+    // A val in a class does not cause a releaseFence.
+    checkReleaseFence(false, "Bar.class",
+      """trait Foo {
+        |}
+        |class Bar extends Foo {
+        |  val x: Int = 5
+        |}
+      """.stripMargin)
+
+    // A val in a trait causes a releaseFence.
+    checkReleaseFence(true, "Bar.class",
+      """trait Foo {
+        |  val x: Int = 5
+        |}
+        |class Bar extends Foo
+      """.stripMargin)
+
+    // The presence of a var in the trait does not invalidate the need for a releaseFence.
+    // Also, indirect mixin.
+    checkReleaseFence(true, "Bar.class",
+      """trait Parent {
+        |  val x: Int = 5
+        |  var y: Int = 6
+        |}
+        |trait Foo extends Parent
+        |class Bar extends Foo
+      """.stripMargin)
+
+    // The presence of a var in the class does not invalidate the need for a releaseFence.
+    checkReleaseFence(true, "Bar.class",
+      """trait Foo {
+        |  val x: Int = 5
+        |}
+        |class Bar extends Foo {
+        |  var y: Int = 6
+        |}
+      """.stripMargin)
+
+    // When inheriting trait vals through a superclass, no releaseFence is inserted.
+    checkReleaseFence(false, "Bar.class",
+      """trait Parent {
+        |  val x: Int = 5
+        |  var y: Int = 6
+        |}
+        |class Foo extends Parent // releaseFence in Foo, but not in Bar
+        |class Bar extends Foo
+      """.stripMargin)
+
+    // Various other stuff that do not cause a releaseFence.
+    checkReleaseFence(false, "Bar.class",
+      """trait Foo {
+        |  var w: Int = 1
+        |  final val x = 2
+        |  def y: Int = 3
+        |  lazy val z: Int = 4
+        |
+        |  def add(a: Int, b: Int): Int = a + b
+        |}
+        |class Bar extends Foo
+      """.stripMargin)
+  }
+
   /* Test that objects compile to *final* classes. */
 
   private def checkFinalClass(outputClassName: String, source: String) = {
@@ -762,7 +851,7 @@ class TestBCode extends DottyBytecodeTest {
          |}
       """.stripMargin
 
-    checkBCode(sourceA, sourceB) { dir =>
+    checkBCode(List(sourceA, sourceB)) { dir =>
       val clsNodeA = loadClassNode(dir.lookupName("A.class", directory = false).input, skipDebugInfo = false)
       val clsNodeB = loadClassNode(dir.lookupName("B.class", directory = false).input, skipDebugInfo = false)
       val a1 = getMethod(clsNodeA, "a1")
@@ -783,4 +872,267 @@ class TestBCode extends DottyBytecodeTest {
       assertParamName(b2, "evidence$2")
     }
   }
+
+
+  @Test // wrong local variable table for methods containing while loops
+  def t9179(): Unit = {
+    val code =
+      """class C {
+        |  def t(): Unit = {
+        |    var x = ""
+        |    while (x != null) {
+        |      foo()
+        |      x = null
+        |    }
+        |    bar()
+        |  }
+        |  def foo(): Unit = ()
+        |  def bar(): Unit = ()
+        |}
+      """.stripMargin
+    checkBCode(code) { dir =>
+      val c = loadClassNode(dir.lookupName("C.class", directory = false).input, skipDebugInfo = false)
+      val t = getMethod(c, "t")
+      val instructions = instructionsFromMethod(t)
+      val isFrameLine = (x: Instruction) => x.isInstanceOf[FrameEntry] || x.isInstanceOf[LineNumber]
+      // TODO: The same test in scalac uses different labels because their LineNumberTable isn't the same as ours,
+      // this should be investigated.
+      assertSameCode(instructions.filterNot(isFrameLine), List(
+        Label(0), Ldc(LDC, ""), VarOp(ASTORE, 1),
+        Label(5), VarOp(ALOAD, 1), Jump(IFNULL, Label(19)),
+        Label(10), VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C", "foo", "()V", false), Label(14), Op(ACONST_NULL), VarOp(ASTORE, 1), Jump(GOTO, Label(5)),
+        Label(19), VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C", "bar", "()V", false), Label(24), Op(RETURN), Label(26)))
+      val labels = instructions collect { case l: Label => l }
+      val x = convertMethod(t).localVars.find(_.name == "x").get
+      assertEquals(x.start, labels(1))
+      assertEquals(x.end, labels(5))
+    }
+  }
+
+  @Test
+  def getClazz: Unit = {
+    val source = """
+                 |class Foo {
+                 |  def sideEffect(): Int = { println("hi"); 1 }
+                 |  def before1: Class[Int] = sideEffect().getClass
+                 |  def before2: Class[Int] = sideEffect().getClass[Int]
+                 |  def after: Class[Int] = { sideEffect(); classOf[Int] }
+                 |}
+                 """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Foo.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      val before1    = instructionsFromMethod(getMethod(clsNode, "before1"))
+      val before2    = instructionsFromMethod(getMethod(clsNode, "before2"))
+      val after      = instructionsFromMethod(getMethod(clsNode, "after"))
+
+      assert(before1 == after,
+        "`before1` was not translated to the same bytecode as `after`\n" +
+        diffInstructions(before1, after))
+      assert(before2 == after,
+        "`before2` was not translated to the same bytecode as `after`\n" +
+        diffInstructions(before2, after))
+    }
+  }
+
+  @Test
+  def invocationReceivers(): Unit = {
+    import Opcodes._
+
+    checkBCode(List(invocationReceiversTestCode.definitions("Object"))) { dir =>
+      val c1 = loadClassNode(dir.lookupName("C1.class", directory = false).input)
+      val c2 = loadClassNode(dir.lookupName("C2.class", directory = false).input)
+      assertSameCode(getMethod(c1, "clone"), List(VarOp(ALOAD, 0), Invoke(INVOKESTATIC, "T", "clone$", "(LT;)Ljava/lang/Object;", true), Op(ARETURN)))
+      assertInvoke(getMethod(c1, "f1"), "T", "clone")
+      assertInvoke(getMethod(c1, "f2"), "T", "clone")
+      assertInvoke(getMethod(c1, "f3"), "C1", "clone")
+      assertInvoke(getMethod(c2, "f1"), "T", "clone")
+      assertInvoke(getMethod(c2, "f2"), "T", "clone")
+      assertInvoke(getMethod(c2, "f3"), "C1", "clone")
+    }
+    checkBCode(List(invocationReceiversTestCode.definitions("String"))) { dir =>
+      val c1b = loadClassNode(dir.lookupName("C1.class", directory = false).input)
+      val c2b = loadClassNode(dir.lookupName("C2.class", directory = false).input)
+      val tb = loadClassNode(dir.lookupName("T.class", directory = false).input)
+      val ub = loadClassNode(dir.lookupName("U.class", directory = false).input)
+
+      def ms(c: ClassNode, n: String) = c.methods.asScala.toList.filter(_.name == n)
+      assert(ms(tb, "clone").length == 1)
+      assert(ms(ub, "clone").isEmpty)
+      val List(c1Clone) = ms(c1b, "clone").filter(_.desc == "()Ljava/lang/Object;")
+      assert((c1Clone.access | Opcodes.ACC_BRIDGE) != 0)
+      assertSameCode(c1Clone, List(VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C1", "clone", "()Ljava/lang/String;", false), Op(ARETURN)))
+
+      def iv(m: MethodNode) = getInstructions(c1b, "f1").collect({case i: Invoke => i})
+      assertSameCode(iv(getMethod(c1b, "f1")), List(Invoke(INVOKEINTERFACE, "T", "clone", "()Ljava/lang/String;", true)))
+      assertSameCode(iv(getMethod(c1b, "f2")), List(Invoke(INVOKEINTERFACE, "T", "clone", "()Ljava/lang/String;", true)))
+      // invokeinterface T.clone in C1 is OK here because it is not an override of Object.clone (different signature)
+      assertSameCode(iv(getMethod(c1b, "f3")), List(Invoke(INVOKEINTERFACE, "T", "clone", "()Ljava/lang/String;", true)))
+    }
+  }
+
+  @Test
+  def invocationReceiversProtected(): Unit = {
+    // http://lrytz.github.io/scala-aladdin-bugtracker/displayItem.do%3Fid=455.html / 9954eaf
+    // also https://github.com/scala/bug/issues/1430 / 0bea2ab (same but with interfaces)
+    val aC =
+      """package a;
+        |/*package private*/ abstract class A {
+        |  public int f() { return 1; }
+        |  public int t;
+        |}
+      """.stripMargin
+    val bC =
+      """package a;
+        |public class B extends A { }
+      """.stripMargin
+    val iC =
+      """package a;
+        |/*package private*/ interface I { int f(); }
+      """.stripMargin
+    val jC =
+      """package a;
+        |public interface J extends I { }
+      """.stripMargin
+    val cC =
+      """package b
+        |class C {
+        |  def f1(b: a.B) = b.f
+        |  def f2(b: a.B) = { b.t = b.t + 1 }
+        |  def f3(j: a.J) = j.f
+        |}
+      """.stripMargin
+
+    checkBCode(scalaSources = List(cC), javaSources = List(aC, bC, iC, jC)) { dir =>
+      val clsIn   = dir.subdirectoryNamed("b").lookupName("C.class", directory = false).input
+      val c = loadClassNode(clsIn)
+
+      assertInvoke(getMethod(c, "f1"), "a/B", "f") // receiver needs to be B (A is not accessible in class C, package b)
+      assertInvoke(getMethod(c, "f3"), "a/J", "f") // receiver needs to be J
+    }
+  }
+
+  @Test
+  def specialInvocationReceivers(): Unit = {
+    val code =
+      """class C {
+        |  def f1(a: Array[String]) = a.clone()
+        |  def f2(a: Array[Int]) = a.hashCode()
+        |  def f3(n: Nothing) = n.hashCode()
+        |  def f4(n: Null) = n.toString()
+        |
+        |}
+      """.stripMargin
+    checkBCode(code) { dir =>
+      val c = loadClassNode(dir.lookupName("C.class", directory = false).input)
+
+      assertInvoke(getMethod(c, "f1"), "[Ljava/lang/String;", "clone") // array descriptor as receiver
+      assertInvoke(getMethod(c, "f2"), "java/lang/Object", "hashCode") // object receiver
+      assertInvoke(getMethod(c, "f3"), "java/lang/Object", "hashCode")
+      assertInvoke(getMethod(c, "f4"), "java/lang/Object", "toString")
+    }
+  }
+
+  @Test
+  def deprecation(): Unit = {
+    val code =
+      """@deprecated
+        |class Test {
+        |  @deprecated
+        |  val v = 0
+        |
+        |  @deprecated
+        |  var x = 0
+        |
+        |  @deprecated("do not use this function!")
+        |  def f(): Unit = ()
+        |}
+      """.stripMargin
+
+    checkBCode(code) { dir =>
+      val c = loadClassNode(dir.lookupName("Test.class", directory = false).input)
+      assert((c.access & Opcodes.ACC_DEPRECATED) != 0)
+      assert((getMethod(c, "f").access & Opcodes.ACC_DEPRECATED) != 0)
+
+      assert((getField(c, "v").access & Opcodes.ACC_DEPRECATED) != 0)
+      assert((getMethod(c, "v").access & Opcodes.ACC_DEPRECATED) != 0)
+
+      assert((getField(c, "x").access & Opcodes.ACC_DEPRECATED) != 0)
+      assert((getMethod(c, "x").access & Opcodes.ACC_DEPRECATED) != 0)
+      assert((getMethod(c, "x_$eq").access & Opcodes.ACC_DEPRECATED) != 0)
+    }
+  }
+
+  @Test def vcElideAllocations = {
+    val source =
+      s"""class ApproxState(val bits: Int) extends AnyVal
+         |class Foo {
+         |  val FreshApprox: ApproxState = new ApproxState(4)
+         |  var approx: ApproxState = FreshApprox
+         |  def meth1: Boolean = approx == FreshApprox
+         |  def meth2: Boolean = (new ApproxState(4): ApproxState) == FreshApprox
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Foo.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      val meth1      = getMethod(clsNode, "meth1")
+      val meth2      = getMethod(clsNode, "meth2")
+      val instructions1 = instructionsFromMethod(meth1)
+      val instructions2 = instructionsFromMethod(meth2)
+
+      val isFrameLine = (x: Instruction) => x.isInstanceOf[FrameEntry] || x.isInstanceOf[LineNumber]
+
+      // No allocations of ApproxState
+
+      assertSameCode(instructions1.filterNot(isFrameLine), List(
+        VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "Foo", "approx", "()I", false),
+        VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "Foo", "FreshApprox", "()I", false),
+        Jump(IF_ICMPNE, Label(7)), Op(ICONST_1),
+        Jump(GOTO, Label(10)),
+        Label(7), Op(ICONST_0),
+        Label(10), Op(IRETURN)))
+
+      assertSameCode(instructions2.filterNot(isFrameLine), List(
+        Op(ICONST_4),
+        VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "Foo", "FreshApprox", "()I", false),
+        Jump(IF_ICMPNE, Label(6)), Op(ICONST_1),
+        Jump(GOTO, Label(9)),
+        Label(6), Op(ICONST_0),
+        Label(9), Op(IRETURN)))
+    }
+  }
+}
+
+object invocationReceiversTestCode {
+  // if cloneType is more specific than Object (e.g., String), a bridge method is generated.
+  def definitions(cloneType: String): String =
+    s"""trait T { override def clone(): $cloneType = "hi" }
+        |trait U extends T
+        |class C1 extends U with Cloneable {
+        |  // The comments below are true when `cloneType` is Object.
+        |  // C1 gets a forwarder for clone that invokes T.clone. this is needed because JVM method
+        |  // resolution always prefers class members, so it would resolve to Object.clone, even if
+        |  // C1 is a subtype of the interface T which has an overriding default method for clone.
+        |
+        |  // invokeinterface T.clone
+        |  def f1 = (this: T).clone()
+        |
+        |  // cannot invokeinterface U.clone (NoSuchMethodError). Object.clone would work here, but
+        |  // not in the example in C2 (illegal access to protected). T.clone works in all cases and
+        |  // resolves correctly.
+        |  def f2 = (this: U).clone()
+        |
+        |  // invokevirtual C1.clone()
+        |  def f3 = (this: C1).clone()
+        |}
+        |
+        |class C2 {
+        |  def f1(t: T) = t.clone()  // invokeinterface T.clone
+        |  def f2(t: U) = t.clone()  // invokeinterface T.clone -- Object.clone would be illegal (protected, explained in C1)
+        |  def f3(t: C1) = t.clone() // invokevirtual C1.clone -- Object.clone would be illegal
+        |}
+    """.stripMargin
 }

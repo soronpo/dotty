@@ -1,10 +1,12 @@
 package dotty.tools.repl
 
 import java.io.{File => JFile, PrintStream}
+import java.nio.charset.StandardCharsets
 
 import dotty.tools.dotc.ast.Trees._
 import dotty.tools.dotc.ast.{tpd, untpd}
-import dotty.tools.dotc.core.Contexts.Context
+import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Phases.{unfusedPhases, typerPhase}
 import dotty.tools.dotc.core.Denotations.Denotation
 import dotty.tools.dotc.core.Flags._
 import dotty.tools.dotc.core.Mode
@@ -16,15 +18,17 @@ import dotty.tools.dotc.core.Symbols.{Symbol, defn}
 import dotty.tools.dotc.interactive.Completion
 import dotty.tools.dotc.printing.SyntaxHighlighting
 import dotty.tools.dotc.reporting.MessageRendering
-import dotty.tools.dotc.reporting.diagnostic.{Message, MessageContainer}
+import dotty.tools.dotc.reporting.{Message, Diagnostic}
 import dotty.tools.dotc.util.Spans.Span
 import dotty.tools.dotc.util.{SourceFile, SourcePosition}
 import dotty.tools.dotc.{CompilationUnit, Driver}
+import dotty.tools.dotc.config.CompilerCommand
 import dotty.tools.io._
 import org.jline.reader._
 
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
+import scala.util.Using
 
 /** The state of the REPL contains necessary bindings instead of having to have
  *  mutation
@@ -64,9 +68,14 @@ class ReplDriver(settings: Array[String],
   private def initialCtx = {
     val rootCtx = initCtx.fresh.addMode(Mode.ReadPositions | Mode.Interactive | Mode.ReadComments)
     rootCtx.setSetting(rootCtx.settings.YcookComments, true)
-    val ictx = setup(settings, rootCtx)._2
-    ictx.base.initialize()(ictx)
-    ictx
+    setup(settings, rootCtx) match
+      case Some((files, ictx)) =>
+        shouldStart = true
+        ictx.base.initialize()(using ictx)
+        ictx
+      case None =>
+        shouldStart = false
+        rootCtx
   }
 
   /** the initial, empty state of the REPL session */
@@ -80,7 +89,7 @@ class ReplDriver(settings: Array[String],
    */
   protected def resetToInitial(): Unit = {
     rootCtx = initialCtx
-    if (rootCtx.settings.outputDir.isDefault(rootCtx))
+    if (rootCtx.settings.outputDir.isDefault(using rootCtx))
       rootCtx = rootCtx.fresh
         .setSetting(rootCtx.settings.outputDir, new VirtualDirectory("<REPL compilation output>"))
     compiler = new ReplCompiler
@@ -88,12 +97,21 @@ class ReplDriver(settings: Array[String],
   }
 
   private var rootCtx: Context = _
+  private var shouldStart: Boolean = _
   private var compiler: ReplCompiler = _
   private var rendering: Rendering = _
 
   // initialize the REPL session as part of the constructor so that once `run`
   // is called, we're in business
   resetToInitial()
+
+  override protected def command: CompilerCommand = ReplCommand
+
+  /** Try to run REPL if there is nothing that prevents us doing so.
+   *
+   *  Possible reason for unsuccessful run are raised flags in CLI like --help or --version
+   */
+  final def tryRunning = if shouldStart then runUntilQuit()
 
   /** Run REPL with `state` until `:quit` command found
    *
@@ -110,7 +128,7 @@ class ReplDriver(settings: Array[String],
         val comps = completions(line.cursor, line.line, state)
         candidates.addAll(comps.asJava)
       }
-      implicit val ctx = state.context
+      given Context = state.context
       try {
         val line = terminal.readLine(completer)
         ParseResult(line)(state)
@@ -139,6 +157,7 @@ class ReplDriver(settings: Array[String],
   // TODO: i5069
   final def bind(name: String, value: Any)(implicit state: State): State = state
 
+  // redirecting the output allows us to test `println` in scripted tests
   private def withRedirectedOutput(op: => State): State = {
     val savedOut = System.out
     val savedErr = System.err
@@ -160,11 +179,10 @@ class ReplDriver(settings: Array[String],
 
   /** Extract possible completions at the index of `cursor` in `expr` */
   protected final def completions(cursor: Int, expr: String, state0: State): List[Candidate] = {
-    def makeCandidate(completion: Completion) = {
-      val displ = completion.label
+    def makeCandidate(label: String) = {
       new Candidate(
-        /* value    = */ displ,
-        /* displ    = */ displ, // displayed value
+        /* value    = */ label,
+        /* displ    = */ label, // displayed value
         /* group    = */ null,  // can be used to group completions together
         /* descr    = */ null,  // TODO use for documentation?
         /* suffix   = */ null,
@@ -176,13 +194,13 @@ class ReplDriver(settings: Array[String],
     compiler
       .typeCheck(expr, errorsAllowed = true)
       .map { tree =>
-        val file = SourceFile.virtual("<completions>", expr)
-        val unit = CompilationUnit(file)(state.context)
+        val file = SourceFile.virtual("<completions>", expr, maybeIncomplete = true)
+        val unit = CompilationUnit(file)(using state.context)
         unit.tpdTree = tree
-        implicit val ctx = state.context.fresh.setCompilationUnit(unit)
+        given Context = state.context.fresh.setCompilationUnit(unit)
         val srcPos = SourcePosition(file, Span(cursor))
         val (_, completions) = Completion.completions(srcPos)
-        completions.map(makeCandidate)
+        completions.map(_.label).distinct.map(makeCandidate)
       }
       .getOrElse(Nil)
   }
@@ -205,10 +223,11 @@ class ReplDriver(settings: Array[String],
       case _ => // new line, empty tree
         state
     }
-    implicit val ctx: Context = newState.context
-    if (!ctx.settings.XreplDisableDisplay.value)
-      out.println()
-    newState
+    inContext(newState.context) {
+      if (!ctx.settings.XreplDisableDisplay.value)
+        out.println()
+      newState
+    }
   }
 
   /** Compile `parsed` trees and evolve `state` in accordance */
@@ -219,7 +238,7 @@ class ReplDriver(settings: Array[String],
     }
 
     def extractTopLevelImports(ctx: Context): List[tpd.Import] =
-      ctx.phases.collectFirst { case phase: CollectTopLevelImports => phase.imports }.get
+      unfusedPhases(using ctx).collectFirst { case phase: CollectTopLevelImports => phase.imports }.get
 
     implicit val state = {
       val state0 = newRun(istate)
@@ -238,20 +257,36 @@ class ReplDriver(settings: Array[String],
               allImports += (newState.objectIndex -> newImports)
             val newStateWithImports = newState.copy(imports = allImports)
 
-            val warnings = newState.context.reporter.removeBufferedMessages(newState.context)
-            displayErrors(warnings)(newState) // display warnings
-            implicit val ctx = newState.context
-            if (!ctx.settings.XreplDisableDisplay.value)
-              displayDefinitions(unit.tpdTree, newestWrapper)(newStateWithImports)
-            else
-              newStateWithImports
+            val warnings = newState.context.reporter
+              .removeBufferedMessages(using newState.context)
+              .map(rendering.formatError)
+
+            inContext(newState.context) {
+              val (updatedState, definitions) =
+                if (!ctx.settings.XreplDisableDisplay.value)
+                  renderDefinitions(unit.tpdTree, newestWrapper)(newStateWithImports)
+                else
+                  (newStateWithImports, Seq.empty)
+
+              // output is printed in the order it was put in. warnings should be
+              // shown before infos (eg. typedefs) for the same line. column
+              // ordering is mostly to make tests deterministic
+              implicit val diagnosticOrdering: Ordering[Diagnostic] =
+                Ordering[(Int, Int, Int)].on(d => (d.pos.line, -d.level, d.pos.column))
+
+              (definitions ++ warnings)
+                .sorted
+                .map(_.msg)
+                .foreach(out.println)
+
+              updatedState
+            }
         }
       )
   }
 
-  /** Display definitions from `tree` */
-  private def displayDefinitions(tree: tpd.Tree, newestWrapper: Name)(implicit state: State): State = {
-    implicit val ctx = state.context
+  private def renderDefinitions(tree: tpd.Tree, newestWrapper: Name)(implicit state: State): (State, Seq[Diagnostic]) = {
+    given Context = state.context
 
     def resAndUnit(denot: Denotation) = {
       import scala.util.{Success, Try}
@@ -264,61 +299,57 @@ class ReplDriver(settings: Array[String],
       name.startsWith(str.REPL_RES_PREFIX) && hasValidNumber && sym.info == defn.UnitType
     }
 
-    def displayMembers(symbol: Symbol) = if (tree.symbol.info.exists) {
+    def extractAndFormatMembers(symbol: Symbol): (State, Seq[Diagnostic]) = if (tree.symbol.info.exists) {
       val info = symbol.info
       val defs =
         info.bounds.hi.finalResultType
           .membersBasedOnFlags(required = Method, excluded = Accessor | ParamAccessor | Synthetic | Private)
           .filterNot { denot =>
-            denot.symbol.owner == defn.AnyClass ||
-            denot.symbol.owner == defn.ObjectClass ||
-            denot.symbol.isConstructor
+            defn.topClasses.contains(denot.symbol.owner) || denot.symbol.isConstructor
           }
-          .sortBy(_.name)
 
       val vals =
         info.fields
           .filterNot(_.symbol.isOneOf(ParamAccessor | Private | Synthetic | Artifact | Module))
           .filter(_.symbol.name.is(SimpleNameKind))
-          .sortBy(_.name)
 
       val typeAliases =
-        info.bounds.hi.typeMembers.filter(_.symbol.info.isTypeAlias).sortBy(_.name)
+        info.bounds.hi.typeMembers.filter(_.symbol.info.isTypeAlias)
 
-      (
-        typeAliases.map("// defined alias " + _.symbol.showUser) ++
+      val formattedMembers =
+        typeAliases.map(rendering.renderTypeAlias) ++
         defs.map(rendering.renderMethod) ++
-        vals.map(rendering.renderVal).flatten
-      ).foreach(str => out.println(SyntaxHighlighting.highlight(str)))
+        vals.flatMap(rendering.renderVal)
 
-      state.copy(valIndex = state.valIndex - vals.count(resAndUnit))
+      val diagnostics = if formattedMembers.isEmpty then rendering.forceModule(symbol) else formattedMembers
+
+      (state.copy(valIndex = state.valIndex - vals.count(resAndUnit)), diagnostics)
     }
-    else state
+    else (state, Seq.empty)
 
     def isSyntheticCompanion(sym: Symbol) =
       sym.is(Module) && sym.is(Synthetic)
 
-    def displayTypeDefs(sym: Symbol) = sym.info.memberClasses
+    def typeDefs(sym: Symbol): Seq[Diagnostic] = sym.info.memberClasses
       .collect {
         case x if !isSyntheticCompanion(x.symbol) && !x.symbol.name.isReplWrapperName =>
-          x.symbol
-      }
-      .foreach { sym =>
-        out.println(SyntaxHighlighting.highlight("// defined " + sym.showUser))
+          rendering.renderTypeDef(x)
       }
 
-
-    ctx.atPhase(ctx.typerPhase.next) {
+    atPhase(typerPhase.next) {
       // Display members of wrapped module:
       tree.symbol.info.memberClasses
         .find(_.symbol.name == newestWrapper.moduleClassName)
         .map { wrapperModule =>
-          displayTypeDefs(wrapperModule.symbol)
-          displayMembers(wrapperModule.symbol)
+          val formattedTypeDefs = typeDefs(wrapperModule.symbol)
+          val (newState, formattedMembers) = extractAndFormatMembers(wrapperModule.symbol)
+          val highlighted = (formattedTypeDefs ++ formattedMembers)
+            .map(d => new Diagnostic(d.msg.mapMsg(SyntaxHighlighting.highlight), d.pos, d.level))
+          (newState, highlighted)
         }
         .getOrElse {
           // user defined a trait/class/object, so no module needed
-          state
+          (state, Seq.empty)
         }
     }
   }
@@ -327,6 +358,10 @@ class ReplDriver(settings: Array[String],
   private def interpretCommand(cmd: Command)(implicit state: State): State = cmd match {
     case UnknownCommand(cmd) =>
       out.println(s"""Unknown command: "$cmd", run ":help" for a list of commands""")
+      state
+
+    case AmbiguousCommand(cmd, matching) =>
+      out.println(s""""$cmd" matches ${matching.mkString(", ")}. Try typing a few more characters. Run ":help" for a list of commands""")
       state
 
     case Help =>
@@ -341,13 +376,13 @@ class ReplDriver(settings: Array[String],
       for {
         objectIndex <- 1 to state.objectIndex
         imp <- state.imports.getOrElse(objectIndex, Nil)
-      } out.println(imp.show(state.context))
+      } out.println(imp.show(using state.context))
       state
 
     case Load(path) =>
       val file = new JFile(path)
       if (file.exists) {
-        val contents = scala.io.Source.fromFile(file, "UTF-8").mkString
+        val contents = Using(scala.io.Source.fromFile(file, StandardCharsets.UTF_8.name))(_.mkString).get
         run(contents)
       }
       else {
@@ -356,17 +391,25 @@ class ReplDriver(settings: Array[String],
       }
 
     case TypeOf(expr) =>
-      compiler.typeOf(expr)(newRun(state)).fold(
-        displayErrors,
-        res => out.println(SyntaxHighlighting.highlight(res)(state.context))
-      )
+      expr match {
+        case "" => out.println(s":type <expression>")
+        case _  =>
+          compiler.typeOf(expr)(newRun(state)).fold(
+            displayErrors,
+            res => out.println(res)  // result has some highlights
+          )
+      }
       state
 
     case DocOf(expr) =>
-      compiler.docOf(expr)(newRun(state)).fold(
-        displayErrors,
-        res => out.println(res)
-      )
+      expr match {
+        case "" => out.println(s":doc <expression>")
+        case _  =>
+          compiler.docOf(expr)(newRun(state)).fold(
+            displayErrors,
+            res => out.println(res)
+          )
+      }
       state
 
     case Quit =>
@@ -374,18 +417,9 @@ class ReplDriver(settings: Array[String],
       state
   }
 
-  /** A `MessageRenderer` without file positions */
-  private val messageRenderer = new MessageRendering {
-    override def posStr(pos: SourcePosition, diagnosticLevel: String, message: Message)(implicit ctx: Context): String = ""
-  }
-
-  /** Render messages using the `MessageRendering` trait */
-  private def renderMessage(cont: MessageContainer): Context => String =
-    messageRenderer.messageAndPos(cont.contained(), cont.pos, messageRenderer.diagnosticLevel(cont))(_)
-
-  /** Output errors to `out` */
-  private def displayErrors(errs: Seq[MessageContainer])(implicit state: State): State = {
-    errs.map(renderMessage(_)(state.context)).foreach(out.println)
+  /** shows all errors nicely formatted */
+  private def displayErrors(errs: Seq[Diagnostic])(implicit state: State): State = {
+    errs.map(rendering.formatError).map(_.msg).foreach(out.println)
     state
   }
 }

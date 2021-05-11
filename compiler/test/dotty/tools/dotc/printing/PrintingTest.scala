@@ -10,6 +10,7 @@ import reporting.TestReporter
 import java.io._
 import java.nio.file.{Path => JPath}
 import java.lang.System.{lineSeparator => EOL}
+import java.nio.charset.StandardCharsets
 
 import interfaces.Diagnostic.INFO
 import dotty.tools.io.Directory
@@ -20,12 +21,6 @@ import org.junit.Test
 class PrintingTest {
   val testsDir = "tests/printing"
   val options = List("-Xprint:typer", "-color:never", "-classpath", TestConfiguration.basicClasspath)
-
-  private def fileContent(filePath: String): List[String] =
-    if (new File(filePath).exists)
-      Source.fromFile(filePath, "UTF-8").getLines().toList
-    else Nil
-
 
   private def compileFile(path: JPath): Boolean = {
     val baseFilePath  = path.toString.stripSuffix(".scala")
@@ -41,8 +36,7 @@ class PrintingTest {
         e.printStackTrace()
     }
 
-    val actualLines = byteStream.toString("UTF-8").split("\\r?\\n")
-
+    val actualLines = byteStream.toString(StandardCharsets.UTF_8.name).linesIterator
     FileDiff.checkAndDump(path.toString, actualLines.toIndexedSeq, checkFilePath)
   }
 

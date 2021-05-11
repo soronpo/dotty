@@ -1,11 +1,10 @@
 package scala.util
 import scala.math.{BigInt}
 import quoted._
-import quoted.matching._
-import internal.Chars.digit2int
 import annotation.internal.sharable
 
-/** A typeclass for types that admit numeric literals.
+
+/** A type class for types that admit numeric literals.
  */
 trait FromDigits[T] {
 
@@ -30,7 +29,7 @@ object FromDigits {
   trait WithRadix[T] extends FromDigits[T] {
     def fromDigits(digits: String): T = fromDigits(digits, 10)
 
-    /** Convert digits string with given radix to numberof type `T`.
+    /** Convert digits string with given radix to number of type `T`.
      *  E.g. if radix is 16, digits `a..f` and `A..F` are also allowed.
      */
     def fromDigits(digits: String, radix: Int): T
@@ -81,9 +80,13 @@ object FromDigits {
     }
     if (i == len) throw MalformedNumber()
     while (i < len) {
-      val c = digits(i)
-      val d = digit2int(c, radix)
-      if (d < 0) throw MalformedNumber()
+      val ch = digits(i)
+      val d =
+        if (ch <= '9') ch - '0'
+        else if ('a' <= ch && ch <= 'z') ch - 'a' + 10
+        else if ('A' <= ch && ch <= 'Z') ch - 'A' + 10
+        else -1
+      if (d < 0 || radix <= d) throw MalformedNumber()
       if (value < 0 ||
           limit / (radix / divider) < value ||
           limit - (d / divider) < value * (radix / divider) &&
@@ -154,11 +157,11 @@ object FromDigits {
     x
   }
 
-  given BigIntFromDigits : FromDigits.WithRadix[BigInt] {
+  given BigIntFromDigits: WithRadix[BigInt] with {
     def fromDigits(digits: String, radix: Int): BigInt = BigInt(digits, radix)
   }
 
-  given BigDecimalFromDigits : FromDigits.Floating[BigDecimal] {
+  given BigDecimalFromDigits: Floating[BigDecimal] with {
     def fromDigits(digits: String): BigDecimal = BigDecimal(digits)
   }
 }

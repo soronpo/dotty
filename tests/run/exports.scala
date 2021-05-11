@@ -7,12 +7,12 @@ object Test extends App {
   class Printer {
     def print() = println("printing")
     object cfg extends Config
-    given config as Config
+    given config: Config()
   }
 
   class Scanner {
     def scan() = println("scanning")
-    def (x: Any).scanned = scan()
+    extension (x: Any) def scanned = scan()
   }
   object Scanner extends Scanner
 
@@ -31,7 +31,7 @@ object Test extends App {
   Copier.config2
 
   def test() = {
-    import Copier._
+    import Copier.*
     print()
     scanIt()
     val x = config2
@@ -39,9 +39,17 @@ object Test extends App {
     1.scanned
   }
   test()
+
+  val _: Int = B.x
 }
 
 final class Foo {
   lazy val foo : Foo = new Foo
   export foo._ // nothing is exported
 }
+
+class A:
+  val x: Int = 1
+class B(a: A):
+  export a.x
+object B extends B(A())

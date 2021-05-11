@@ -1,5 +1,4 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
 
 object SourceFiles {
@@ -7,9 +6,7 @@ object SourceFiles {
   implicit inline def getThisFile: String =
     ${getThisFileImpl}
 
-  private def getThisFileImpl(using qctx: QuoteContext) : Expr[String] = {
-    import qctx.tasty.{_, given _}
-    rootContext.source.getFileName.toString
-  }
+  private def getThisFileImpl(using Quotes) : Expr[String] =
+    Expr(quotes.reflect.SourceFile.current.jpath.getFileName.toString)
 
 }

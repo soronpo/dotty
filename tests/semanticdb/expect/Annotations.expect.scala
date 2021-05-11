@@ -1,8 +1,8 @@
 package annot
 
-import com.javacp.annot._
-import scala.annotation.meta._
-import scala.language/*->scalaShadowing::language.*/.experimental/*->scalaShadowing::language.experimental.*/.macros/*->scalaShadowing::language.experimental.macros.*/
+import com.javacp.annot.*
+import scala.annotation.meta.*
+import scala.language/*->scala::language.*/.experimental/*->scala::language.experimental.*/.macros/*->scala::language.experimental.macros.*/
 
 @ClassAnnotation/*->com::javacp::annot::ClassAnnotation#*/
 class Annotations/*<-annot::Annotations#*/[@TypeParameterAnnotation/*->com::javacp::annot::TypeParameterAnnotation#*/ T/*<-annot::Annotations#[T]*/](@ParameterAnnotation/*->com::javacp::annot::ParameterAnnotation#*/ x/*<-annot::Annotations#x.*/: T/*->annot::Annotations#[T]*/) { self/*<-local0*/: AnyRef/*->scala::AnyRef#*/ =>
@@ -27,7 +27,7 @@ class B/*<-annot::B#*/ @ConstructorAnnotation/*->com::javacp::annot::Constructor
 @ObjectAnnotation/*->com::javacp::annot::ObjectAnnotation#*/
 object M/*<-annot::M.*/ {
   @MacroAnnotation/*->com::javacp::annot::MacroAnnotation#*/
-  def m/*<-annot::M.m().*/[TT/*<-annot::M.m().[TT]*/]: Int/*->scala::Int#*//*->scala::Predef.`???`().*/ = macro ???
+  def m/*<-annot::M.m().*/[TT/*<-annot::M.m().[TT]*/]: Int/*->scala::Int#*/ = macro ???/*->scala::Predef.`???`().*/
 }
 
 @TraitAnnotation/*->com::javacp::annot::TraitAnnotation#*/

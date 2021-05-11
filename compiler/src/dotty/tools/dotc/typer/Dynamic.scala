@@ -6,20 +6,45 @@ import dotty.tools.dotc.ast.Trees._
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.untpd
 import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.Contexts.Context
+import dotty.tools.dotc.core.Contexts._
 import dotty.tools.dotc.core.Names.{Name, TermName}
 import dotty.tools.dotc.core.StdNames._
 import dotty.tools.dotc.core.Types._
 import dotty.tools.dotc.core.Decorators._
+import dotty.tools.dotc.core.TypeErasure
 import util.Spans._
 import core.Symbols._
 import core.Definitions
 import ErrorReporting._
-import dotty.tools.dotc.reporting.diagnostic.messages.ReassignmentToVal
+import reporting._
 
 object Dynamic {
-  def isDynamicMethod(name: Name): Boolean =
+  private def isDynamicMethod(name: Name): Boolean =
     name == nme.applyDynamic || name == nme.selectDynamic || name == nme.updateDynamic || name == nme.applyDynamicNamed
+
+  /** Is `tree` a reference over `Dynamic` that should be expanded to a
+   *  dyanmic `applyDynamic`, `selectDynamic`, `updateDynamic`, or `applyDynamicNamed` call?
+   */
+  def isDynamicExpansion(tree: untpd.RefTree)(using Context): Boolean =
+    isDynamicMethod(tree.name)
+    || tree.match
+          case Select(Apply(fun: untpd.RefTree, _), nme.apply)
+          if defn.isContextFunctionClass(fun.symbol.owner) =>
+            isDynamicExpansion(fun)
+          case Select(qual, nme.apply) =>
+            isDynamicMethod(qual.symbol.name) && tree.span.isSynthetic
+          case _ => false
+}
+
+object DynamicUnapply {
+  def unapply(tree: tpd.Tree): Option[List[tpd.Tree]] = tree match
+    case TypeApply(Select(qual, name), _) if name == nme.asInstanceOfPM =>
+      unapply(qual)
+    case Apply(Apply(Select(selectable, fname), Literal(Constant(name)) :: ctag :: Nil), _ :: implicits)
+    if fname == nme.applyDynamic && (name == "unapply" || name == "unapplySeq") =>
+      Some(selectable :: ctag :: implicits)
+    case _ =>
+      None
 }
 
 /** Handles programmable member selections of `Dynamic` instances and values
@@ -50,7 +75,7 @@ trait Dynamic {
    *    foo.bar(x = bazX, y = bazY, baz, ...)          ~~> foo.applyDynamicNamed("bar")(("x", bazX), ("y", bazY), ("", baz), ...)
    *    foo.bar[T0, ...](x = bazX, y = bazY, baz, ...) ~~> foo.applyDynamicNamed[T0, ...]("bar")(("x", bazX), ("y", bazY), ("", baz), ...)
    */
-  def typedDynamicApply(tree: untpd.Apply, pt: Type)(implicit ctx: Context): Tree = {
+  def typedDynamicApply(tree: untpd.Apply, isInsertedApply: Boolean, pt: Type)(using Context): Tree = {
     def typedDynamicApply(qual: untpd.Tree, name: Name, selSpan: Span, targs: List[untpd.Tree]): Tree = {
       def isNamedArg(arg: untpd.Tree): Boolean = arg match { case NamedArg(_, _) => true; case _ => false }
       val args = tree.args
@@ -68,15 +93,22 @@ trait Dynamic {
       }
     }
 
-    tree.fun match {
-      case sel @ Select(qual, name) if !isDynamicMethod(name) =>
-        typedDynamicApply(qual, name, sel.span, Nil)
-      case TypeApply(sel @ Select(qual, name), targs) if !isDynamicMethod(name) =>
-        typedDynamicApply(qual, name, sel.span, targs)
-      case TypeApply(fun, targs) =>
-        typedDynamicApply(fun, nme.apply, fun.span, targs)
-      case fun =>
-        typedDynamicApply(fun, nme.apply, fun.span, Nil)
+    if (isInsertedApply) {
+      tree.fun match {
+        case TypeApply(fun, targs) =>
+          typedDynamicApply(fun, nme.apply, fun.span, targs)
+        case fun =>
+          typedDynamicApply(fun, nme.apply, fun.span, Nil)
+      }
+    } else {
+      tree.fun match {
+        case sel @ Select(qual, name) if !isDynamicMethod(name) =>
+          typedDynamicApply(qual, name, sel.span, Nil)
+        case TypeApply(sel @ Select(qual, name), targs) if !isDynamicMethod(name) =>
+          typedDynamicApply(qual, name, sel.span, targs)
+        case _ =>
+          errorTree(tree, em"Dynamic insertion not applicable")
+      }
     }
   }
 
@@ -87,13 +119,13 @@ trait Dynamic {
    *  Note: inner part of translation foo.bar(baz) = quux ~~> foo.selectDynamic(bar).update(baz, quux) is achieved
    *  through an existing transformation of in typedAssign [foo.bar(baz) = quux ~~> foo.bar.update(baz, quux)].
    */
-  def typedDynamicSelect(tree: untpd.Select, targs: List[Tree], pt: Type)(implicit ctx: Context): Tree =
+  def typedDynamicSelect(tree: untpd.Select, targs: List[untpd.Tree], pt: Type)(using Context): Tree =
     typedApply(coreDynamic(tree.qualifier, nme.selectDynamic, tree.name, tree.span, targs), pt)
 
   /** Translate selection that does not typecheck according to the normal rules into a updateDynamic.
    *    foo.bar = baz ~~> foo.updateDynamic(bar)(baz)
    */
-  def typedDynamicAssign(tree: untpd.Assign, pt: Type)(implicit ctx: Context): Tree = {
+  def typedDynamicAssign(tree: untpd.Assign, pt: Type)(using Context): Tree = {
     def typedDynamicAssign(qual: untpd.Tree, name: Name, selSpan: Span, targs: List[untpd.Tree]): Tree =
       typedApply(untpd.Apply(coreDynamic(qual, nme.updateDynamic, name, selSpan, targs), tree.rhs), pt)
     tree.lhs match {
@@ -106,7 +138,7 @@ trait Dynamic {
     }
   }
 
-  private def coreDynamic(qual: untpd.Tree, dynName: Name, name: Name, selSpan: Span, targs: List[untpd.Tree])(implicit ctx: Context): untpd.Apply = {
+  private def coreDynamic(qual: untpd.Tree, dynName: Name, name: Name, selSpan: Span, targs: List[untpd.Tree])(using Context): untpd.Apply = {
     val select = untpd.Select(qual, dynName).withSpan(selSpan)
     val selectWithTypes =
       if (targs.isEmpty) select
@@ -120,43 +152,67 @@ trait Dynamic {
    *  and `x.a` is of type `U`, map `x.a` to the equivalent of:
    *
    *  ```scala
-   *  (x: Selectable).selectDynamic("a").asInstanceOf[U]
+   *  x1.selectDynamic("a").asInstanceOf[U]
    *  ```
+   *  where `x1` is `x` adapted to `Selectable`.
    *
    *  Given `x.a(a11, ..., a1n)...(aN1, ..., aNn)`, where `x.a` is of (widened) type
-   *  `(T11, ..., T1n)...(TN1, ..., TNn) => R`, it is desugared to:
+   *  `(T11, ..., T1n)...(TN1, ..., TNn): R`, it is desugared to:
    *
    *  ```scala
-   *  (x:selectable).applyDynamic("a", CT11, ..., CT1n, ..., CTN1, ... CTNn)
-   *                             (a11, ..., a1n, ..., aN1, ..., aNn)
-   *                .asInstanceOf[R]
+   *  x1.applyDynamic("a")(a11, ..., a1n, ..., aN1, ..., aNn)
+   *    .asInstanceOf[R]
    *  ```
-   *
-   *  where CT11, ..., CTNn are the class tags representing the erasure of T11, ..., TNn.
+   *  If this call resolves to an `applyDynamic` method that takes a `Class[?]*` as second
+   *  parameter, we further rewrite this call to
+   *  scala```
+   *  x1.applyDynamic("a", c11, ..., c1n, ..., cN1, ... cNn)
+   *                  (a11, ..., a1n, ..., aN1, ..., aNn)
+   *    .asInstanceOf[R]
+   *  ```
+   *  where c11, ..., cNn are the classOf constants representing the erasures of T11, ..., TNn.
    *
    *  It's an error if U is neither a value nor a method type, or a dependent method
-   *  type.
+   *  type
    */
-  def handleStructural(tree: Tree)(implicit ctx: Context): Tree = {
-    val (fun @ Select(qual, name), targs, vargss) = decomposeCall(tree)
+  def handleStructural(tree: Tree)(using Context): Tree = {
+    val fun @ Select(qual, name) = funPart(tree)
+    val vargss = termArgss(tree)
 
-    def structuralCall(selectorName: TermName, ctags: List[Tree]) = {
+    def structuralCall(selectorName: TermName, classOfs: => List[Tree]) = {
       val selectable = adapt(qual, defn.SelectableClass.typeRef)
 
-      // ($qual: Selectable).$selectorName("$name", ..$ctags)
+      // ($qual: Selectable).$selectorName("$name")
       val base =
         untpd.Apply(
           untpd.TypedSplice(selectable.select(selectorName)).withSpan(fun.span),
-          (Literal(Constant(name.toString)) :: ctags).map(untpd.TypedSplice(_)))
+          (Literal(Constant(name.toString)) :: Nil).map(untpd.TypedSplice(_)))
 
       val scall =
         if (vargss.isEmpty) base
-        else untpd.Apply(base, vargss.flatten)
+        else untpd.Apply(base, vargss.flatten.map(untpd.TypedSplice(_)))
 
-      typed(scall)
+      // If function is an `applyDynamic` that takes a Class* parameter,
+      // add `classOfs`.
+      def addClassOfs(tree: Tree): Tree = tree match
+        case Apply(fn: Apply, args) =>
+          cpy.Apply(tree)(addClassOfs(fn), args)
+        case Apply(fn @ Select(_, nme.applyDynamic), nameArg :: _ :: Nil) =>
+          fn.tpe.widen match
+            case mt: MethodType => mt.paramInfos match
+              case _ :: classOfsParam :: Nil
+              if classOfsParam.isRepeatedParam
+                 && classOfsParam.argInfos.head.isRef(defn.ClassClass) =>
+                  val jlClassType = defn.ClassClass.typeRef.appliedTo(TypeBounds.empty)
+                  cpy.Apply(tree)(fn,
+                    nameArg :: seqToRepeated(SeqLiteral(classOfs, TypeTree(jlClassType))) :: Nil)
+              case _ => tree
+            case other => tree
+        case _ => tree
+      addClassOfs(typed(scall))
     }
 
-    def fail(name: Name, reason: String) =
+    def fail(reason: String): Tree =
       errorTree(tree, em"Structural access not allowed on method $name because it $reason")
 
     fun.tpe.widen match {
@@ -174,18 +230,21 @@ trait Dynamic {
         }
 
         if (isDependentMethod(tpe))
-          fail(name, i"has a method type with inter-parameter dependencies")
+          fail(i"has a method type with inter-parameter dependencies")
         else {
-          val ctags = tpe.paramInfoss.flatten.map(pt =>
-            implicitArgTree(defn.ClassTagClass.typeRef.appliedTo(pt.widenDealias :: Nil), fun.span.endPos))
-          structuralCall(nme.applyDynamic, ctags).cast(tpe.finalResultType)
+          def classOfs =
+            if tpe.paramInfoss.nestedExists(!TypeErasure.hasStableErasure(_)) then
+              fail(i"has a parameter type with an unstable erasure") :: Nil
+            else
+              TypeErasure.erasure(tpe).asInstanceOf[MethodType].paramInfos.map(clsOf(_))
+          structuralCall(nme.applyDynamic, classOfs).cast(tpe.finalResultType)
         }
 
       // (@allanrenucci) I think everything below is dead code
       case _: PolyType =>
-        fail(name, "is polymorphic")
+        fail("is polymorphic")
       case tpe =>
-        fail(name, i"has an unsupported type: $tpe")
+        fail(i"has an unsupported type: $tpe")
     }
   }
 }

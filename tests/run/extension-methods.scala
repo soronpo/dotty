@@ -1,35 +1,36 @@
 object Test extends App {
 
-  def (x: Int).em: Boolean = x > 0
+  extension (x: Int) def em: Boolean = x > 0
 
   assert(1.em == em(1))
 
   case class Circle(x: Double, y: Double, radius: Double)
 
-  def (c: Circle).circumference: Double = c.radius * math.Pi * 2
+  extension (c: Circle) def circumference: Double = c.radius * math.Pi * 2
 
   val circle = new Circle(1, 1, 2.0)
 
-  assert(circle.circumference == circumference(circle))
+  assert(circle.circumference == this.circumference(circle))
 
-  def (xs: Seq[String]).longestStrings: Seq[String] = {
+  extension (xs: Seq[String]) def longestStrings: Seq[String] = {
     val maxLength = xs.map(_.length).max
     xs.filter(_.length == maxLength)
   }
   val names = List("hi", "hello", "world")
   assert(names.longestStrings == List("hello", "world"))
 
-  def [T](xs: Seq[T]) second = xs.tail.head
+  extension [T](xs: Seq[T]) def second = xs.tail.head
 
   assert(names.longestStrings.second == "world")
 
-  def [T](xs: List[List[T]]) flattened = xs.foldLeft[List[T]](Nil)(_ ++ _)
+  extension [T](xs: List[List[T]])
+    def flattened = xs.foldLeft[List[T]](Nil)(_ ++ _)
 
   assert(List(names, List("!")).flattened == names :+ "!")
   assert(Nil.flattened == Nil)
 
   trait SemiGroup[T] {
-    def (x: T).combine(y: T): T
+    extension (x: T) def combine(y: T): T
   }
   trait Monoid[T] extends SemiGroup[T] {
     def unit: T
@@ -37,32 +38,32 @@ object Test extends App {
 
   // An instance declaration:
   implicit object StringMonoid extends Monoid[String] {
-    def (x: String).combine(y: String): String = x.concat(y)
+    extension (x: String) def combine(y: String): String = x.concat(y)
     def unit: String = ""
   }
 
-  // Abstracting over a typeclass with a context bound:
+  // Abstracting over a type class with a context bound:
   def sum[T: Monoid](xs: List[T]): T =
     xs.foldLeft(implicitly[Monoid[T]].unit)(_.combine(_))
 
   println(sum(names))
 
   trait Ord[T] {
-    def (x: T).compareTo(y: T): Int
-    def (x: T) < (y: T) = x.compareTo(y) < 0
-    def (x: T) > (y: T) = x.compareTo(y) > 0
+    extension (x: T) def compareTo(y: T): Int
+    extension (x: T) def < (y: T) = x.compareTo(y) < 0
+    extension (x: T) def > (y: T) = x.compareTo(y) > 0
     val minimum: T
   }
 
   implicit object IntOrd extends Ord[Int] {
-    def (x: Int).compareTo(y: Int) =
+    extension (x: Int) def compareTo(y: Int) =
       if (x < y) -1 else if (x > y) +1 else 0
     val minimum = Int.MinValue
   }
 
   class ListOrd[T: Ord] extends Ord[List[T]] {
-    def (xs: List[T])
-        compareTo (ys: List[T]): Int = (xs, ys) match {
+    extension (xs: List[T])
+      def compareTo (ys: List[T]): Int = (xs, ys) match {
       case (Nil, Nil) => 0
       case (Nil, _) => -1
       case (_, Nil) => +1
@@ -84,28 +85,26 @@ object Test extends App {
   println(max(List(1, 2, 3), List(2)))
 
   trait Functor[F[_]] {
-    def [A, B](x: F[A]) map (f: A => B): F[B]
+    extension [A](x: F[A]) def map[B](f: A => B): F[B]
   }
 
   trait Monad[F[_]] extends Functor[F] {
-    def [A, B](x: F[A])
-        flatMap (f: A => F[B]): F[B]
-
-    def [A, B](x: F[A])
-        map (f: A => B) = x.flatMap(f `andThen` pure)
+    extension [A](x: F[A])
+      def flatMap[B](f: A => F[B]): F[B]
+      def map[B](f: A => B) = x.flatMap(f `andThen` pure)
 
     def pure[A](x: A): F[A]
   }
 
   implicit object ListMonad extends Monad[List] {
-    def [A, B](xs: List[A]) flatMap (f: A => List[B]): List[B] =
+    extension [A](xs: List[A]) def flatMap[B](f: A => List[B]): List[B] =
       xs.flatMap(f)
     def pure[A](x: A): List[A] =
       List(x)
   }
 
   class ReaderMonad[Ctx] extends Monad[[X] =>> Ctx => X] {
-    def [A, B](r: Ctx => A) flatMap (f: A => Ctx => B): Ctx => B =
+    extension [A](r: Ctx => A) def flatMap[B](f: A => Ctx => B): Ctx => B =
       ctx => f(r(ctx))(ctx)
     def pure[A](x: A): Ctx => A =
       ctx => x
@@ -116,6 +115,6 @@ object Test extends App {
     fs.foldLeft(implicitly[Monad[F]].pure(x))((x: F[T], f: T => T) =>
       if (true) implicitly[Monad[F]].map(x)(f)
       else if (true) x.map(f)
-      else x.map[T, T](f)
+      else x.map[T](f)
     )
 }

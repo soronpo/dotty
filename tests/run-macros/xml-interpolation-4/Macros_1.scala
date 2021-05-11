@@ -1,17 +1,16 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
 import scala.language.implicitConversions
 
 object XmlQuote {
 
   implicit object SCOps {
-    inline def (ctx: => StringContext) xml (args: => (Scope ?=> Any)*)(using Scope): String =
+    extension (ctx: => StringContext) inline def xml (args: => (Scope ?=> Any)*)(using Scope): String =
       ${XmlQuote.impl('ctx, 'args, '{implicitly[Scope]})}
   }
 
-  private def impl(receiver: Expr[StringContext], args: Expr[Seq[Scope ?=> Any]], scope: Expr[Scope])(using QuoteContext): Expr[String] = '{
-    $receiver.s($args.map(_(using $scope.inner)): _*)
+  private def impl(receiver: Expr[StringContext], args: Expr[Seq[Scope ?=> Any]], scope: Expr[Scope])(using Quotes): Expr[String] = '{
+    $receiver.s($args.map(_(using $scope.inner))*)
   }
 }
 

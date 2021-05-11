@@ -1,37 +1,37 @@
 class Common:
 
   trait Ord[T]:
-    def (x: T).compareTo(y: T): Int
-    def (x: T) < (y: T) = x.compareTo(y) < 0
-    def (x: T) > (y: T) = x.compareTo(y) > 0
+    extension (x: T) def compareTo(y: T): Int
+    extension (x: T) def < (y: T) = x.compareTo(y) < 0
+    extension (x: T) def > (y: T) = x.compareTo(y) > 0
 
   trait Convertible[From, To]:
-    def (x: From).convert: To
+    extension (x: From) def convert: To
 
   trait SemiGroup[T]:
-    def (x: T).combine(y: T): T
+    extension (x: T) def combine(y: T): T
 
   trait Monoid[T] extends SemiGroup[T]:
     def unit: T
 
   trait Functor[F[_]]:
-    def [A, B](x: F[A]) map (f: A => B): F[B]
+    extension [A](x: F[A]) def map[B](f: A => B): F[B]
 
   trait Monad[F[_]] extends Functor[F]:
-    def [A, B](x: F[A]) flatMap (f: A => F[B]): F[B]
-    def [A, B](x: F[A]) map (f: A => B) = x.flatMap(f `andThen` pure)
+    extension [A](x: F[A]) def flatMap[B](f: A => F[B]): F[B]
+    extension [A](x: F[A]) def map[B](f: A => B) = x.flatMap(f `andThen` pure)
 
     def pure[A](x: A): F[A]
 end Common
 
 object Instances extends Common:
 
-  given intOrd as Ord[Int]:
-    def (x: Int).compareTo(y: Int) =
+  given intOrd: Ord[Int] with
+    extension (x: Int) def compareTo(y: Int) =
       if (x < y) -1 else if (x > y) +1 else 0
 
-  given listOrd[T](using Ord[T]) as Ord[List[T]]:
-    def (xs: List[T]).compareTo(ys: List[T]): Int = (xs, ys) match
+  given listOrd[T](using Ord[T]): Ord[List[T]] with
+    extension (xs: List[T]) def compareTo(ys: List[T]): Int = (xs, ys) match
       case (Nil, Nil) => 0
       case (Nil, _) => -1
       case (_, Nil) => +1
@@ -40,23 +40,23 @@ object Instances extends Common:
         if (fst != 0) fst else xs1.compareTo(ys1)
   end listOrd
 
-  extension stringOps on (xs: Seq[String]):
+  extension (xs: Seq[String])
     def longestStrings: Seq[String] =
       val maxLength = xs.map(_.length).max
       xs.filter(_.length == maxLength)
 
-  extension on [T](xs: List[T]):
+  extension [T](xs: List[T])
     def second = xs.tail.head
     def third = xs.tail.tail.head
 
-  given listMonad as Monad[List]:
-    def [A, B](xs: List[A]) flatMap (f: A => List[B]): List[B] =
+  given listMonad: Monad[List] with
+    extension [A](xs: List[A]) def flatMap[B](f: A => List[B]): List[B] =
       xs.flatMap(f)
     def pure[A](x: A): List[A] =
       List(x)
 
-  given readerMonad[Ctx] as Monad[[X] =>> Ctx => X]:
-    def [A, B](r: Ctx => A) flatMap (f: A => Ctx => B): Ctx => B =
+  given readerMonad[Ctx]: Monad[[X] =>> Ctx => X] with
+    extension [A](r: Ctx => A) def flatMap[B](f: A => Ctx => B): Ctx => B =
       ctx => f(r(ctx))(ctx)
     def pure[A](x: A): Ctx => A =
       ctx => x
@@ -65,7 +65,7 @@ object Instances extends Common:
     xs.reduceLeft((x, y) => if (x < y) y else x)
 
   def descending[T](using asc: Ord[T]): Ord[T] = new Ord[T]:
-    def (x: T).compareTo(y: T) = asc.compareTo(y)(x)
+    extension (x: T) def compareTo(y: T) = asc.compareTo(y)(x)
 
   def minimum[T](xs: List[T])(using Ord[T]) =
     maximum(xs)(using descending)
@@ -88,14 +88,13 @@ object Instances extends Common:
   trait TastyAPI:
     type Symbol
     trait SymDeco:
-      def (sym: Symbol).name: String
-    def symDeco: SymDeco
-    given SymDeco = symDeco
+      extension (sym: Symbol) def name: String
+    given symDeco: SymDeco
 
   object TastyImpl extends TastyAPI:
     type Symbol = String
-    val symDeco = new SymDeco:
-      def (sym: Symbol).name = sym
+    given symDeco: SymDeco with
+      extension (sym: Symbol) def name = sym
 
   class D[T]
 
@@ -111,11 +110,11 @@ object Instances extends Common:
         println(summon[Context].value)
       }
       locally {
-        given d[T] as D[T]
+        given d[T]: D[T]()
         println(summon[D[Int]])
       }
       locally {
-        given (using Context) as D[Int]
+        given (using Context): D[Int]()
         println(summon[D[Int]])
       }
   end C
@@ -123,7 +122,7 @@ object Instances extends Common:
   class Token(str: String)
 
   object Token:
-    given StringToToken as Conversion[String, Token]:
+    given StringToToken: Conversion[String, Token] with
       def apply(str: String): Token = new Token(str)
 
   val x: Token = "if"
@@ -134,19 +133,19 @@ object PostConditions:
 
   def result[T](using x: WrappedResult[T]): T = x
 
-  extension on [T](x: T):
+  extension [T](x: T)
     def ensuring(condition: WrappedResult[T] ?=> Boolean): T =
       assert(condition(using x))
       x
 end PostConditions
 
 object AnonymousInstances extends Common:
-  given Ord[Int]:
-    def (x: Int).compareTo(y: Int) =
+  given Ord[Int] with
+    extension (x: Int) def compareTo(y: Int) =
       if (x < y) -1 else if (x > y) +1 else 0
 
-  given [T: Ord] as Ord[List[T]]:
-    def (xs: List[T]).compareTo(ys: List[T]): Int = (xs, ys).match
+  given [T: Ord]: Ord[List[T]] with
+    extension (xs: List[T]) def compareTo(ys: List[T]): Int = (xs, ys).match
       case (Nil, Nil) => 0
       case (Nil, _) => -1
       case (_, Nil) => +1
@@ -154,19 +153,20 @@ object AnonymousInstances extends Common:
         val fst = x.compareTo(y)
         if (fst != 0) fst else xs1.compareTo(ys1)
 
-  extension on (xs: Seq[String]):
+  extension (xs: Seq[String])
     def longestStrings: Seq[String] =
       val maxLength = xs.map(_.length).max
       xs.filter(_.length == maxLength)
 
-  extension on [T](xs: List[T]):
+  extension [T](xs: List[T])
     def second = xs.tail.head
 
-  given [From, To](using c: Convertible[From, To]) as Convertible[List[From], List[To]]:
-    def (x: List[From]).convert: List[To] = x.map(c.convert)
+  given [From, To](using c: Convertible[From, To])
+      : Convertible[List[From], List[To]] with
+    extension (x: List[From]) def convert: List[To] = x.map(c.convert)
 
-  given Monoid[String]:
-    def (x: String).combine(y: String): String = x.concat(y)
+  given Monoid[String] with
+    extension (x: String) def combine(y: String): String = x.concat(y)
     def unit: String = ""
 
   def sum[T: Monoid](xs: List[T]): T =
@@ -175,11 +175,11 @@ end AnonymousInstances
 
 object Implicits extends Common:
   implicit object IntOrd extends Ord[Int]:
-    def (x: Int).compareTo(y: Int) =
+    extension (x: Int) def compareTo(y: Int) =
       if (x < y) -1 else if (x > y) +1 else 0
 
   class ListOrd[T: Ord] extends Ord[List[T]]:
-    def (xs: List[T]).compareTo(ys: List[T]): Int = (xs, ys).match
+    extension (xs: List[T]) def compareTo(ys: List[T]): Int = (xs, ys).match
       case (Nil, Nil) => 0
       case (Nil, _) => -1
       case (_, Nil) => +1
@@ -190,7 +190,7 @@ object Implicits extends Common:
 
   class given_Convertible_List_List[From, To](implicit c: Convertible[From, To])
   extends Convertible[List[From], List[To]]:
-    def (x: List[From]).convert: List[To] = x.map(c.convert)
+    extension (x: List[From]) def convert: List[To] = x.map(c.convert)
   implicit def given_Convertible_List_List[From, To](implicit c: Convertible[From, To])
     : Convertible[List[From], List[To]] =
     new given_Convertible_List_List[From, To]
@@ -200,15 +200,14 @@ object Implicits extends Common:
     xs.reduceLeft((x, y) => if (x < y) y else x)
 
   def descending[T](implicit asc: Ord[T]): Ord[T] = new Ord[T]:
-    def (x: T).compareTo(y: T) = asc.compareTo(y)(x)
+    extension (x: T) def compareTo(y: T) = asc.compareTo(y)(x)
 
   def minimum[T](xs: List[T])(implicit cmp: Ord[T]) =
     maximum(xs)(descending)
 
 object Test extends App:
   Instances.test()
-  import PostConditions.result
-  import PostConditions.{given _}
+  import PostConditions.{result, ensuring}
   val s = List(1, 2, 3).sum
   s.ensuring(result == 6)
 end Test
@@ -232,10 +231,10 @@ object Completions:
     //
     //   CompletionArg.from(statusCode)
 
-    given fromString as Conversion[String, CompletionArg] = Error(_)
-    given fromFuture as Conversion[Future[HttpResponse], CompletionArg] = Response(_)
-    given fromStatusCode as Conversion[Future[StatusCode], CompletionArg] = Status(_)
-  import CompletionArg._
+    given fromString    : Conversion[String, CompletionArg] = Error(_)
+    given fromFuture    : Conversion[Future[HttpResponse], CompletionArg] = Response(_)
+    given fromStatusCode: Conversion[Future[StatusCode], CompletionArg] = Status(_)
+  import CompletionArg.*
 
   def complete[T](arg: CompletionArg) = arg match
     case Error(s) => ???

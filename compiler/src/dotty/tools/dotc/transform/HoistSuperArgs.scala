@@ -33,7 +33,7 @@ object HoistSuperArgs {
  *
  *  An argument is complex if it contains a method or template definition, a this or a new,
  *  or it contains an identifier which needs a `this` prefix to be accessed. This is the case
- *  if the identifer neither a global reference nor a reference to a parameter of the enclosing class.
+ *  if the identifier has neither a global reference nor a reference to a parameter of the enclosing class.
  *  @see needsHoist for an implementation.
  *
  *  A hoisted argument definition gets the parameters of the class it is hoisted from
@@ -54,7 +54,7 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
    *  parent super calls and constructor definitions.
    *  Hoisted superarg methods are collected in `superArgDefs`
    */
-  class Hoister(cls: Symbol)(implicit ctx: Context) {
+  class Hoister(cls: Symbol)(using Context) {
     val superArgDefs: mutable.ListBuffer[DefDef] = new mutable.ListBuffer
 
     /** If argument is complex, hoist it out into its own method and refer to the
@@ -67,9 +67,9 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
       val constr = cdef.symbol
       lazy val origParams = // The parameters that can be accessed in the supercall
         if (constr == cls.primaryConstructor)
-          cls.info.decls.filter(d => d.is(TypeParam) || d.is(ParamAccessor))
+          cls.info.decls.filter(d => d.is(TypeParam) || d.is(ParamAccessor) && !d.isSetter)
         else
-          (cdef.tparams ::: cdef.vparamss.flatten).map(_.symbol)
+          allParamSyms(cdef)
 
       /** The parameter references defined by the constructor info */
       def allParamRefs(tp: Type): List[ParamRef] = tp match {
@@ -91,7 +91,7 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
         val argTypeWrtConstr = argType.subst(origParams, allParamRefs(constr.info))
         // argType with references to paramRefs of the primary constructor instead of
         // local parameter accessors
-        ctx.newSymbol(
+        newSymbol(
           owner = methOwner,
           name = SuperArgName.fresh(cls.name.toTermName),
           flags = Synthetic | Private | Method | staticFlag,
@@ -116,21 +116,28 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
         case _                    => false
       }
 
+      /** Only rewire types that are owned by the current Hoister and is an param or accessor */
+      def needsRewire(tp: Type) = tp match {
+        case ntp: NamedType =>
+          val owner = ntp.symbol.maybeOwner
+          (owner == cls || owner == constr) && ntp.symbol.isParamOrAccessor
+        case _ => false
+      }
+
       // begin hoistSuperArg
       arg match {
         case Apply(fn, arg1 :: Nil) if fn.symbol == defn.cbnArg =>
           cpy.Apply(arg)(fn, hoistSuperArg(arg1, cdef) :: Nil)
-        case _ if (arg.existsSubTree(needsHoist)) =>
+        case _ if arg.existsSubTree(needsHoist) =>
           val superMeth = newSuperArgMethod(arg.tpe)
-          val superArgDef = polyDefDef(superMeth, trefs => vrefss => {
-            val paramSyms = trefs.map(_.typeSymbol) ::: vrefss.flatten.map(_.symbol)
+          val superArgDef = DefDef(superMeth, prefss => {
+            val paramSyms = prefss.flatten.map(pref =>
+              if pref.isType then pref.tpe.typeSymbol else pref.symbol)
             val tmap = new TreeTypeMap(
               typeMap = new TypeMap {
                 lazy val origToParam = origParams.zip(paramSyms).toMap
                 def apply(tp: Type) = tp match {
-                  case tp: NamedType
-                  if (tp.symbol.owner == cls || tp.symbol.owner == constr) &&
-                     tp.symbol.isParamOrAccessor =>
+                  case tp: NamedType if needsRewire(tp) =>
                     origToParam.get(tp.symbol) match {
                       case Some(mappedSym) => if (tp.symbol.isType) mappedSym.typeRef else mappedSym.termRef
                       case None => mapOver(tp)
@@ -140,7 +147,7 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
                 }
               },
               treeMap = {
-                case tree: RefTree if paramSyms.contains(tree.symbol) =>
+                case tree: RefTree if needsRewire(tree.tpe) =>
                   cpy.Ident(tree)(tree.name).withType(tree.tpe)
                 case tree =>
                   tree
@@ -161,7 +168,7 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
           val res = ref(superMeth)
             .appliedToTypes(typeParams.map(_.typeRef))
             .appliedToArgss(termParamRefs(constr.info, termParams))
-          ctx.log(i"hoist $arg, cls = $cls = $res")
+          report.log(i"hoist $arg, cls = $cls = $res")
           res
         case _ => arg
       }
@@ -192,7 +199,7 @@ class HoistSuperArgs extends MiniPhase with IdentityDenotTransformer { thisPhase
     }
   }
 
-  override def transformTypeDef(tdef: TypeDef)(implicit ctx: Context): Tree =
+  override def transformTypeDef(tdef: TypeDef)(using Context): Tree =
     tdef.rhs match {
       case impl @ Template(cdef, superCall :: others, _, _) =>
         val hoist = new Hoister(tdef.symbol)

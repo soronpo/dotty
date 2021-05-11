@@ -1,5 +1,4 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
 case class Location(owners: List[String])
 
@@ -7,8 +6,8 @@ object Location {
 
   implicit inline def location: Location = ${impl}
 
-  def impl(using QuoteContext): Expr[Location] = {
-    val list = List("a", "b", "c", "d", "e", "f")
+  def impl(using Quotes): Expr[Location] = {
+    val list = Expr(List("a", "b", "c", "d", "e", "f"))
     '{new Location(${list})}
   }
 

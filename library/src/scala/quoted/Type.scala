@@ -1,65 +1,45 @@
 package scala.quoted
 
-import scala.quoted.show.SyntaxHighlight
+import scala.annotation.compileTimeOnly
 
-/** Quoted type (or kind) `T` */
-class Type[T <: AnyKind] private[scala] {
-  type `$splice` = T
+/** Type (or type constructor) `T` needed contextually when using `T` in a quoted expression `'{... T ...}` */
+abstract class Type[T <: AnyKind] private[scala]:
+  /** The type represented by `Type` */
+  type Underlying = T
+end Type
+
+/** Methods to interact with the current `Type[T]` in scope */
+object Type:
 
   /** Show a source code like representation of this type without syntax highlight */
-  def show(using qctx: QuoteContext): String = qctx.show(this, SyntaxHighlight.plain)
+  def show[T <: AnyKind](using Type[T])(using Quotes): String =
+    import quotes.reflect.*
+    TypeTree.of[T].show
 
-  /** Show a source code like representation of this type */
-  def show(syntaxHighlight: SyntaxHighlight)(using qctx: QuoteContext): String = qctx.show(this, syntaxHighlight)
+  /** Return a quoted.Type with the given type */
+  @compileTimeOnly("Reference to `scala.quoted.Type.of` was not handled by PickleQuotes")
+  given of[T <: AnyKind](using Quotes): Type[T] = ???
 
-}
 
-/** Some basic type tags, currently incomplete */
-object Type {
+  /** Extracts the value of a singleton constant type.
+   *  Returns Some of the value of the type if it is a singleton constant type.
+   *  Returns None if the type is not a singleton constant type.
+   *
+   *  Example usage:
+   *  ```scala
+   *  ... match
+   *    case '{ $mirrorExpr : Mirror.Sum { type MirroredLabel = label } } =>
+   *      Type.valueOfConstant[label] // Option[String]
+   *  }
+   *  ```
+   *  @syntax markdown
+   */
+  def valueOfConstant[T](using Type[T])(using Quotes): Option[T] =
+    import quotes.reflect.*
+    def valueOf(tpe: TypeRepr): Option[T] =
+      tpe.dealias.widenTermRefByName match
+        case ConstantType(const) => Some(const.value.asInstanceOf[T])
+        case _ => None
+    valueOf(TypeRepr.of[T])
 
-  given UnitTag(using qctx: QuoteContext): Type[Unit] = {
-    import qctx.tasty.{_, given}
-    defn.UnitType.seal.asInstanceOf[quoted.Type[Unit]]
-  }
-
-  given BooleanTag(using qctx: QuoteContext): Type[Boolean] = {
-    import qctx.tasty.{_, given}
-    defn.BooleanType.seal.asInstanceOf[quoted.Type[Boolean]]
-  }
-
-  given ByteTag(using qctx: QuoteContext): Type[Byte] = {
-    import qctx.tasty.{_, given}
-    defn.ByteType.seal.asInstanceOf[quoted.Type[Byte]]
-  }
-
-  given CharTag(using qctx: QuoteContext): Type[Char] = {
-    import qctx.tasty.{_, given}
-    defn.CharType.seal.asInstanceOf[quoted.Type[Char]]
-  }
-
-  given ShortTag(using qctx: QuoteContext): Type[Short] = {
-    import qctx.tasty.{_, given}
-    defn.ShortType.seal.asInstanceOf[quoted.Type[Short]]
-  }
-
-  given IntTag(using qctx: QuoteContext): Type[Int] = {
-    import qctx.tasty.{_, given}
-    defn.IntType.seal.asInstanceOf[quoted.Type[Int]]
-  }
-
-  given LongTag(using qctx: QuoteContext): Type[Long] = {
-    import qctx.tasty.{_, given}
-    defn.LongType.seal.asInstanceOf[quoted.Type[Long]]
-  }
-
-  given FloatTag(using qctx: QuoteContext): Type[Float] = {
-    import qctx.tasty.{_, given}
-    defn.FloatType.seal.asInstanceOf[quoted.Type[Float]]
-  }
-
-  given DoubleTag(using qctx: QuoteContext): Type[Double] = {
-    import qctx.tasty.{_, given}
-    defn.DoubleType.seal.asInstanceOf[quoted.Type[Double]]
-  }
-
-}
+end Type

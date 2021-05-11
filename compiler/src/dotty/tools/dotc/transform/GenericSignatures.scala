@@ -2,14 +2,15 @@ package dotty.tools
 package dotc
 package transform
 
-import core.Annotations.Annotation
-import core.Contexts.Context
+import core.Annotations._
+import core.Contexts._
+import core.Phases._
 import core.Definitions
 import core.Flags._
 import core.Names.{DerivedName, Name, SimpleName, TypeName}
 import core.Symbols._
 import core.TypeApplications.TypeParamInfo
-import core.TypeErasure.erasure
+import core.TypeErasure.{erasedGlb, erasure, isGenericArrayElement}
 import core.Types._
 import core.classfile.ClassfileConstants
 import ast.Trees._
@@ -18,6 +19,7 @@ import TypeUtils._
 import java.lang.StringBuilder
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 /** Helper object to generate generic java signatures, as defined in
  *  the Java Virtual Machine Specification, §4.3.4
@@ -31,13 +33,13 @@ object GenericSignatures {
    *  @param info The type of the symbol
    *  @return The signature if it could be generated, `None` otherwise.
    */
-  def javaSig(sym0: Symbol, info: Type)(implicit ctx: Context): Option[String] =
-    // Avoid generating a signature for local symbols.
-    if (sym0.isLocal) None
-    else javaSig0(sym0, info)(ctx.withPhase(ctx.erasurePhase))
+  def javaSig(sym0: Symbol, info: Type)(using Context): Option[String] =
+    // Avoid generating a signature for non-class local symbols.
+    if (sym0.isLocal && !sym0.isClass) None
+    else atPhase(erasurePhase)(javaSig0(sym0, info))
 
   @noinline
-  private final def javaSig0(sym0: Symbol, info: Type)(implicit ctx: Context): Option[String] = {
+  private final def javaSig0(sym0: Symbol, info: Type)(using Context): Option[String] = {
     val builder = new StringBuilder(64)
     val isTraitSignature = sym0.enclosingClass.is(Trait)
 
@@ -64,17 +66,78 @@ object GenericSignatures {
 
     def boxedSig(tp: Type): Unit = jsig(tp.widenDealias, primitiveOK = false)
 
+    /** The signature of the upper-bound of a type parameter.
+     *
+     *  @pre none of the bounds are themselves type parameters.
+     *       TODO: Remove this restriction so we can support things like:
+     *
+     *           class Foo[A]:
+     *              def foo[S <: A & Object](...): ...
+     *
+     *        Which should emit a signature `S <: A`. See the handling
+     *        of `AndType` in `jsig` which already supports `def foo(x: A & Object)`.
+     */
     def boundsSig(bounds: List[Type]): Unit = {
-      val (isTrait, isClass) = bounds partition (_.typeSymbol.is(Trait))
-      isClass match {
-        case Nil    => builder.append(':') // + boxedSig(ObjectTpe)
-        case x :: _ => builder.append(':'); boxedSig(x)
-      }
-      isTrait.foreach { tp =>
+      val (repr :: _, others) = splitIntersection(bounds)
+      builder.append(':')
+
+      // According to the Java spec
+      // (https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4),
+      // intersections erase to their first member and must start with a class.
+      // So, if our intersection erases to a trait, in theory we should emit
+      // just that trait in the generic signature even if the intersection type
+      // is composed of multiple traits. But in practice Scala 2 has always
+      // ignored this restriction as intersections of traits seem to be handled
+      // correctly by javac, we do the same here since type soundness seems
+      // more important than adhering to the spec.
+      if repr.classSymbol.is(Trait) then
+        builder.append(':')
+        boxedSig(repr)
+        // If we wanted to be compliant with the spec, we would `return` here.
+      else
+        boxedSig(repr)
+      others.filter(_.classSymbol.is(Trait)).foreach { tp =>
         builder.append(':')
         boxedSig(tp)
       }
     }
+
+    /** The parents of this intersection where type parameters
+     *  that cannot appear in the signature have been replaced
+     *  by their upper-bound.
+     */
+    def flattenedIntersection(tp: AndType)(using Context): List[Type] =
+      val parents = ListBuffer[Type]()
+
+      def collect(parent: Type, parents: ListBuffer[Type]): Unit = parent.widenDealias match
+        case AndType(tp1, tp2) =>
+          collect(tp1, parents)
+          collect(tp2, parents)
+        case parent: TypeRef =>
+          if parent.symbol.isClass || isTypeParameterInSig(parent.symbol, sym0) then
+            parents += parent
+          else
+            collect(parent.superType, parents)
+        case parent =>
+          parents += parent
+
+      collect(tp, parents)
+      parents.toList
+    end flattenedIntersection
+
+    /** Split the `parents` of an intersection into two subsets:
+     *  those whose individual erasure matches the overall erasure
+     *  of the intersection and the others.
+     */
+    def splitIntersection(parents: List[Type])(using Context): (List[Type], List[Type]) =
+      val erasedParents = parents.map(erasure)
+      val erasedTp = erasedGlb(erasedParents)
+      parents.zip(erasedParents)
+        .partitionMap((parent, erasedParent) =>
+          if erasedParent =:= erasedTp then
+            Left(parent)
+          else
+            Right(parent))
 
     def paramSig(param: LambdaParam): Unit = {
       builder.append(sanitizeName(param.paramName))
@@ -112,7 +175,7 @@ object GenericSignatures {
     // a type parameter or similar) must go through here or the signature is
     // likely to end up with Foo<T>.Empty where it needs Foo<T>.Empty$.
     def fullNameInSig(sym: Symbol): Unit = {
-      val name = ctx.atPhase(ctx.genBCodePhase) { sanitizeName(sym.fullName).replace('.', '/') }
+      val name = atPhase(genBCodePhase) { sanitizeName(sym.fullName).replace('.', '/') }
       builder.append('L').append(name)
     }
 
@@ -182,15 +245,17 @@ object GenericSignatures {
         case ref @ TypeParamRef(_: PolyType, _) =>
           typeParamSig(ref.paramName.lastPart)
 
+        case defn.ArrayOf(elemtp) =>
+          if (isGenericArrayElement(elemtp, isScala2 = false))
+            jsig(defn.ObjectType)
+          else
+            builder.append(ClassfileConstants.ARRAY_TAG)
+            elemtp match
+              case TypeBounds(lo, hi) => jsig(hi.widenDealias)
+              case _ => jsig(elemtp)
+
         case RefOrAppliedType(sym, pre, args) =>
-          // If args isEmpty, Array is being used as a type constructor
-          if (sym == defn.ArrayClass && args.nonEmpty)
-            if (unboundedGenericArrayLevel(tp) == 1) jsig(defn.ObjectType)
-            else {
-              builder.append(ClassfileConstants.ARRAY_TAG)
-              args.foreach(jsig(_))
-            }
-          else if (sym == defn.PairClass && tp.tupleArity > Definitions.MaxTupleArity)
+          if (sym == defn.PairClass && tp.tupleArity > Definitions.MaxTupleArity)
             jsig(defn.TupleXXLClass.typeRef)
           else if (isTypeParameterInSig(sym, sym0)) {
             assert(!sym.isAliasType, "Unexpected alias type: " + sym)
@@ -201,20 +266,19 @@ object GenericSignatures {
           else if (sym == defn.UnitClass || sym == defn.BoxedUnitModule)
             jsig(defn.BoxedUnitClass.typeRef)
           else if (sym == defn.NothingClass)
-            jsig(defn.RuntimeNothingModuleRef)
+            builder.append("Lscala/runtime/Nothing$;")
           else if (sym == defn.NullClass)
-            jsig(defn.RuntimeNullModuleRef)
+            builder.append("Lscala/runtime/Null$;")
           else if (sym.isPrimitiveValueClass)
             if (!primitiveOK) jsig(defn.ObjectType)
             else if (sym == defn.UnitClass) jsig(defn.BoxedUnitClass.typeRef)
             else builder.append(defn.typeTag(sym.info))
           else if (ValueClasses.isDerivedValueClass(sym)) {
-            val unboxed     = ValueClasses.valueClassUnbox(sym.asClass).info.finalResultType
-            val unboxedSeen = tp.memberInfo(ValueClasses.valueClassUnbox(sym.asClass)).finalResultType
-            if (unboxedSeen.isPrimitiveValueType && !primitiveOK)
+            val erasedUnderlying = core.TypeErasure.fullErasure(tp)
+            if (erasedUnderlying.isPrimitiveValueType && !primitiveOK)
               classSig(sym, pre, args)
             else
-              jsig(unboxedSeen, toplevel, primitiveOK)
+              jsig(erasedUnderlying, toplevel, primitiveOK)
           }
           else if (defn.isSyntheticFunctionClass(sym)) {
             val erasedSym = defn.erasedFunctionClass(sym)
@@ -246,7 +310,7 @@ object GenericSignatures {
 
         case mtpe: MethodType =>
           // erased method parameters do not make it to the bytecode.
-          def effectiveParamInfoss(t: Type)(implicit ctx: Context): List[List[Type]] = t match {
+          def effectiveParamInfoss(t: Type)(using Context): List[List[Type]] = t match {
             case t: MethodType if t.isErasedMethod => effectiveParamInfoss(t.resType)
             case t: MethodType => t.paramInfos :: effectiveParamInfoss(t.resType)
             case _ => Nil
@@ -261,8 +325,20 @@ object GenericSignatures {
           builder.append(')')
           methodResultSig(restpe)
 
-        case AndType(tp1, tp2) =>
-          jsig(intersectionDominator(tp1 :: tp2 :: Nil), primitiveOK = primitiveOK)
+        case tp: AndType =>
+          // Only intersections appearing as the upper-bound of a type parameter
+          // can be preserved in generic signatures and those are already
+          // handled by `boundsSig`, so here we fallback to picking a parent of
+          // the intersection to determine its overall signature. We must pick a
+          // parent whose erasure matches the erasure of the intersection
+          // because javac relies on the generic signature to determine the
+          // bytecode signature. Additionally, we prefer picking a type
+          // parameter since that will likely lead to a more precise type.
+          val parents = flattenedIntersection(tp)
+          val (reprParents, _) = splitIntersection(parents)
+          val repr =
+            reprParents.find(_.typeSymbol.is(TypeParam)).getOrElse(reprParents.head)
+          jsig(repr, primitiveOK = primitiveOK)
 
         case ci: ClassInfo =>
           def polyParamSig(tparams: List[TypeParamInfo]): Unit =
@@ -306,42 +382,10 @@ object GenericSignatures {
 
   private class UnknownSig extends Exception
 
-  /** The intersection dominator (SLS 3.7) of a list of types is computed as follows.
-    *
-    *  - If the list contains one or more occurrences of scala.Array with
-    *    type parameters El1, El2, ... then the dominator is scala.Array with
-    *    type parameter of intersectionDominator(List(El1, El2, ...)).           <--- @PP: not yet in spec.
-    *  - Otherwise, the list is reduced to a subsequence containing only types
-    *    which are not subtypes of other listed types (the span.)
-    *  - If the span is empty, the dominator is Object.
-    *  - If the span contains a class Tc which is not a trait and which is
-    *    not Object, the dominator is Tc.                                        <--- @PP: "which is not Object" not in spec.
-    *  - Otherwise, the dominator is the first element of the span.
-    */
-  private def intersectionDominator(parents: List[Type])(implicit ctx: Context): Type =
-    if (parents.isEmpty) defn.ObjectType
-    else {
-      val psyms = parents map (_.typeSymbol)
-      if (psyms contains defn.ArrayClass)
-        // treat arrays specially
-        defn.ArrayType.appliedTo(intersectionDominator(parents.filter(_.typeSymbol == defn.ArrayClass).map(t => t.argInfos.head)))
-      else {
-        // implement new spec for erasure of refined types.
-        def isUnshadowed(psym: Symbol) =
-          !(psyms exists (qsym => (psym ne qsym) && (qsym isSubClass psym)))
-        val cs = parents.iterator.filter { p => // isUnshadowed is a bit expensive, so try classes first
-          val psym = p.classSymbol
-          psym.ensureCompleted()
-          psym.isClass && !psym.is(Trait) && isUnshadowed(psym)
-        }
-        (if (cs.hasNext) cs else parents.iterator.filter(p => isUnshadowed(p.classSymbol))).next()
-      }
-    }
-
   /* Drop redundant types (ones which are implemented by some other parent) from the immediate parents.
    * This is important on Android because there is otherwise an interface explosion.
    */
-  private def minimizeParents(cls: Symbol, parents: List[Type])(implicit ctx: Context): List[Type] = if (parents.isEmpty) parents else {
+  private def minimizeParents(cls: Symbol, parents: List[Type])(using Context): List[Type] = if (parents.isEmpty) parents else {
     // val requiredDirect: Symbol => Boolean = requiredDirectInterfaces.getOrElse(cls, Set.empty)
     var rest   = parents.tail
     var leaves = collection.mutable.ListBuffer.empty[Type] += parents.head
@@ -363,48 +407,22 @@ object GenericSignatures {
     leaves.toList
   }
 
-  private def hiBounds(bounds: TypeBounds)(implicit ctx: Context): List[Type] = bounds.hi.widenDealias match {
+  private def hiBounds(bounds: TypeBounds)(using Context): List[Type] = bounds.hi.widenDealias match {
     case AndType(tp1, tp2) => hiBounds(tp1.bounds) ::: hiBounds(tp2.bounds)
     case tp => tp :: Nil
   }
 
-  /** Arrays despite their finality may turn up as refined type parents,
-    *  e.g. with "tagged types" like Array[Int] with T.
-    */
-  private def unboundedGenericArrayLevel(tp: Type)(implicit ctx: Context): Int = tp match {
-    case GenericArray(core, level) if !(core <:< defn.AnyRefType) =>
-      level
-    case AndType(tp1, tp2) =>
-      unboundedGenericArrayLevel(tp1) max unboundedGenericArrayLevel(tp2)
-    case _ =>
-      0
-  }
 
   // only refer to type params that will actually make it into the sig, this excludes:
   // * higher-order type parameters
   // * type parameters appearing in method parameters
   // * type members not visible in an enclosing template
-  private def isTypeParameterInSig(sym: Symbol, initialSymbol: Symbol)(implicit ctx: Context) =
+  private def isTypeParameterInSig(sym: Symbol, initialSymbol: Symbol)(using Context) =
     !sym.maybeOwner.isTypeParam &&
       sym.isTypeParam && (
       sym.isContainedIn(initialSymbol.topLevelClass) ||
         (initialSymbol.is(Method) && initialSymbol.typeParams.contains(sym))
       )
-
-  /** Extracts the type of the thrown exception from an AnnotationInfo.
-    *
-    * Supports both “old-style” `@throws(classOf[Exception])`
-    * as well as “new-style” `@throws[Exception]("cause")` annotations.
-    */
-  private object ThrownException {
-    def unapply(ann: Annotation)(implicit ctx: Context): Option[Type] =
-      ann.tree match {
-        case Apply(TypeApply(fun, List(tpe)), _) if tpe.isType && fun.symbol.owner == defn.ThrowsAnnot && fun.symbol.isConstructor =>
-          Some(tpe.typeOpt)
-        case _ =>
-          None
-      }
-  }
 
   // @M #2585 when generating a java generic signature that includes
   // a selection of an inner class p.I, (p = `pre`, I = `cls`) must
@@ -415,60 +433,13 @@ object GenericSignatures {
   // included (use pre.baseType(cls.owner)).
   //
   // This requires that cls.isClass.
-  private def rebindInnerClass(pre: Type, cls: Symbol)(implicit ctx: Context): Type = {
+  private def rebindInnerClass(pre: Type, cls: Symbol)(using Context): Type = {
     val owner = cls.owner
     if (owner.is(PackageClass) || owner.isTerm) pre else cls.owner.info /* .tpe_* */
   }
 
-  object GenericArray {
-
-    /** Is `tp` an unbounded generic type (i.e. which could be instantiated
-      *  with primitive as well as class types)?.
-      */
-    private def genericCore(tp: Type)(implicit ctx: Context): Type = tp.widenDealias match {
-      /* A Java Array<T> is erased to Array[Object] (T can only be a reference type), where as a Scala Array[T] is
-       * erased to Object. However, there is only symbol for the Array class. So to make the distinction between
-       * a Java and a Scala array, we check if the owner of T comes from a Java class.
-       * This however caused issue scala/bug#5654. The additional test for EXISTENTIAL fixes it, see the ticket comments.
-       * In short, members of an existential type (e.g. `T` in `forSome { type T }`) can have pretty arbitrary
-       * owners (e.g. when computing lubs, <root> is used). All packageClass symbols have `isJavaDefined == true`.
-       */
-      case RefOrAppliedType(sym, tp, _) =>
-        if (sym.isAbstractOrParamType && (!sym.owner.is(JavaDefined) || sym.is(Scala2Existential)))
-          tp
-        else
-          NoType
-
-      case bounds: TypeBounds =>
-        bounds
-
-      case _ =>
-        NoType
-    }
-
-    /** If `tp` is of the form Array[...Array[T]...] where `T` is an abstract type
-      *  then Some((N, T)) where N is the number of Array constructors enclosing `T`,
-      *  otherwise None. Existentials on any level are ignored.
-      */
-    def unapply(tp: Type)(implicit ctx: Context): Option[(Type, Int)] = tp.widenDealias match {
-      case defn.ArrayOf(arg) =>
-        genericCore(arg) match {
-          case NoType =>
-            arg match {
-              case GenericArray(core, level) => Some((core, level + 1))
-              case _ => None
-            }
-          case core =>
-            Some((core, 1))
-        }
-      case _ =>
-        None
-    }
-  }
-
-
   private object RefOrAppliedType {
-    def unapply(tp: Type)(implicit ctx: Context): Option[(Symbol, Type, List[Type])] = tp match {
+    def unapply(tp: Type)(using Context): Option[(Symbol, Type, List[Type])] = tp match {
       case TypeParamRef(_, _) =>
         Some((tp.typeSymbol, tp, Nil))
       case TermParamRef(_, _) =>
@@ -483,12 +454,12 @@ object GenericSignatures {
     }
   }
 
-  private def needsJavaSig(tp: Type, throwsArgs: List[Type])(implicit ctx: Context): Boolean = !ctx.settings.YnoGenericSig.value && {
+  private def needsJavaSig(tp: Type, throwsArgs: List[Type])(using Context): Boolean = !ctx.settings.YnoGenericSig.value && {
       def needs(tp: Type) = (new NeedsSigCollector).apply(false, tp)
       needs(tp) || throwsArgs.exists(needs)
   }
 
-  private class NeedsSigCollector(implicit ctx: Context) extends TypeAccumulator[Boolean] {
+  private class NeedsSigCollector(using Context) extends TypeAccumulator[Boolean] {
     override def apply(x: Boolean, tp: Type): Boolean =
       if (!x)
         tp match {

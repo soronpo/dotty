@@ -1,5 +1,5 @@
 object Deriving {
-  import scala.compiletime._
+  import scala.compiletime.*
 
   sealed trait Shape
 
@@ -11,7 +11,7 @@ object Deriving {
   }
 
   enum Lst[+T] {
-    case Cons(hd: T, tl: Lst[T])
+    case Cons[T](hd: T, tl: Lst[T]) extends Lst[T]
     case Nil
   }
 
@@ -23,9 +23,9 @@ object Deriving {
       def fromProduct(xs: (T, Lst[T])): Lst.Cons[T] = Lst.Cons(xs(0), xs(1)).asInstanceOf
     }
 
-    implicit def nilShape[T]: HasProductShape[Lst.Nil.type, Unit] = new {
-      def toProduct(xs: Lst.Nil.type) = ()
-      def fromProduct(xs: Unit) = Lst.Nil
+    implicit def nilShape[T]: HasProductShape[Lst.Nil.type, EmptyTuple] = new {
+      def toProduct(xs: Lst.Nil.type) = Tuple()
+      def fromProduct(xs: EmptyTuple) = Lst.Nil
     }
 
     implicit def LstEq[T: Eq]: Eq[Lst[T]] = Eq.derivedForSum
@@ -38,9 +38,7 @@ object Deriving {
   }
 
   object Eq {
-    inline def tryEq[T](x: T, y: T) = summonFrom {
-      case eq: Eq[T] => eq.equals(x, y)
-    }
+    inline def tryEq[T](x: T, y: T) = summonInline[Eq[T]].equals(x, y)
 
     inline def deriveForSum[Alts <: Tuple](x: Any, y: Any): Boolean = inline erasedValue[Alts] match {
       case _: (alt *: alts1) =>
@@ -52,7 +50,7 @@ object Deriving {
             }
           case _ => deriveForSum[alts1](x, y)
         }
-      case _: Unit =>
+      case _: EmptyTuple =>
         false
     }
 
@@ -62,7 +60,7 @@ object Deriving {
         val ys1 = ys.asInstanceOf[elem *: elems1]
         tryEq[elem](xs1.head, ys1.head) &&
         deriveForProduct[elems1](xs1.tail, ys1.tail)
-      case _: Unit =>
+      case _: EmptyTuple =>
         true
     }
 
@@ -81,7 +79,7 @@ object Deriving {
 }
 
 object Test extends App {
-  import Deriving._
+  import Deriving.*
   val eq = implicitly[Eq[Lst[Int]]]
   val xs = Lst.Cons(1, Lst.Cons(2, Lst.Cons(3, Lst.Nil)))
   val ys = Lst.Cons(1, Lst.Cons(2, Lst.Nil))

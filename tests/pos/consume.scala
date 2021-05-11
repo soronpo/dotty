@@ -5,8 +5,8 @@ object Test1:
 
 object Test2 {
   import scala.math.Numeric
-  import scala.math.Numeric.Implicits._
-  import scala.math.Ordering.Implicits._
+  import scala.math.Numeric.Implicits.*
+  import scala.math.Ordering.Implicits.*
 
   def consume[T: Numeric](xs: List[T], limit: T): List[T] =
     val zero = implicitly[Numeric[T]].zero
@@ -18,13 +18,13 @@ object Test2 {
 
 object math3:
   trait Ord[T]:
-    def (x: T) > (t: T): Boolean = ???
-    def (x: T) <= (t: T): Boolean = ???
+    extension (x: T) def > (t: T): Boolean = ???
+    extension (x: T) def <= (t: T): Boolean = ???
 
   trait Numeric[T] extends Ord[T]:
-    def (x: T) + (y: T): T = ???
-    def (x: T) - (y: T): T = ???
-    def (x: Int).numeric: T = ???
+    extension (x: T) def + (y: T): T = ???
+    extension (x: T) def - (y: T): T = ???
+    extension (x: Int) def numeric: T = ???
 end math3
 
 object Test3:

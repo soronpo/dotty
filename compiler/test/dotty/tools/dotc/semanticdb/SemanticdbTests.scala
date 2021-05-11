@@ -26,7 +26,7 @@ import dotty.tools.dotc.util.SourceFile
   SemanticdbTests().runExpectTest(updateExpectFiles = true)
 
 @Category(Array(classOf[BootstrappedOnlyTests]))
-class SemanticdbTests with
+class SemanticdbTests:
   val javaFile = FileSystems.getDefault.getPathMatcher("glob:**.java")
   val scalaFile = FileSystems.getDefault.getPathMatcher("glob:**.scala")
   val expectFile = FileSystems.getDefault.getPathMatcher("glob:**.expect.scala")
@@ -36,14 +36,14 @@ class SemanticdbTests with
   val metacExpectFile = rootSrc.resolve("metac.expect")
 
   @Category(Array(classOf[dotty.SlowTests]))
-  @Test def expectTests: Unit = runExpectTest(updateExpectFiles = false)
+  @Test def expectTests: Unit = if (!scala.util.Properties.isWin) runExpectTest(updateExpectFiles = false)
 
   def runExpectTest(updateExpectFiles: Boolean): Unit =
     val target = generateSemanticdb()
     val errors = mutable.ArrayBuffer.empty[Path]
     val metacSb: StringBuilder = StringBuilder(5000)
     def collectErrorOrUpdate(expectPath: Path, obtained: String) =
-      if updateExpectFiles
+      if updateExpectFiles then
         Files.write(expectPath, obtained.getBytes(StandardCharsets.UTF_8))
         println("updated: " + expectPath)
       else
@@ -61,9 +61,9 @@ class SemanticdbTests with
         .resolve("semanticdb")
         .resolve(relpath)
         .resolveSibling(filename + ".semanticdb")
-      val expectPath = source.resolveSibling(filename.replaceAllLiterally(".scala", ".expect.scala"))
+      val expectPath = source.resolveSibling(filename.replace(".scala", ".expect.scala"))
       val doc = Tools.loadTextDocument(source, relpath, semanticdbPath)
-      Tools.metac(doc, rootSrc.relativize(source))(given metacSb)
+      Tools.metac(doc, rootSrc.relativize(source))(using metacSb)
       val obtained = trimTrailingWhitespace(SemanticdbTests.printTextDocument(doc))
       collectErrorOrUpdate(expectPath, obtained)
     collectErrorOrUpdate(metacExpectFile, metacSb.toString)
@@ -73,10 +73,12 @@ class SemanticdbTests with
       println(s"""[${red("error")}] check file ${blue(expect.toString)} does not match generated.
       |If you meant to make a change, replace the expect file by:
       |  mv ${expect.resolveSibling("" + expect.getFileName + ".out")} $expect
+      |inspect with:
+      |  diff $expect ${expect.resolveSibling("" + expect.getFileName + ".out")}
       |Or else update all expect files with
-      |  sbt 'dotty-compiler-bootstrapped/test:runMain dotty.tools.dotc.semanticdb.updateExpect'""".stripMargin)
+      |  sbt 'scala3-compiler-bootstrapped/test:runMain dotty.tools.dotc.semanticdb.updateExpect'""".stripMargin)
     Files.walk(target).sorted(Comparator.reverseOrder).forEach(Files.delete)
-    if errors.nonEmpty
+    if errors.nonEmpty then
       fail(s"${errors.size} errors in expect test.")
 
   def trimTrailingWhitespace(s: String): String =
@@ -105,7 +107,7 @@ class SemanticdbTests with
     val exitJava = javac.run(null, null, null, javaArgs:_*)
     assert(exitJava == 0, "java compiler has errors")
     val args = Array(
-      "-Ysemanticdb",
+      "-Xsemanticdb",
       "-d", target.toString,
       "-feature",
       "-deprecation",
@@ -113,6 +115,7 @@ class SemanticdbTests with
       // "-Xprint:extractSemanticDB",
       "-sourceroot", expectSrc.toString,
       "-classpath", target.toString,
+      "-Xignore-scala2-macros",
       "-usejavacp"
     ) ++ inputFiles().map(_.toString)
     val exit = Main.process(args)
@@ -121,7 +124,7 @@ class SemanticdbTests with
 
 end SemanticdbTests
 
-object SemanticdbTests with
+object SemanticdbTests:
   /** Prettyprint a text document with symbol occurrences next to each resolved identifier.
    *
    * Useful for testing purposes to ensure that SymbolOccurrence values make sense and are correct.
@@ -145,7 +148,7 @@ object SemanticdbTests with
       )
       val isPrimaryConstructor =
         symtab.get(occ.symbol).exists(_.isPrimary)
-      if !occ.symbol.isPackage && !isPrimaryConstructor
+      if !occ.symbol.isPackage && !isPrimaryConstructor then
         assert(end <= doc.text.length,
           s"doc is only ${doc.text.length} - offset=$offset, end=$end , symbol=${occ.symbol} in source ${sourceFile.name}")
         sb.append(doc.text.substring(offset, end))

@@ -1,4 +1,4 @@
-import Predef.{any2stringadd => _, _}
+import Predef.{any2stringadd as _, *}
 object opaquetypes {
   opaque type Logarithm = Double
 
@@ -27,7 +27,7 @@ object opaquetypes {
   val LL: Logarithm = Logarithm(1)
 }
 object usesites {
-  import opaquetypes._
+  import opaquetypes.*
   val l = Logarithm(1.0)
   val l2 = Logarithm(2.0)
   val l3 = l * l2
@@ -35,6 +35,8 @@ object usesites {
                    // as a contextual implicit this takes precedence over the
                    // implicit scope implicit LogarithmOps.
                    // TODO: Remove any2stringadd
+  assert(l == Logarithm(1.0))
+  assert(l != l2)
   val d = l3.toDouble
   val l5: Logarithm = (1.0).asInstanceOf[Logarithm]
 }

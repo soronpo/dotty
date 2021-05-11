@@ -1,12 +1,12 @@
 object O1 {
   type A[X] = X
-  opaque type T = A
+  opaque type T = A // error: opaque type alias must be fully applied
 }
 
 object O2 {
   opaque type A[X] = X
   object A {
-    opaque type T = A
+    opaque type T = A  // error: opaque type alias must be fully applied
   }
 }
 

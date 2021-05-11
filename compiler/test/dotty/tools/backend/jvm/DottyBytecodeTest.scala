@@ -4,7 +4,7 @@ package backend.jvm
 
 import vulpix.TestConfiguration
 
-import dotc.core.Contexts.{Context, ContextBase}
+import dotc.core.Contexts.{Context, ContextBase, ctx}
 import dotc.core.Comments.{ContextDoc, ContextDocstrings}
 import dotc.core.Phases.Phase
 import dotc.Compiler
@@ -21,9 +21,12 @@ import scala.tools.asm.{ClassWriter, ClassReader}
 import scala.tools.asm.tree._
 import java.io.{File => JFile, InputStream}
 
+import org.junit.Assert._
+
 trait DottyBytecodeTest {
   import AsmNode._
   import ASMConverters._
+  import DottyBytecodeTest._
 
   protected object Opcode {
     val newarray       = 188
@@ -52,15 +55,40 @@ trait DottyBytecodeTest {
     ctx0.setSetting(ctx0.settings.outputDir, outputDir)
   }
 
+  def checkBCode(scalaSource: String)(checkOutput: AbstractFile => Unit): Unit =
+    checkBCode(List(scalaSource))(checkOutput)
+
   /** Checks source code from raw strings */
-  def checkBCode(sources: String*)(checkOutput: AbstractFile => Unit): Unit = {
-    implicit val ctx: Context = initCtx
+  def checkBCode(scalaSources: List[String], javaSources: List[String] = Nil)(checkOutput: AbstractFile => Unit): Unit = {
+    given Context = initCtx
 
     val compiler = new Compiler
     val run = compiler.newRun
-    compiler.newRun.compileFromStrings(sources: _*)
+    compiler.newRun.compileFromStrings(scalaSources, javaSources)
 
     checkOutput(ctx.settings.outputDir.value)
+  }
+
+  def compileCode(scalaSources: List[String], javaSources: List[String] = Nil): AbstractFile = {
+    given Context = initCtx
+
+    val compiler = new Compiler
+    val run = compiler.newRun
+    compiler.newRun.compileFromStrings(scalaSources, javaSources)
+    ctx.settings.outputDir.value
+  }
+
+  def getGeneratedClassfiles(outDir: AbstractFile): List[(String, Array[Byte])] = {
+    import scala.collection.mutable.ListBuffer
+    def files(dir: AbstractFile): List[(String, Array[Byte])] = {
+      val res = ListBuffer.empty[(String, Array[Byte])]
+      for (f <- dir.iterator) {
+        if (!f.isDirectory) res += ((f.name, f.toByteArray))
+        else if (f.name != "." && f.name != "..") res ++= files(f)
+      }
+      res.toList
+    }
+    files(outDir)
   }
 
   protected def loadClassNode(input: InputStream, skipDebugInfo: Boolean = true): ClassNode = {
@@ -70,6 +98,14 @@ trait DottyBytecodeTest {
     cn
   }
 
+  /** Finds a class with `cls` as name in `dir`, throws if it can't find it */
+  def findClass(cls: String, dir: AbstractFile) = {
+    val clsIn = dir.lookupName(s"$cls.class", directory = false).input
+    val clsNode = loadClassNode(clsIn)
+    assert(clsNode.name == cls, s"inspecting wrong class: ${clsNode.name}")
+    clsNode
+  }
+
   protected def getMethod(classNode: ClassNode, name: String): MethodNode =
     classNode.methods.asScala.find(_.name == name) getOrElse
       sys.error(s"Didn't find method '$name' in class '${classNode.name}'")
@@ -77,6 +113,24 @@ trait DottyBytecodeTest {
   protected def getField(classNode: ClassNode, name: String): FieldNode =
     classNode.fields.asScala.find(_.name == name) getOrElse
       sys.error(s"Didn't find field '$name' in class '${classNode.name}'")
+
+  def getInstructions(c: ClassNode, name: String): List[Instruction] =
+    instructionsFromMethod(getMethod(c, name))
+
+  def assertSameCode(method: MethodNode, expected: List[Instruction]): Unit =
+    assertSameCode(instructionsFromMethod(method).dropNonOp, expected)
+  def assertSameCode(actual: List[Instruction], expected: List[Instruction]): Unit = {
+    assert(actual === expected, s"\nExpected: $expected\nActual  : $actual")
+  }
+
+  def assertInvoke(m: MethodNode, receiver: String, method: String): Unit =
+    assertInvoke(instructionsFromMethod(m), receiver, method)
+  def assertInvoke(l: List[Instruction], receiver: String, method: String): Unit = {
+    assert(l.exists {
+      case Invoke(_, `receiver`, `method`, _, _) => true
+      case _ => false
+    }, l.stringLines)
+  }
 
   def diffInstructions(isa: List[Instruction], isb: List[Instruction]): String = {
     val len = Math.max(isa.length, isb.length)
@@ -159,7 +213,7 @@ trait DottyBytecodeTest {
       val msg     = new StringBuilder
       val success = ms1.lazyZip(ms2) forall { (m1, m2) =>
         val c1 = f(m1)
-        val c2 = f(m2).replaceAllLiterally(name2, name1)
+        val c2 = f(m2).replace(name2, name1)
         if (c1 == c2)
           msg append (s"[ok] $m1")
         else
@@ -190,4 +244,54 @@ trait DottyBytecodeTest {
       s"Wrong number of null checks ($actualChecks), expected: $expectedChecks"
     )
   }
+
+  def assertBoxing(nodeName: String, methods: java.lang.Iterable[MethodNode])(implicit source: String): Unit =
+    methods.asScala.find(_.name == nodeName)
+    .map { node =>
+      val (ins, boxed) = boxingInstructions(node)
+      if (!boxed) fail("No boxing in:\n" + boxingError(ins, source))
+    }
+    .getOrElse(fail("Could not find constructor for object `Test`"))
+
+  private def boxingError(ins: List[_], source: String) =
+    s"""|----------------------------------
+        |${ins.mkString("\n")}
+        |----------------------------------
+        |From code:
+        |$source
+        |----------------------------------""".stripMargin
+
+
+  protected def assertNoBoxing(nodeName: String, methods: java.lang.Iterable[MethodNode])(implicit source: String): Unit =
+    methods.asScala.find(_.name == nodeName)
+    .map { node =>
+      val (ins, boxed) = boxingInstructions(node)
+      if (boxed) fail(boxingError(ins, source))
+    }
+    .getOrElse(fail("Could not find constructor for object `Test`"))
+
+  protected def boxingInstructions(method: MethodNode): (List[_], Boolean) = {
+    val ins = instructionsFromMethod(method)
+    val boxed = ins.exists {
+      case Invoke(op, owner, name, desc, itf) =>
+        owner.toLowerCase.contains("box") || name.toLowerCase.contains("box")
+      case _ => false
+    }
+
+    (ins, boxed)
+  }
+
+  protected def hasInvokeStatic(method: MethodNode): Boolean = {
+    val ins = instructionsFromMethod(method)
+    ins.exists {
+      case Invoke(op, owner, name, desc, itf) =>
+        op == 184
+      case _ => false
+    }
+  }
+
 }
+object DottyBytecodeTest {
+  extension [T](l: List[T]) def stringLines = l.mkString("\n")
+}
+

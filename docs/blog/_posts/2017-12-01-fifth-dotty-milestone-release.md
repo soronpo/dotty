@@ -20,7 +20,7 @@ You can learn more about Dotty on our [website](http://dotty.epfl.ch).
 <!--more-->
 
 This is our fifth scheduled release according to our [6-week release schedule](https://dotty.epfl.ch/docs/usage/version-numbers.html).
-The [previous technology preview](/blog/2017/10/16/fourth-dotty-milestone-release.html) added
+The [previous technology preview](/blog/_posts/2017-10-16-fourth-dotty-milestone-release.html) added
 support for Scala 2.12 and came with a brand new REPL.
 
 ## What’s new in the 0.5.0-RC1 technology preview?
@@ -109,7 +109,7 @@ are currently two backends using the TASTY frontend:
    different backends...
 
 ### Generic java signatures [#3234](https://github.com/lampepfl/dotty/pull/3234)
-Dotty now emits generic signatures for classes and methods. Theses signatures are used by compilers,
+Dotty now emits generic signatures for classes and methods. Those signatures are used by compilers,
 debuggers and to support runtime reflection. For example:
 
 ```scala

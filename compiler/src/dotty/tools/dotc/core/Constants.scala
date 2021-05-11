@@ -1,9 +1,11 @@
-package dotty.tools.dotc
+package dotty.tools
+package dotc
 package core
 
 import Types._, Symbols._, Contexts._
 import printing.Printer
 import printing.Texts.Text
+import Decorators._
 
 object Constants {
 
@@ -20,8 +22,6 @@ object Constants {
   final val StringTag  = 10
   final val NullTag    = 11
   final val ClazzTag   = 12
-  // For supporting java enumerations inside java annotations (see ClassfileParser)
-  final val EnumTag    = 13
 
   class Constant(val value: Any, val tag: Int) extends printing.Showable with Product1[Any] {
     import java.lang.Double.doubleToRawLongBits
@@ -37,7 +37,7 @@ object Constants {
     def isNonUnitAnyVal: Boolean = BooleanTag <= tag && tag <= DoubleTag
     def isAnyVal: Boolean        = UnitTag <= tag && tag <= DoubleTag
 
-    def tpe(implicit ctx: Context): Type = tag match {
+    def tpe(using Context): Type = tag match {
       case UnitTag        => defn.UnitType
       case BooleanTag     => defn.BooleanType
       case ByteTag        => defn.ByteType
@@ -50,7 +50,6 @@ object Constants {
       case StringTag      => defn.StringType
       case NullTag        => defn.NullType
       case ClazzTag       => defn.ClassType(typeValue)
-      case EnumTag        => defn.EnumType(symbolValue)
     }
 
     /** We need the equals method to take account of tags as well as values.
@@ -150,7 +149,7 @@ object Constants {
 
     /** Convert constant value to conform to given type.
      */
-    def convertTo(pt: Type)(implicit ctx: Context): Constant = {
+    def convertTo(pt: Type)(using Context): Constant = {
       def classBound(pt: Type): Type = pt.dealias.stripTypeVar match {
         case tref: TypeRef if !tref.symbol.isClass && tref.info.exists =>
           classBound(tref.info.bounds.lo)
@@ -164,25 +163,29 @@ object Constants {
           }
         case pt => pt
       }
-      val target = classBound(pt).typeSymbol
-      if (target == tpe.typeSymbol)
-        this
-      else if ((target == defn.ByteClass) && isByteRange)
-        Constant(byteValue)
-      else if (target == defn.ShortClass && isShortRange)
-        Constant(shortValue)
-      else if (target == defn.CharClass && isCharRange)
-        Constant(charValue)
-      else if (target == defn.IntClass && isIntRange)
-        Constant(intValue)
-      else if (target == defn.LongClass && isLongRange)
-        Constant(longValue)
-      else if (target == defn.FloatClass && isFloatRange)
-        Constant(floatValue)
-      else if (target == defn.DoubleClass && isNumeric)
-        Constant(doubleValue)
-      else
-        null
+      pt match
+        case ConstantType(value) if value == this => this
+        case _: SingletonType => null
+        case _ =>
+          val target = classBound(pt).typeSymbol
+          if (target == tpe.typeSymbol)
+            this
+          else if ((target == defn.ByteClass) && isByteRange)
+            Constant(byteValue)
+          else if (target == defn.ShortClass && isShortRange)
+            Constant(shortValue)
+          else if (target == defn.CharClass && isCharRange)
+            Constant(charValue)
+          else if (target == defn.IntClass && isIntRange)
+            Constant(intValue)
+          else if (target == defn.LongClass && isLongRange)
+            Constant(longValue)
+          else if (target == defn.FloatClass && isFloatRange)
+            Constant(floatValue)
+          else if (target == defn.DoubleClass && isNumeric)
+            Constant(doubleValue)
+          else
+            null
     }
 
     def stringValue: String = value.toString
@@ -190,7 +193,6 @@ object Constants {
     def toText(printer: Printer): Text = printer.toText(this)
 
     def typeValue: Type     = value.asInstanceOf[Type]
-    def symbolValue: Symbol = value.asInstanceOf[Symbol]
 
     /**
      * Consider two `NaN`s to be identical, despite non-equality
@@ -237,7 +239,6 @@ object Constants {
     def apply(x: String): Constant       = new Constant(x, StringTag)
     def apply(x: Char): Constant         = new Constant(x, CharTag)
     def apply(x: Type): Constant         = new Constant(x, ClazzTag)
-    def apply(x: Symbol): Constant       = new Constant(x, EnumTag)
     def apply(value: Any): Constant      =
       new Constant(value,
         value match {
@@ -253,7 +254,6 @@ object Constants {
           case x: String       => StringTag
           case x: Char         => CharTag
           case x: Type         => ClazzTag
-          case x: Symbol       => EnumTag
         }
       )
 

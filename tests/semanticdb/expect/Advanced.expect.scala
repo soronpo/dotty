@@ -1,7 +1,7 @@
 package advanced
 
-import scala.language/*->scalaShadowing::language.*/.higherKinds/*->scalaShadowing::language.higherKinds.*/
-import scala.language/*->scalaShadowing::language.*/.reflectiveCalls/*->scalaShadowing::language.reflectiveCalls.*/
+import scala.language/*->scala::language.*/.higherKinds/*->scala::language.higherKinds.*/
+import scala.language/*->scala::language.*/.reflectiveCalls/*->scala::language.reflectiveCalls.*/
 
 import scala.reflect.Selectable/*->scala::reflect::Selectable.*/.reflectiveSelectable/*->scala::reflect::Selectable.reflectiveSelectable().*/
 
@@ -22,11 +22,11 @@ class Wildcards/*<-advanced::Wildcards#*/ {
 object Test/*<-advanced::Test.*/ {
   val s/*<-advanced::Test.s.*/ = new Structural/*->advanced::Structural#*/
   val s1/*<-advanced::Test.s1.*/ = s/*->advanced::Test.s.*/.s1/*->advanced::Structural#s1().*/
-  val s1x/*<-advanced::Test.s1x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s1/*->advanced::Structural#s1().*//*->scala::Selectable#selectDynamic().*/.x
+  val s1x/*<-advanced::Test.s1x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s1/*->advanced::Structural#s1().*//*->scala::reflect::Selectable#selectDynamic().*/.x
   val s2/*<-advanced::Test.s2.*/ = s/*->advanced::Test.s.*/.s2/*->advanced::Structural#s2().*/
-  val s2x/*<-advanced::Test.s2x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s2/*->advanced::Structural#s2().*//*->scala::Selectable#selectDynamic().*/.x
+  val s2x/*<-advanced::Test.s2x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s2/*->advanced::Structural#s2().*//*->scala::reflect::Selectable#selectDynamic().*/.x
   val s3/*<-advanced::Test.s3.*/ = s/*->advanced::Test.s.*/.s3/*->advanced::Structural#s3().*/
-  val s3x/*<-advanced::Test.s3x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s3/*->advanced::Structural#s3().*//*->scala::Selectable#applyDynamic().*/.m/*->scala::reflect::ClassTag.apply().*//*->java::lang::Integer#TYPE.*/(???/*->scala::Predef.`???`().*/)
+  val s3x/*<-advanced::Test.s3x.*/ = /*->scala::reflect::Selectable.reflectiveSelectable().*/s/*->advanced::Test.s.*/.s3/*->advanced::Structural#s3().*//*->scala::reflect::Selectable#applyDynamic().*/.m(???/*->scala::Predef.`???`().*/)
 
   val e/*<-advanced::Test.e.*/ = new Wildcards/*->advanced::Wildcards#*/
   val e1/*<-advanced::Test.e1.*/ = e/*->advanced::Test.e.*/.e1/*->advanced::Wildcards#e1().*/

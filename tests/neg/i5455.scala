@@ -11,14 +11,14 @@ object Library {
     def toInt(n: Nat): Int = n
 
   }
-  extension on (x: Nat) {
+  extension (x: Nat) {
     def * (y: Nat): Nat = x * y
     def toInt: Int = x
   }
 }
 
 object User extends App {
-  import Library._
+  import Library.*
 
   val x = Nat(3)
   val y = Nat(4)

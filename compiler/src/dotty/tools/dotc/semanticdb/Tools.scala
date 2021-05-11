@@ -6,7 +6,14 @@ import scala.collection.JavaConverters._
 import dotty.tools.dotc.util.SourceFile
 import dotty.tools.dotc.semanticdb.Scala3.{_, given}
 
-object Tools with
+object Tools:
+
+  /** Converts a Path to a String that is URI encoded, without forcing absolute paths. */
+  def mkURIstring(path: Path): String =
+    // Calling `.toUri` on a relative path will convert it to absolute. Iteration through its parts instead preserves
+    // the resulting URI as relative.
+    val uriParts = for part <- path.asScala yield new java.net.URI(null, null, part.toString, null)
+    uriParts.mkString("/")
 
   /** Load SemanticDB TextDocument for a single Scala source file
    *
@@ -19,16 +26,16 @@ object Tools with
     scalaRelativePath: Path,
     semanticdbAbsolutePath: Path
   ): TextDocument =
-    val reluri = scalaRelativePath.toString
+    val reluri  = mkURIstring(scalaRelativePath)
     val sdocs = parseTextDocuments(semanticdbAbsolutePath)
     sdocs.documents.find(_.uri == reluri) match
-    case None => throw new NoSuchElementException(reluri)
+    case None => throw new NoSuchElementException(s"$scalaRelativePath")
     case Some(document) =>
       val text = new String(Files.readAllBytes(scalaAbsolutePath), StandardCharsets.UTF_8)
       // Assert the SemanticDB payload is in-sync with the contents of the Scala file on disk.
       val md5FingerprintOnDisk = internal.MD5.compute(text)
-      if document.md5 != md5FingerprintOnDisk
-        throw new IllegalArgumentException("stale semanticdb: " + reluri)
+      if document.md5 != md5FingerprintOnDisk then
+        throw new IllegalArgumentException(s"stale semanticdb: $scalaRelativePath")
       else
         // Update text document to include full text contents of the file.
         document.copy(text = text)
@@ -39,7 +46,7 @@ object Tools with
     val bytes = Files.readAllBytes(path) // NOTE: a semanticdb file is a TextDocuments message, not TextDocument
     TextDocuments.parseFrom(bytes)
 
-  def metac(doc: TextDocument, realPath: Path)(given sb: StringBuilder): StringBuilder =
+  def metac(doc: TextDocument, realPath: Path)(using sb: StringBuilder): StringBuilder =
     val realURI = realPath.toString
     given SourceFile = SourceFile.virtual(doc.uri, doc.text)
     sb.append(realURI).nl
@@ -78,7 +85,7 @@ object Tools with
     case UNKNOWN_LANGUAGE | Unrecognized(_) => "unknown"
   end languageString
 
-  private def processSymbol(info: SymbolInformation)(given sb: StringBuilder): Unit =
+  private def processSymbol(info: SymbolInformation)(using sb: StringBuilder): Unit =
     import SymbolInformation.Kind._
     sb.append(info.symbol).append(" => ")
     if info.isAbstract then sb.append("abstract ")
@@ -115,7 +122,7 @@ object Tools with
     sb.append(info.displayName).nl
   end processSymbol
 
-  private def processOccurrence(occ: SymbolOccurrence)(given sb: StringBuilder, sourceFile: SourceFile): Unit =
+  private def processOccurrence(occ: SymbolOccurrence)(using sb: StringBuilder, sourceFile: SourceFile): Unit =
     occ.range match
     case Some(range) =>
       sb.append('[')
@@ -125,7 +132,7 @@ object Tools with
         .append("):")
       if range.endLine == range.startLine
       && range.startCharacter != range.endCharacter
-      && !(occ.symbol.isConstructor && occ.role.isDefinition)
+      && !(occ.symbol.isConstructor && occ.role.isDefinition) then
         val line = sourceFile.lineContent(sourceFile.lineToOffset(range.startLine))
         assert(range.startCharacter <= line.length && range.endCharacter <= line.length,
           s"Line is only ${line.length} - start line was ${range.startLine} in source ${sourceFile.name}"
@@ -137,4 +144,5 @@ object Tools with
     sb.append(if occ.role.isReference then " -> " else " <- ").append(occ.symbol).nl
   end processOccurrence
 
-  private inline def (sb: StringBuilder) nl = sb.append(System.lineSeparator)
+  extension (sb: StringBuilder)
+    private inline def nl = sb.append(System.lineSeparator)

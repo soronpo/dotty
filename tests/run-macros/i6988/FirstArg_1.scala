@@ -6,12 +6,12 @@ object FirstArg {
 }
 
 object Macros {
-  import scala.quoted._
+  import scala.quoted.*
 
-  def argsImpl(using qctx: QuoteContext) : Expr[FirstArg] = {
-    import qctx.tasty.{_, given _}
+  def argsImpl(using Quotes) : Expr[FirstArg] = {
+    import quotes.reflect.*
 
-    def enclosingClass(cur: Symbol = rootContext.owner): Symbol =
+    def enclosingClass(cur: Symbol = Symbol.spliceOwner): Symbol =
       if (cur.isClassDef) cur
       else enclosingClass(cur.owner)
 
@@ -19,14 +19,14 @@ object Macros {
       if owner.isClassDef then
         owner.tree match
           case tdef: ClassDef =>
-            tdef.constructor.paramss map { _ map {_.symbol }}
+            tdef.constructor.paramss map { _.params map {_.symbol }}
       else enclosingParamList(owner.owner)
 
     def literal(value: String): Expr[String] =
-      Literal(Constant(value)).seal.asInstanceOf[Expr[String]]
-    val paramss = enclosingParamList(rootContext.owner)
+      Literal(StringConstant(value)).asExpr.asInstanceOf[Expr[String]]
+    val paramss = enclosingParamList(Symbol.spliceOwner)
     val firstArg = paramss.flatten.head
     val ref = Select.unique(This(enclosingClass()), firstArg.name)
-    '{ FirstArg(${ref.seal}, ${Expr(firstArg.name)}) }
+    '{ FirstArg(${ref.asExpr}, ${Expr(firstArg.name)}) }
   }
 }

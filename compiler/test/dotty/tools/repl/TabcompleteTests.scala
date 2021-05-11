@@ -100,14 +100,14 @@ class TabcompleteTests extends ReplTest {
   @Test def importScala = fromInitialState { implicit s =>
     val comp = tabComplete("import scala.")
     // check that there are no special symbols leaked: <byname>, <special-ops>, ...
-    assertEquals(comp.find(_.startsWith("<")), Some("<:<"))
+    assertEquals(Some("<:<"), comp.find(_.startsWith("<")))
     assert(!comp.contains("package"))
   }
 
   @Test def `null` = fromInitialState { implicit s =>
     val comp = tabComplete("null.")
     assertEquals(
-      List("!=", "##", "==", "asInstanceOf", "clone", "eq", "equals", "finalize", "getClass", "hashCode",
+      List("!=", "##", "==", "asInstanceOf", "eq", "equals", "getClass", "hashCode",
           "isInstanceOf", "ne", "notify", "notifyAll", "synchronized", "toString", "wait"),
       comp.distinct.sorted)
   }
@@ -115,8 +115,8 @@ class TabcompleteTests extends ReplTest {
   @Test def anyRef = fromInitialState { implicit s =>
     val comp = tabComplete("(null: AnyRef).")
     assertEquals(
-      List("!=", "##", "->", "==", "asInstanceOf", "clone", "ensuring", "eq", "equals", "finalize", "formatted",
-          "getClass", "hashCode", "isInstanceOf", "ne", "notify", "notifyAll", "synchronized", "toString", "wait", "→"),
+      List("!=", "##", "->", "==", "asInstanceOf", "ensuring", "eq", "equals", "formatted",
+          "getClass", "hashCode", "isInstanceOf", "ne", "nn", "notify", "notifyAll", "synchronized", "toString", "wait", "→"),
       comp.distinct.sorted)
   }
 

@@ -1,18 +1,16 @@
-import scala.quoted._
-import scala.quoted.autolift.{given _}
+import scala.quoted.*
 
 object SourceFiles {
 
-  type Macro[X] = QuoteContext ?=> Expr[X]
-  def tastyContext(using qctx: QuoteContext): QuoteContext = qctx
+  type Macro[X] = Quotes ?=> Expr[X]
+  def tastyContext(using q: Quotes): Quotes = q
 
   implicit inline def getThisFile: String =
     ${getThisFileImpl}
 
   def getThisFileImpl: Macro[String] = {
     val qctx = tastyContext
-    import qctx.tasty.{_, given _}
-    rootContext.source.getFileName.toString
+    Expr(qctx.reflect.SourceFile.current.jpath.getFileName.toString)
   }
 
 }

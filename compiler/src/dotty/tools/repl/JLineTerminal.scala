@@ -1,6 +1,6 @@
 package dotty.tools.repl
 
-import dotty.tools.dotc.core.Contexts.Context
+import dotty.tools.dotc.core.Contexts._
 import dotty.tools.dotc.parsing.Scanners.Scanner
 import dotty.tools.dotc.parsing.Tokens._
 import dotty.tools.dotc.printing.SyntaxHighlighting
@@ -9,6 +9,7 @@ import dotty.tools.dotc.util.SourceFile
 import org.jline.reader
 import org.jline.reader.Parser.ParseContext
 import org.jline.reader._
+import org.jline.reader.impl.LineReaderImpl
 import org.jline.reader.impl.history.DefaultHistory
 import org.jline.terminal.TerminalBuilder
 import org.jline.utils.AttributedString
@@ -19,15 +20,16 @@ final class JLineTerminal extends java.io.Closeable {
 
   private val terminal =
     TerminalBuilder.builder()
-    .dumb(false) // fail early if not able to create a terminal
+    .dumb(dumbTerminal) // fail early if not able to create a terminal
     .build()
   private val history = new DefaultHistory
+  def dumbTerminal = Option(System.getenv("TERM")) == Some("dumb")
 
-  private def blue(str: String)(implicit ctx: Context) =
+  private def blue(str: String)(using Context) =
     if (ctx.settings.color.value != "never") Console.BLUE + str + Console.RESET
     else str
-  private def prompt(implicit ctx: Context)        = blue("scala> ")
-  private def newLinePrompt(implicit ctx: Context) = blue("     | ")
+  private def prompt(using Context)        = blue("scala> ")
+  private def newLinePrompt(using Context) = blue("     | ")
 
   /** Blockingly read line from `System.in`
    *
@@ -44,7 +46,7 @@ final class JLineTerminal extends java.io.Closeable {
    */
   def readLine(
     completer: Completer // provide auto-completions
-  )(implicit ctx: Context): String = {
+  )(using Context): String = {
     import LineReader.Option._
     import LineReader._
     val userHome = System.getProperty("user.home")
@@ -60,6 +62,8 @@ final class JLineTerminal extends java.io.Closeable {
                                                 // this is supplied from the EOFError.getMissing() method
       .variable(LIST_MAX, 400)                  // Ask user when number of completions exceed this limit (default is 100).
       .variable(BLINK_MATCHING_PAREN, 0L)       // Don't blink the opening paren after typing a closing paren.
+      .variable(WORDCHARS,
+        LineReaderImpl.DEFAULT_WORDCHARS.filterNot("*?.[]~=/&;!#%^(){}<>".toSet)) // Finer grained word boundaries
       .option(INSERT_TAB, true)                 // At the beginning of the line, insert tab instead of completing.
       .option(AUTO_FRESH_LINE, true)            // if not at start of line before prompt, move to new line.
       .option(DISABLE_EVENT_EXPANSION, true)    // don't process escape sequences in input
@@ -71,15 +75,17 @@ final class JLineTerminal extends java.io.Closeable {
   def close(): Unit = terminal.close()
 
   /** Provide syntax highlighting */
-  private class Highlighter(implicit ctx: Context) extends reader.Highlighter {
+  private class Highlighter(using Context) extends reader.Highlighter {
     def highlight(reader: LineReader, buffer: String): AttributedString = {
       val highlighted = SyntaxHighlighting.highlight(buffer)
       AttributedString.fromAnsi(highlighted)
     }
+    def setErrorPattern(errorPattern: java.util.regex.Pattern): Unit = {}
+    def setErrorIndex(errorIndex: Int): Unit = {}
   }
 
   /** Provide multi-line editing support */
-  private class Parser(implicit ctx: Context) extends reader.Parser {
+  private class Parser(using Context) extends reader.Parser {
 
     /**
      * @param cursor     The cursor position within the line
@@ -111,7 +117,7 @@ final class JLineTerminal extends java.io.Closeable {
       case class TokenData(token: Token, start: Int, end: Int)
       def currentToken: TokenData /* | Null */ = {
         val source = SourceFile.virtual("<completions>", input)
-        val scanner = new Scanner(source)(ctx.fresh.setReporter(Reporter.NoReporter))
+        val scanner = new Scanner(source)(using ctx.fresh.setReporter(Reporter.NoReporter))
         while (scanner.token != EOF) {
           val start = scanner.offset
           val token = scanner.token

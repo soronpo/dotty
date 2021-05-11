@@ -8,20 +8,20 @@ final class Off extends State
 @implicitNotFound("State must be Off")
 class IsOff[S <: State]
 object IsOff {
-  given isOff as IsOff[Off] = new IsOff[Off]
+  given isOff: IsOff[Off] = new IsOff[Off]
 }
 
 @implicitNotFound("State must be On")
 class IsOn[S <: State]
 object IsOn {
-  given isOn as IsOn[On] = new IsOn[On]
+  given isOn: IsOn[On] = new IsOn[On]
 }
 
 class Machine[S <: State] {
-  inline def turnOn()(using s: IsOff[S]) <: Machine[On] = summonFrom {
+  transparent inline def turnOn()(using s: IsOff[S]): Machine[On] = summonFrom {
     case _: IsOff[Off]  => new Machine[On]
   }
-  inline def turnOff()(using s: IsOn[S]) <: Machine[Off] = summonFrom {
+  transparent inline def turnOff()(using s: IsOn[S]): Machine[Off] = summonFrom {
     case _: IsOn[On]    => new Machine[Off]
   }
 }

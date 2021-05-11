@@ -14,19 +14,20 @@ import Uniques._
 import ast.Trees._
 import ast.untpd
 import Flags.GivenOrImplicit
-import util.{NoSource, SimpleIdentityMap, SourceFile}
-import typer.{Implicits, ImportInfo, Inliner, NamerContextOps, SearchHistory, SearchRoot, TypeAssigner, Typer, Nullables}
-import Nullables.{NotNullInfo, given}
+import util.{NoSource, SimpleIdentityMap, SourceFile, HashSet, ReusableInstance}
+import typer.{Implicits, ImportInfo, Inliner, SearchHistory, SearchRoot, TypeAssigner, Typer, Nullables}
+import Nullables._
 import Implicits.ContextualImplicits
 import config.Settings._
 import config.Config
 import reporting._
-import reporting.diagnostic.Message
 import io.{AbstractFile, NoAbstractFile, PlainFile, Path}
 import scala.io.Codec
 import collection.mutable
 import printing._
 import config.{JavaPlatform, SJSPlatform, Platform, ScalaSettings}
+import classfile.ReusableDataReader
+import StdNames.nme
 
 import scala.annotation.internal.sharable
 
@@ -37,6 +38,7 @@ import util.Store
 import xsbti.AnalysisCallback
 import plugins._
 import java.util.concurrent.atomic.AtomicInteger
+import java.nio.file.InvalidPathException
 
 object Contexts {
 
@@ -48,10 +50,57 @@ object Contexts {
   private val (runLoc,              store6) = store5.newLocation[Run]()
   private val (profilerLoc,         store7) = store6.newLocation[Profiler]()
   private val (notNullInfosLoc,     store8) = store7.newLocation[List[NotNullInfo]]()
-  private val initialStore = store8
+  private val (importInfoLoc,       store9) = store8.newLocation[ImportInfo]()
+  private val (typeAssignerLoc,    store10) = store9.newLocation[TypeAssigner](TypeAssigner)
+
+  private val initialStore = store10
 
   /** The current context */
-  def curCtx(given ctx: Context): Context = ctx
+  inline def ctx(using ctx: Context): Context = ctx
+
+  /** Run `op` with given context */
+  inline def inContext[T](c: Context)(inline op: Context ?=> T): T =
+    op(using c)
+
+  /** Execute `op` at given period */
+  inline def atPeriod[T](pd: Period)(inline op: Context ?=> T)(using Context): T =
+    op(using ctx.fresh.setPeriod(pd))
+
+  /** Execute `op` at given phase id */
+  inline def atPhase[T](pid: PhaseId)(inline op: Context ?=> T)(using Context): T =
+    op(using ctx.withPhase(pid))
+
+  /** Execute `op` at given phase */
+  inline def atPhase[T](phase: Phase)(inline op: Context ?=> T)(using Context): T =
+    op(using ctx.withPhase(phase))
+
+  inline def atNextPhase[T](inline op: Context ?=> T)(using Context): T =
+    atPhase(ctx.phase.next)(op)
+
+  /** Execute `op` at the current phase if it's before the first transform phase,
+   *  otherwise at the last phase before the first transform phase.
+   *
+   *  Note: this should be used instead of `atPhaseNoLater(ctx.picklerPhase)`
+   *  because the later won't work if the `Pickler` phase is not present (for example,
+   *  when using `QuoteCompiler`).
+   */
+  inline def atPhaseBeforeTransforms[T](inline op: Context ?=> T)(using Context): T =
+    atPhaseNoLater(firstTransformPhase.prev)(op)
+
+  inline def atPhaseNoLater[T](limit: Phase)(inline op: Context ?=> T)(using Context): T =
+    op(using if !limit.exists || ctx.phase <= limit then ctx else ctx.withPhase(limit))
+
+  inline def atPhaseNoEarlier[T](limit: Phase)(inline op: Context ?=> T)(using Context): T =
+    op(using if !limit.exists || limit <= ctx.phase then ctx else ctx.withPhase(limit))
+
+  inline def inMode[T](mode: Mode)(inline op: Context ?=> T)(using ctx: Context): T =
+    op(using if mode != ctx.mode then ctx.fresh.setMode(mode) else ctx)
+
+  inline def withMode[T](mode: Mode)(inline op: Context ?=> T)(using ctx: Context): T =
+    inMode(ctx.mode | mode)(op)
+
+  inline def withoutMode[T](mode: Mode)(inline op: Context ?=> T)(using ctx: Context): T =
+    inMode(ctx.mode &~ mode)(op)
 
   /** A context is passed basically everywhere in dotc.
    *  This is convenient but carries the risk of captured contexts in
@@ -72,20 +121,9 @@ object Contexts {
    *      of all class fields of type context; allow them only in whitelisted
    *      classes (which should be short-lived).
    */
-  abstract class Context(val base: ContextBase)
-    extends Periods
-       with Substituters
-       with TypeOps
-       with Phases
-       with Printers
-       with Symbols
-       with SymDenotations
-       with Reporting
-       with NamerContextOps
-       with Plugins
-       with Cloneable { thiscontext =>
+  abstract class Context(val base: ContextBase) { thiscontext =>
 
-    implicit def ctx: Context = this
+    given Context = this
 
     /** All outer contexts, ending in `base.initialCtx` and then `NoContext` */
     def outersIterator: Iterator[Context] = new Iterator[Context] {
@@ -132,16 +170,6 @@ object Contexts {
     protected def typerState_=(typerState: TyperState): Unit = _typerState = typerState
     final def typerState: TyperState = _typerState
 
-    /** The current type assigner or typer */
-    private var _typeAssigner: TypeAssigner = _
-    protected def typeAssigner_=(typeAssigner: TypeAssigner): Unit = _typeAssigner = typeAssigner
-    final def typeAssigner: TypeAssigner = _typeAssigner
-
-    /** The currently active import info */
-    private var _importInfo: ImportInfo = _
-    protected def importInfo_=(importInfo: ImportInfo): Unit = _importInfo = importInfo
-    final def importInfo: ImportInfo = _importInfo
-
     /** The current bounds in force for type parameters appearing in a GADT */
     private var _gadt: GadtConstraint = _
     protected def gadt_=(gadt: GadtConstraint): Unit = _gadt = gadt
@@ -151,17 +179,6 @@ object Contexts {
     private var _searchHistory: SearchHistory = null
     protected def searchHistory_= (searchHistory: SearchHistory): Unit = _searchHistory = searchHistory
     final def searchHistory: SearchHistory = _searchHistory
-
-    /** The current type comparer. This ones updates itself automatically for
-     *  each new context.
-     */
-    private var _typeComparer: TypeComparer = _
-    protected def typeComparer_=(typeComparer: TypeComparer): Unit = _typeComparer = typeComparer
-    def typeComparer: TypeComparer = {
-      if (_typeComparer.ctx ne this)
-        _typeComparer = _typeComparer.copyIn(this)
-      _typeComparer
-    }
 
     /** The current source file */
     private var _source: SourceFile = _
@@ -196,6 +213,11 @@ object Contexts {
     /** The current plain printer */
     def printerFn: Context => Printer = store(printerFnLoc)
 
+    /** A function creating a printer */
+    def printer: Printer =
+      val pr = printerFn(this)
+      if this.settings.YplainPrinter.value then pr.plain else pr
+
     /** The current settings values */
     def settingsState: SettingsState = store(settingsStateLoc)
 
@@ -210,6 +232,12 @@ object Contexts {
 
     /** The paths currently known to be not null */
     def notNullInfos = store(notNullInfosLoc)
+
+    /** The currently active import info */
+    def importInfo = store(importInfoLoc)
+
+    /** The current type assigner or typer */
+    def typeAssigner: TypeAssigner = store(typeAssignerLoc)
 
     /** The new implicit references that are introduced by this scope */
     protected var implicitsCache: ContextualImplicits = null
@@ -231,64 +259,93 @@ object Contexts {
             else
               outer.implicits
           if (implicitRefs.isEmpty) outerImplicits
-          else new ContextualImplicits(implicitRefs, outerImplicits)(this)
+          else new ContextualImplicits(implicitRefs, outerImplicits, isImportContext)(this)
         }
       implicitsCache
     }
 
+    /** Either the current scope, or, if the current context owner is a class,
+     *  the declarations of the current class.
+     */
+    def effectiveScope(using Context): Scope =
+      if owner != null && owner.isClass then owner.asClass.unforcedDecls
+      else scope
+
     /** Sourcefile corresponding to given abstract file, memoized */
     def getSource(file: AbstractFile, codec: => Codec = Codec(settings.encoding.value)) = {
-      util.Stats.record("getSource")
-      base.sources.getOrElseUpdate(file, new SourceFile(file, codec))
+      util.Stats.record("Context.getSource")
+      base.sources.getOrElseUpdate(file, SourceFile(file, codec))
     }
 
-    /** Sourcefile with given path name, memoized */
-    def getSource(path: TermName): SourceFile = base.sourceNamed.get(path) match {
-      case Some(source) =>
-        source
-      case None =>
-        val f = new PlainFile(Path(path.toString))
-        val src = getSource(f)
-        base.sourceNamed(path) = src
-        src
-    }
+    /** SourceFile with given path name, memoized */
+    def getSource(path: TermName): SourceFile = getFile(path) match
+      case NoAbstractFile => NoSource
+      case file => getSource(file)
 
-    /** Sourcefile with given path, memoized */
+    /** SourceFile with given path, memoized */
     def getSource(path: String): SourceFile = getSource(path.toTermName)
 
-    /** Those fields are used to cache phases created in withPhase.
-      * phasedCtx is first phase with altered phase ever requested.
-      * phasedCtxs is array that uses phaseId's as indexes,
-      * contexts are created only on request and cached in this array
-      */
-    private var phasedCtx: Context = this
-    private var phasedCtxs: Array[Context] = _
+    /** AbstraFile with given path name, memoized */
+    def getFile(name: TermName): AbstractFile = base.files.get(name) match
+      case Some(file) =>
+        file
+      case None =>
+        try
+          val file = new PlainFile(Path(name.toString))
+          base.files(name) = file
+          file
+        catch
+          case ex: InvalidPathException =>
+            report.error(s"invalid file path: ${ex.getMessage}")
+            NoAbstractFile
 
-    /** This context at given phase.
-     *  This method will always return a phase period equal to phaseId, thus will never return squashed phases
-     */
-    final def withPhase(phaseId: PhaseId): Context =
-      if (this.phaseId == phaseId) this
-      else if (phasedCtx.phaseId == phaseId) phasedCtx
-      else if (phasedCtxs != null && phasedCtxs(phaseId) != null) phasedCtxs(phaseId)
-      else {
-        val ctx1 = fresh.setPhase(phaseId)
-        if (phasedCtx eq this) phasedCtx = ctx1
-        else {
-          if (phasedCtxs == null) phasedCtxs = new Array[Context](base.phases.length)
-          phasedCtxs(phaseId) = ctx1
-        }
+    /** AbstractFile with given path, memoized */
+    def getFile(name: String): AbstractFile = getFile(name.toTermName)
+
+
+    private var related: SimpleIdentityMap[Phase | SourceFile, Context] = null
+
+    private def lookup(key: Phase | SourceFile): Context =
+      util.Stats.record("Context.related.lookup")
+      if related == null then
+        related = SimpleIdentityMap.empty
+        null
+      else
+        related(key)
+
+    private def withPhase(phase: Phase, pid: PhaseId): Context =
+      util.Stats.record("Context.withPhase")
+      val curId = phaseId
+      if curId == pid then
+        this
+      else
+        var ctx1 = lookup(phase)
+        if ctx1 == null then
+          util.Stats.record("Context.withPhase.new")
+          ctx1 = fresh.setPhase(pid)
+          related = related.updated(phase, ctx1)
         ctx1
-      }
 
-    final def withPhase(phase: Phase): Context =
-      withPhase(phase.id)
+    final def withPhase(phase: Phase): Context = withPhase(phase, phase.id)
+    final def withPhase(pid: PhaseId): Context = withPhase(base.phases(pid), pid)
 
-    final def withPhaseNoLater(phase: Phase): Context =
-      if (phase.exists && ctx.phase.id > phase.id) withPhase(phase) else ctx
-
-    final def withPhaseNoEarlier(phase: Phase): Context =
-      if (phase.exists && ctx.phase.id < phase.id) withPhase(phase) else ctx
+    final def withSource(source: SourceFile): Context =
+      util.Stats.record("Context.withSource")
+      if this.source eq source then
+        this
+      else
+        var ctx1 = lookup(source)
+        if ctx1 == null then
+          util.Stats.record("Context.withSource.new")
+          val ctx2 = fresh.setSource(source)
+          if ctx2.compilationUnit == null then
+            // `source` might correspond to a file not necessarily
+            // in the current project (e.g. when inlining library code),
+            // so set `mustExist` to false.
+            ctx2.setCompilationUnit(CompilationUnit(source, mustExist = false))
+          ctx1 = ctx2
+          related = related.updated(source, ctx2)
+        ctx1
 
     // `creationTrace`-related code. To enable, uncomment the code below and the
     // call to `setCreationTrace()` in this file.
@@ -299,8 +356,7 @@ object Contexts {
     private var creationTrace: Array[StackTraceElement] = _
 
     private def setCreationTrace() =
-      if (this.settings.YtraceContextCreation.value)
-        creationTrace = (new Throwable).getStackTrace().take(20)
+      creationTrace = (new Throwable).getStackTrace().take(20)
 
     /** Print all enclosing context's creation stacktraces */
     def printCreationTraces() = {
@@ -316,10 +372,24 @@ object Contexts {
     /** The current reporter */
     def reporter: Reporter = typerState.reporter
 
-    /** Run `op` as if it was run in a fresh explore typer state, but possibly
-     *  optimized to re-use the current typer state.
-     */
-    final def test[T](op: (given Context) => T): T = typerState.test(op)(this)
+    final def phase: Phase = base.phases(period.firstPhaseId)
+    final def runId = period.runId
+    final def phaseId = period.phaseId
+
+    final def lastPhaseId = base.phases.length - 1
+
+    /** Does current phase use an erased types interpretation? */
+    final def erasedTypes = phase.erasedTypes
+
+    /** Are we in a Java compilation unit? */
+    final def isJava: Boolean =
+      // FIXME: It would be much nicer if compilationUnit was non-nullable,
+      // perhaps we need to introduce a `NoCompilationUnit` compilation unit
+      // to be used as a default value.
+      compilationUnit != null && compilationUnit.isJava
+
+    /** Is current phase after FrontEnd? */
+    final def isAfterTyper = base.isAfterTyper(phase)
 
     /** Is this a context for the members of a class definition? */
     def isClassDefContext: Boolean =
@@ -327,7 +397,9 @@ object Contexts {
 
     /** Is this a context that introduces an import clause? */
     def isImportContext: Boolean =
-      (this ne NoContext) && (this.importInfo ne outer.importInfo)
+      (this ne NoContext)
+      && (outer ne NoContext)
+      && (this.importInfo ne outer.importInfo)
 
     /** Is this a context that introduces a non-empty scope? */
     def isNonEmptyScopeContext: Boolean =
@@ -353,7 +425,6 @@ object Contexts {
      *  - as owner: The primary constructor of the class
      *  - as outer context: The context enclosing the class context
      *  - as scope: The parameter accessors in the class context
-     *  - with additional mode: InSuperCall
      *
      *  The reasons for this peculiar choice of attributes are as follows:
      *
@@ -394,26 +465,18 @@ object Contexts {
       var classCtx = outersIterator.dropWhile(!_.isClassDefContext).next()
       classCtx.outer.fresh.setOwner(owner)
         .setScope(locals)
-        .setMode(classCtx.mode | Mode.InSuperCall)
+        .setMode(classCtx.mode)
     }
 
     /** The context of expression `expr` seen as a member of a statement sequence */
     def exprContext(stat: Tree[? >: Untyped], exprOwner: Symbol): Context =
       if (exprOwner == this.owner) this
       else if (untpd.isSuperConstrCall(stat) && this.owner.isClass) superCallContext
-      else ctx.fresh.setOwner(exprOwner)
+      else fresh.setOwner(exprOwner)
 
     /** A new context that summarizes an import statement */
-    def importContext(imp: Import[?], sym: Symbol): FreshContext = {
-      val impNameOpt = imp.expr match {
-        case ref: RefTree[?] => Some(ref.name.asTermName)
-        case _               => None
-      }
-      ctx.fresh.setImportInfo(ImportInfo(sym, imp.selectors, impNameOpt))
-    }
-
-    /** Does current phase use an erased types interpretation? */
-    def erasedTypes: Boolean = phase.erasedTypes
+    def importContext(imp: Import[?], sym: Symbol): FreshContext =
+       fresh.setImportInfo(ImportInfo(sym, imp.selectors, imp.expr))
 
     /** Is the debug option set? */
     def debug: Boolean = base.settings.Ydebug.value
@@ -428,57 +491,40 @@ object Contexts {
     /** Is the explicit nulls option set? */
     def explicitNulls: Boolean = base.settings.YexplicitNulls.value
 
-    protected def init(outer: Context, origin: Context): this.type = {
-      util.Stats.record("Context.fresh")
+    /** Initialize all context fields, except typerState, which has to be set separately
+     *  @param  outer   The outer context
+     *  @param  origin  The context from which fields are copied
+     */
+    private[Contexts] def init(outer: Context, origin: Context): this.type = {
       _outer = outer
       _period = origin.period
       _mode = origin.mode
       _owner = origin.owner
       _tree = origin.tree
       _scope = origin.scope
-      _typerState = origin.typerState
-      _typeAssigner = origin.typeAssigner
-      _importInfo = origin.importInfo
       _gadt = origin.gadt
       _searchHistory = origin.searchHistory
-      _typeComparer = origin.typeComparer
       _source = origin.source
       _moreProperties = origin.moreProperties
       _store = origin.store
       this
     }
 
+    def reuseIn(outer: Context): this.type =
+      implicitsCache = null
+      related = null
+      init(outer, outer)
+
     /** A fresh clone of this context embedded in this context. */
     def fresh: FreshContext = freshOver(this)
 
     /** A fresh clone of this context embedded in the specified `outer` context. */
-    def freshOver(outer: Context): FreshContext = new FreshContext(base).init(outer, this)
+    def freshOver(outer: Context): FreshContext =
+      util.Stats.record("Context.fresh")
+      FreshContext(base).init(outer, this).setTyperState(this.typerState)
 
     final def withOwner(owner: Symbol): Context =
       if (owner ne this.owner) fresh.setOwner(owner) else this
-
-    private var sourceCtx: SimpleIdentityMap[SourceFile, Context] = null
-
-    final def withSource(source: SourceFile): Context =
-      if (source `eq` this.source) this
-      else if ((source `eq` outer.source) &&
-               outer.sourceCtx != null &&
-               (outer.sourceCtx(this.source) `eq` this)) outer
-      else {
-        if (sourceCtx == null) sourceCtx = SimpleIdentityMap.Empty
-        val prev = sourceCtx(source)
-        if (prev != null) prev
-        else {
-          val newCtx = fresh.setSource(source)
-          if (newCtx.compilationUnit == null)
-            // `source` might correspond to a file not necessarily
-            // in the current project (e.g. when inlining library code),
-            // so set `mustExist` to false.
-            newCtx.setCompilationUnit(CompilationUnit(source, mustExist = false))
-          sourceCtx = sourceCtx.updated(source, newCtx)
-          newCtx
-        }
-      }
 
     final def withProperty[T](key: Key[T], value: Option[T]): Context =
       if (property(key) == value) this
@@ -487,39 +533,31 @@ object Contexts {
         case None => fresh.dropProperty(key)
       }
 
-    override def toString: String = {
-      def iinfo(implicit ctx: Context) = if (ctx.importInfo == null) "" else i"${ctx.importInfo.selectors}%, %"
-      "Context(\n" +
-      (outersIterator map ( ctx => s"  owner = ${ctx.owner}, scope = ${ctx.scope}, import = ${iinfo(ctx)}") mkString "\n")
+    def typer: Typer = this.typeAssigner match {
+      case typer: Typer => typer
+      case _ => new Typer
     }
 
-    def typerPhase: Phase                  = base.typerPhase
-    def postTyperPhase: Phase              = base.postTyperPhase
-    def sbtExtractDependenciesPhase: Phase = base.sbtExtractDependenciesPhase
-    def picklerPhase: Phase                = base.picklerPhase
-    def reifyQuotesPhase: Phase            = base.reifyQuotesPhase
-    def refchecksPhase: Phase              = base.refchecksPhase
-    def patmatPhase: Phase                 = base.patmatPhase
-    def elimRepeatedPhase: Phase           = base.elimRepeatedPhase
-    def extensionMethodsPhase: Phase       = base.extensionMethodsPhase
-    def explicitOuterPhase: Phase          = base.explicitOuterPhase
-    def gettersPhase: Phase                = base.gettersPhase
-    def erasurePhase: Phase                = base.erasurePhase
-    def elimErasedValueTypePhase: Phase    = base.elimErasedValueTypePhase
-    def lambdaLiftPhase: Phase             = base.lambdaLiftPhase
-    def flattenPhase: Phase                = base.flattenPhase
-    def genBCodePhase: Phase               = base.genBCodePhase
-    def phases: Array[Phase]               = base.phases
+    override def toString: String =
+      def iinfo(using Context) =
+        if (ctx.importInfo == null) "" else i"${ctx.importInfo.selectors}%, %"
+      def cinfo(using Context) =
+        val core = s"  owner = ${ctx.owner}, scope = ${ctx.scope}, import = $iinfo"
+        if (ctx ne NoContext) && (ctx.implicits ne ctx.outer.implicits) then
+          s"$core, implicits = ${ctx.implicits}"
+        else
+          core
+      s"""Context(
+         |${outersIterator.map(ctx => cinfo(using ctx)).mkString("\n\n")})""".stripMargin
 
     def settings: ScalaSettings            = base.settings
     def definitions: Definitions           = base.definitions
     def platform: Platform                 = base.platform
-    def pendingUnderlying: mutable.HashSet[Type]   = base.pendingUnderlying
+    def pendingUnderlying: util.HashSet[Type]      = base.pendingUnderlying
     def uniqueNamedTypes: Uniques.NamedTypeUniques = base.uniqueNamedTypes
     def uniques: util.HashSet[Type]                = base.uniques
-    def nextSymId: Int                     = base.nextSymId
 
-    def initialize()(implicit ctx: Context): Unit = base.initialize()(ctx)
+    def initialize()(using Context): Unit = base.initialize()
   }
 
   /** A condensed context provides only a small memory footprint over
@@ -534,26 +572,54 @@ object Contexts {
    *  of its attributes using the with... methods.
    */
   class FreshContext(base: ContextBase) extends Context(base) {
-    def setPeriod(period: Period): this.type = { this.period = period; this }
-    def setMode(mode: Mode): this.type = { this.mode = mode; this }
-    def setOwner(owner: Symbol): this.type = { assert(owner != NoSymbol); this.owner = owner; this }
-    def setTree(tree: Tree[? >: Untyped]): this.type = { this.tree = tree; this }
+    def setPeriod(period: Period): this.type =
+      util.Stats.record("Context.setPeriod")
+      this.period = period
+      this
+    def setMode(mode: Mode): this.type =
+      util.Stats.record("Context.setMode")
+      this.mode = mode
+      this
+    def setOwner(owner: Symbol): this.type =
+      util.Stats.record("Context.setOwner")
+      assert(owner != NoSymbol)
+      this.owner = owner
+      this
+    def setTree(tree: Tree[? >: Untyped]): this.type =
+      util.Stats.record("Context.setTree")
+      this.tree = tree
+      this
     def setScope(scope: Scope): this.type = { this.scope = scope; this }
-    def setNewScope: this.type = { this.scope = newScope; this }
+    def setNewScope: this.type =
+      util.Stats.record("Context.setScope")
+      this.scope = newScope
+      this
     def setTyperState(typerState: TyperState): this.type = { this.typerState = typerState; this }
     def setNewTyperState(): this.type = setTyperState(typerState.fresh().setCommittable(true))
     def setExploreTyperState(): this.type = setTyperState(typerState.fresh().setCommittable(false))
     def setReporter(reporter: Reporter): this.type = setTyperState(typerState.fresh().setReporter(reporter))
-    def setTypeAssigner(typeAssigner: TypeAssigner): this.type = { this.typeAssigner = typeAssigner; this }
     def setTyper(typer: Typer): this.type = { this.scope = typer.scope; setTypeAssigner(typer) }
-    def setImportInfo(importInfo: ImportInfo): this.type = { this.importInfo = importInfo; this }
-    def setGadt(gadt: GadtConstraint): this.type = { this.gadt = gadt; this }
+    def setGadt(gadt: GadtConstraint): this.type =
+      util.Stats.record("Context.setGadt")
+      this.gadt = gadt
+      this
     def setFreshGADTBounds: this.type = setGadt(gadt.fresh)
-    def setSearchHistory(searchHistory: SearchHistory): this.type = { this.searchHistory = searchHistory; this }
-    def setSource(source: SourceFile): this.type = { this.source = source; this }
-    def setTypeComparerFn(tcfn: Context => TypeComparer): this.type = { this.typeComparer = tcfn(this); this }
-    private def setMoreProperties(moreProperties: Map[Key[Any], Any]): this.type = { this.moreProperties = moreProperties; this }
-    private def setStore(store: Store): this.type = { this.store = store; this }
+    def setSearchHistory(searchHistory: SearchHistory): this.type =
+      util.Stats.record("Context.setSearchHistory")
+      this.searchHistory = searchHistory
+      this
+    def setSource(source: SourceFile): this.type =
+      util.Stats.record("Context.setSource")
+      this.source = source
+      this
+    private def setMoreProperties(moreProperties: Map[Key[Any], Any]): this.type =
+      util.Stats.record("Context.setMoreProperties")
+      this.moreProperties = moreProperties
+      this
+    private def setStore(store: Store): this.type =
+      util.Stats.record("Context.setStore")
+      this.store = store
+      this
     def setImplicits(implicits: ContextualImplicits): this.type = { this.implicitsCache = implicits; this }
 
     def setCompilationUnit(compilationUnit: CompilationUnit): this.type = {
@@ -568,6 +634,15 @@ object Contexts {
     def setRun(run: Run): this.type = updateStore(runLoc, run)
     def setProfiler(profiler: Profiler): this.type = updateStore(profilerLoc, profiler)
     def setNotNullInfos(notNullInfos: List[NotNullInfo]): this.type = updateStore(notNullInfosLoc, notNullInfos)
+    def setImportInfo(importInfo: ImportInfo): this.type =
+      importInfo.mentionsFeature(nme.unsafeNulls) match
+        case Some(true) =>
+          setMode(this.mode &~ Mode.SafeNulls)
+        case Some(false) if ctx.settings.YexplicitNulls.value =>
+          setMode(this.mode | Mode.SafeNulls)
+        case _ =>
+      updateStore(importInfoLoc, importInfo)
+    def setTypeAssigner(typeAssigner: TypeAssigner): this.type = updateStore(typeAssignerLoc, typeAssigner)
 
     def setProperty[T](key: Key[T], value: T): this.type =
       setMoreProperties(moreProperties.updated(key, value))
@@ -599,31 +674,117 @@ object Contexts {
     def setDebug: this.type = setSetting(base.settings.Ydebug, true)
   }
 
-  given ops: extension (c: Context) with
-    def addNotNullInfo(info: NotNullInfo) =
-      c.withNotNullInfos(c.notNullInfos.extendWith(info))
+  given ops: AnyRef with
+    extension (c: Context)
+      def addNotNullInfo(info: NotNullInfo) =
+        c.withNotNullInfos(c.notNullInfos.extendWith(info))
 
-    def addNotNullRefs(refs: Set[TermRef]) =
-      c.addNotNullInfo(NotNullInfo(refs, Set()))
+      def addNotNullRefs(refs: Set[TermRef]) =
+        c.addNotNullInfo(NotNullInfo(refs, Set()))
 
-    def withNotNullInfos(infos: List[NotNullInfo]): Context =
-      if c.notNullInfos eq infos then c else c.fresh.setNotNullInfos(infos)
+      def withNotNullInfos(infos: List[NotNullInfo]): Context =
+        if c.notNullInfos eq infos then c else c.fresh.setNotNullInfos(infos)
+  end ops
 
   // TODO: Fix issue when converting ModeChanges and FreshModeChanges to extension givens
-  implicit class ModeChanges(val c: Context) extends AnyVal {
+  extension (c: Context) {
     final def withModeBits(mode: Mode): Context =
       if (mode != c.mode) c.fresh.setMode(mode) else c
 
     final def addMode(mode: Mode): Context = withModeBits(c.mode | mode)
-    final def maskMode(mode: Mode): Context = withModeBits(c.mode & mode)
     final def retractMode(mode: Mode): Context = withModeBits(c.mode &~ mode)
   }
 
-  implicit class FreshModeChanges(val c: FreshContext) extends AnyVal {
+  extension (c: FreshContext) {
     final def addMode(mode: Mode): c.type = c.setMode(c.mode | mode)
-    final def maskMode(mode: Mode): c.type = c.setMode(c.mode & mode)
     final def retractMode(mode: Mode): c.type = c.setMode(c.mode &~ mode)
   }
+
+  private def exploreCtx(using Context): FreshContext =
+    util.Stats.record("explore")
+    val base = ctx.base
+    import base._
+    val nestedCtx =
+      if exploresInUse < exploreContexts.size then
+        exploreContexts(exploresInUse).reuseIn(ctx)
+      else
+        val ts = TyperState()
+          .setReporter(ExploringReporter())
+          .setCommittable(false)
+        val c = FreshContext(ctx.base).init(ctx, ctx).setTyperState(ts)
+        exploreContexts += c
+        c
+    exploresInUse += 1
+    val nestedTS = nestedCtx.typerState
+    nestedTS.init(ctx.typerState, ctx.typerState.constraint)
+    nestedCtx
+
+  private def wrapUpExplore(ectx: Context) =
+    ectx.reporter.asInstanceOf[ExploringReporter].reset()
+    ectx.base.exploresInUse -= 1
+
+  inline def explore[T](inline op: Context ?=> T)(using Context): T =
+    val ectx = exploreCtx
+    try op(using ectx) finally wrapUpExplore(ectx)
+
+  inline def exploreInFreshCtx[T](inline op: FreshContext ?=> T)(using Context): T =
+    val ectx = exploreCtx
+    try op(using ectx) finally wrapUpExplore(ectx)
+
+  private def changeOwnerCtx(owner: Symbol)(using Context): Context =
+    val base = ctx.base
+    import base._
+    val nestedCtx =
+      if changeOwnersInUse < changeOwnerContexts.size then
+        changeOwnerContexts(changeOwnersInUse).reuseIn(ctx)
+      else
+        val c = FreshContext(ctx.base).init(ctx, ctx)
+        changeOwnerContexts += c
+        c
+    changeOwnersInUse += 1
+    nestedCtx.setOwner(owner).setTyperState(ctx.typerState)
+
+  /** Run `op` in current context, with a mode is temporarily set as specified.
+   */
+  inline def runWithOwner[T](owner: Symbol)(inline op: Context ?=> T)(using Context): T =
+    if Config.reuseOwnerContexts then
+      try op(using changeOwnerCtx(owner))
+      finally ctx.base.changeOwnersInUse -= 1
+    else
+      op(using ctx.fresh.setOwner(owner))
+
+  /** The type comparer of the kind created by `maker` to be used.
+   *  This is the currently active type comparer CMP if
+   *   - CMP is associated with the current context, and
+   *   - CMP is of the kind created by maker or maker creates a plain type comparer.
+   *  Note: plain TypeComparers always take on the kind of the outer comparer if they are in the same context.
+   *  In other words: tracking or explaining is a sticky property in the same context.
+   */
+  private def comparer(using Context): TypeComparer =
+    util.Stats.record("comparing")
+    val base = ctx.base
+    if base.comparersInUse > 0
+       && (base.comparers(base.comparersInUse - 1).comparerContext eq ctx)
+    then
+      base.comparers(base.comparersInUse - 1).currentInstance
+    else
+      val result =
+        if base.comparersInUse < base.comparers.size then
+          base.comparers(base.comparersInUse)
+        else
+          val result = TypeComparer(ctx)
+          base.comparers += result
+          result
+      base.comparersInUse += 1
+      result.init(ctx)
+      result
+
+  inline def comparing[T](inline op: TypeComparer => T)(using Context): T =
+    util.Stats.record("comparing")
+    val saved = ctx.base.comparersInUse
+    try op(comparer)
+    finally ctx.base.comparersInUse = saved
+  end comparing
 
   /** A class defining the initial context with given context base
    *  and set of possible settings.
@@ -632,31 +793,29 @@ object Contexts {
     outer = NoContext
     period = InitialPeriod
     mode = Mode.None
-    typerState = new TyperState(null)
+    typerState = TyperState.initialState()
     owner = NoSymbol
     tree = untpd.EmptyTree
-    typeAssigner = TypeAssigner
-    moreProperties = Map.empty
+    moreProperties = Map(MessageLimiter -> DefaultMessageLimiter())
     source = NoSource
     store = initialStore
       .updated(settingsStateLoc, settingsGroup.defaultState)
       .updated(notNullInfosLoc, Nil)
-    typeComparer = new TypeComparer(this)
     searchHistory = new SearchRoot
     gadt = EmptyGadtConstraint
   }
 
   @sharable object NoContext extends Context(null) {
     source = NoSource
-    override val implicits: ContextualImplicits = new ContextualImplicits(Nil, null)(this)
+    override val implicits: ContextualImplicits = new ContextualImplicits(Nil, null, false)(this)
   }
 
   /** A context base defines state and associated methods that exist once per
    *  compiler run.
    */
   class ContextBase extends ContextState
-                       with Denotations.DenotationsBase
-                       with Phases.PhasesBase {
+                       with Phases.PhasesBase
+                       with Plugins {
 
     /** The applicable settings */
     val settings: ScalaSettings = new ScalaSettings
@@ -675,12 +834,12 @@ object Contexts {
       _platform
     }
 
-    protected def newPlatform(implicit ctx: Context): Platform =
+    protected def newPlatform(using Context): Platform =
       if (settings.scalajs.value) new SJSPlatform
       else new JavaPlatform
 
     /** The loader that loads the members of _root_ */
-    def rootLoader(root: TermSymbol)(implicit ctx: Context): SymbolLoader = platform.rootLoader(root)
+    def rootLoader(root: TermSymbol)(using Context): SymbolLoader = platform.rootLoader(root)
 
     // Set up some phases to get started */
     usePhases(List(SomePhase))
@@ -691,12 +850,12 @@ object Contexts {
     /** Initializes the `ContextBase` with a starting context.
      *  This initializes the `platform` and the `definitions`.
      */
-    def initialize()(implicit ctx: Context): Unit = {
+    def initialize()(using Context): Unit = {
       _platform = newPlatform
       definitions.init()
     }
 
-    def squashed(p: Phase): Phase =
+    def fusedContaining(p: Phase): Phase =
       allPhases.find(_.period.containsPhaseId(p.id)).getOrElse(NoPhase)
   }
 
@@ -708,31 +867,22 @@ object Contexts {
     private var _nextSymId: Int = 0
     def nextSymId: Int = { _nextSymId += 1; _nextSymId }
 
-    /** Sources that were loaded */
-    val sources: mutable.HashMap[AbstractFile, SourceFile] = new mutable.HashMap[AbstractFile, SourceFile]
-    val sourceNamed: mutable.HashMap[TermName, SourceFile] = new mutable.HashMap[TermName, SourceFile]
+    /** Sources and Files that were loaded */
+    val sources: util.HashMap[AbstractFile, SourceFile] = util.HashMap[AbstractFile, SourceFile]()
+    val files: util.HashMap[TermName, AbstractFile] = util.HashMap()
 
     // Types state
     /** A table for hash consing unique types */
-    private[core] val uniques: util.HashSet[Type] = new util.HashSet[Type](Config.initialUniquesCapacity) {
-      override def hash(x: Type): Int = x.hash
-      override def isEqual(x: Type, y: Type) = x.eql(y)
-    }
+    private[core] val uniques: Uniques = Uniques()
 
     /** A table for hash consing unique applied types */
-    private[dotc] val uniqueAppliedTypes: AppliedUniques = new AppliedUniques
+    private[dotc] val uniqueAppliedTypes: AppliedUniques = AppliedUniques()
 
     /** A table for hash consing unique named types */
-    private[core] val uniqueNamedTypes: NamedTypeUniques = new NamedTypeUniques
+    private[core] val uniqueNamedTypes: NamedTypeUniques = NamedTypeUniques()
 
-    private def uniqueSets = Map(
-        "uniques" -> uniques,
-        "uniqueAppliedTypes" -> uniqueAppliedTypes,
-        "uniqueNamedTypes" -> uniqueNamedTypes)
-
-    /** A map that associates label and size of all uniques sets */
-    def uniquesSizes: Map[String, (Int, Int, Int)] =
-      uniqueSets.transform((_, s) => (s.size, s.accesses, s.misses))
+    var emptyTypeBounds: TypeBounds = null
+    var emptyWildcardBounds: WildcardType = null
 
     /** Number of findMember calls on stack */
     private[core] var findMemberCount: Int = 0
@@ -749,13 +899,13 @@ object Contexts {
 
     /** The set of named types on which a currently active invocation
      *  of underlying during a controlled operation exists. */
-    private[core] val pendingUnderlying: mutable.HashSet[Type] = new mutable.HashSet[Type]
+    private[core] val pendingUnderlying: util.HashSet[Type] = util.HashSet[Type]()
 
-    /** A map from ErrorType to associated message computation. We use this map
-     *  instead of storing message computations directly in ErrorTypes in order
-     *  to avoid space leaks - the message computation usually captures a context.
+    /** A map from ErrorType to associated message. We use this map
+     *  instead of storing messages directly in ErrorTypes in order
+     *  to avoid space leaks - the message usually captures a context.
      */
-    private[core] val errorTypeMsg: mutable.Map[Types.ErrorType, () => Message] = mutable.Map()
+    private[core] val errorTypeMsg: mutable.Map[Types.ErrorType, Message] = mutable.Map()
 
     // Phases state
 
@@ -764,29 +914,50 @@ object Contexts {
     /** Phases by id */
     private[dotc] var phases: Array[Phase] = _
 
-    /** Phases with consecutive Transforms grouped into a single phase, Empty array if squashing is disabled */
-    private[core] var squashedPhases: Array[Phase] = Array.empty[Phase]
+    /** Phases with consecutive Transforms grouped into a single phase, Empty array if fusion is disabled */
+    private[core] var fusedPhases: Array[Phase] = Array.empty[Phase]
 
     /** Next denotation transformer id */
     private[core] var nextDenotTransformerId: Array[Int] = _
 
     private[core] var denotTransformers: Array[DenotTransformer] = _
 
-    // Printers state
-    /** Number of recursive invocations of a show method on current stack */
-    private[dotc] var toTextRecursions: Int = 0
+    /** Flag to suppress inlining, set after overflow */
+    private[dotc] var stopInlining: Boolean = false
 
     // Reporters state
     private[dotc] var indent: Int = 0
 
     protected[dotc] val indentTab: String = "  "
 
-    def reset(): Unit = {
-      for ((_, set) <- uniqueSets) set.clear()
+    private[Contexts] val exploreContexts = new mutable.ArrayBuffer[FreshContext]
+    private[Contexts] var exploresInUse: Int = 0
+
+    private[Contexts] val changeOwnerContexts = new mutable.ArrayBuffer[FreshContext]
+    private[Contexts] var changeOwnersInUse: Int = 0
+
+    private[Contexts] val comparers = new mutable.ArrayBuffer[TypeComparer]
+    private[Contexts] var comparersInUse: Int = 0
+
+    private var charArray = new Array[Char](256)
+
+    private[core] val reusableDataReader = ReusableInstance(new ReusableDataReader())
+
+    def sharedCharArray(len: Int): Array[Char] =
+      while len > charArray.length do
+        charArray = new Array[Char](charArray.length * 2)
+      charArray
+
+    def reset(): Unit =
+      uniques.clear()
+      uniqueAppliedTypes.clear()
+      uniqueNamedTypes.clear()
+      emptyTypeBounds = null
+      emptyWildcardBounds = null
       errorTypeMsg.clear()
       sources.clear()
-      sourceNamed.clear()
-    }
+      files.clear()
+      comparers.clear()  // forces re-evaluation of top and bottom classes in TypeComparer
 
     // Test that access is single threaded
 
