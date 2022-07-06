@@ -22,7 +22,7 @@ import scala.util.control.NonFatal
 import typer.ProtoTypes.constrained
 import typer.Applications.productSelectorTypes
 import reporting.trace
-import annotation.constructorOnly
+import annotation.{constructorOnly, tailrec}
 
 /** Provides methods to compare types.
  */
@@ -1027,7 +1027,7 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
         variancesConform(remainingTparams, tparams) && {
           val adaptedTycon =
             if d > 0 then
-              HKTypeLambda(remainingTparams.map(_.paramName))(
+              HKTypeLambda(remainingTparams.map(_.paramName), remainingTparams.map(_.paramPrecise))(
                 tl => remainingTparams.map(remainingTparam =>
                   tl.integrate(remainingTparams, remainingTparam.paramInfo).bounds),
                 tl => otherTycon.appliedTo(
@@ -2022,7 +2022,7 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
    *  to override `tp2` ? This is the case if they're pairwise >:>.
    */
   def matchingPolyParams(tp1: PolyType, tp2: PolyType): Boolean = {
-    def loop(formals1: List[Type], formals2: List[Type]): Boolean = formals1 match {
+    @tailrec def loop(formals1: List[Type], formals2: List[Type]): Boolean = formals1 match {
       case formal1 :: rest1 =>
         formals2 match {
           case formal2 :: rest2 =>
@@ -2035,7 +2035,7 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
       case nil =>
         formals2.isEmpty
     }
-    loop(tp1.paramInfos, tp2.paramInfos)
+    tp1.paramPrecises == tp2.paramPrecises && loop(tp1.paramInfos, tp2.paramInfos)
   }
 
   // Type equality =:=
@@ -2375,6 +2375,7 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
     else if (tparams1.hasSameLengthAs(tparams2))
       HKTypeLambda(
         paramNames = HKTypeLambda.syntheticParamNames(tparams1.length),
+        paramPrecises = Nil,
         variances =
           if tp1.isDeclaredVarianceLambda && tp2.isDeclaredVarianceLambda then
             tparams1.lazyZip(tparams2).map((p1, p2) => combineVariance(p1.paramVariance, p2.paramVariance))

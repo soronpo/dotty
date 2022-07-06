@@ -891,7 +891,7 @@ trait Applications extends Compatibility {
    */
   def typedApply(tree: untpd.Apply, pt: Type)(using Context): Tree = {
 
-    def realApply(using Context): Tree = {
+    def realApply(argsPrecises: List[Boolean] = Nil)(using Context): Tree = {
       val resultProto = tree.fun match
         case Select(New(tpt), _) if pt.isInstanceOf[ValueType] =>
           if tpt.isType && typedAheadType(tpt).tpe.typeSymbol.typeParams.isEmpty then
@@ -905,7 +905,7 @@ trait Applications extends Compatibility {
           // Do ignore other expected result types, since there might be an implicit conversion
           // on the result. We could drop this if we disallow unrestricted implicit conversions.
       val originalProto =
-        new FunProto(tree.args, resultProto)(this, tree.applyKind)(using argCtx(tree))
+        new FunProto(tree.args, resultProto)(this, tree.applyKind, argsPrecises = argsPrecises)(using argCtx(tree))
       record("typedApply")
       val fun1 = typedExpr(tree.fun, originalProto)
 
@@ -1015,6 +1015,29 @@ trait Applications extends Compatibility {
       }
     }
 
+    /** Attempts to run `realApply`, and if implicit conversions should be
+     *  precise, then re-run `realApply` with the precise enforcement.
+     */
+    def realApplyWithRetry(using Context): Tree = {
+      val firstAttemptCtx = ctx.fresh.setNewTyperState()
+      val app = realApply()(using firstAttemptCtx)
+      app match
+        // If we are already in precise mode, then the arguments are already typed precisely,
+        // so there is no need for any additional logic.
+        case Apply(_, args) if !ctx.mode.is(Mode.Precise) =>
+          val convArgsPrecises = args.map(firstAttemptCtx.typerState.hasPreciseConversion)
+          if (convArgsPrecises.contains(true))
+            val preciseCtx = ctx.fresh.setNewTyperState()
+            val app = realApply(convArgsPrecises)(using preciseCtx)
+            preciseCtx.typerState.commit()
+            app
+          else
+            firstAttemptCtx.typerState.commit()
+            app
+        case _ =>
+          firstAttemptCtx.typerState.commit()
+          app
+    }
     /** Convert expression like
      *
      *     e += (args)
@@ -1037,7 +1060,7 @@ trait Applications extends Compatibility {
     val app1 =
       if (untpd.isOpAssign(tree))
         tryEither {
-          realApply
+          realApplyWithRetry
         } { (failedVal, failedState) =>
           tryEither {
             typedOpAssign
@@ -1049,7 +1072,7 @@ trait Applications extends Compatibility {
       else {
         val app = tree.fun match
           case _: untpd.Splice if ctx.mode.is(Mode.QuotedPattern) => typedAppliedSplice(tree, pt)
-          case _ => realApply
+          case _ => realApplyWithRetry
         app match {
           case Apply(fn @ Select(left, _), right :: Nil) if fn.hasType =>
             val op = fn.symbol
@@ -1478,7 +1501,7 @@ trait Applications extends Compatibility {
     case mt: MethodType if mt.isImplicitMethod =>
       stripImplicit(resultTypeApprox(mt))
     case pt: PolyType =>
-      pt.derivedLambdaType(pt.paramNames, pt.paramInfos, stripImplicit(pt.resultType)).asInstanceOf[PolyType].flatten
+      pt.derivedLambdaType(pt.paramNames, pt.paramPrecises, pt.paramInfos, stripImplicit(pt.resultType)).asInstanceOf[PolyType].flatten
     case _ =>
       tp
   }
@@ -1588,7 +1611,7 @@ trait Applications extends Compatibility {
             // contain uninstantiated TypeVars, this could lead to cycles in
             // `isSubType` as a TypeVar might get constrained by a TypeRef it's
             // part of.
-            val tp1Params = tp1.newLikeThis(tp1.paramNames, tp1.paramInfos, defn.AnyType)
+            val tp1Params = tp1.newLikeThis(tp1.paramNames, tp1.paramPrecises, tp1.paramInfos, defn.AnyType)
             fullyDefinedType(tp1Params, "type parameters of alternative", alt1.symbol.srcPos)
 
             val tparams = newTypeParams(alt1.symbol, tp1.paramNames, EmptyFlags, tp1.instantiateParamInfos(_))
@@ -1677,9 +1700,9 @@ trait Applications extends Compatibility {
      */
     def widenGiven(tp: Type, alt: TermRef): Type = tp match {
       case mt: MethodType if mt.isImplicitMethod =>
-        mt.derivedLambdaType(mt.paramNames, mt.paramInfos, widenGiven(mt.resultType, alt))
+        mt.derivedLambdaType(mt.paramNames, Nil, mt.paramInfos, widenGiven(mt.resultType, alt))
       case pt: PolyType =>
-        pt.derivedLambdaType(pt.paramNames, pt.paramInfos, widenGiven(pt.resultType, alt))
+        pt.derivedLambdaType(pt.paramNames, pt.paramPrecises, pt.paramInfos, widenGiven(pt.resultType, alt))
       case rt =>
         if alt.symbol.isCoDefinedGiven(rt.typeSymbol) then tp.widenToParents
         else tp
@@ -2288,11 +2311,11 @@ trait Applications extends Compatibility {
     // The return type after truncation is not important
     def truncateExtension(tp: Type)(using Context): Type = tp match
       case poly: PolyType =>
-        poly.newLikeThis(poly.paramNames, poly.paramInfos, truncateExtension(poly.resType))
+        poly.newLikeThis(poly.paramNames, poly.paramPrecises, poly.paramInfos, truncateExtension(poly.resType))
       case meth: MethodType if meth.isContextualMethod =>
-        meth.newLikeThis(meth.paramNames, meth.paramInfos, truncateExtension(meth.resType))
+        meth.newLikeThis(meth.paramNames, meth.paramPrecises, meth.paramInfos, truncateExtension(meth.resType))
       case meth: MethodType =>
-        meth.newLikeThis(meth.paramNames, meth.paramInfos, defn.AnyType)
+        meth.newLikeThis(meth.paramNames, meth.paramPrecises, meth.paramInfos, defn.AnyType)
 
     def replaceCallee(inTree: Tree, replacement: Tree)(using Context): Tree = inTree match
       case Apply(fun, args) => Apply(replaceCallee(fun, replacement), args)

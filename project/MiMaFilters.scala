@@ -30,5 +30,23 @@ object MiMaFilters {
     ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeTreeModule.ref"),
 
     ProblemFilters.exclude[MissingClassProblem]("scala.annotation.since"),
+
+    // APIs will be added in 3.3.0
+    ProblemFilters.exclude[MissingClassProblem]("scala.annotation.precise"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.scala$quoted$Quotes$reflectModule$PolyTypeModule$$$outer"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.scala$quoted$Quotes$reflectModule$TypeLambdaModule$$$outer"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply$default$2$"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply$default$2"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#PolyTypeModule.apply"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply$default$4$"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply$default$4"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("scala.quoted.Quotes#reflectModule#TypeLambdaModule.apply"),
   )
 }
+

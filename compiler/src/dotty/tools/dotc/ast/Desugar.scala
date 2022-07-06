@@ -256,6 +256,14 @@ object desugar {
           evidenceParamBuf.toList)
   end elimContextBounds
 
+  //TODO: this is a hack. Typing causes problems
+  def isPreciseAnnot(tree: untpd.Tree)(using Context): Boolean =
+    inContext(ctx.fresh.setExploreTyperState()) {
+      try
+        ctx.typer.typedExpr(tree).tpe.classSymbol == defn.PreciseAnnot
+      catch case _ : Throwable => false
+    }
+
   def addDefaultGetters(meth: DefDef)(using Context): Tree =
 
     /** The longest prefix of parameter lists in paramss whose total number of
@@ -293,14 +301,42 @@ object desugar {
         vparam => toDefParam(vparam, keepAnnotations = true, keepDefault = false)
       }
 
+    def ignoreErrorsAndRun[R](op: => R): R =
+      val savedState = ctx.typerState.snapshot()
+      val savedReporter = ctx.reporter
+      ctx.typerState.setReporter(Reporter.NoReporter)
+      val ret = op
+      ctx.typerState.setReporter(savedReporter)
+      ctx.typerState.resetTo(savedState)
+      ret
+
+    // gets arguments should be considered precise
+    val paramPrecises: List[Boolean] =
+      // indication for the type parameters preciseness
+      val preciseMap : Map[TypeName, Boolean] =
+        meth.leadingTypeParams.map(t => (t.name, t.mods.annotations.exists(isPreciseAnnot))).toMap
+      // mapping type parameters preciseness onto term parameter preciseness
+      meth.termParamss.view.flatten.map(p => p.tpt).map {
+        case Ident(n) => preciseMap.getOrElse(n.asTypeName, false)
+        case _ => false
+      }.toList
+
     def defaultGetters(paramss: List[ParamClause], n: Int): List[DefDef] = paramss match
       case ValDefs(vparam :: vparams) :: paramss1 =>
         def defaultGetter: DefDef =
+          val (rhs, tpt) =
+            // if the parameter is precise, then we add explicit return type for the
+            // definition to keep the precise type after precise typing.
+            if paramPrecises(n) then
+              val rhsTyped = withMode(Mode.Precise){ctx.typer.typedExpr(vparam.rhs)}
+              (TypedSplice(rhsTyped), TypeTree(rhsTyped.tpe))
+            // otherwise, the desugaring is unchanged from the status quo
+            else (vparam.rhs, TypeTree())
           DefDef(
             name = DefaultGetterName(meth.name, n),
             paramss = getterParamss(n),
-            tpt = TypeTree(),
-            rhs = vparam.rhs
+            tpt = tpt,
+            rhs = rhs
           )
           .withMods(Modifiers(
             meth.mods.flags & (AccessFlags | Synthetic) | (vparam.mods.flags & Inline),
@@ -381,9 +417,10 @@ object desugar {
 
   @sharable private val synthetic = Modifiers(Synthetic)
 
-  private def toDefParam(tparam: TypeDef, keepAnnotations: Boolean): TypeDef = {
+  private def toDefParam(tparam: TypeDef, keepAnnotations: Boolean)(using Context): TypeDef = {
     var mods = tparam.rawMods
-    if (!keepAnnotations) mods = mods.withAnnotations(Nil)
+    val onlyPreciseAnnot = mods.annotations.filter(isPreciseAnnot)
+    if (!keepAnnotations) mods = mods.withAnnotations(onlyPreciseAnnot)
     tparam.withMods(mods & EmptyFlags | Param)
   }
   private def toDefParam(vparam: ValDef, keepAnnotations: Boolean, keepDefault: Boolean): ValDef = {

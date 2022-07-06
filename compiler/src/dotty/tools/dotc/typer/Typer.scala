@@ -644,9 +644,45 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
   def typedSelect(tree: untpd.Select, pt: Type)(using Context): Tree = {
     record("typedSelect")
 
-    def typeSelectOnTerm(using Context): Tree =
-      val qual = typedExpr(tree.qualifier, shallowSelectionProto(tree.name, pt, this))
+    def typeSelectOnTerm(precise: Boolean)(using Context): Tree =
+      val preciseMode = if (precise) Mode.Precise else Mode.None
+      val qual = withMode(preciseMode){ typedExpr(tree.qualifier, shallowSelectionProto(tree.name, pt, this)) }
       typedSelect(tree, pt, qual).withSpan(tree.span).computeNullable()
+
+    /** Attempts to do the type select, but if this is an extension method or implicit class
+     *  and the qualifier is an argument that needs to be precise, then we need to rerun the
+     *  type select with precise enforcement on.
+     */
+    def typeSelectOnTermWithPreciseRetry(using Context): Tree =
+      val firstAttemptCtx = ctx.fresh.setNewTyperState()
+      val selected = typeSelectOnTerm(precise = false)(using firstAttemptCtx)
+      object Extract:
+        @tailrec def unapply(tree: Tree): Option[Apply] =
+          tree match
+            // extension method with arguments
+            case TypeApply(fun: Apply, _) => Some(fun)
+            // extension method with no arguments
+            case apply : Apply => Some(apply)
+            // deeper nesting or a result of implicit classes
+            case Select(tree, _) => unapply(tree)
+            case _ => None
+      selected match
+        // `fun` may not be typed do to errors like ambiguity in typing, so we check for that.
+        // If we are already in precise mode, then the qualifier is already typed precisely,
+        // so there is no need for any additional logic.
+        case Extract(Apply(TypeApply(fun, _), _)) if fun.hasType && !ctx.mode.is(Mode.Precise) =>
+          fun.tpe.widen match
+            case pt: PolyType if pt.paramPrecises.headOption.contains(true) =>
+              val preciseCtx = ctx.fresh.setNewTyperState()
+              val selected = typeSelectOnTerm(precise = true)(using preciseCtx)
+              preciseCtx.typerState.commit()
+              selected
+            case _ =>
+              firstAttemptCtx.typerState.commit()
+              selected
+        case _ =>
+          firstAttemptCtx.typerState.commit()
+          selected
 
     def javaSelectOnType(qual: Tree)(using Context) =
       // semantic name conversion for `O$` in java code
@@ -672,7 +708,7 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
     }
 
     def selectWithFallback(fallBack: Context ?=> Tree) =
-      tryAlternatively(typeSelectOnTerm)(fallBack)
+      tryAlternatively(typeSelectOnTermWithPreciseRetry)(fallBack)
 
     if (tree.qualifier.isType) {
       val qual1 = typedType(tree.qualifier, shallowSelectionProto(tree.name, pt, this))
@@ -683,7 +719,7 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
       // value A and from the type A. We have to try both.
       selectWithFallback(tryJavaSelectOnType) // !!! possibly exponential bcs of qualifier retyping
     else
-      typeSelectOnTerm
+      typeSelectOnTermWithPreciseRetry
   }
 
   def typedThis(tree: untpd.This)(using Context): Tree = {
@@ -1059,7 +1095,10 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
 
   def typedBlock(tree: untpd.Block, pt: Type)(using Context): Tree = {
     val (stats1, exprCtx) = withoutMode(Mode.Pattern) {
-      typedBlockStats(tree.stats)
+      // in all cases except a closure block, we disable precise type enforcement
+      tree.expr match
+        case _ : untpd.Closure => typedBlockStats(tree.stats)
+        case _ => withoutMode(Mode.Precise){ typedBlockStats(tree.stats) }
     }
     var expr1 = typedExpr(tree.expr, pt.dropIfProto)(using exprCtx)
 
@@ -1903,7 +1942,7 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
   }
 
   def typedInlined(tree: untpd.Inlined, pt: Type)(using Context): Tree = {
-    val (bindings1, exprCtx) = typedBlockStats(tree.bindings)
+    val (bindings1, exprCtx) = withoutMode(Mode.Precise){ typedBlockStats(tree.bindings) }
     val expansion1 = typed(tree.expansion, pt)(using inlineContext(tree.call)(using exprCtx))
     assignType(cpy.Inlined(tree)(tree.call, bindings1.asInstanceOf[List[MemberDef]], expansion1),
         bindings1, expansion1)
@@ -2684,7 +2723,7 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
           pkg.moduleClass.info.decls.lookup(topLevelClassName).ensureCompleted()
           var stats1 = typedStats(tree.stats, pkg.moduleClass)._1
           if (!ctx.isAfterTyper)
-            stats1 = stats1 ++ typedBlockStats(MainProxies.proxies(stats1))._1
+            stats1 = stats1 ++ withoutMode(Mode.Precise){ typedBlockStats(MainProxies.proxies(stats1))._1 }
           cpy.PackageDef(tree)(pid1, stats1).withType(pkg.termRef)
         }
       case _ =>
@@ -3042,7 +3081,48 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
         typed(tree, pt, locked)(using ctx.withSource(tree.source))
       else if ctx.run.nn.isCancelled then
         tree.withType(WildcardType)
-      else adapt(typedUnadapted(tree, pt, locked), pt, locked)
+      else
+        val tu = typedUnadapted(tree, pt, locked)
+        pt match
+          // If we are already in precise mode, then the arguments are already typed precisely,
+          // so there is no need for any additional logic.
+          case pt : FunProto if !ctx.mode.is(Mode.Precise) =>
+            extension (tpe: Type) def getArgsPrecises: List[Boolean] = tpe.widen match
+              case mt: MethodType => mt.paramInfos.map(_.isPrecise)
+              case pt: PolyType => pt.resType.getArgsPrecises
+              case _ => Nil
+            val argsPrecises = tu.tpe.getArgsPrecises
+            // if the function arguments are known to be precise, then we update the
+            // proto with this information and later propagate its state back to the
+            // original proto.
+            if (argsPrecises.contains(true))
+              val ptPrecises = pt.derivedFunProto(argsPrecises = argsPrecises)
+              val adapted = adapt(tu, ptPrecises, locked)
+              pt.resetTo(ptPrecises.snapshot)
+              adapted
+            // otherwise, we need to check for overloaded function, because in that
+            // case we may not know if the final adapted function will be precise.
+            else tu.tpe match
+              // the function is overloaded, so we preserve the typer and proto state,
+              // adapt the tree, and then check if the arguments should be considered as
+              // precise. if so, then we need to recover the typer state and proto
+              // state, and re-adapt the tree with the precise enforcement.
+              case v: TermRef if v.isOverloaded =>
+                val savedTyperState = ctx.typerState.snapshot()
+                val savedProtoState = pt.snapshot
+                val adaptedMaybePrecise = adapt(tu, pt, locked)
+                val argsPrecises = adaptedMaybePrecise.tpe.getArgsPrecises
+                if (argsPrecises.contains(true))
+                  val ptPrecises = pt.derivedFunProto(argsPrecises = argsPrecises)
+                  ctx.typerState.resetTo(savedTyperState)
+                  pt.resetTo(savedProtoState)
+                  val adapted = adapt(tu, ptPrecises, locked)
+                  pt.resetTo(ptPrecises.snapshot)
+                  adapted
+                else adaptedMaybePrecise
+              // the function is not overloaded or has precise arguments
+              case _ => adapt(tu, pt, locked)
+          case _ => adapt(tu, pt, locked)
     }
 
   def typed(tree: untpd.Tree, pt: Type = WildcardType)(using Context): Tree =
@@ -3970,6 +4050,28 @@ class Typer(@constructorOnly nestingLevel: Int = 0) extends Namer
             case SearchSuccess(found, _, _, isExtension) =>
               if isExtension then found
               else
+                object Extract:
+                  @tailrec def unapply(tree: Tree): Option[Tree] =
+                    tree match
+                      case Apply(tree, _) => unapply(tree)
+                      case Select(tree, _) => unapply(tree)
+                      case ta: TypeApply => Some(ta.fun)
+                      case _ => None
+                found match
+                  case Extract(fun) =>
+                    fun.tpe.widen match
+                      case pt: PolyType => pt.resType match
+                        case mt: MethodType => mt.paramInfos.headOption.foreach {
+                          case v if v.isPrecise =>
+                            ctx.typerState.addPreciseConversion(found)
+                          case _ =>
+                        }
+                        case AppliedType(tycon, from :: _)
+                          if tycon.derivesFrom(defn.ConversionClass) && from.isPrecise =>
+                          ctx.typerState.addPreciseConversion(found)
+                        case _ =>
+                      case _ =>
+                  case _ =>
                 checkImplicitConversionUseOK(found)
                 withoutMode(Mode.ImplicitsEnabled)(readapt(found))
             case failure: SearchFailure =>

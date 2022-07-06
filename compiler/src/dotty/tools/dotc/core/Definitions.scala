@@ -164,7 +164,7 @@ class Definitions {
                     useCompleter: Boolean = false) = {
     val tparamNames = PolyType.syntheticParamNames(typeParamCount)
     val tparamInfos = tparamNames map (_ => bounds)
-    def ptype = PolyType(tparamNames)(_ => tparamInfos, resultTypeFn)
+    def ptype = PolyType(tparamNames, Nil)(_ => tparamInfos, resultTypeFn)
     val info =
       if (useCompleter)
         new LazyType {
@@ -695,7 +695,7 @@ class Definitions {
                   case meth: MethodType =>
                     info.derivedLambdaType(
                       resType = meth.derivedLambdaType(
-                      paramNames = Nil, paramInfos = Nil))
+                      paramNames = Nil, paramPrecises = Nil, paramInfos = Nil))
                 }
             }
             val argConstr = constr.copy().entered
@@ -962,6 +962,7 @@ class Definitions {
   @tu lazy val NowarnAnnot: ClassSymbol = requiredClass("scala.annotation.nowarn")
   @tu lazy val TransparentTraitAnnot: ClassSymbol = requiredClass("scala.annotation.transparentTrait")
   @tu lazy val NativeAnnot: ClassSymbol = requiredClass("scala.native")
+  @tu lazy val PreciseAnnot: ClassSymbol = requiredClass("scala.annotation.precise")
   @tu lazy val RepeatedAnnot: ClassSymbol = requiredClass("scala.annotation.internal.Repeated")
   @tu lazy val SourceFileAnnot: ClassSymbol = requiredClass("scala.annotation.internal.SourceFile")
   @tu lazy val ScalaSignatureAnnot: ClassSymbol = requiredClass("scala.reflect.ScalaSignature")

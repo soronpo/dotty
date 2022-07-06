@@ -12,6 +12,7 @@ import collection.mutable
 import java.lang.ref.WeakReference
 import util.{Stats, SimpleIdentityMap}
 import Decorators._
+import ast.tpd.Tree
 
 import scala.annotation.internal.sharable
 
@@ -93,6 +94,11 @@ class TyperState() {
 
   private var upLevels: LevelMap = _
 
+  private var myPreciseConversions: Set[Tree] = Set()
+  def hasPreciseConversion(tree: Tree): Boolean = myPreciseConversions.contains(tree)
+  def addPreciseConversion(tree: Tree): Unit = myPreciseConversions = myPreciseConversions + tree
+  def getPreciseConversions: Set[Tree] = myPreciseConversions
+
   /** Initializes all fields except reporter, isCommittable, which need to be
    *  set separately.
    */
@@ -105,6 +111,7 @@ class TyperState() {
     this.myOwnedVars = SimpleIdentitySet.empty
     this.upLevels = SimpleIdentityMap.empty
     this.isCommitted = false
+    this.myPreciseConversions = Set()
     this
 
   /** A fresh typer state with the same constraint as this one. */
@@ -161,6 +168,8 @@ class TyperState() {
     assert(isCommittable, s"$this is not committable")
     assert(!isCommitted, s"$this is already committed")
     val targetState = ctx.typerState
+
+    targetState.myPreciseConversions = targetState.myPreciseConversions ++ myPreciseConversions
 
     val nothingToCommit = (constraint eq targetState.constraint) && !reporter.hasUnreportedMessages
     assert(!targetState.isCommitted || nothingToCommit ||

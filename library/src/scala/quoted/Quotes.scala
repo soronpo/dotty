@@ -3137,7 +3137,7 @@ trait Quotes { self: runtime.QuoteUnpickler & runtime.QuoteMatching =>
 
     /** Methods of the module object `val PolyType` */
     trait PolyTypeModule { this: PolyType.type =>
-      def apply(paramNames: List[String])(paramBoundsExp: PolyType => List[TypeBounds], resultTypeExp: PolyType => TypeRepr): PolyType
+      def apply(paramNames: List[String], paramPrecises: List[Boolean] = Nil)(paramBoundsExp: PolyType => List[TypeBounds], resultTypeExp: PolyType => TypeRepr): PolyType
       def unapply(x: PolyType): (List[String], List[TypeBounds], TypeRepr)
     }
 
@@ -3163,7 +3163,7 @@ trait Quotes { self: runtime.QuoteUnpickler & runtime.QuoteMatching =>
 
     /** Methods of the module object `val TypeLambda` */
     trait TypeLambdaModule { this: TypeLambda.type =>
-      def apply(paramNames: List[String], boundsFn: TypeLambda => List[TypeBounds], bodyFn: TypeLambda => TypeRepr): TypeLambda
+      def apply(paramNames: List[String], boundsFn: TypeLambda => List[TypeBounds], bodyFn: TypeLambda => TypeRepr, paramPrecises: List[Boolean] = Nil): TypeLambda
       def unapply(x: TypeLambda): (List[String], List[TypeBounds], TypeRepr)
     }
 

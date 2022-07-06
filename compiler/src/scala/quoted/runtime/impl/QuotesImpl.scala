@@ -2146,8 +2146,8 @@ class QuotesImpl private (using val ctx: Context) extends Quotes, QuoteUnpickler
     end PolyTypeTypeTest
 
     object PolyType extends PolyTypeModule:
-      def apply(paramNames: List[String])(paramBoundsExp: PolyType => List[TypeBounds], resultTypeExp: PolyType => TypeRepr): PolyType =
-        Types.PolyType(paramNames.map(_.toTypeName))(paramBoundsExp, resultTypeExp)
+      def apply(paramNames: List[String], paramPrecises: List[Boolean] = Nil)(paramBoundsExp: PolyType => List[TypeBounds], resultTypeExp: PolyType => TypeRepr): PolyType =
+        Types.PolyType(paramNames.map(_.toTypeName), paramPrecises)(paramBoundsExp, resultTypeExp)
       def unapply(x: PolyType): (List[String], List[TypeBounds], TypeRepr) =
         (x.paramNames.map(_.toString), x.paramBounds, x.resType)
     end PolyType
@@ -2168,8 +2168,8 @@ class QuotesImpl private (using val ctx: Context) extends Quotes, QuoteUnpickler
     end TypeLambdaTypeTest
 
     object TypeLambda extends TypeLambdaModule:
-      def apply(paramNames: List[String], boundsFn: TypeLambda => List[TypeBounds], bodyFn: TypeLambda => TypeRepr): TypeLambda =
-        Types.HKTypeLambda(paramNames.map(_.toTypeName))(boundsFn, bodyFn)
+      def apply(paramNames: List[String], boundsFn: TypeLambda => List[TypeBounds], bodyFn: TypeLambda => TypeRepr, paramPrecises: List[Boolean] = Nil): TypeLambda =
+        Types.HKTypeLambda(paramNames.map(_.toTypeName), paramPrecises)(boundsFn, bodyFn)
       def unapply(x: TypeLambda): (List[String], List[TypeBounds], TypeRepr) =
         (x.paramNames.map(_.toString), x.paramBounds, x.resType)
     end TypeLambda

@@ -13,7 +13,7 @@ import typer.ProtoTypes.{newTypeVar, representedParamRef}
 import UnificationDirection.*
 import NameKinds.AvoidNameKind
 import util.SimpleIdentitySet
-
+import annotation.tailrec
 /** Methods for adding constraints and solving them.
  *
  * What goes into a Constraint as opposed to a ConstrainHandler?
@@ -654,8 +654,35 @@ trait ConstraintHandling {
       case WildcardType(optBounds) => optBounds.exists && isSingleton(optBounds.bounds.hi)
       case _ => isSubTypeWhenFrozen(tp, defn.SingletonType)
 
+    def derivesPreciseAnnot(tp: Type): Boolean =
+      tp.derivesAnnotWith(_.matches(defn.PreciseAnnot))
+
+    def dependsOnParam(tp: Type, param: TypeParamRef) : Boolean =
+      tp match
+        case v: TypeVar => v.origin == param
+        case AppliedType(_, args) => args.exists(dependsOnParam(_, param))
+        case _ => false
+
+    def isPreciseRecur(tp: Type, uninstParams : List[TypeParamRef]): Boolean = tp match
+      //the type parameter is annotated as precise
+      case param: TypeParamRef if param.isPrecise | ctx.mode.is(Mode.Precise) => true
+      case param: TypeParamRef =>
+        //the type parameter is from an applied type and there it is annotated as precise
+        constraint.domainLambdas.view.flatMap(_.resType.paramInfoss.flatten).flatMap {
+          case AppliedType(tycon, args) =>
+            val preciseArgIdx = tycon.typeParamSymbols.indexWhere(_.paramPrecise)
+            if (preciseArgIdx >= 0) Some(args(preciseArgIdx) == param)
+            else None
+          case p : TypeParamRef => if (p == param) Some(false) else None
+          case _ => None
+        }.headOption.getOrElse(false)
+      case _ => false
+
+    def isPrecise(tp: Type): Boolean =
+      isPreciseRecur(tp, constraint.uninstVars.view.reverse.map(_.origin).toList)
+
     val wideInst =
-      if isSingleton(bound) then inst
+      if isSingleton(bound) || isPrecise(bound) then inst
       else dropTransparentTraits(widenIrreducible(widenOr(widenSingle(inst))), bound)
     wideInst match
       case wideInst: TypeRef if wideInst.symbol.is(Module) =>

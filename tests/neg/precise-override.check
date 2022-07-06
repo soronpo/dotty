@@ -1,0 +1,14 @@
+-- [E163] Declaration Error: tests/neg/precise-override.scala:16:8 -----------------------------------------------------
+16 |    def id[@precise T](t: T): T = ??? // error
+   |        ^
+   |        error overriding method id in class Foo of type [T](t: T): T;
+   |          method id of type [@precise T](t: T): T has incompatible type
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E163] Declaration Error: tests/neg/precise-override.scala:24:8 -----------------------------------------------------
+24 |    def id[T](t: T): T = ??? // error
+   |        ^
+   |        error overriding method id in class Foo of type [@precise T](t: T): T;
+   |          method id of type [T](t: T): T has incompatible type
+   |
+   | longer explanation available when compiling with `-explain`

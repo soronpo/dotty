@@ -1,0 +1,36 @@
+-- Error: tests/neg/precise-alias-extends.scala:23:28 ------------------------------------------------------------------
+23 |  type FooInvAlias[@precise A] = FooInv[A] // error
+   |                   ^^^^^^^^^^
+   |            precise type parameter A occurs in imprecise position in preciseTypeAliasExtendMorePrecise.FooInv[A]
+-- Error: tests/neg/precise-alias-extends.scala:28:29 ------------------------------------------------------------------
+28 |  type FooCovAlias[@precise +A] = FooCov[A] // error
+   |                   ^^^^^^^^^^^
+   |            precise type parameter A occurs in imprecise position in preciseTypeAliasExtendMorePrecise.FooCov[A]
+-- Error: tests/neg/precise-alias-extends.scala:32:29 ------------------------------------------------------------------
+32 |  type FooConAlias[@precise -A] = FooCon[A] // error
+   |                   ^^^^^^^^^^^
+   |            precise type parameter A occurs in imprecise position in preciseTypeAliasExtendMorePrecise.FooCon[A]
+-- Error: tests/neg/precise-alias-extends.scala:38:21 ------------------------------------------------------------------
+38 |  class FooInvExtend[A](val value : A) extends FooInv[A] // error
+   |                     ^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooInv[A]
+-- Error: tests/neg/precise-alias-extends.scala:39:19 ------------------------------------------------------------------
+39 |  type FooInvAlias[A] = FooInv[A] // error
+   |                   ^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooInv[A]
+-- Error: tests/neg/precise-alias-extends.scala:43:22 ------------------------------------------------------------------
+43 |  class FooCovExtend[+A](val value : A) extends FooCov[A] // error
+   |                     ^^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooCov[A]
+-- Error: tests/neg/precise-alias-extends.scala:44:20 ------------------------------------------------------------------
+44 |  type FooCovAlias[+A] = FooCov[A] // error
+   |                   ^^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooCov[A]
+-- Error: tests/neg/precise-alias-extends.scala:47:22 ------------------------------------------------------------------
+47 |  class FooConExtend[-A] extends FooCon[A] // error
+   |                     ^^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooCon[A]
+-- Error: tests/neg/precise-alias-extends.scala:48:20 ------------------------------------------------------------------
+48 |  type FooConAlias[-A] = FooCon[A] // error
+   |                   ^^
+   |            imprecise type parameter A occurs in precise position in preciseTypeAliasExtendLessPrecise.FooCon[A]

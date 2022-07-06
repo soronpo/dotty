@@ -324,7 +324,7 @@ class TreeUnpickler(reader: TastyReader,
               nameReader.skipTree() // skip result
               val paramReader = nameReader.fork
               val (paramNames, mods) = nameReader.readParamNamesAndMods(end)
-              companionOp(mods)(paramNames.map(nameMap))(
+              companionOp(mods)(paramNames.map(nameMap), Nil)(
                 pt => registeringType(pt, paramReader.readParamTypes[PInfo](paramNames.length)),
                 pt => readType())
             })

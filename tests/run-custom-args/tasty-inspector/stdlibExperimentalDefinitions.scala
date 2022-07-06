@@ -58,6 +58,9 @@ val experimentalDefinitionInLibrary = Set(
   // Need experimental annotation macros to check that design works.
   "scala.quoted.Quotes.reflectModule.ClassDefModule.apply",
   "scala.quoted.Quotes.reflectModule.SymbolModule.newClass",
+
+  ////New APIs: precise
+  "scala.annotation.precise",
 )
 
 
