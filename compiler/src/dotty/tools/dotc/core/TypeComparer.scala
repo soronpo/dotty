@@ -1461,20 +1461,42 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
           false
       }
 
-    /** Compare `tp` of form `S[arg]` with `other`, via ">:>" if fromBelow is true, "<:<" otherwise.
+    /** Compare `tp` of form `S[arg <: Int]` with `other`, via ">:>" if fromBelow is true, "<:<" otherwise.
      *  If `arg` is a Nat constant `n`, proceed with comparing `n + 1` and `other`.
      *  Otherwise, if `other` is a Nat constant `n`, proceed with comparing `arg` and `n - 1`.
      */
-    def compareS(tp: AppliedType, other: Type, fromBelow: Boolean): Boolean = tp.args match {
+    def compareS_Int(tp: AppliedType, other: Type, fromBelow: Boolean): Boolean = tp.args match {
       case arg :: Nil =>
-        natValue(arg) match {
+        natValueInt(arg) match {
           case Some(n) if n != Int.MaxValue =>
             val succ = ConstantType(Constant(n + 1))
             if (fromBelow) recur(other, succ) else recur(succ, other)
           case _ =>
-            natValue(other) match {
+            natValueInt(other) match {
               case Some(n) if n > 0 =>
                 val pred = ConstantType(Constant(n - 1))
+                if (fromBelow) recur(pred, arg) else recur(arg, pred)
+              case _ =>
+                false
+            }
+        }
+      case _ => false
+    }
+
+    /** Compare `tp` of form `S[arg <: Long]` with `other`, via ">:>" if fromBelow is true, "<:<" otherwise.
+     *  If `arg` is a Nat constant `n`, proceed with comparing `n + 1L` and `other`.
+     *  Otherwise, if `other` is a Nat constant `n`, proceed with comparing `arg` and `n - 1L`.
+     */
+    def compareS_Long(tp: AppliedType, other: Type, fromBelow: Boolean): Boolean = tp.args match {
+      case arg :: Nil =>
+        natValueLong(arg) match {
+          case Some(n) if n != Long.MaxValue =>
+            val succ = ConstantType(Constant(n + 1L))
+            if (fromBelow) recur(other, succ) else recur(succ, other)
+          case _ =>
+            natValueLong(other) match {
+              case Some(n) if n > 0L =>
+                val pred = ConstantType(Constant(n - 1L))
                 if (fromBelow) recur(pred, arg) else recur(arg, pred)
               case _ =>
                 false
@@ -1488,7 +1510,8 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
      *  Delegates to compareS if `tycon` is scala.compiletime.S. Otherwise, constant folds if possible.
      */
     def compareCompiletimeAppliedType(tp: AppliedType, other: Type, fromBelow: Boolean): Boolean = {
-      if (defn.isCompiletime_S(tp.tycon.typeSymbol)) compareS(tp, other, fromBelow)
+      if (defn.isCompiletime_S_Int(tp.tycon.typeSymbol)) compareS_Int(tp, other, fromBelow)
+      else if (defn.isCompiletime_S_Long(tp.tycon.typeSymbol)) compareS_Long(tp, other, fromBelow)
       else {
         val folded = tp.tryCompiletimeConstantFold
         if (fromBelow) recur(other, folded) else recur(folded, other)
@@ -1607,8 +1630,14 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
   }
 
   /** Optionally, the `n` such that `tp <:< ConstantType(Constant(n: Int))` */
-  def natValue(tp: Type): Option[Int] = constValue(tp) match {
+  def natValueInt(tp: Type): Option[Int] = constValue(tp) match {
     case Some(Constant(n: Int)) if n >= 0 => Some(n)
+    case _ => None
+  }
+
+  /** Optionally, the `n` such that `tp <:< ConstantType(Constant(n: Long))` */
+  def natValueLong(tp: Type): Option[Long] = constValue(tp) match {
+    case Some(Constant(n: Long)) if n >= 0L => Some(n)
     case _ => None
   }
 

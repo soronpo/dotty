@@ -83,7 +83,8 @@ object TypeEval:
       // occur since the type signature of the operation enforces the proper number of args.
         assert(tp.args.length == expectedNum, s"Type operation expects $expectedNum arguments but found ${tp.args.length}")
 
-      def natValue(tp: Type): Option[Int] = intValue(tp).filter(n => n >= 0 && n < Int.MaxValue)
+      def natValueInt(tp: Type): Option[Int] = intValue(tp).filter(n => n >= 0 && n < Int.MaxValue)
+      def natValueLong(tp: Type): Option[Long] = longValue(tp).filter(n => n >= 0L && n < Long.MaxValue)
 
       // Runs the op and returns the result as a constant type.
       // If the op throws an exception, then this exception is converted into a type error.
@@ -125,15 +126,14 @@ object TypeEval:
         val name = tycon.symbol.name
         val owner = tycon.symbol.owner
         val constantType =
-          if defn.isCompiletime_S(tycon.symbol) then
-            constantFold1(natValue, _ + 1)
-          else if owner == defn.CompiletimeOpsAnyModuleClass then name match
+          if owner == defn.CompiletimeOpsAnyModuleClass then name match
             case tpnme.Equals     => constantFold2(constValue, _ == _)
             case tpnme.NotEquals  => constantFold2(constValue, _ != _)
             case tpnme.ToString   => constantFold1(constValue, _.toString)
             case tpnme.IsConst    => isConst(tp.args.head).map(b => ConstantType(Constant(b)))
             case _ => None
           else if owner == defn.CompiletimeOpsIntModuleClass then name match
+            case tpnme.S          => constantFold1(natValueInt, _ + 1)
             case tpnme.Abs        => constantFold1(intValue, _.abs)
             case tpnme.Negate     => constantFold1(intValue, x => -x)
             // ToString is deprecated for ops.int, and moved to ops.any
@@ -161,6 +161,7 @@ object TypeEval:
             case tpnme.ToDouble   => constantFold1(intValue, _.toDouble)
             case _ => None
           else if owner == defn.CompiletimeOpsLongModuleClass then name match
+            case tpnme.S          => constantFold1(natValueLong, _ + 1L)
             case tpnme.Abs        => constantFold1(longValue, _.abs)
             case tpnme.Negate     => constantFold1(longValue, x => -x)
             case tpnme.Plus       => constantFold2(longValue, _ + _)

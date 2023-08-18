@@ -1247,8 +1247,11 @@ class Definitions {
     case ByNameFunction(_) => true
     case _ => false
 
-  final def isCompiletime_S(sym: Symbol)(using Context): Boolean =
+  final def isCompiletime_S_Int(sym: Symbol)(using Context): Boolean =
     sym.name == tpnme.S && sym.owner == CompiletimeOpsIntModuleClass
+
+  final def isCompiletime_S_Long(sym: Symbol)(using Context): Boolean =
+    sym.name == tpnme.S && sym.owner == CompiletimeOpsLongModuleClass
 
   private val compiletimePackageAnyTypes: Set[Name] = Set(
     tpnme.Equals, tpnme.NotEquals, tpnme.IsConst, tpnme.ToString
@@ -1260,10 +1263,12 @@ class Definitions {
   )
   private val compiletimePackageIntTypes: Set[Name] = compiletimePackageNumericTypes ++ Set[Name](
     tpnme.ToString, // ToString is moved to ops.any and deprecated for ops.int
+    tpnme.S,
     tpnme.NumberOfLeadingZeros, tpnme.ToLong, tpnme.ToFloat, tpnme.ToDouble,
     tpnme.Xor, tpnme.BitwiseAnd, tpnme.BitwiseOr, tpnme.ASR, tpnme.LSL, tpnme.LSR
   )
   private val compiletimePackageLongTypes: Set[Name] = compiletimePackageNumericTypes ++ Set[Name](
+    tpnme.S,
     tpnme.NumberOfLeadingZeros, tpnme.ToInt, tpnme.ToFloat, tpnme.ToDouble,
     tpnme.Xor, tpnme.BitwiseAnd, tpnme.BitwiseOr, tpnme.ASR, tpnme.LSL, tpnme.LSR
   )
@@ -1290,8 +1295,7 @@ class Definitions {
   final def isCompiletimeAppliedType(sym: Symbol)(using Context): Boolean =
     compiletimePackageOpTypes.contains(sym.name)
     && (
-         isCompiletime_S(sym)
-      || sym.owner == CompiletimeOpsAnyModuleClass && compiletimePackageAnyTypes.contains(sym.name)
+      sym.owner == CompiletimeOpsAnyModuleClass && compiletimePackageAnyTypes.contains(sym.name)
       || sym.owner == CompiletimeOpsIntModuleClass && compiletimePackageIntTypes.contains(sym.name)
       || sym.owner == CompiletimeOpsLongModuleClass && compiletimePackageLongTypes.contains(sym.name)
       || sym.owner == CompiletimeOpsFloatModuleClass && compiletimePackageFloatTypes.contains(sym.name)
