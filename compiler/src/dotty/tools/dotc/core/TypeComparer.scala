@@ -1471,12 +1471,12 @@ class TypeComparer(@constructorOnly initctx: Context) extends ConstraintHandling
           case Some(n) if n != Int.MaxValue =>
             val succ = ConstantType(Constant(n + 1))
             if (fromBelow) recur(other, succ) else recur(succ, other)
-          case none =>
+          case _ =>
             natValue(other) match {
               case Some(n) if n > 0 =>
                 val pred = ConstantType(Constant(n - 1))
                 if (fromBelow) recur(pred, arg) else recur(arg, pred)
-              case none =>
+              case _ =>
                 false
             }
         }
