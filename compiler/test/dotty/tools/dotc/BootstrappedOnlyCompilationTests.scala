@@ -2,12 +2,15 @@ package dotty
 package tools
 package dotc
 
+import scala.language.unsafeNulls
+
 import org.junit.{ Test, BeforeClass, AfterClass }
 import org.junit.Assert._
 import org.junit.Assume._
 import org.junit.experimental.categories.Category
 
 import scala.concurrent.duration._
+import reporting.TestReporter
 import vulpix._
 
 import java.nio.file._
@@ -26,9 +29,6 @@ class BootstrappedOnlyCompilationTests {
     aggregateTests(
       compileFilesInDir("tests/bench", defaultOptions.without("-Yno-deep-subtypes")),
       compileFilesInDir("tests/pos-macros", defaultOptions.and("-Xcheck-macros")),
-      compileFilesInDir("tests/pos-custom-args/semanticdb", defaultOptions.and("-Xsemanticdb")),
-      compileDir("tests/pos-special/i7592", defaultOptions.and("-Yretain-trees")),
-      compileDir("tests/pos-special/i11331.1", defaultOptions),
     ).checkCompile()
   }
 
@@ -97,10 +97,8 @@ class BootstrappedOnlyCompilationTests {
 
   @Test def negMacros: Unit = {
     implicit val testGroup: TestGroup = TestGroup("compileNegWithCompiler")
-    aggregateTests(
-      compileFilesInDir("tests/neg-macros", defaultOptions.and("-Xcheck-macros")),
-      compileFile("tests/pos-macros/i9570.scala", defaultOptions.and("-Xfatal-warnings")),
-    ).checkExpectedErrors()
+    compileFilesInDir("tests/neg-macros", defaultOptions.and("-Xcheck-macros"))
+      .checkExpectedErrors()
   }
 
   @Test def negWithCompiler: Unit = {
@@ -115,25 +113,32 @@ class BootstrappedOnlyCompilationTests {
 
   @Test def runMacros: Unit = {
     implicit val testGroup: TestGroup = TestGroup("runMacros")
-    aggregateTests(
-      compileFilesInDir("tests/run-macros", defaultOptions.and("-Xcheck-macros")),
-      compileFilesInDir("tests/run-custom-args/Yretain-trees", defaultOptions and "-Yretain-trees"),
-      compileFilesInDir("tests/run-custom-args/run-macros-erased", defaultOptions.and("-language:experimental.erasedDefinitions").and("-Xcheck-macros")),
-    )
-  }.checkRuns()
+    compileFilesInDir("tests/run-macros", defaultOptions.and("-Xcheck-macros"), FileFilter.exclude(TestSources.runMacrosScala2LibraryTastyBlacklisted))
+      .checkRuns()
+  }
 
   @Test def runWithCompiler: Unit = {
     implicit val testGroup: TestGroup = TestGroup("runWithCompiler")
     val basicTests = List(
       compileFilesInDir("tests/run-with-compiler", withCompilerOptions),
       compileFilesInDir("tests/run-staging", withStagingOptions),
-      compileFilesInDir("tests/run-custom-args/tasty-inspector", withTastyInspectorOptions)
+      compileFilesInDir("tests/run-tasty-inspector", withTastyInspectorOptions)
     )
     val tests =
       if scala.util.Properties.isWin then basicTests
-      else compileDir("tests/run-custom-args/tasty-interpreter", withTastyInspectorOptions) :: basicTests
+      else compileDir("tests/old-tasty-interpreter-prototype", withTastyInspectorOptions) :: basicTests
 
-    aggregateTests(tests: _*).checkRuns()
+    aggregateTests(tests*).checkRuns()
+  }
+
+  @Test def runScala2LibraryFromTasty: Unit = {
+    implicit val testGroup: TestGroup = TestGroup("runScala2LibraryFromTasty")
+    // These tests recompile the entire scala2-library from TASTy,
+    // they are resource intensive and should not run alongside other tests to avoid timeouts
+    aggregateTests(
+      compileFile("tests/run-custom-args/scala2-library-from-tasty-jar.scala", withCompilerOptions),
+      compileFile("tests/run-custom-args/scala2-library-from-tasty.scala", withCompilerOptions),
+    ).limitThreads(2).checkRuns() // TODO reduce to limitThreads(1) if it still causes problems, this would be around 50% slower based on local benchmarking
   }
 
   @Test def runBootstrappedOnly: Unit = {
@@ -181,7 +186,7 @@ class BootstrappedOnlyCompilationTests {
 
     // 1. hack with absolute path for -Xplugin
     // 2. copy `pluginFile` to destination
-    def compileFilesInDir(dir: String): CompilationTest = {
+    def compileFilesInDir(dir: String, run: Boolean = false): CompilationTest = {
       val outDir = defaultOutputDir + "testPlugins/"
       val sourceDir = new java.io.File(dir)
 
@@ -189,7 +194,10 @@ class BootstrappedOnlyCompilationTests {
       val targets = dirs.map { dir =>
         val compileDir = createOutputDirsForDir(dir, sourceDir, outDir)
         Files.copy(dir.toPath.resolve(pluginFile), compileDir.toPath.resolve(pluginFile), StandardCopyOption.REPLACE_EXISTING)
-        val flags = TestFlags(withCompilerClasspath, noCheckOptions).and("-Xplugin:" + compileDir.getAbsolutePath)
+        val flags = {
+          val base = TestFlags(withCompilerClasspath, noCheckOptions).and("-Xplugin:" + compileDir.getAbsolutePath)
+          if run then base.withRunClasspath(withCompilerClasspath) else base
+        }
         SeparateCompilationSource("testPlugins", dir, flags, compileDir)
       }
 
@@ -198,18 +206,20 @@ class BootstrappedOnlyCompilationTests {
 
     compileFilesInDir("tests/plugins/neg").checkExpectedErrors()
     compileDir("tests/plugins/custom/analyzer", withCompilerOptions.and("-Yretain-trees")).checkCompile()
+    compileFilesInDir("tests/plugins/run", run = true).checkRuns()
   }
 }
 
 object BootstrappedOnlyCompilationTests extends ParallelTesting {
   // Test suite configuration --------------------------------------------------
 
-  def maxDuration = 60.seconds
+  def maxDuration = 100.seconds
   def numberOfSlaves = Runtime.getRuntime().availableProcessors()
   def safeMode = Properties.testsSafeMode
   def isInteractive = SummaryReport.isInteractive
   def testFilter = Properties.testsFilter
   def updateCheckFiles: Boolean = Properties.testsUpdateCheckfile
+  def failedTests = TestReporter.lastRunFailedTests
 
   implicit val summaryReport: SummaryReporting = new SummaryReport
   @AfterClass def tearDown(): Unit = {

@@ -2,11 +2,20 @@ package dotty.tools
 package dotc
 package reporting
 
-import core.Contexts._
-import config.Config
-import config.Printers
-import core.Mode
+import scala.language.unsafeNulls
 
+import core.*, Contexts.*, Decorators.*
+import config.*
+import printing.Formatting.*
+
+import scala.compiletime.*
+
+/** Exposes the {{{ trace("question") { op } }}} syntax.
+ *
+ * Traced operations will print indented messages if enabled.
+ * Tracing depends on [[Config.tracingEnabled]] and [[dotty.tools.dotc.config.ScalaSettings.Ylog]].
+ * Tracing can be forced by replacing [[trace]] with [[trace.force]] or [[trace.log]] (see below).
+ */
 object trace extends TraceSyntax:
   inline def isEnabled = Config.tracingEnabled
   protected val isForced = false
@@ -14,6 +23,22 @@ object trace extends TraceSyntax:
   object force extends TraceSyntax:
     inline def isEnabled: true = true
     protected val isForced = true
+
+  object log extends TraceSyntax:
+    inline def isEnabled: true = true
+    protected val isForced = false
+
+  def dumpStack(limit: Int = -1): Unit = {
+    val out = Console.out
+    val exc = new Exception("Dump Stack")
+    var stack = exc.getStackTrace
+      .filter(e => !e.getClassName.startsWith("dotty.tools.dotc.reporting.TraceSyntax"))
+      .filter(e => !e.getClassName.startsWith("dotty.tools.dotc.reporting.trace"))
+    if limit >= 0 then
+      stack = stack.take(limit)
+    exc.setStackTrace(stack)
+    exc.printStackTrace(out)
+  }
 end trace
 
 /** This module is carefully optimized to give zero overhead if Config.tracingEnabled
@@ -33,15 +58,26 @@ trait TraceSyntax:
       apply(question, if cond then Printers.default else Printers.noPrinter, show)(op)
     else op
 
-  inline def apply[T](inline question: String, inline printer: Printers.Printer, inline showOp: Any => String)(inline op: T)(using Context): T =
+  inline def apply[T, U >: T](inline question: String, inline printer: Printers.Printer, inline showOp: U => String)(inline op: T)(using Context): T =
     inline if isEnabled then
       doTrace[T](question, printer, showOp)(op)
     else op
 
   inline def apply[T](inline question: String, inline printer: Printers.Printer, inline show: Boolean)(inline op: T)(using Context): T =
-    inline if isEnabled then
-      doTrace[T](question, printer, if show then showShowable(_) else alwaysToString)(op)
-    else op
+    apply(question, printer, {
+      val showOp: T => String = inline if show == true then
+        val showT = summonInline[Show[T]]
+        {
+          given Show[T] = showT
+          t => i"$t"
+        }
+      else
+        summonFrom {
+          case given Show[T] => t => i"$t"
+          case _             => alwaysToString
+        }
+      showOp
+    })(op)
 
   inline def apply[T](inline question: String, inline printer: Printers.Printer)(inline op: T)(using Context): T =
     apply[T](question, printer, false)(op)
@@ -52,32 +88,35 @@ trait TraceSyntax:
   inline def apply[T](inline question: String)(inline op: T)(using Context): T =
     apply[T](question, false)(op)
 
-  private def showShowable(x: Any)(using Context) = x match
-    case x: printing.Showable => x.show
-    case _ => String.valueOf(x)
-
   private val alwaysToString = (x: Any) => String.valueOf(x)
 
   private def doTrace[T](question: => String,
                          printer: Printers.Printer = Printers.default,
-                         showOp: Any => String = alwaysToString)
+                         showOp: T => String)
                         (op: => T)(using Context): T =
     if ctx.mode.is(Mode.Printing) || !isForced && (printer eq Printers.noPrinter) then op
     else
+      val start = System.nanoTime
       // Avoid evaluating question multiple time, since each evaluation
       // may cause some extra logging output.
       val q = question
       val leading = s"==> $q?"
-      val trailing = (res: Any) => s"<== $q = ${showOp(res)}"
+      val trailing = (res: T) => s"<== $q = ${showOp(res)}"
       var finalized = false
       var logctx = ctx
       while logctx.reporter.isInstanceOf[StoreReporter] do logctx = logctx.outer
       def margin = ctx.base.indentTab * ctx.base.indent
-      def doLog(s: String) = if isForced then println(s) else report.log(s)
+      def doLog(s: String) = if isForced then println(s) else report.log(s)(using logctx)
       def finalize(msg: String) =
         if !finalized then
           ctx.base.indent -= 1
-          doLog(s"$margin$msg")
+          val stop = System.nanoTime
+          val diffNs = stop - start
+          val diffS = (diffNs / 1000 / 1000).toInt / 1000.0
+          if diffS > 0.1 then
+            doLog(s"$margin$msg (${"%.2f".format(diffS)} s)")
+          else
+            doLog(s"$margin$msg")
           finalized = true
       try
         doLog(s"$margin$leading")
@@ -86,7 +125,7 @@ trait TraceSyntax:
         finalize(trailing(res))
         res
       catch
-        case ex: runtime.NonLocalReturnControl[T] =>
+        case ex: runtime.NonLocalReturnControl[T @unchecked] =>
           finalize(trailing(ex.value))
           throw ex
         case ex: Throwable =>

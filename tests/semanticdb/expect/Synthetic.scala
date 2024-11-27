@@ -9,11 +9,11 @@ class Synthetic {
 
   // See https://github.com/scalameta/scalameta/issues/977
   val Name = "name:(.*)".r
-  val x #:: xs = LazyList(1, 2)
-  val Name(name) = "name:foo"
+  val x #:: xs = LazyList(1, 2): @unchecked
+  val Name(name) = "name:foo": @unchecked
   1 #:: 2 #:: LazyList.empty
 
-  val a1 #:: a2 #:: as = LazyList(1, 2)
+  val a1 #:: a2 #:: as = LazyList(1, 2): @unchecked
 
   val lst = 1 #:: 2 #:: LazyList.empty
 
@@ -47,4 +47,24 @@ class Synthetic {
     if a < b
   } yield a
 
+  object Contexts {
+    def foo(x: Int)(using Int) = ???
+    def m1(using Int) = foo(0)
+    def m2(using x: Int) = foo(0)
+    def m3 =
+      given x: Int = 1
+      foo(x)
+    def m4 =
+      given Int = 1
+      foo(0)
+  }
+
+  // Argument lifting
+  val _ =
+    def f(s: String)(i: Int = s.length()) = i + 1
+    def g(s: String, t: String) = s + t
+
+    def impure(s: String) = { ???; s }
+    val _ = f(impure(""))()
+    val _ = g(t = impure(""), s = "a")
 }

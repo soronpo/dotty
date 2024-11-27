@@ -1,18 +1,18 @@
 package dotty.tools.dotc
 package transform
 
-import dotty.tools.dotc.ast.Trees._
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.core.Names.TermName
-import dotty.tools.dotc.core.StdNames._
-import dotty.tools.dotc.core.Symbols._
-import dotty.tools.dotc.core.Types._
+import dotty.tools.dotc.core.StdNames.*
+import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.transform.MegaPhase.MiniPhase
 
 object InterceptedMethods {
   val name: String = "intercepted"
+  val description: String = "rewrite universal `!=`, `##` methods"
 }
 
 /** Replace member references as follows:
@@ -23,9 +23,11 @@ object InterceptedMethods {
   *     using the most precise overload available
   */
 class InterceptedMethods extends MiniPhase {
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = InterceptedMethods.name
+
+  override def description: String = InterceptedMethods.description
 
   // this should be removed if we have guarantee that ## will get Apply node
   override def transformSelect(tree: tpd.Select)(using Context): Tree =
@@ -63,7 +65,7 @@ class InterceptedMethods extends MiniPhase {
   override def transformApply(tree: Apply)(using Context): Tree = {
     lazy val qual = tree.fun match {
       case Select(qual, _) => qual
-      case ident @ Ident(_) =>
+      case ident: Ident =>
         ident.tpe match {
           case TermRef(prefix: TermRef, _) =>
             tpd.ref(prefix)

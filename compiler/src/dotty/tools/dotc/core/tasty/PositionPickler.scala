@@ -5,35 +5,44 @@ package tasty
 
 import dotty.tools.tasty.TastyFormat.{SOURCE, PositionsSection}
 import dotty.tools.tasty.TastyBuffer
-import TastyBuffer._
+import TastyBuffer.*
 
-import ast._
-import Trees.WithLazyField
+import ast.*
+import Trees.WithLazyFields
 import util.{SourceFile, NoSource}
-import core._
-import Annotations._, Decorators._
+import core.*
+import Annotations.*, Decorators.*
 import collection.mutable
-import util.Spans._
+import util.Spans.*
+import reporting.Message
 
-class PositionPickler(
-    pickler: TastyPickler,
-    addrOfTree: PositionPickler.TreeToAddr,
-    treeAnnots: untpd.MemberDef => List[tpd.Tree],
-    relativePathReference: String){
+object PositionPickler:
+  import ast.tpd.*
 
-  import ast.tpd._
+  // Note: This could be just TreeToAddr => Addr if functions are specialized to value classes.
+  // We use a SAM type to avoid boxing of Addr
+  @FunctionalInterface
+  trait TreeToAddr:
+    def apply(x: untpd.Tree): Addr
 
-  val buf: TastyBuffer = new TastyBuffer(5000)
-  pickler.newSection(PositionsSection, buf)
-
-  private val pickledIndices = new mutable.BitSet
-
-  def header(addrDelta: Int, hasStartDelta: Boolean, hasEndDelta: Boolean, hasPoint: Boolean): Int = {
+  def header(addrDelta: Int, hasStartDelta: Boolean, hasEndDelta: Boolean, hasPoint: Boolean): Int =
     def toInt(b: Boolean) = if (b) 1 else 0
     (addrDelta << 3) | (toInt(hasStartDelta) << 2) | (toInt(hasEndDelta) << 1) | toInt(hasPoint)
-  }
 
-  def picklePositions(source: SourceFile, roots: List[Tree], warnings: mutable.ListBuffer[String]): Unit = {
+  def picklePositions(
+      pickler: TastyPickler,
+      addrOfTree: TreeToAddr,
+      treeAnnots: untpd.MemberDef => List[tpd.Tree],
+      typeAnnots: List[tpd.Tree],
+      relativePathReference: String,
+      source: SourceFile,
+      roots: List[Tree],
+      warnings: mutable.ListBuffer[Message],
+      buf: TastyBuffer = new TastyBuffer(5000),
+      pickledIndices: mutable.BitSet = new mutable.BitSet) =
+
+    pickler.newSection(PositionsSection, buf)
+
     /** Pickle the number of lines followed by the length of each line */
     def pickleLineOffsets(): Unit = {
       val content = source.content()
@@ -79,7 +88,7 @@ class PositionPickler(
     def alwaysNeedsPos(x: Positioned) = x match {
       case
           // initialSpan is inaccurate for trees with lazy field
-          _: WithLazyField[?]
+          _: WithLazyFields
 
           // A symbol is created before the corresponding tree is unpickled,
           // and its position cannot be changed afterwards.
@@ -91,7 +100,7 @@ class PositionPickler(
           | _: Trees.PackageDef[?]
           // holes can change source files when filled, which means
           // they might lose their position
-          | _: TreePickler.Hole => true
+          | _: Trees.Hole[?] => true
       case _ => false
     }
 
@@ -128,10 +137,9 @@ class PositionPickler(
     }
     for (root <- roots)
       traverse(root, NoSource)
-  }
-}
-object PositionPickler:
-  // Note: This could be just TreeToAddr => Addr if functions are specialized to value classes.
-  // We use a SAM type to avoid boxing of Addr
-  @FunctionalInterface trait TreeToAddr:
-    def apply(x: untpd.Tree): Addr
+
+    for annotTree <- typeAnnots do
+      traverse(annotTree, NoSource)
+  end picklePositions
+end PositionPickler
+

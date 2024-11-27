@@ -2,11 +2,13 @@ package dotty.tools
 package dotc
 package core
 
+import scala.language.unsafeNulls
+
 import ast.{ untpd, tpd }
-import Decorators._, Symbols._, Contexts._
+import Symbols.*, Contexts.*
 import util.{SourceFile, ReadOnlyMap}
-import util.Spans._
-import util.CommentParsing._
+import util.Spans.*
+import util.CommentParsing.*
 import util.Property.Key
 import parsing.Parsers.Parser
 import reporting.ProperDefinitionNotFound
@@ -15,8 +17,7 @@ object Comments {
   val ContextDoc: Key[ContextDocstrings] = new Key[ContextDocstrings]
 
   /** Decorator for getting docbase out of context */
-  given CommentsContext: AnyRef with
-    extension (c: Context) def docCtx: Option[ContextDocstrings] = c.property(ContextDoc)
+  extension (c: Context) def docCtx: Option[ContextDocstrings] = c.property(ContextDoc)
 
   /** Context for Docstrings, contains basic functionality for getting
     * docstrings via `Symbol` and expanding templates
@@ -143,7 +144,7 @@ object Comments {
    * @author Felix Mulder
    */
   class CommentExpander {
-    import dotc.config.Printers.dottydoc
+    import dotc.config.Printers.scaladoc
     import scala.collection.mutable
 
     def expand(sym: Symbol, site: Symbol)(using Context): String = {
@@ -203,7 +204,7 @@ object Comments {
         case None =>
           // SI-8210 - The warning would be false negative when this symbol is a setter
           if (ownComment.indexOf("@inheritdoc") != -1 && ! sym.isSetter)
-            dottydoc.println(s"${sym.span}: the comment for ${sym} contains @inheritdoc, but no parent comment is available to inherit from.")
+            scaladoc.println(s"${sym.span}: the comment for ${sym} contains @inheritdoc, but no parent comment is available to inherit from.")
           ownComment.replace("@inheritdoc", "<invalid inheritdoc annotation>")
         case Some(sc) =>
           if (ownComment == "") sc
@@ -317,7 +318,7 @@ object Comments {
                 val sectionTextBounds = extractSectionText(parent, section)
                 cleanupSectionText(parent.substring(sectionTextBounds._1, sectionTextBounds._2))
               case None =>
-                dottydoc.println(s"""${sym.span}: the """" + getSectionHeader + "\" annotation of the " + sym +
+                scaladoc.println(s"""${sym.span}: the """" + getSectionHeader + "\" annotation of the " + sym +
                     " comment contains @inheritdoc, but the corresponding section in the parent is not defined.")
                 "<invalid inheritdoc annotation>"
             }
@@ -384,7 +385,7 @@ object Comments {
                 lookupVariable(vname, site) match {
                   case Some(replacement) => replaceWith(replacement)
                   case None              =>
-                    dottydoc.println(s"Variable $vname undefined in comment for $sym in $site")
+                    scaladoc.println(s"Variable $vname undefined in comment for $sym in $site")
                 }
             }
           }

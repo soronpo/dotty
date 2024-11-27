@@ -4,21 +4,54 @@ package scala.quoted
  *
  *  `Expr` has extension methods that are defined in `scala.quoted.Quotes`.
  */
-abstract class Expr[+T] private[scala]
+abstract class Expr[+T] private[scala] ()
 
 /** Constructors for expressions */
 object Expr {
 
   /** `e.betaReduce` returns an expression that is functionally equivalent to `e`,
-   *   however if `e` is of the form `((y1, ..., yn) => e2)(e1, ..., en)`
-   *   then it optimizes this the top most call by returning the result of beta-reducing the application.
-   *   Otherwise returns `expr`.
+   *  however if `e` is of the form `((y1, ..., yn) => e2)(e1, ..., en)`
+   *  then it optimizes the top most call by returning the result of beta-reducing the application.
+   *  Similarly, all outermost curried function applications will be beta-reduced, if possible.
+   *  Otherwise returns `expr`.
    *
-   *   To retain semantics the argument `ei` is bound as `val yi = ei` and by-name arguments to `def yi = ei`.
-   *   Some bindings may be elided as an early optimization.
+   *  To retain semantics the argument `ei` is bound as `val yi = ei` and by-name arguments to `def yi = ei`.
+   *  Some bindings may be elided as an early optimization.
+   *
+   *  Example:
+   *  ```scala sc:nocompile
+   *  ((a: Int, b: Int) => a + b).apply(x, y)
+   *  ```
+   *  will be reduced to
+   *  ```scala sc:nocompile
+   *  val a = x
+   *  val b = y
+   *  a + b
+   *  ```
+   *
+   *  Generally:
+   *  ```scala sc:nocompile
+   *  ([X1, Y1, ...] => (x1, y1, ...) => ... => [Xn, Yn, ...] => (xn, yn, ...) => f[X1, Y1, ..., Xn, Yn, ...](x1, y1, ..., xn, yn, ...))).apply[Tx1, Ty1, ...](myX1, myY1, ...)....apply[Txn, Tyn, ...](myXn, myYn, ...)
+   *  ```
+   *  will be reduced to
+   *  ```scala sc:nocompile
+   *  type X1 = Tx1
+   *  type Y1 = Ty1
+   *  ...
+   *  val x1 = myX1
+   *  val y1 = myY1
+   *  ...
+   *  type Xn = Txn
+   *  type Yn = Tyn
+   *  ...
+   *  val xn = myXn
+   *  val yn = myYn
+   *  ...
+   *  f[X1, Y1, ..., Xn, Yn, ...](x1, y1, ..., xn, yn, ...)
+   *  ```
    */
   def betaReduce[T](expr: Expr[T])(using Quotes): Expr[T] =
-    import quotes.reflect._
+    import quotes.reflect.*
     Term.betaReduce(expr.asTerm) match
       case Some(expr1) => expr1.asExpr.asInstanceOf[Expr[T]]
       case _ => expr
@@ -28,7 +61,7 @@ object Expr {
    *  will be equivalent to `'{ $s1; $s2; ...; $e }`.
    */
   def block[T](statements: List[Expr[Any]], expr: Expr[T])(using Quotes): Expr[T] = {
-    import quotes.reflect._
+    import quotes.reflect.*
     Block(statements.map(asTerm), expr.asTerm).asExpr.asInstanceOf[Expr[T]]
   }
 
@@ -40,14 +73,13 @@ object Expr {
    *  Otherwise returns `None`.
    *
    *  Usage:
-   *  ```scala
+   *  ```scala sc:nocompile
    *  case '{ ... ${expr @ Expr(value)}: T ...} =>
    *    // expr: Expr[T]
    *    // value: T
    *  ```
    *
    *  To directly get the value of an expression `expr: Expr[T]` consider using `expr.value`/`expr.valueOrError` instead.
-   *  @syntax markdown
    */
   def unapply[T](x: Expr[T])(using FromExpr[T])(using Quotes): Option[T] =
     scala.Predef.summon[FromExpr[T]].unapply(x)
@@ -70,7 +102,7 @@ object Expr {
    *    `'{ List($e1, $e2, ...) }` typed as an `Expr[List[T]]`
    */
   def ofList[T](xs: Seq[Expr[T]])(using Type[T])(using Quotes): Expr[List[T]] =
-    if (xs.isEmpty) Expr(Nil) else '{ List(${Varargs(xs)}: _*) }
+    if xs.isEmpty then Expr(Nil) else '{ List(${Varargs(xs)}*) }
 
   /** Creates an expression that will construct a copy of this tuple
    *
@@ -104,7 +136,7 @@ object Expr {
       case 20 => ofTupleFromSeq20(seq)
       case 21 => ofTupleFromSeq21(seq)
       case 22 => ofTupleFromSeq22(seq)
-      case _ => '{ Tuple.fromIArray(IArray(${Varargs(seq)}: _*)) }
+      case _ => ofTupleFromSeqXXL(seq)
     }
   }
 
@@ -215,6 +247,18 @@ object Expr {
       case Seq('{ $x1: t1 }, '{ $x2: t2 }, '{ $x3: t3 }, '{ $x4: t4 }, '{ $x5: t5 }, '{ $x6: t6 }, '{ $x7: t7 }, '{ $x8: t8 }, '{ $x9: t9 }, '{ $x10: t10 }, '{ $x11: t11 }, '{ $x12: t12 }, '{ $x13: t13 }, '{ $x14: t14 }, '{ $x15: t15 }, '{ $x16: t16 }, '{ $x17: t17 }, '{ $x18: t18 }, '{ $x19: t19 }, '{ $x20: t20 }, '{ $x21: t21 }, '{ $x22: t22 }) =>
         '{ Tuple22($x1, $x2, $x3, $x4, $x5, $x6, $x7, $x8, $x9, $x10, $x11, $x12, $x13, $x14, $x15, $x16, $x17, $x18, $x19, $x20, $x21, $x22) }
 
+  private def ofTupleFromSeqXXL(seq: Seq[Expr[Any]])(using Quotes): Expr[Tuple] =
+    val tupleTpe = tupleTypeFromSeq(seq)
+    tupleTpe.asType match
+      case '[tpe] =>
+        '{ Tuple.fromIArray(IArray(${Varargs(seq)}*)).asInstanceOf[tpe & Tuple] }
+
+  private def tupleTypeFromSeq(seq: Seq[Expr[Any]])(using Quotes): quotes.reflect.TypeRepr =
+    import quotes.reflect.*
+    val consRef = Symbol.classSymbol("scala.*:").typeRef
+    seq.foldRight(TypeRepr.of[EmptyTuple]) { (expr, ts) =>
+      AppliedType(consRef, expr.asTerm.tpe :: ts :: Nil)
+    }
 
   /** Given a tuple of the form `(Expr[A1], ..., Expr[An])`, outputs a tuple `Expr[(A1, ..., An)]`. */
   def ofTuple[T <: Tuple: Tuple.IsMappedBy[Expr]: Type](tup: T)(using Quotes): Expr[Tuple.InverseMap[T, Expr]] = {
@@ -229,7 +273,7 @@ object Expr {
    *  @tparam T type of the implicit parameter
    */
   def summon[T](using Type[T])(using Quotes): Option[Expr[T]] = {
-    import quotes.reflect._
+    import quotes.reflect.*
     Implicits.search(TypeRepr.of[T]) match {
       case iss: ImplicitSearchSuccess => Some(iss.tree.asExpr.asInstanceOf[Expr[T]])
       case isf: ImplicitSearchFailure => None

@@ -1,23 +1,22 @@
 package dotty.tools.dotc
 package transform
 
-import core._
+import core.*
 import MegaPhase.MiniPhase
-import dotty.tools.dotc.core.Contexts._
-import ast._
-import Trees._
-import Flags._
-import Symbols._
-import Contexts._
-import Decorators._
-import DenotTransformers._
+import dotty.tools.dotc.core.Contexts.*
+import ast.*
+import Flags.*
+import Symbols.*
+import Contexts.*
+import Decorators.*
+import DenotTransformers.*
 import ExplicitOuter.isOuterParamAccessor
 import CountOuterAccesses.mightBeDropped
 import collection.mutable
-import annotation.threadUnsafe
 
 object DropOuterAccessors:
   val name: String = "dropOuterAccessors"
+  val description: String = "drop unused outer accessors"
 
 /** Drops unused outer accessors of inner classes that are visible only in one
  *  toplevel class. For other classes, we can't tell whether an outer accessor
@@ -25,9 +24,11 @@ object DropOuterAccessors:
  */
 class DropOuterAccessors extends MiniPhase with IdentityDenotTransformer:
   thisPhase =>
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = DropOuterAccessors.name
+
+  override def description: String = DropOuterAccessors.description
 
   override def runsAfterGroupsOf: Set[String] = Set(CountOuterAccesses.name)
 
@@ -79,7 +80,7 @@ class DropOuterAccessors extends MiniPhase with IdentityDenotTransformer:
             cpy.Block(rhs)(inits.filterNot(dropOuterInit), expr)
         })
     assert(droppedParamAccessors.isEmpty,
-      i"""Failed to eliminate: $droppedParamAccessors
+      i"""Failed to eliminate: ${droppedParamAccessors.toList}
           when dropping outer accessors for ${ctx.owner} with
           $impl""")
     cpy.Template(impl)(constr = constr1, body = body1)

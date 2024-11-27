@@ -1,9 +1,9 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import dotty.tools.dotc.transform.MegaPhase._
-import Contexts._
+import core.*
+import dotty.tools.dotc.transform.MegaPhase.*
+import Contexts.*
 
 /** A transformer that eliminates SeqLiteral's, transforming `SeqLiteral(elems)` to an operation
  *  equivalent to
@@ -15,9 +15,12 @@ import Contexts._
  *  keep a precise type after erasure, whereas SeqLiterals only get the erased type `Seq`,
  */
 class SeqLiterals extends MiniPhase {
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "seqLiterals"
+  override def phaseName: String = SeqLiterals.name
+
+  override def description: String = SeqLiterals.description
+
   override def runsAfter: Set[String] = Set(PatternMatcher.name)
 
   override def checkPostCondition(tree: Tree)(using Context): Unit = tree match {
@@ -34,3 +37,8 @@ class SeqLiterals extends MiniPhase {
       wrapArray(arr, elemtp).withSpan(tree.span).ensureConforms(tree.tpe)
   }
 }
+
+object SeqLiterals:
+  val name: String = "seqLiterals"
+  val description: String = "express vararg arguments as arrays"
+

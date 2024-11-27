@@ -2,8 +2,8 @@ package dotty.tools
 package dotc
 package typer
 
-import core._
-import Contexts._, Symbols._, Decorators._, Comments.{_, given}
+import core.*
+import Contexts.*, Symbols.*, Decorators.*, Comments.{_, given}
 import ast.tpd
 
 object Docstrings {
@@ -37,7 +37,7 @@ object Docstrings {
               case List(df: tpd.DefDef) =>
                 usecase.typed(df)
               case _ =>
-                report.error("`@usecase` was not a valid definition", ctx.source.atSpan(usecase.codePos))
+                report.error(em"`@usecase` was not a valid definition", ctx.source.atSpan(usecase.codePos))
                 usecase
             }
           }

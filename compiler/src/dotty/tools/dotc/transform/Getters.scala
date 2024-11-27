@@ -1,18 +1,16 @@
 package dotty.tools.dotc
 package transform
 
-import core._
+import core.*
 import DenotTransformers.SymTransformer
-import Contexts._
+import Contexts.*
 import SymDenotations.SymDenotation
-import Types._
-import Symbols._
-import MegaPhase._
-import Flags._
-import ValueClasses._
-import SymUtils._
-import NameOps._
-import collection.mutable
+import Types.*
+import Symbols.*
+import MegaPhase.*
+import Flags.*
+
+import NameOps.*
 
 
 /** Performs the following rewritings for fields of a class:
@@ -58,14 +56,16 @@ import collection.mutable
  *  This allows subsequent code motions in Flatten.
  */
 class Getters extends MiniPhase with SymTransformer { thisPhase =>
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = Getters.name
+
+  override def description: String = Getters.description
 
   override def transformSym(d: SymDenotation)(using Context): SymDenotation = {
     def noGetterNeeded =
       d.isOneOf(NoGetterNeededFlags) ||
-      d.isAllOf(PrivateLocal) && !d.owner.is(Trait) && !isDerivedValueClass(d.owner) && !d.is(Lazy) ||
+      d.isAllOf(PrivateLocal) && !d.owner.is(Trait) && !d.owner.isDerivedValueClass && !d.is(Lazy) ||
       d.is(Module) && d.isStatic ||
       d.hasAnnotation(defn.ScalaStaticAnnot) ||
       d.isSelfSym
@@ -103,7 +103,7 @@ class Getters extends MiniPhase with SymTransformer { thisPhase =>
   override def transformValDef(tree: ValDef)(using Context): Tree =
     val sym = tree.symbol
     if !sym.is(Method) then return tree
-    val getterDef = DefDef(sym.asTerm, tree.rhs).withSpan(tree.span)
+    val getterDef = DefDef(sym.asTerm, tree.rhs).withSpan(tree.span).withAttachmentsFrom(tree)
     if !sym.is(Mutable) then return getterDef
     ensureSetter(sym.asTerm)
     if !newSetters.contains(sym.setter) then return getterDef
@@ -120,4 +120,5 @@ class Getters extends MiniPhase with SymTransformer { thisPhase =>
 
 object Getters {
   val name: String = "getters"
+  val description: String = "replace non-private vals and vars with getter defs"
 }

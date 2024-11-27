@@ -1,14 +1,15 @@
 package dotty.tools
 package dotc
 
-import core._
-import Contexts._
-import typer.{FrontEnd, RefChecks}
+import core.*
+import Contexts.*
+import typer.{TyperPhase, RefChecks}
+import parsing.Parser
 import Phases.Phase
-import transform._
-import dotty.tools.backend.jvm.{CollectSuperCalls, GenBCode}
+import transform.*
 import dotty.tools.backend
-import dotty.tools.dotc.transform.localopt.StringInterpolatorOpt
+import backend.jvm.{CollectSuperCalls, GenBCode}
+import localopt.StringInterpolatorOpt
 
 /** The central class of the dotc compiler. The job of a compiler is to create
  *  runs, which process given `phases` in a given `rootContext`.
@@ -23,65 +24,74 @@ class Compiler {
    *  all refs to it would become outdated - they could not be dereferenced in the
    *  new phase.
    *
-   *  After erasure, signature changing denot-transformers are OK because erasure
-   *  will make sure that only term refs with fixed SymDenotations survive beyond it. This
-   *  is possible because:
-   *
-   *   - splitter has run, so every ident or select refers to a unique symbol
-   *   - after erasure, asSeenFrom is the identity, so every reference has a
-   *     plain SymDenotation, as opposed to a UniqueRefDenotation.
+   *  After erasure, signature changing denot-transformers are OK because signatures
+   *  are never recomputed later than erasure.
    */
   def phases: List[List[Phase]] =
     frontendPhases ::: picklerPhases ::: transformPhases ::: backendPhases
 
   /** Phases dealing with the frontend up to trees ready for TASTY pickling */
   protected def frontendPhases: List[List[Phase]] =
-    List(new FrontEnd) ::           // Compiler frontend: scanner, parser, namer, typer
+    List(new Parser) ::             // Compiler frontend: scanner, parser
+    List(new TyperPhase) ::         // Compiler frontend: namer, typer
+    List(new CheckUnused.PostTyper) :: // Check for unused elements
+    List(new CheckShadowing) :: // Check shadowing elements
     List(new YCheckPositions) ::    // YCheck positions
     List(new sbt.ExtractDependencies) :: // Sends information on classes' dependencies to sbt via callbacks
-    List(new semanticdb.ExtractSemanticDB) :: // Extract info into .semanticdb files
+    List(new semanticdb.ExtractSemanticDB.ExtractSemanticInfo) :: // Extract info into .semanticdb files
     List(new PostTyper) ::          // Additional checks and cleanups after type checking
     List(new sjs.PrepJSInterop) ::  // Additional checks and transformations for Scala.js (Scala.js only)
-    List(new sbt.ExtractAPI) ::     // Sends a representation of the API of classes to sbt via callbacks
     List(new SetRootTree) ::        // Set the `rootTreeOrProvider` on class symbols
     Nil
 
   /** Phases dealing with TASTY tree pickling and unpickling */
   protected def picklerPhases: List[List[Phase]] =
     List(new Pickler) ::            // Generate TASTY info
+    List(new sbt.ExtractAPI) ::     // Sends a representation of the API of classes to sbt via callbacks
     List(new Inlining) ::           // Inline and execute macros
     List(new PostInlining) ::       // Add mirror support for inlined code
+    List(new CheckUnused.PostInlining) ::  // Check for unused elements
     List(new Staging) ::            // Check staging levels and heal staged types
+    List(new Splicing) ::           // Replace level 1 splices with holes
     List(new PickleQuotes) ::       // Turn quoted trees into explicit run-time data structures
     Nil
 
   /** Phases dealing with the transformation from pickled trees to backend trees */
   protected def transformPhases: List[List[Phase]] =
-    List(new FirstTransform,         // Some transformations to put trees into a canonical form
+    List(new InstrumentCoverage) ::  // Perform instrumentation for code coverage (if -coverage-out is set)
+    List(new CrossVersionChecks,     // Check issues related to deprecated and experimental
+         new FirstTransform,         // Some transformations to put trees into a canonical form
          new CheckReentrant,         // Internal use only: Check that compiled program has no data races involving global vars
          new ElimPackagePrefixes,    // Eliminate references to package prefixes in Select nodes
          new CookComments,           // Cook the comments: expand variables, doc, etc.
-         new CheckStatic,            // Check restrictions that apply to @static members
+         new CheckLoopingImplicits,  // Check that implicit defs do not call themselves in an infinite loop
          new BetaReduce,             // Reduce closure applications
          new InlineVals,             // Check right hand-sides of an `inline val`s
          new ExpandSAMs,             // Expand single abstract method closures to anonymous classes
-         new init.Checker) ::        // Check initialization of objects
-    List(new ElimRepeated,           // Rewrite vararg parameters and arguments
-         new ProtectedAccessors,     // Add accessors for protected members
+         new ElimRepeated,           // Rewrite vararg parameters and arguments
+         new RefChecks) ::           // Various checks mostly related to abstract members and overriding
+    List(new semanticdb.ExtractSemanticDB.AppendDiagnostics) :: // Attach warnings to extracted SemanticDB and write to .semanticdb file
+    List(new init.Checker) ::        // Check initialization of objects
+    List(new ProtectedAccessors,     // Add accessors for protected members
          new ExtensionMethods,       // Expand methods of value classes with extension methods
          new UncacheGivenAliases,    // Avoid caching RHS of simple parameterless given aliases
-         new ByNameClosures,         // Expand arguments to by-name parameters to closures
+         new CheckStatic,            // Check restrictions that apply to @static members
+         new ElimByName,             // Map by-name parameters to functions
          new HoistSuperArgs,         // Hoist complex arguments of supercalls to enclosing scope
+         new ForwardDepChecks,       // Check that there are no forward references to local vals
          new SpecializeApplyMethods, // Adds specialized methods to FunctionN
-         new RefChecks) ::           // Various checks mostly related to abstract members and overriding
-    List(new ElimOpaque,             // Turn opaque into normal aliases
          new TryCatchPatterns,       // Compile cases in try/catch
-         new PatternMatcher,         // Compile pattern matches
+         new PatternMatcher) ::      // Compile pattern matches
+    List(new TestRecheck.Pre) ::     // Test only: run rechecker, enabled under -Yrecheck-test
+    List(new TestRecheck) ::         // Test only: run rechecker, enabled under -Yrecheck-test
+    List(new cc.Setup) ::            // Preparations for check captures phase, enabled under captureChecking
+    List(new cc.CheckCaptures) ::    // Check captures, enabled under captureChecking
+    List(new ElimOpaque,             // Turn opaque into normal aliases
          new sjs.ExplicitJSClasses,  // Make all JS classes explicit (Scala.js only)
          new ExplicitOuter,          // Add accessors to outer classes from nested ones.
          new ExplicitSelf,           // Make references to non-trivial self types explicit as casts
-         new ElimByName,             // Expand by-name parameter references
-         new StringInterpolatorOpt) :: // Optimizes raw and s string interpolators by rewriting them to string concatenations
+         new StringInterpolatorOpt,  // Optimizes raw and s and f string interpolators by rewriting them to string concatenations or formats
+         new DropBreaks) ::          // Optimize local Break throws by rewriting them
     List(new PruneErasedDefs,        // Drop erased definitions from scopes and simplify erased expressions
          new UninitializedDefs,      // Replaces `compiletime.uninitialized` by `_`
          new InlinePatterns,         // Remove placeholders of inlined patterns
@@ -90,7 +100,7 @@ class Compiler {
          new InterceptedMethods,     // Special handling of `==`, `|=`, `getClass` methods
          new Getters,                // Replace non-private vals and vars with getter defs (fields are added later)
          new SpecializeFunctions,    // Specialized Function{0,1,2} by replacing super with specialized super
-         new LiftTry,                // Put try expressions that might execute on non-empty stacks into their own methods
+         new SpecializeTuples,       // Specializes Tuples by replacing tuple construction and selection trees
          new CollectNullableFields,  // Collect fields that can be nulled out after use in lazy initialization
          new ElimOuterSelect,        // Expand outer selections
          new ResolveSuper,           // Implement super accessors
@@ -100,9 +110,10 @@ class Compiler {
          new LetOverApply,           // Lift blocks from receivers of applications
          new ArrayConstructors) ::   // Intercept creation of (non-generic) arrays and intrinsify.
     List(new Erasure) ::             // Rewrite types to JVM model, erasing all type parameters, abstract types and refinements.
-    List(new ElimErasedValueType,    // Expand erased value types to their underlying implmementation types
+    List(new ElimErasedValueType,    // Expand erased value types to their underlying implementation types
          new PureStats,              // Remove pure stats from blocks
          new VCElideAllocations,     // Peep-hole optimization to eliminate unnecessary value class allocations
+         new EtaReduce,              // Reduce eta expansions of pure paths to the underlying function reference
          new ArrayApply,             // Optimize `scala.Array.apply([....])` and `scala.Array.apply(..., [....])` into `[...]`
          new sjs.AddLocalJSFakeNews, // Adds fake new invocations to local JS classes in calls to `createLocalJSClass`
          new ElimPolyFunction,       // Rewrite PolyFunction subclasses to FunctionN subclasses
@@ -121,14 +132,16 @@ class Compiler {
          new ElimStaticThis,         // Replace `this` references to static objects by global identifiers
          new CountOuterAccesses) ::  // Identify outer accessors that can be dropped
     List(new DropOuterAccessors,     // Drop unused outer accessors
+         new DropParentRefinements,  // Drop parent refinements from a template
+         new CheckNoSuperThis,       // Check that supercalls don't contain references to `this`
          new Flatten,                // Lift all inner classes to package scope
-         new RenameLifted,           // Renames lifted classes to local numbering scheme
          new TransformWildcards,     // Replace wildcards with default values
          new MoveStatics,            // Move static methods from companion to the class itself
          new ExpandPrivate,          // Widen private definitions accessed from nested classes
          new RestoreScopes,          // Repair scopes rendered invalid by moving definitions in prior phases of the group
          new SelectStatic,           // get rid of selects that would be compiled into GetStatic
          new sjs.JUnitBootstrappers, // Generate JUnit-specific bootstrapper classes for Scala.js (not enabled by default)
+         new CollectEntryPoints,     // Collect all entry points and save them in the context
          new CollectSuperCalls,      // Find classes that are called with super
          new RepeatableAnnotations) :: // Aggregate repeatable annotations
     Nil
@@ -139,20 +152,26 @@ class Compiler {
     List(new GenBCode) ::             // Generate JVM bytecode
     Nil
 
-  var runId: Int = 1
+  // TODO: Initially 0, so that the first nextRunId call would return InitialRunId == 1
+  // Changing the initial runId from 1 to 0 makes the scala2-library-bootstrap fail to compile,
+  // when the underlying issue is fixed, please update dotc.profiler.RealProfiler.chromeTrace logic
+  private var runId: Int = 1
   def nextRunId: Int = {
     runId += 1; runId
   }
 
   def reset()(using Context): Unit = {
     ctx.base.reset()
-    if (ctx.run != null) ctx.run.reset()
+    val run = ctx.run
+    if (run != null) run.reset()
   }
 
   def newRun(using Context): Run = {
     reset()
     val rctx =
       if ctx.settings.Xsemanticdb.value then
+        ctx.addMode(Mode.ReadPositions)
+      else if ctx.settings.YcheckInitGlobal.value then
         ctx.addMode(Mode.ReadPositions)
       else
         ctx

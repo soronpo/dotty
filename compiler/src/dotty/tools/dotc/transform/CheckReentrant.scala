@@ -1,12 +1,12 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import dotty.tools.dotc.transform.MegaPhase._
-import Flags._
-import Contexts._
-import Symbols._
-import Decorators._
+import core.*
+import dotty.tools.dotc.transform.MegaPhase.*
+import Flags.*
+import Contexts.*
+import Symbols.*
+import Decorators.*
 
 /** A no-op transform that checks whether the compiled sources are re-entrant.
  *  If -Ycheck:reentrant is set, the phase makes sure that there are no variables
@@ -27,9 +27,11 @@ import Decorators._
  *     for immutable array.
  */
 class CheckReentrant extends MiniPhase {
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "checkReentrant"
+  override def phaseName: String = CheckReentrant.name
+
+  override def description: String = CheckReentrant.description
 
   private var shared: Set[Symbol] = Set()
   private var seen: Set[ClassSymbol] = Set()
@@ -41,7 +43,7 @@ class CheckReentrant extends MiniPhase {
     requiredClass("scala.annotation.internal.unshared"))
 
   private val scalaJSIRPackageClass = new CtxLazy(
-    getPackageClassIfDefined("org.scalajs.ir"))
+    getPackageClassIfDefined("dotty.tools.sjs.ir"))
 
   def isIgnored(sym: Symbol)(using Context): Boolean =
     sym.hasAnnotation(sharableAnnot()) ||
@@ -65,8 +67,8 @@ class CheckReentrant extends MiniPhase {
           if (sym.isTerm && !sym.isSetter && !isIgnored(sym))
             if (sym.is(Mutable)) {
               report.error(
-                i"""possible data race involving globally reachable ${sym.showLocated}: ${sym.info}
-                   |  use -Ylog:checkReentrant+ to find out more about why the variable is reachable.""")
+                em"""possible data race involving globally reachable ${sym.showLocated}: ${sym.info}
+                    |  use -Ylog:checkReentrant+ to find out more about why the variable is reachable.""")
               shared += sym
             }
             else if (!sym.is(Method) || sym.isOneOf(Accessor | ParamAccessor))
@@ -84,3 +86,7 @@ class CheckReentrant extends MiniPhase {
     tree
   }
 }
+
+object CheckReentrant:
+  val name: String = "checkReentrant"
+  val description: String = "check no data races involving global vars"

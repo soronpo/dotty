@@ -2,14 +2,15 @@ package dotty.tools
 package backend
 package jvm
 
+import scala.language.unsafeNulls
+
 import scala.collection.immutable
 import scala.tools.asm
 
 import dotty.tools.dotc.CompilationUnit
 import dotty.tools.dotc.core.StdNames.nme
-import dotty.tools.dotc.core.Symbols._
+import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.ast.tpd.TreeOps
 
 /*
  *
@@ -18,10 +19,10 @@ import dotty.tools.dotc.ast.tpd.TreeOps
  *
  */
 trait BCodeSyncAndTry extends BCodeBodyBuilder {
-  import int.{_, given}
-  import tpd._
-  import bTypes._
-  import coreBTypes._
+  import int.given
+  import tpd.*
+  import bTypes.*
+  import coreBTypes.*
   /*
    * Functionality to lower `synchronized` and `try` expressions.
    */
@@ -29,7 +30,7 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
 
     def genSynchronized(tree: Apply, expectedType: BType): BType = (tree: @unchecked) match {
       case Apply(TypeApply(fun, _), args) =>
-      val monitor = locals.makeLocal(ObjectReference, "monitor", defn.ObjectType, tree.span)
+      val monitor = locals.makeLocal(ObjectRef, "monitor", defn.ObjectType, tree.span)
       val monCleanup = new asm.Label
 
       // if the synchronized block returns a result, store it in a local variable.
@@ -39,7 +40,7 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
 
       /* ------ (1) pushing and entering the monitor, also keeping a reference to it in a local var. ------ */
       genLoadQualifier(fun)
-      bc dup ObjectReference
+      bc dup ObjectRef
       locals.store(monitor)
       emit(asm.Opcodes.MONITORENTER)
 
@@ -117,6 +118,11 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
 
     /*
      *  Emitting try-catch is easy, emitting try-catch-finally not quite so.
+     *
+     *  For a try-catch, the only thing we need to care about is to stash the stack away
+     *  in local variables and load them back in afterwards, in case the incoming stack
+     *  is not empty.
+     *
      *  A finally-block (which always has type Unit, thus leaving the operand stack unchanged)
      *  affects control-transfer from protected regions, as follows:
      *
@@ -184,12 +190,12 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
         for (CaseDef(pat, _, caseBody) <- catches) yield {
           pat match {
             case Typed(Ident(nme.WILDCARD), tpt)  => NamelessEH(tpeTK(tpt).asClassBType, caseBody)
-            case Ident(nme.WILDCARD)              => NamelessEH(ThrowableReference,  caseBody)
+            case Ident(nme.WILDCARD)              => NamelessEH(jlThrowableRef,  caseBody)
             case Bind(_, _)                       => BoundEH   (pat.symbol, caseBody)
           }
         }
 
-      // ------ (0) locals used later ------
+      // ------ locals used later ------
 
       /*
        * `postHandlers` is a program point denoting:
@@ -201,6 +207,13 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
        * where "all exception handlers" includes those derived from catch-clauses as well as from finally-blocks.
        */
       val postHandlers = new asm.Label
+
+      // stack stash
+      val needStackStash = !stack.isEmpty && !caseHandlers.isEmpty
+      val acquiredStack = if needStackStash then stack.acquireFullStack() else null
+      val stashLocals =
+        if acquiredStack == null then null
+        else acquiredStack.uncheckedNN.filter(_ != UNIT).map(btpe => locals.makeTempLocal(btpe))
 
       val hasFinally   = (finalizer != tpd.EmptyTree)
 
@@ -220,6 +233,17 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
        * AND hasFinally, a cleanup is needed.
        */
       val finCleanup   = if (hasFinally) new asm.Label else null
+
+      /* ------ (0) Stash the stack into local variables, if necessary.
+       *            From top of the stack down to the bottom.
+       * ------
+       */
+
+      if stashLocals != null then
+        val stashLocalsNN = stashLocals.uncheckedNN // why is this necessary?
+        for i <- (stashLocalsNN.length - 1) to 0 by -1 do
+          val local = stashLocalsNN(i)
+          bc.store(local.idx, local.tk)
 
       /* ------ (1) try-block, protected by:
        *                       (1.a) the EHs due to case-clauses,   emitted in (2),
@@ -323,7 +347,7 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
         nopIfNeeded(startTryBody)
         val finalHandler = currProgramPoint() // version of the finally-clause reached via unhandled exception.
         protect(startTryBody, finalHandler, finalHandler, null)
-        val Local(eTK, _, eIdx, _) = locals(locals.makeLocal(ThrowableReference, "exc", defn.ThrowableType, finalizer.span))
+        val Local(eTK, _, eIdx, _) = locals(locals.makeLocal(jlThrowableRef, "exc", defn.ThrowableType, finalizer.span))
         bc.store(eIdx, eTK)
         emitFinalizer(finalizer, null, isDuplicate = true)
         bc.load(eIdx, eTK)
@@ -366,6 +390,39 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
         emitFinalizer(finalizer, tmp, isDuplicate = false) // the only invocation of emitFinalizer with `isDuplicate == false`
       }
 
+      /* ------ (5) Unstash the stack, if it was stashed before.
+       *            From bottom of the stack to the top.
+       *            If there is a non-UNIT result, we need to temporarily store
+       *            that one in a local variable while we unstash.
+       * ------
+       */
+
+      if stashLocals != null then
+        val stashLocalsNN = stashLocals.uncheckedNN // why is this necessary?
+
+        val resultLoc =
+          if kind == UNIT then null
+          else if tmp != null then locals(tmp) // reuse the same local
+          else locals.makeTempLocal(kind)
+        if resultLoc != null then
+          bc.store(resultLoc.idx, kind)
+
+        for i <- 0 until stashLocalsNN.size do
+          val local = stashLocalsNN(i)
+          bc.load(local.idx, local.tk)
+          if local.tk.isRef then
+            bc.emit(asm.Opcodes.ACONST_NULL)
+            bc.store(local.idx, local.tk)
+
+        stack.restoreFullStack(acquiredStack.nn)
+
+        if resultLoc != null then
+          bc.load(resultLoc.idx, kind)
+          if kind.isRef then
+            bc.emit(asm.Opcodes.ACONST_NULL)
+            bc.store(resultLoc.idx, kind)
+      end if // stashLocals != null
+
       kind
     } // end of genLoadTry()
 
@@ -396,7 +453,7 @@ trait BCodeSyncAndTry extends BCodeBodyBuilder {
 
     /* `tmp` (if non-null) is the symbol of the local-var used to preserve the result of the try-body, see `guardResult` */
     def emitFinalizer(finalizer: Tree, tmp: Symbol, isDuplicate: Boolean): Unit = {
-      var saved: immutable.Map[ /* LabelDef */ Symbol, asm.Label ] = null
+      var saved: immutable.Map[ /* Labeled */ Symbol, (BType, LoadDestination) ] = null
       if (isDuplicate) {
         saved = jumpDest
       }

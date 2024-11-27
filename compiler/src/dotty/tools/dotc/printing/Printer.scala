@@ -2,13 +2,15 @@ package dotty.tools
 package dotc
 package printing
 
-import core._
-import Texts._, ast.Trees._
-import Types.{Type, SingletonType}, Symbols.Symbol, Scopes.Scope, Constants.Constant,
-       Names.Name, Denotations._, Annotations.Annotation
-import typer.Implicits.SearchResult
+import core.*
+import Texts.*, ast.Trees.*
+import Types.{Type, SingletonType, LambdaParam, NamedType, RefinedType},
+       Symbols.Symbol, Scopes.Scope, Constants.Constant,
+       Names.Name, Denotations._, Annotations.Annotation, Contexts.Context
+import typer.Implicits.*
 import util.SourcePosition
 import typer.ImportInfo
+import cc.CaptureSet
 
 import scala.annotation.internal.sharable
 
@@ -30,7 +32,7 @@ abstract class Printer {
    *  ### `atPrec` vs `changePrec`
    *
    *  This is to be used when changing precedence inside some sort of parentheses:
-   *  for instance, to print T[A]` use
+   *  for instance, to print `T[A]` use
    *  `toText(T) ~ '[' ~ atPrec(GlobalPrec) { toText(A) } ~ ']'`.
    *
    *  If the presence of the parentheses depends on precedence, inserting them manually is most certainly a bug.
@@ -59,8 +61,7 @@ abstract class Printer {
    *  A op B op' C parses as (A op B) op' C if op and op' are left-associative, and as
    *  A op (B op' C) if they're right-associative, so we need respectively
    *  ```scala
-   *  val isType = ??? // is this a term or type operator?
-   *  val prec = parsing.precedence(op, isType)
+   *  val prec = parsing.precedence(op)
    *  // either:
    *  changePrec(prec) { toText(a) ~ op ~ atPrec(prec + 1) { toText(b) } } // for left-associative op and op'
    *  // or:
@@ -70,7 +71,7 @@ abstract class Printer {
   def changePrec(prec: Precedence)(op: => Text): Text =
     if (prec < this.prec) atPrec(prec) ("(" ~ op ~ ")") else atPrec(prec)(op)
 
-  /** The name, possibly with with namespace suffix if debugNames is set:
+  /** The name, possibly with namespace suffix if debugNames is set:
    *  /L for local names, /V for other term names, /T for type names
    */
   def nameString(name: Name): String
@@ -101,7 +102,16 @@ abstract class Printer {
   def toTextRef(tp: SingletonType): Text
 
   /** Textual representation of a prefix of some reference, ending in `.` or `#` */
-  def toTextPrefix(tp: Type): Text
+  def toTextPrefixOf(tp: NamedType): Text
+
+  /** textual representation of a refinement, with no enclosing {...} */
+  def toTextRefinement(rt: RefinedType): Text
+
+  /** Textual representation of a reference in a capture set */
+  def toTextCaptureRef(tp: Type): Text
+
+  /** Textual representation of a reference in a capture set */
+  def toTextCaptureSet(cs: CaptureSet): Text
 
   /** Textual representation of symbol's declaration */
   def dclText(sym: Symbol): Text
@@ -118,6 +128,9 @@ abstract class Printer {
   /** A description of sym's location */
   def extendedLocationText(sym: Symbol): Text
 
+  /** Textual description of regular annotation in terms of its tree */
+  def annotText(annot: Annotation): Text
+
   /** Textual representation of denotation */
   def toText(denot: Denotation): Text
 
@@ -130,6 +143,9 @@ abstract class Printer {
   /** Textual representation of type */
   def toText(tp: Type): Text
 
+  /** Textual representation of lambda param */
+  def toText(tree: LambdaParam): Text
+
   /** Textual representation of all symbols in given list,
    *  using `dclText` for displaying each.
    */
@@ -139,16 +155,25 @@ abstract class Printer {
   def toText(sc: Scope): Text
 
   /** Textual representation of tree */
-  def toText[T >: Untyped](tree: Tree[T]): Text
+  def toText[T <: Untyped](tree: Tree[T]): Text
 
   /** Textual representation of source position */
   def toText(pos: SourcePosition): Text
+
+  /** Textual representation of implicit candidates. */
+  def toText(cand: Candidate): Text
 
   /** Textual representation of implicit search result */
   def toText(result: SearchResult): Text
 
   /** Textual representation of info relating to an import clause */
   def toText(result: ImportInfo): Text
+
+  /** Textual representation of a constraint */
+  def toText(c: OrderingConstraint): Text
+
+  /** Textual representation of a GADT constraint */
+  def toText(c: GadtConstraint): Text
 
   /** Render element within highest precedence */
   def toTextLocal(elem: Showable): Text =
@@ -159,19 +184,22 @@ abstract class Printer {
     atPrec(GlobalPrec) { elem.toText(this) }
 
   /** Render elements alternating with `sep` string */
-  def toText(elems: Traversable[Showable], sep: String): Text =
+  def toText(elems: Iterable[Showable], sep: String): Text =
     Text(elems map (_ toText this), sep)
 
   /** Render elements within highest precedence */
-  def toTextLocal(elems: Traversable[Showable], sep: String): Text =
+  def toTextLocal(elems: Iterable[Showable], sep: String): Text =
     atPrec(DotPrec) { toText(elems, sep) }
 
   /** Render elements within lowest precedence */
-  def toTextGlobal(elems: Traversable[Showable], sep: String): Text =
+  def toTextGlobal(elems: Iterable[Showable], sep: String): Text =
     atPrec(GlobalPrec) { toText(elems, sep) }
 
   /** A plain printer without any embellishments */
   def plain: Printer
+
+  /** The context in which this printer operates */
+  def printerContext: Context
 }
 object Printer {
 

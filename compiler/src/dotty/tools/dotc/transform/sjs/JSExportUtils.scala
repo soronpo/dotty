@@ -2,33 +2,18 @@ package dotty.tools.dotc
 package transform
 package sjs
 
-import core._
-import util.SrcPos
-import Annotations._
-import Constants._
-import Contexts._
-import Decorators._
-import DenotTransformers._
-import Flags._
-import NameKinds.DefaultGetterName
-import NameOps._
-import Names._
-import Phases._
-import Scopes._
-import StdNames._
-import Symbols._
-import SymDenotations._
-import SymUtils._
-import ast.Trees._
-import Types._
+import scala.language.unsafeNulls
 
-import dotty.tools.backend.sjs.JSDefinitions.jsdefn
+import core.*
+import NameKinds.DefaultGetterName
+import Names.*
+
 
 /** Utilities for JS exports handling. */
 object JSExportUtils {
-  private final val ExportPrefix = "$js$exported$"
-  private final val MethodExportPrefix = ExportPrefix + "meth$"
-  private final val PropExportPrefix = ExportPrefix + "prop$"
+  private inline val ExportPrefix = "$js$exported$"
+  private inline val MethodExportPrefix = ExportPrefix + "meth$"
+  private inline val PropExportPrefix = ExportPrefix + "prop$"
 
   /** Creates a name for an export specification. */
   def makeExportName(jsName: String, isProp: Boolean): TermName = {

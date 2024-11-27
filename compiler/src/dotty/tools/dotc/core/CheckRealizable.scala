@@ -2,9 +2,9 @@ package dotty.tools
 package dotc
 package core
 
-import Contexts._, Types._, Symbols._, Names._, Flags._
+import Contexts.*, Types.*, Symbols.*, Names.*, Flags.*
 import Denotations.SingleDenotation
-import Decorators._
+import Decorators.*
 import collection.mutable
 import config.SourceVersion.future
 import config.Feature.sourceVersion
@@ -62,7 +62,7 @@ object CheckRealizable {
   * Type.isStable).
   */
 class CheckRealizable(using Context) {
-  import CheckRealizable._
+  import CheckRealizable.*
 
   /** A set of all fields that have already been checked. Used
    *  to avoid infinite recursions when analyzing recursive types.
@@ -116,15 +116,7 @@ class CheckRealizable(using Context) {
     case _: SingletonType | NoPrefix =>
       Realizable
     case tp =>
-      def isConcrete(tp: Type): Boolean = tp.dealias match {
-        case tp: TypeRef => tp.symbol.isClass
-        case tp: TypeParamRef => false
-        case tp: TypeProxy => isConcrete(tp.underlying)
-        case tp: AndType => isConcrete(tp.tp1) && isConcrete(tp.tp2)
-        case tp: OrType  => isConcrete(tp.tp1) && isConcrete(tp.tp2)
-        case _ => false
-      }
-      if (!isConcrete(tp)) NotConcrete
+      if !MatchTypes.isConcrete(tp) then NotConcrete
       else boundsRealizability(tp).andAlso(memberRealizability(tp))
   }
 
@@ -132,15 +124,15 @@ class CheckRealizable(using Context) {
     case tp: RefinedType => refinedNames(tp.parent) + tp.refinedName
     case tp: AndType => refinedNames(tp.tp1) ++ refinedNames(tp.tp2)
     case tp: OrType  => refinedNames(tp.tp1) ++ refinedNames(tp.tp2)
-    case tp: TypeProxy => refinedNames(tp.underlying)
+    case tp: TypeProxy => refinedNames(tp.superType)
     case _ => Set.empty
   }
 
   /** `Realizable` if `tp` has good bounds, a `HasProblem...` instance
    *  pointing to a bad bounds member otherwise. "Has good bounds" means:
    *
-   *    - all type members have good bounds (except for opaque helpers)
-   *    - all refinements of the underlying type have good bounds (except for opaque companions)
+   *    - all type members have good bounds
+   *    - all refinements of the underlying type have good bounds
    *    - all base types are class types, and if their arguments are wildcards
    *      they have good bounds.
    *    - base types do not appear in multiple instances with different arguments.
@@ -149,7 +141,7 @@ class CheckRealizable(using Context) {
    */
   private def boundsRealizability(tp: Type) = {
 
-    val memberProblems = withMode(Mode.CheckBounds) {
+    val memberProblems = withMode(Mode.CheckBoundsOrSelfType) {
       for {
         mbr <- tp.nonClassTypeMembers
         if !(mbr.info.loBound <:< mbr.info.hiBound)
@@ -157,7 +149,7 @@ class CheckRealizable(using Context) {
       yield new HasProblemBounds(mbr.name, mbr.info)
     }
 
-    val refinementProblems = withMode(Mode.CheckBounds) {
+    val refinementProblems = withMode(Mode.CheckBoundsOrSelfType) {
       for {
         name <- refinedNames(tp)
         if (name.isTypeName)

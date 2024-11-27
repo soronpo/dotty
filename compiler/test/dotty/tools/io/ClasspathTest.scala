@@ -1,5 +1,7 @@
 package dotty.tools.io
 
+import scala.language.unsafeNulls
+
 import org.junit.Test
 
 import java.io.File
@@ -13,6 +15,8 @@ class ClasspathTest {
 
   def pathsep = sys.props("path.separator")
 
+  def isWindows: Boolean = scala.util.Properties.isWin
+
   //
   // Cope with wildcard classpath entries, exercised with -classpath <cp>
   //
@@ -21,7 +25,7 @@ class ClasspathTest {
   @Test def testWildcards(): Unit =
     val outDir = Files.createTempDirectory("classpath-test")
     try
-      val compilerLib = "dist/target/pack/lib"
+      val compilerLib = s"${if isWindows then "dist-win-x86_64" else "dist"}/target/pack/lib"
       val libdir = Paths.get(compilerLib).toFile
       if libdir.exists then
         val libjarFiles = libdir.listFiles.toList.take(5)
@@ -29,9 +33,9 @@ class ClasspathTest {
           for src <- libjarFiles do
             val dest = Paths.get(s"$outDir/${src.getName}")
             printf("copy: %s\n", Files.copy(src.toPath, dest))
-        
+
           val cp = Seq(s"$outDir/*", "not-a-real-directory/*").mkString(pathsep).replace('\\', '/')
-         
+
           val libjars = libjarFiles.map { _.getName }.toSet
 
           // expand wildcard classpath entries, ignoring invalid entries

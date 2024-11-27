@@ -5,6 +5,8 @@
 
 package dotty.tools.io
 
+import scala.language.unsafeNulls
+
 import java.io.InputStream
 
 /** A distinguished object so you can avoid both null
@@ -15,8 +17,6 @@ import java.io.InputStream
 object NoAbstractFile extends AbstractFile {
   def absolute: AbstractFile = this
   def container: AbstractFile = this
-  def create(): Unit = ???
-  def delete(): Unit = ???
   def jpath: JPath = null
   def input: InputStream = null
   def isDirectory: Boolean = false

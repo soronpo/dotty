@@ -1,18 +1,18 @@
 package dotty.tools.dotc
 package typer
 
-import core._
-import Contexts._
-import Types._
-import Symbols._
-import StdNames._
-import Decorators._
-import typer.ProtoTypes._
-import ast.{tpd, untpd, Trees}
-import Trees._
+import core.*
+import Contexts.*
+import Types.*
+import Symbols.*
+import StdNames.*
+import Decorators.*
+import typer.ProtoTypes.*
+import ast.{tpd, untpd}
 import scala.util.control.NonFatal
 import util.Spans.Span
-import Nullables._
+import Nullables.*
+import staging.StagingLevel.*
 
 /** A version of Typer that keeps all symbols defined and referenced in a
  *  previously typed tree.
@@ -22,8 +22,8 @@ import Nullables._
  *
  *  Otherwise, everything is as in Typer.
  */
-class ReTyper extends Typer with ReChecking {
-  import tpd._
+class ReTyper(nestingLevel: Int = 0) extends Typer(nestingLevel) with ReChecking {
+  import tpd.*
 
   private def assertTyped(tree: untpd.Tree)(using Context): Unit =
     assert(tree.hasType, i"$tree ${tree.getClass} ${tree.uniqueId}")
@@ -52,6 +52,9 @@ class ReTyper extends Typer with ReChecking {
   override def typedSuper(tree: untpd.Super, pt: Type)(using Context): Tree =
     promote(tree)
 
+  override def typedImport(tree: untpd.Import)(using Context): Tree =
+    promote(tree)
+
   override def typedTyped(tree: untpd.Typed, pt: Type)(using Context): Tree = {
     assertTyped(tree)
 
@@ -69,7 +72,10 @@ class ReTyper extends Typer with ReChecking {
     promote(tree)
 
   override def typedRefinedTypeTree(tree: untpd.RefinedTypeTree)(using Context): TypTree =
-    promote(TypeTree(tree.tpe).withSpan(tree.span))
+    promote(TypeTree(tree.typeOpt).withSpan(tree.span))
+
+  override def typedExport(exp: untpd.Export)(using Context): Export =
+    promote(exp)
 
   override def typedBind(tree: untpd.Bind, pt: Type)(using Context): Bind = {
     assertTyped(tree)
@@ -82,12 +88,60 @@ class ReTyper extends Typer with ReChecking {
       // retract PatternOrTypeBits like in typedExpr
       withoutMode(Mode.PatternOrTypeBits)(typedUnadapted(tree.fun, AnyFunctionProto))
     val implicits1 = tree.implicits.map(typedExpr(_))
-    val patterns1 = tree.patterns.mapconserve(pat => typed(pat, pat.tpe))
-    untpd.cpy.UnApply(tree)(fun1, implicits1, patterns1).withType(tree.tpe)
+    val patterns1 = tree.patterns.mapconserve(pat => typed(pat, pat.typeOpt))
+    untpd.cpy.UnApply(tree)(fun1, implicits1, patterns1).withType(tree.typeOpt)
   }
 
   override def typedUnApply(tree: untpd.Apply, selType: Type)(using Context): Tree =
     typedApply(tree, selType)
+
+  override def typedInlined(tree: untpd.Inlined, pt: Type)(using Context): Tree = {
+    val (bindings1, exprCtx) = typedBlockStats(tree.bindings)
+    val expansion1 = typed(tree.expansion, pt)(using inlineContext(promote(tree))(using exprCtx))
+    untpd.cpy.Inlined(tree)(tree.call, bindings1.asInstanceOf[List[MemberDef]], expansion1)
+      .withType(avoidingType(expansion1, bindings1))
+  }
+
+  override def typedQuote(tree: untpd.Quote, pt: Type)(using Context): Tree =
+    assertTyped(tree)
+    val body1 = typed(tree.body, promote(tree).bodyType)(using quoteContext)
+    for tag <- tree.tags do assertTyped(tag)
+    untpd.cpy.Quote(tree)(body1, tree.tags).withType(tree.typeOpt)
+
+  override def typedSplice(tree: untpd.Splice, pt: Type)(using Context): Tree =
+    assertTyped(tree)
+    val exprType = // Expr[T]
+        defn.QuotedExprClass.typeRef.appliedTo(tree.typeOpt)
+    val quoteType = // Quotes ?=> Expr[T]
+      defn.FunctionType(1, isContextual = true)
+        .appliedTo(defn.QuotesClass.typeRef, exprType)
+    val expr1 = typed(tree.expr, quoteType)(using spliceContext)
+    untpd.cpy.Splice(tree)(expr1).withType(tree.typeOpt)
+
+  override def typedQuotePattern(tree: untpd.QuotePattern, pt: Type)(using Context): Tree =
+    assertTyped(tree)
+    val bindings1 = tree.bindings.map(typed(_))
+    val bodyCtx = quoteContext
+      .retractMode(Mode.Pattern)
+      .addMode(if tree.body.isType then Mode.QuotedTypePattern else Mode.QuotedExprPattern)
+    val body1 = typed(tree.body, promote(tree).bodyType)(using bodyCtx)
+    val quotes1 = typed(tree.quotes, defn.QuotesClass.typeRef)
+    untpd.cpy.QuotePattern(tree)(bindings1, body1, quotes1).withType(tree.typeOpt)
+
+  override def typedSplicePattern(tree: untpd.SplicePattern, pt: Type)(using Context): Tree =
+    assertTyped(tree)
+    val typeargs1 = tree.typeargs.mapconserve(typedType(_))
+    val args1 = tree.args.mapconserve(typedExpr(_))
+    val patternTpe =
+      if !typeargs1.isEmpty then QuotesAndSplices.PolyFunctionOf(typeargs1.map(_.tpe), args1.map(_.tpe), tree.typeOpt)
+      else if args1.isEmpty then tree.typeOpt
+      else defn.FunctionType(args1.size).appliedTo(args1.map(_.tpe) :+ tree.typeOpt)
+    val bodyCtx = spliceContext.addMode(Mode.Pattern).retractMode(Mode.QuotedPatternBits)
+    val body1 = typed(tree.body, defn.QuotedExprClass.typeRef.appliedTo(patternTpe))(using bodyCtx)
+    untpd.cpy.SplicePattern(tree)(body1, typeargs1, args1).withType(tree.typeOpt)
+
+  override def typedHole(tree: untpd.Hole, pt: Type)(using Context): Tree =
+    promote(tree)
 
   override def localDummy(cls: ClassSymbol, impl: untpd.Template)(using Context): Symbol = impl.symbol
 
@@ -103,25 +157,19 @@ class ReTyper extends Typer with ReChecking {
 
   override def completeAnnotations(mdef: untpd.MemberDef, sym: Symbol)(using Context): Unit = ()
 
-  override def ensureConstrCall(cls: ClassSymbol, parent: Tree)(using Context): Tree =
+  override def ensureConstrCall(cls: ClassSymbol, parent: Tree, psym: Symbol)(using Context): Tree =
     parent
 
   override def handleUnexpectedFunType(tree: untpd.Apply, fun: Tree)(using Context): Tree = fun.tpe match {
     case mt: MethodType =>
-      val args: List[Tree] = tree.args.zipWithConserve(mt.paramInfos)(typedExpr(_, _)).asInstanceOf[List[Tree]]
+      val args: List[Tree] = tree.args.zipWithConserve(mt.paramInfos)(typedExpr)
       assignType(untpd.cpy.Apply(tree)(fun, args), fun, args)
     case _ =>
       super.handleUnexpectedFunType(tree, fun)
   }
 
-  override def typedUnadapted(tree: untpd.Tree, pt: Type, locked: TypeVars)(using Context): Tree =
-    try super.typedUnadapted(tree, pt, locked)
-    catch {
-      case NonFatal(ex) =>
-        if ctx.phase != Phases.typerPhase && ctx.phase != Phases.inliningPhase then
-          println(i"exception while typing $tree of class ${tree.getClass} # ${tree.uniqueId}")
-        throw ex
-    }
+  override def addCanThrowCapabilities(expr: untpd.Tree, cases: List[CaseDef])(using Context): untpd.Tree =
+    expr
 
   override def inlineExpansion(mdef: DefDef)(using Context): List[Tree] = mdef :: Nil
 
@@ -134,4 +182,6 @@ class ReTyper extends Typer with ReChecking {
   override protected def addAccessorDefs(cls: Symbol, body: List[Tree])(using Context): List[Tree] = body
   override protected def checkEqualityEvidence(tree: tpd.Tree, pt: Type)(using Context): Unit = ()
   override protected def matchingApply(methType: MethodOrPoly, pt: FunProto)(using Context): Boolean = true
+  override protected def typedScala2MacroBody(call: untpd.Tree)(using Context): Tree = promote(call)
+  override protected def migrate[T](migration: => T, disabled: => T = ()): T = disabled
 }

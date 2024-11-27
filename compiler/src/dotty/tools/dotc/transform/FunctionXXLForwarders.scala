@@ -1,16 +1,16 @@
 package dotty.tools.dotc
 package transform
 
-import core._
+import core.*
 import Constants.Constant
-import Contexts._
-import Flags._
-import Definitions._
-import DenotTransformers._
-import StdNames._
-import Symbols._
-import MegaPhase._
-import Types._
+import Contexts.*
+import Flags.*
+import Definitions.*
+import DenotTransformers.*
+import StdNames.*
+import Symbols.*
+import MegaPhase.*
+import Types.*
 
 
 /** This phase adds forwarder for XXL functions `apply` methods that are implemented with a method
@@ -23,9 +23,11 @@ import Types._
  *  is generated.
  */
 class FunctionXXLForwarders extends MiniPhase with IdentityDenotTransformer {
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "functionXXLForwarders"
+  override def phaseName: String = FunctionXXLForwarders.name
+
+  override def description: String = FunctionXXLForwarders.description
 
   override def transformTemplate(impl: Template)(using Context): Template = {
 
@@ -43,7 +45,7 @@ class FunctionXXLForwarders extends MiniPhase with IdentityDenotTransformer {
 
     val forwarders =
       for {
-        (ddef: DefDef) <- impl.body
+        case (ddef: DefDef) <- impl.body
         if ddef.name == nme.apply && ddef.symbol.is(Method) &&
            ddef.symbol.signature.paramsSig.size > MaxImplementedFunctionArity &&
            ddef.symbol.allOverriddenSymbols.exists(sym => defn.isXXLFunctionClass(sym.owner))
@@ -59,3 +61,6 @@ class FunctionXXLForwarders extends MiniPhase with IdentityDenotTransformer {
   }
 }
 
+object FunctionXXLForwarders:
+  val name: String = "functionXXLForwarders"
+  val description: String = "add forwarders for FunctionXXL apply methods"

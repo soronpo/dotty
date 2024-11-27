@@ -1,13 +1,12 @@
 package dotty.tools.dotc
 package transform
 
-import core.Symbols._
-import core.StdNames._
-import ast.Trees._
-import core.Types._
+import core.Symbols.*
+import core.StdNames.*
+import core.Types.*
 import core.NameKinds.ExceptionBinderName
 import dotty.tools.dotc.core.Flags
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.transform.MegaPhase.MiniPhase
 import dotty.tools.dotc.util.Spans.Span
 
@@ -40,9 +39,11 @@ import dotty.tools.dotc.util.Spans.Span
  *
  */
 class TryCatchPatterns extends MiniPhase {
-  import dotty.tools.dotc.ast.tpd._
+  import dotty.tools.dotc.ast.tpd.*
 
-  def phaseName: String = "tryCatchPatterns"
+  override def phaseName: String = TryCatchPatterns.name
+
+  override def description: String = TryCatchPatterns.description
 
   override def runsAfter: Set[String] = Set(ElimRepeated.name)
 
@@ -70,7 +71,7 @@ class TryCatchPatterns extends MiniPhase {
     case _                                                               => isDefaultCase(cdef)
   }
 
-  private def isSimpleThrowable(tp: Type)(using Context): Boolean = tp.stripAnnots match {
+  private def isSimpleThrowable(tp: Type)(using Context): Boolean = tp.stripped match {
     case tp @ TypeRef(pre, _) =>
       (pre == NoPrefix || pre.typeSymbol.isStatic) && // Does not require outer class check
       !tp.symbol.is(Flags.Trait) && // Traits not supported by JVM
@@ -98,3 +99,6 @@ class TryCatchPatterns extends MiniPhase {
     }
 }
 
+object TryCatchPatterns:
+  val name: String = "tryCatchPatterns"
+  val description: String = "compile cases in try/catch"

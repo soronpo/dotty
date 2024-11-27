@@ -2,26 +2,25 @@ package dotty.tools
 package dotc
 package core
 
-import Types._, Symbols._, Contexts._
+import Types.*, Symbols.*, Contexts.*
 import printing.Printer
 import printing.Texts.Text
-import Decorators._
 
 object Constants {
 
-  final val NoTag      = 0
-  final val UnitTag    = 1
-  final val BooleanTag = 2
-  final val ByteTag    = 3
-  final val ShortTag   = 4
-  final val CharTag    = 5
-  final val IntTag     = 6
-  final val LongTag    = 7
-  final val FloatTag   = 8
-  final val DoubleTag  = 9
-  final val StringTag  = 10
-  final val NullTag    = 11
-  final val ClazzTag   = 12
+  inline val NoTag      = 0
+  inline val UnitTag    = 1
+  inline val BooleanTag = 2
+  inline val ByteTag    = 3
+  inline val ShortTag   = 4
+  inline val CharTag    = 5
+  inline val IntTag     = 6
+  inline val LongTag    = 7
+  inline val FloatTag   = 8
+  inline val DoubleTag  = 9
+  inline val StringTag  = 10
+  inline val NullTag    = 11
+  inline val ClazzTag   = 12
 
   class Constant(val value: Any, val tag: Int) extends printing.Showable with Product1[Any] {
     import java.lang.Double.doubleToRawLongBits
@@ -149,7 +148,7 @@ object Constants {
 
     /** Convert constant value to conform to given type.
      */
-    def convertTo(pt: Type)(using Context): Constant = {
+    def convertTo(pt: Type)(using Context): Constant | Null = {
       def classBound(pt: Type): Type = pt.dealias.stripTypeVar match {
         case tref: TypeRef if !tref.symbol.isClass && tref.info.exists =>
           classBound(tref.info.bounds.lo)
@@ -211,7 +210,7 @@ object Constants {
     }
 
     override def hashCode: Int = {
-      import scala.util.hashing.MurmurHash3._
+      import scala.util.hashing.MurmurHash3.*
       val seed = 17
       var h = seed
       h = mix(h, tag.##) // include tag in the hash, otherwise 0, 0d, 0L, 0f collide.

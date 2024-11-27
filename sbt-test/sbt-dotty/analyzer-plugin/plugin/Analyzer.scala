@@ -14,14 +14,14 @@ import Decorators._
 import Symbols.Symbol
 import Constants.Constant
 import Types._
-import transform.ElimRepeated
+import transform.ProtectedAccessors
 
 class InitPlugin extends StandardPlugin {
   import tpd._
   val name: String = "initPlugin"
   override val description: String = "checks that under -Yretain-trees we may get tree for all symbols"
 
-  def init(options: List[String]): List[PluginPhase] =
+  override def initialize(options: List[String])(using Context): List[PluginPhase] =
     (new SetDefTree) :: (new InitChecker) :: Nil
 }
 
@@ -31,7 +31,7 @@ class InitChecker extends PluginPhase {
   val phaseName = "symbolTreeChecker"
 
   override val runsAfter = Set(SetDefTree.name)
-  override val runsBefore = Set(ElimRepeated.name)
+  override val runsBefore = Set(ProtectedAccessors.name)
 
   private def checkDef(tree: Tree)(implicit ctx: Context): Tree = {
     if (tree.symbol.defTree.isEmpty)

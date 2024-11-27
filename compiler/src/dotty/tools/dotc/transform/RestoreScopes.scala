@@ -1,22 +1,23 @@
 package dotty.tools.dotc
 package transform
 
-import core._
+import core.*
 import DenotTransformers.IdentityDenotTransformer
-import Contexts._
-import Symbols._
-import Scopes._
+import Contexts.*
+import Symbols.*
+import Scopes.*
 import MegaPhase.MiniPhase
-import ast.Trees._
-import StdNames._
 
 /** The preceding lambda lift and flatten phases move symbols to different scopes
  *  and rename them. This miniphase cleans up afterwards and makes sure that all
  *  class scopes contain the symbols defined in them.
  */
 class RestoreScopes extends MiniPhase with IdentityDenotTransformer { thisPhase =>
-  import ast.tpd._
-  override def phaseName: String = "restoreScopes"
+  import ast.tpd.*
+
+  override def phaseName: String = RestoreScopes.name
+
+  override def description: String = RestoreScopes.description
 
   override def changesMembers: Boolean = true // the phase affects scopes, applying tree transformations of previous phases
 
@@ -50,3 +51,6 @@ class RestoreScopes extends MiniPhase with IdentityDenotTransformer { thisPhase 
   }
 }
 
+object RestoreScopes:
+  val name: String = "restoreScopes"
+  val description: String = "repair rendered invalid scopes"

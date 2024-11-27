@@ -21,7 +21,10 @@ class Annotations/*<-annot::Annotations#*/[@TypeParameterAnnotation/*->com::java
 
 class B/*<-annot::B#*/ @ConstructorAnnotation/*->com::javacp::annot::ConstructorAnnotation#*/()(x/*<-annot::B#x.*/: Int/*->scala::Int#*/) {
   @ConstructorAnnotation/*->com::javacp::annot::ConstructorAnnotation#*/
-  def this()/*<-annot::B#`<init>`(+1).*/ = this(42)
+  def this/*<-annot::B#`<init>`(+1).*/() = this(42)
+
+  @throws/*->scala::throws#*/[Exception/*->scala::package.Exception#*/]
+  def throwing/*<-annot::B#throwing().*/ = throw new Exception/*->scala::package.Exception#*/("")
 }
 
 @ObjectAnnotation/*->com::javacp::annot::ObjectAnnotation#*/

@@ -2,29 +2,34 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import MegaPhase._
-import Contexts._
-import Flags._
-import SymUtils._
-import Symbols._
-import SymDenotations._
-import Types._
-import Periods._
-import Decorators._
-import DenotTransformers._
-import StdNames._
-import Names._
-import NameKinds._
-import NameOps._
-import ast.Trees._
-import collection.mutable
+import core.*
+import MegaPhase.*
+import Contexts.*
+import Flags.*
+
+import Symbols.*
+import SymDenotations.*
+import Types.*
+import Decorators.*
+import DenotTransformers.*
+import StdNames.*
+import Names.*
+import NameKinds.*
+import NameOps.*
+import ast.Trees.*
+
+import dotty.tools.dotc.transform.sjs.JSSymUtils.isJSType
 
 object Mixin {
   val name: String = "mixin"
+  val description: String = "expand trait fields and trait initializers"
 
   def traitSetterName(getter: TermSymbol)(using Context): TermName =
+    extension (name: Name) def qualifiedToSimple = name.replace {
+      case n @ AnyQualifiedName(_, _) => n.toSimpleName
+    }
     getter.ensureNotPrivate.name
+      .qualifiedToSimple  // TODO: Find out why TraitSetterNames can't be defined over QualifiedNames
       .expandedName(getter.owner, TraitSetterName)
       .asTermName.syntheticSetterName
 }
@@ -108,9 +113,11 @@ object Mixin {
  *  are symbolic.
  */
 class Mixin extends MiniPhase with SymTransformer { thisPhase =>
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = Mixin.name
+
+  override def description: String = Mixin.description
 
   override def relaxedTypingInGroup: Boolean = true
     // Because it changes number of parameters in trait initializers
@@ -179,7 +186,7 @@ class Mixin extends MiniPhase with SymTransformer { thisPhase =>
   override def transformTemplate(impl: Template)(using Context): Template = {
     val cls = impl.symbol.owner.asClass
     val ops = new MixinOps(cls, thisPhase)
-    import ops._
+    import ops.*
 
     def traitDefs(stats: List[Tree]): List[Tree] = {
       stats.flatMap {
@@ -213,10 +220,11 @@ class Mixin extends MiniPhase with SymTransformer { thisPhase =>
                 initFlags = stat.symbol.flags | PrivateLocal
               ).installAfter(thisPhase)
               stat.symbol.enteredAfter(thisPhase)
+            case _ =>
           }
           (scall, stats ::: inits, args)
       case _ =>
-        val Apply(sel @ Select(New(_), nme.CONSTRUCTOR), args) = tree
+        val Apply(sel @ Select(New(_), nme.CONSTRUCTOR), args) = tree: @unchecked
         val (callArgs, initArgs) = if (tree.symbol.owner.is(Trait)) (Nil, args) else (args, Nil)
         (superRef(tree.symbol, tree.span).appliedToTermArgs(callArgs), Nil, initArgs)
     }
@@ -267,7 +275,15 @@ class Mixin extends MiniPhase with SymTransformer { thisPhase =>
             else if (getter.is(Lazy, butNot = Module))
               transformFollowing(superRef(getter).appliedToNone)
             else if (getter.is(Module))
-              New(getter.info.resultType, List(This(cls)))
+              if ctx.settings.scalajs.value && getter.moduleClass.isJSType then
+                if getter.is(Scala2x) then
+                  report.error(
+                      em"""Implementation restriction: cannot extend the Scala 2 trait $mixin
+                          |containing the object $getter that extends js.Any""",
+                      cls.srcPos)
+                transformFollowing(superRef(getter).appliedToNone)
+              else
+                New(getter.info.resultType, List(This(cls)))
             else
               Underscore(getter.info.resultType)
           // transformFollowing call is needed to make memoize & lazy vals run

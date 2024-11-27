@@ -6,14 +6,15 @@
 package dotty.tools
 package io
 
+import scala.language.unsafeNulls
+
 import java.io.{InputStream, OutputStream}
 import java.nio.file.{InvalidPathException, Paths}
 
 /** ''Note:  This library is considered experimental and should not be used unless you know what you are doing.'' */
 class PlainDirectory(givenPath: Directory) extends PlainFile(givenPath) {
-  override def isDirectory: Boolean = true
+  override val isDirectory: Boolean = true
   override def iterator(): Iterator[PlainFile] = givenPath.list.filter(_.exists).map(new PlainFile(_))
-  override def delete(): Unit = givenPath.deleteRecursively()
 }
 
 /** This class implements an abstract file backed by a File.
@@ -26,7 +27,7 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
   dotc.util.Stats.record("new PlainFile")
 
   def jpath: JPath = givenPath.jpath
-  
+
   override def underlyingSource  = {
     val fileSystem = jpath.getFileSystem
     fileSystem.provider().getScheme match {
@@ -76,7 +77,7 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
   }
 
   /** Is this abstract file a directory? */
-  def isDirectory: Boolean = givenPath.isDirectory
+  val isDirectory: Boolean = givenPath.isDirectory // cached for performance on Windows
 
   /** Returns the time that this abstract file was last modified. */
   def lastModified: Long = givenPath.lastModified.toMillis
@@ -100,17 +101,16 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
    */
   def lookupName(name: String, directory: Boolean): AbstractFile = {
     val child = givenPath / name
-    if ((child.isDirectory && directory) || (child.isFile && !directory)) new PlainFile(child)
-    else null
+    if directory then
+      if child.isDirectory /* IO! */ then
+        new PlainFile(child)
+      else
+        null
+    else if child.isFile /* IO! */ then
+      new PlainFile(child)
+    else
+      null
   }
-
-  /** Does this abstract file denote an existing file? */
-  def create(): Unit = if (!exists) givenPath.createFile()
-
-  /** Delete the underlying file or directory (recursively). */
-  def delete(): Unit =
-    if (givenPath.isFile) givenPath.delete()
-    else if (givenPath.isDirectory) givenPath.toDirectory.deleteRecursively()
 
   /** Returns a plain file with the given name. It does not
    *  check that it exists.

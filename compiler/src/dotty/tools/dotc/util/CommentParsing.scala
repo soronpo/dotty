@@ -5,17 +5,19 @@
  */
 package dotty.tools.dotc.util
 
+import scala.language.unsafeNulls
+
 import scala.collection.mutable
 
 /** The comment parsing in `dotc` is used by both the comment cooking and the
-  * dottydoc tool.
+  * scaladoc tool.
   *
   * The comment cooking is used to expand comments with `@inheritdoc` and
   * `@define` annotations. The rest of the comment is untouched and later
-  * handled by dottydoc.
+  * handled by scaladoc.
   */
 object CommentParsing {
-  import Chars._
+  import Chars.*
 
   /** Returns index of string `str` following `start` skipping longest
    *  sequence of whitespace characters characters (but no newlines)

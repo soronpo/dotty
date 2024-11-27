@@ -3,7 +3,7 @@ package dotc
 package core
 package unpickleScala2
 
-import Flags._
+import Flags.*
 
 /** Variable length byte arrays, with methods for basic pickling and unpickling.
  *
@@ -189,13 +189,13 @@ class PickleBuffer(data: Array[Byte], from: Int, to: Int) {
 
 object PickleBuffer {
 
-  private final val ScalaFlagEnd = 48
-  private final val ChunkBits = 8
-  private final val ChunkSize = 1 << ChunkBits
+  private inline val ScalaFlagEnd = 48
+  private inline val ChunkBits = 8
+  private inline val ChunkSize = 1 << ChunkBits
   private type FlagMap = Array[Array[Long]]
 
   private val (scalaTermFlagMap, scalaTypeFlagMap) = {
-    import Scala2Flags._
+    import Scala2Flags.*
 
     val corr = Map(
       PROTECTED_PKL -> Protected,

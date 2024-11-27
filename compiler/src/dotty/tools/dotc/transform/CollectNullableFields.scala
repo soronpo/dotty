@@ -1,11 +1,11 @@
 package dotty.tools.dotc.transform
 
 import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.Flags._
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Symbols.Symbol
 import dotty.tools.dotc.transform.MegaPhase.MiniPhase
-import dotty.tools.dotc.transform.SymUtils._
+
 
 import scala.collection.mutable
 
@@ -13,6 +13,7 @@ import java.util.IdentityHashMap
 
 object CollectNullableFields {
   val name: String = "collectNullableFields"
+  val description: String = "collect fields that can be nulled out after use in lazy initialization"
 }
 
 /** Collect fields that can be nulled out after use in lazy initialization.
@@ -39,9 +40,11 @@ object CollectNullableFields {
  *    - defined in the same class as the lazy val
  */
 class CollectNullableFields extends MiniPhase {
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = CollectNullableFields.name
+
+  override def description: String = CollectNullableFields.description
 
   /** Running after `ElimByName` to see by names as nullable types. */
   override def runsAfter: Set[String] = Set(ElimByName.name)
@@ -97,7 +100,7 @@ class CollectNullableFields extends MiniPhase {
 
     nullability.foreach {
       case (sym, Nullable(from)) =>
-        val bldr = result.computeIfAbsent(from, _ => new mutable.ListBuffer)
+        val bldr = result.computeIfAbsent(from, _ => new mutable.ListBuffer).nn
         bldr += sym
       case _ =>
     }

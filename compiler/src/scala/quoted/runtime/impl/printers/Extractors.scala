@@ -1,7 +1,7 @@
 package scala.quoted
 package runtime.impl.printers
 
-import scala.quoted._
+import scala.quoted.*
 
 object Extractors {
 
@@ -18,7 +18,7 @@ object Extractors {
     new ExtractorsPrinter[quotes.type]().visitSymbol(symbol).result()
 
   def showFlags(using Quotes)(flags: quotes.reflect.Flags): String = {
-    import quotes.reflect._
+    import quotes.reflect.*
     val flagList = List.newBuilder[String]
     if (flags.is(Flags.Abstract)) flagList += "Flags.Abstract"
     if (flags.is(Flags.Artifact)) flagList += "Flags.Artifact"
@@ -33,6 +33,7 @@ object Extractors {
     if (flags.is(Flags.ExtensionMethod)) flagList += "Flags.ExtensionMethod"
     if (flags.is(Flags.FieldAccessor)) flagList += "Flags.FieldAccessor"
     if (flags.is(Flags.Final)) flagList += "Flags.Final"
+    if (flags.is(Flags.Given)) flagList += "Flags.Given"
     if (flags.is(Flags.HasDefault)) flagList += "Flags.HasDefault"
     if (flags.is(Flags.Implicit)) flagList += "Flags.Implicit"
     if (flags.is(Flags.Infix)) flagList += "Flags.Infix"
@@ -56,7 +57,6 @@ object Extractors {
     if (flags.is(Flags.Scala2x)) flagList += "Flags.Scala2x"
     if (flags.is(Flags.Sealed)) flagList += "Flags.Sealed"
     if (flags.is(Flags.StableRealizable)) flagList += "Flags.StableRealizable"
-    if (flags.is(Flags.Static)) flagList += "Flags.javaStatic"
     if (flags.is(Flags.Synthetic)) flagList += "Flags.Synthetic"
     if (flags.is(Flags.Trait)) flagList += "Flags.Trait"
     if (flags.is(Flags.Transparent)) flagList += "Flags.Transparent"
@@ -64,17 +64,21 @@ object Extractors {
   }
 
   private class ExtractorsPrinter[Q <: Quotes & Singleton](using val quotes: Q) { self =>
-    import quotes.reflect._
+    import quotes.reflect.*
 
     private val sb: StringBuilder = new StringBuilder
 
     def result(): String = sb.result()
 
     def visitTree(x: Tree): this.type = x match {
-      case Ident(name) =>
-        this += "Ident(\"" += name += "\")"
-      case Select(qualifier, name) =>
-        this += "Select(" += qualifier += ", \"" += name += "\")"
+      case tree: Ref =>
+        tree match
+          case Wildcard() =>
+            this += "Wildcard()"
+          case Ident(name) =>
+            this += "Ident(\"" += name += "\")"
+          case Select(qualifier, name) =>
+            this += "Select(" += qualifier += ", \"" += name += "\")"
       case This(qual) =>
         this += "This(" += qual += ")"
       case Super(qual, mix) =>
@@ -171,6 +175,10 @@ object Extractors {
         this += "Unapply(" += fun += ", " ++= implicits += ", " ++= patterns += ")"
       case Alternatives(patterns) =>
         this += "Alternatives(" ++= patterns += ")"
+      case TypedOrTest(tree, tpt) =>
+        this += "TypedOrTest(" += tree += ", " += tpt += ")"
+      case tree =>
+        this += s"<Internal compiler AST $tree does not have a corresponding reflect extractor>"
     }
 
     def visitConstant(x: Constant): this.type = x match {
@@ -231,6 +239,12 @@ object Extractors {
         this += "TypeBounds(" += lo += ", " += hi += ")"
       case NoPrefix() =>
         this += "NoPrefix()"
+      case MatchCase(pat, rhs) =>
+        this += "MatchCase(" += pat += ", " += rhs += ")"
+      case FlexibleType(tp) =>
+        this += "FlexibleType(" += tp += ")"
+      case tp =>
+        this += s"<Internal compiler type $tp does not have a corresponding reflect extractor>"
     }
 
     def visitSignature(sig: Signature): this.type = {

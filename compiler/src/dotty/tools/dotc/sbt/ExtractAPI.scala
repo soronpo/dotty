@@ -1,29 +1,34 @@
 package dotty.tools.dotc
 package sbt
 
+import scala.language.unsafeNulls
+
 import ExtractDependencies.internalError
-import ast.{Positioned, Trees, tpd, untpd}
-import core._
-import core.Decorators._
-import Annotations._
-import Contexts._
-import Flags._
-import Phases._
-import Trees._
-import Types._
-import Symbols._
-import Names._
-import NameOps._
-import NameKinds.DefaultGetterName
-import typer.Inliner
+import ast.{Positioned, Trees, tpd}
+import core.*
+import core.Decorators.*
+import Annotations.*
+import Contexts.*
+import Flags.*
+import Phases.*
+import Trees.*
+import Types.*
+import Symbols.*
+import Names.*
+import StdNames.str
+import NameOps.*
+import inlines.Inlines
 import transform.ValueClasses
-import transform.SymUtils._
-import dotty.tools.io.File
+import transform.Pickler
+import dotty.tools.io.{File, FileExtension, JarArchive}
+import util.{Property, SourceFile}
 import java.io.PrintWriter
 
-import xsbti.api.DefinitionType
+import ExtractAPI.NonLocalClassSymbolsInCurrentUnits
 
 import scala.collection.mutable
+import scala.util.hashing.MurmurHash3
+import scala.util.chaining.*
 
 /** This phase sends a representation of the API of classes to sbt via callbacks.
  *
@@ -41,49 +46,116 @@ import scala.collection.mutable
  *  @see ExtractDependencies
  */
 class ExtractAPI extends Phase {
-  override def phaseName: String = "sbt-api"
+
+  override def phaseName: String = ExtractAPI.name
+
+  override def description: String = ExtractAPI.description
 
   override def isRunnable(using Context): Boolean = {
-    def forceRun = ctx.settings.YdumpSbtInc.value || ctx.settings.YforceSbtPhases.value
-    super.isRunnable && (ctx.sbtCallback != null || forceRun)
+    super.isRunnable && (ctx.runZincPhases || ctx.settings.XjavaTasty.value)
   }
 
   // Check no needed. Does not transform trees
   override def isCheckable: Boolean = false
+
+  // when `-Xjava-tasty` is set we actually want to run this phase on Java sources
+  override def skipIfJava(using Context): Boolean = false
 
   // SuperAccessors need to be part of the API (see the scripted test
   // `trait-super` for an example where this matters), this is only the case
   // after `PostTyper` (unlike `ExtractDependencies`, the simplication to trees
   // done by `PostTyper` do not affect this phase because it only cares about
   // definitions, and `PostTyper` does not change definitions).
-  override def runsAfter: Set[String] = Set(transform.PostTyper.name)
+  override def runsAfter: Set[String] = Set(transform.Pickler.name)
+
+  override def runOn(units: List[CompilationUnit])(using Context): List[CompilationUnit] =
+    val doZincCallback = ctx.runZincPhases
+    val nonLocalClassSymbols = new mutable.HashSet[Symbol]
+    val units0 =
+      if doZincCallback then
+        val ctx0 = ctx.withProperty(NonLocalClassSymbolsInCurrentUnits, Some(nonLocalClassSymbols))
+        super.runOn(units)(using ctx0)
+      else
+        units // still run the phase for the side effects (writing TASTy files to -Yearly-tasty-output)
+    if doZincCallback then
+      ctx.withIncCallback(recordNonLocalClasses(nonLocalClassSymbols, _))
+    if ctx.settings.XjavaTasty.value then
+      units0.filterNot(_.typedAsJava) // remove java sources, this is the terminal phase when `-Xjava-tasty` is set
+    else
+      units0
+  end runOn
+
+  private def recordNonLocalClasses(nonLocalClassSymbols: mutable.HashSet[Symbol], cb: interfaces.IncrementalCallback)(using Context): Unit =
+    for cls <- nonLocalClassSymbols do
+      val sourceFile = cls.source
+      if sourceFile.exists && cls.isDefinedInCurrentRun then
+        recordNonLocalClass(cls, sourceFile, cb)
+    ctx.run.nn.asyncTasty.foreach(_.signalAPIComplete())
+
+  private def recordNonLocalClass(cls: Symbol, sourceFile: SourceFile, cb: interfaces.IncrementalCallback)(using Context): Unit =
+    def registerProductNames(fullClassName: String, binaryClassName: String) =
+      val pathToClassFile = s"${binaryClassName.replace('.', java.io.File.separatorChar)}.class"
+
+      val classFile = {
+        ctx.settings.outputDir.value match {
+          case jar: JarArchive =>
+            // important detail here, even on Windows, Zinc expects the separator within the jar
+            // to be the system default, (even if in the actual jar file the entry always uses '/').
+            // see https://github.com/sbt/zinc/blob/dcddc1f9cfe542d738582c43f4840e17c053ce81/internal/compiler-bridge/src/main/scala/xsbt/JarUtils.scala#L47
+            new java.io.File(s"$jar!$pathToClassFile")
+          case outputDir =>
+            new java.io.File(outputDir.file, pathToClassFile)
+        }
+      }
+
+      cb.generatedNonLocalClass(sourceFile, classFile.toPath(), binaryClassName, fullClassName)
+    end registerProductNames
+
+    val fullClassName = atPhase(sbtExtractDependenciesPhase) {
+      ExtractDependencies.classNameAsString(cls)
+    }
+    val binaryClassName = cls.binaryClassName
+    registerProductNames(fullClassName, binaryClassName)
+
+    // Register the names of top-level module symbols that emit two class files
+    val isTopLevelUniqueModule =
+      cls.owner.is(PackageClass) && cls.is(ModuleClass) && cls.companionClass == NoSymbol
+    if isTopLevelUniqueModule then
+      registerProductNames(fullClassName, binaryClassName.stripSuffix(str.MODULE_SUFFIX))
+  end recordNonLocalClass
 
   override def run(using Context): Unit = {
     val unit = ctx.compilationUnit
-    val sourceFile = unit.source.file
-    if (ctx.sbtCallback != null)
-      ctx.sbtCallback.startSource(sourceFile.file)
+    val sourceFile = unit.source
+    ctx.withIncCallback: cb =>
+      cb.startSource(sourceFile)
 
-    val apiTraverser = new ExtractAPICollector
+    val nonLocalClassSymbols = ctx.property(NonLocalClassSymbolsInCurrentUnits).get
+    val apiTraverser = ExtractAPICollector(nonLocalClassSymbols)
     val classes = apiTraverser.apiSource(unit.tpdTree)
     val mainClasses = apiTraverser.mainClasses
 
     if (ctx.settings.YdumpSbtInc.value) {
       // Append to existing file that should have been created by ExtractDependencies
-      val pw = new PrintWriter(File(sourceFile.jpath).changeExtension("inc").toFile
+      val pw = new PrintWriter(File(sourceFile.file.jpath).changeExtension(FileExtension.Inc).toFile
         .bufferedWriter(append = true), true)
       try {
         classes.foreach(source => pw.println(DefaultShowAPI(source)))
       } finally pw.close()
     }
 
-    if ctx.sbtCallback != null &&
-      !ctx.compilationUnit.suspendedAtInliningPhase // already registered before this unit was suspended
-    then
-      classes.foreach(ctx.sbtCallback.api(sourceFile.file, _))
-      mainClasses.foreach(ctx.sbtCallback.mainClass(sourceFile.file, _))
+    ctx.withIncCallback: cb =>
+      if !ctx.compilationUnit.suspendedAtInliningPhase then // already registered before this unit was suspended
+        classes.foreach(cb.api(sourceFile, _))
+        mainClasses.foreach(cb.mainClass(sourceFile, _))
   }
 }
+
+object ExtractAPI:
+  val name: String = "sbt-api"
+  val description: String = "sends a representation of the API of classes to sbt"
+
+  private val NonLocalClassSymbolsInCurrentUnits: Property.Key[mutable.HashSet[Symbol]] = Property.Key()
 
 /** Extracts full (including private members) API representation out of Symbols and Types.
  *
@@ -127,8 +199,8 @@ class ExtractAPI extends Phase {
  *  without going through an intermediate representation, see
  *  http://www.scala-sbt.org/0.13/docs/Understanding-Recompilation.html#Hashing+an+API+representation
  */
-private class ExtractAPICollector(using Context) extends ThunkHolder {
-  import tpd._
+private class ExtractAPICollector(nonLocalClassSymbols: mutable.HashSet[Symbol])(using Context) extends ThunkHolder {
+  import tpd.*
   import xsbti.api
 
   /** This cache is necessary for correctness, see the comment about inherited
@@ -140,8 +212,20 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
   /** This cache is necessary to avoid unstable name hashing when `typeCache` is present,
    *  see the comment in the `RefinedType` case in `computeType`
    *  The cache key is (api of RefinedType#parent, api of RefinedType#refinedInfo).
-    */
+   */
   private val refinedTypeCache = new mutable.HashMap[(api.Type, api.Definition), api.Structure]
+
+  /** This cache is necessary to avoid infinite loops when hashing an inline "Body" annotation.
+   *  Its values are transitively seen inline references within a call chain starting from a single "origin" inline
+   *  definition. Avoid hashing an inline "Body" annotation if its associated definition is already in the cache.
+   *  Precondition: the cache is empty whenever we hash a new "origin" inline "Body" annotation.
+   */
+  private val seenInlineCache = mutable.HashSet.empty[Symbol]
+
+  /** This cache is optional, it avoids recomputing hashes of inline "Body" annotations,
+   *  e.g. when a concrete inline method is inherited by a subclass.
+   */
+  private val inlineBodyCache = mutable.HashMap.empty[Symbol, Int]
 
   private val allNonLocalClassesInSrc = new mutable.HashSet[xsbti.api.ClassLike]
   private val _mainClasses = new mutable.HashSet[String]
@@ -211,7 +295,7 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
 
     val selfType = apiType(sym.givenSelfType)
 
-    val name = sym.fullName.stripModuleClassSuffix.toString
+    val name = ExtractDependencies.classNameAsString(sym)
       // We strip module class suffix. Zinc relies on a class and its companion having the same name
 
     val tparams = sym.typeParams.map(apiTypeParameter).toArray
@@ -219,9 +303,9 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
     val structure = apiClassStructure(sym)
     val acc = apiAccess(sym)
     val modifiers = apiModifiers(sym)
-    val anns = apiAnnotations(sym).toArray
+    val anns = apiAnnotations(sym, inlineOrigin = NoSymbol).toArray
     val topLevel = sym.isTopLevelClass
-    val childrenOfSealedClass = sym.children.sorted(classFirstSort).map(c =>
+    val childrenOfSealedClass = sym.sealedDescendants.sorted(classFirstSort).map(c =>
       if (c.isClass)
         apiType(c.typeRef)
       else
@@ -233,6 +317,8 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
       childrenOfSealedClass, topLevel, tparams)
 
     allNonLocalClassesInSrc += cl
+    if !sym.isLocal then
+      nonLocalClassSymbols += sym
 
     if (sym.isStatic && !sym.is(Trait) && ctx.platform.hasMainMethod(sym)) {
        // If sym is an object, all main methods count, otherwise only @static ones count.
@@ -255,7 +341,7 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
             report.error(ex, csym.sourcePos)
             defn.ObjectType :: Nil
         }
-      if (ValueClasses.isDerivedValueClass(csym)) {
+      if (csym.isDerivedValueClass) {
         val underlying = ValueClasses.valueClassUnbox(csym).info.finalResultType
         // The underlying type of a value class should be part of the name hash
         // of the value class (see the test `value-class-underlying`), this is accomplished
@@ -320,54 +406,100 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
     }
   }
 
-  def apiDefinitions(defs: List[Symbol]): List[api.ClassDefinition] = {
-    defs.sorted(classFirstSort).map(apiDefinition)
-  }
+  def apiDefinitions(defs: List[Symbol]): List[api.ClassDefinition] =
+    defs.sorted(classFirstSort).map(apiDefinition(_, inlineOrigin = NoSymbol))
 
-  def apiDefinition(sym: Symbol): api.ClassDefinition = {
+  /** `inlineOrigin` denotes an optional inline method that we are
+   *  currently hashing the body of. If it exists, include extra information
+   *  that is missing after erasure
+   */
+  def apiDefinition(sym: Symbol, inlineOrigin: Symbol): api.ClassDefinition = {
     if (sym.isClass) {
       apiClass(sym.asClass)
     } else if (sym.isType) {
       apiTypeMember(sym.asType)
     } else if (sym.is(Mutable, butNot = Accessor)) {
       api.Var.of(sym.name.toString, apiAccess(sym), apiModifiers(sym),
-        apiAnnotations(sym).toArray, apiType(sym.info))
+        apiAnnotations(sym, inlineOrigin).toArray, apiType(sym.info))
     } else if (sym.isStableMember && !sym.isRealMethod) {
       api.Val.of(sym.name.toString, apiAccess(sym), apiModifiers(sym),
-        apiAnnotations(sym).toArray, apiType(sym.info))
+        apiAnnotations(sym, inlineOrigin).toArray, apiType(sym.info))
     } else {
-      apiDef(sym.asTerm)
+      apiDef(sym.asTerm, inlineOrigin)
     }
   }
 
-  def apiDef(sym: TermSymbol): api.Def = {
+  /** `inlineOrigin` denotes an optional inline method that we are
+   *  currently hashing the body of. If it exists, include extra information
+   *  that is missing after erasure
+   */
+  def apiDef(sym: TermSymbol, inlineOrigin: Symbol): api.Def = {
+
+    var seenInlineExtras = false
+    var inlineExtras = 41
+
+    def mixInlineParam(p: Symbol): Unit =
+      if inlineOrigin.exists && p.is(Inline) then
+        seenInlineExtras = true
+        inlineExtras = hashInlineParam(p, inlineExtras)
+
+    def inlineExtrasAnnot: Option[api.Annotation] =
+      val h = inlineExtras
+      Option.when(seenInlineExtras) {
+        marker(s"${MurmurHash3.finalizeHash(h, "inlineExtras".hashCode)}")
+      }
+
+    def tparamList(pt: TypeLambda): List[api.TypeParameter] =
+      pt.paramNames.lazyZip(pt.paramInfos).map((pname, pbounds) =>
+        apiTypeParameter(pname.toString, 0, pbounds.lo, pbounds.hi)
+      )
+
+    def paramList(mt: MethodType, params: List[Symbol]): api.ParameterList =
+      val apiParams = params.lazyZip(mt.paramInfos).map((param, ptype) =>
+        mixInlineParam(param)
+        api.MethodParameter.of(
+          param.name.toString, apiType(ptype), param.is(HasDefault), api.ParameterModifier.Plain))
+      api.ParameterList.of(apiParams.toArray, mt.isImplicitMethod)
+
     def paramLists(t: Type, paramss: List[List[Symbol]]): List[api.ParameterList] = t match {
       case pt: TypeLambda =>
         paramLists(pt.resultType, paramss.drop(1))
       case mt @ MethodTpe(pnames, ptypes, restpe) =>
         assert(paramss.nonEmpty && paramss.head.hasSameLengthAs(pnames),
           i"mismatch for $sym, ${sym.info}, ${sym.paramSymss}")
-        val apiParams = paramss.head.lazyZip(ptypes).map((param, ptype) =>
-          api.MethodParameter.of(param.name.toString, apiType(ptype),
-          param.is(HasDefault), api.ParameterModifier.Plain))
-        api.ParameterList.of(apiParams.toArray, mt.isImplicitMethod)
-          :: paramLists(restpe, paramss.tail)
+        paramList(mt, paramss.head) :: paramLists(restpe, paramss.tail)
       case _ =>
         Nil
     }
 
-    val tparams = sym.info match {
+    /** returns list of pairs of 1: the position in all parameter lists, and 2: a type parameter list */
+    def tparamLists(t: Type, index: Int): List[(Int, List[api.TypeParameter])] = t match
       case pt: TypeLambda =>
-        pt.paramNames.lazyZip(pt.paramInfos).map((pname, pbounds) =>
-          apiTypeParameter(pname.toString, 0, pbounds.lo, pbounds.hi))
+        (index, tparamList(pt)) :: tparamLists(pt.resultType, index + 1)
+      case mt: MethodType =>
+        tparamLists(mt.resultType, index + 1)
       case _ =>
         Nil
-    }
+
+    val (tparams, tparamsExtras) = sym.info match
+      case pt: TypeLambda =>
+        (tparamList(pt), tparamLists(pt.resultType, index = 1))
+      case mt: MethodType =>
+        (Nil, tparamLists(mt.resultType, index = 1))
+      case _ =>
+        (Nil, Nil)
+
     val vparamss = paramLists(sym.info, sym.paramSymss)
     val retTp = sym.info.finalResultType.widenExpr
 
-    api.Def.of(sym.name.toString, apiAccess(sym), apiModifiers(sym),
-      apiAnnotations(sym).toArray, tparams.toArray, vparamss.toArray, apiType(retTp))
+    val tparamsExtraAnnot = Option.when(tparamsExtras.nonEmpty) {
+      marker(s"${hashTparamsExtras(tparamsExtras)("tparamsExtra".hashCode)}")
+    }
+
+    val annotations = inlineExtrasAnnot ++: tparamsExtraAnnot ++: apiAnnotations(sym, inlineOrigin)
+
+    api.Def.of(sym.zincMangledName.toString, apiAccess(sym), apiModifiers(sym),
+      annotations.toArray, tparams.toArray, vparamss.toArray, apiType(retTp))
   }
 
   def apiTypeMember(sym: TypeSymbol): api.TypeMember = {
@@ -375,13 +507,13 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
     val name = sym.name.toString
     val access = apiAccess(sym)
     val modifiers = apiModifiers(sym)
-    val as = apiAnnotations(sym)
+    val as = apiAnnotations(sym, inlineOrigin = NoSymbol)
     val tpe = sym.info
 
     if (sym.isAliasType)
       api.TypeAlias.of(name, access, modifiers, as.toArray, typeParams, apiType(tpe.bounds.hi))
     else {
-      assert(sym.isAbstractType)
+      assert(sym.isAbstractOrParamType)
       api.TypeDeclaration.of(name, access, modifiers, as.toArray, typeParams, apiType(tpe.bounds.lo), apiType(tpe.bounds.hi))
     }
   }
@@ -498,10 +630,12 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
       case tp: OrType =>
         val s = combineApiTypes(apiType(tp.tp1), apiType(tp.tp2))
         withMarker(s, orMarker)
+      case tp: FlexibleType =>
+        apiType(tp.underlying)
       case ExprType(resultType) =>
         withMarker(apiType(resultType), byNameMarker)
       case MatchType(bound, scrut, cases) =>
-        val s = combineApiTypes(apiType(bound) :: apiType(scrut) :: cases.map(apiType): _*)
+        val s = combineApiTypes(apiType(bound) :: apiType(scrut) :: cases.map(apiType)*)
         withMarker(s, matchMarker)
       case ConstantType(constant) =>
         api.Constant.of(apiType(constant.tpe), constant.stringValue)
@@ -549,7 +683,7 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
       apiType(lo), apiType(hi))
 
   def apiVariance(v: Int): api.Variance = {
-    import api.Variance._
+    import api.Variance.*
     if (v < 0) Contravariant
     else if (v > 0) Covariant
     else Invariant
@@ -585,31 +719,42 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
       sym.isOneOf(GivenOrImplicit), sym.is(Lazy), sym.is(Macro), sym.isSuperAccessor)
   }
 
-  def apiAnnotations(s: Symbol): List[api.Annotation] = {
+  /** `inlineOrigin` denotes an optional inline method that we are
+   *  currently hashing the body of.
+   */
+  def apiAnnotations(s: Symbol, inlineOrigin: Symbol): List[api.Annotation] = {
     val annots = new mutable.ListBuffer[api.Annotation]
-    val inlineBody = Inliner.bodyToInline(s)
-    if (!inlineBody.isEmpty) {
+    val inlineBody = Inlines.bodyToInline(s)
+    if !inlineBody.isEmpty then
       // If the body of an inline def changes, all the reverse dependencies of
       // this method need to be recompiled. sbt has no way of tracking method
       // bodies, so we include the hash of the body of the method as part of the
       // signature we send to sbt.
-      //
-      // FIXME: The API of a class we send to Zinc includes the signatures of
-      // inherited methods, which means that we repeatedly compute the hash of
-      // an inline def in every class that extends its owner. To avoid this we
-      // could store the hash as an annotation when pickling an inline def
-      // and retrieve it here instead of computing it on the fly.
-      val inlineBodyHash = treeHash(inlineBody)
-      annots += marker(inlineBodyHash.toString)
-    }
+
+      def hash[U](inlineOrigin: Symbol): Int =
+        assert(seenInlineCache.add(s)) // will fail if already seen, guarded by treeHash
+        treeHash(inlineBody, inlineOrigin)
+
+      val inlineHash =
+        if inlineOrigin.exists then hash(inlineOrigin)
+        else inlineBodyCache.getOrElseUpdate(s, hash(inlineOrigin = s).tap(_ => seenInlineCache.clear()))
+
+      annots += marker(inlineHash.toString)
+
+    end if
 
     // In the Scala2 ExtractAPI phase we only extract annotations that extend
     // StaticAnnotation, but in Dotty we currently pickle all annotations so we
-    // extract everything (except annotations missing from the classpath which
-    // we simply skip over, and inline body annotations which are handled above).
+    // extract everything, except:
+    // - annotations missing from the classpath which we simply skip over
+    // - inline body annotations which are handled above
+    // - the Child annotation since we already extract children via
+    //   `api.ClassLike#childrenOfSealedClass` and adding this annotation would
+    //   lead to overcompilation when using zinc's
+    //   `IncOptions#useOptimizedSealed`.
     s.annotations.foreach { annot =>
       val sym = annot.symbol
-      if sym.exists && sym != defn.BodyAnnot then
+      if sym.exists && sym != defn.BodyAnnot && sym != defn.ChildAnnot then
         annots += apiAnnotation(annot)
     }
 
@@ -619,15 +764,65 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
   /** Produce a hash for a tree that is as stable as possible:
    *  it should stay the same across compiler runs, compiler instances,
    *  JVMs, etc.
+   *
+   * `inlineOrigin` denotes an optional inline method that we are hashing the body of, where `tree` could be
+   * its body, or the body of another method referenced in a call chain leading to `inlineOrigin`.
+   *
+   * If `inlineOrigin` is NoSymbol, then tree is the tree of an annotation.
    */
-  def treeHash(tree: Tree): Int =
-    import scala.util.hashing.MurmurHash3
+  def treeHash(tree: Tree, inlineOrigin: Symbol): Int =
+    import core.Constants.*
+
+    def nameHash(n: Name, initHash: Int): Int =
+      val h =
+        if n.isTermName then
+          MurmurHash3.mix(initHash, TermNameHash)
+        else
+          MurmurHash3.mix(initHash, TypeNameHash)
+
+      // The hashCode of the name itself is not stable across compiler instances
+      MurmurHash3.mix(h, n.toString.hashCode)
+    end nameHash
+
+    def constantHash(c: Constant, initHash: Int): Int =
+      var h = MurmurHash3.mix(initHash, c.tag)
+      c.tag match
+        case NullTag =>
+          // No value to hash, the tag is enough.
+        case ClazzTag =>
+          // Go through `apiType` to get a value with a stable hash, it'd
+          // be better to use Murmur here too instead of relying on
+          // `hashCode`, but that would essentially mean duplicating
+          // https://github.com/sbt/zinc/blob/develop/internal/zinc-apiinfo/src/main/scala/xsbt/api/HashAPI.scala
+          // and at that point we might as well do type hashing on our own
+          // representation.
+          h = MurmurHash3.mix(h, apiType(c.typeValue).hashCode)
+        case _ =>
+          h = MurmurHash3.mix(h, c.value.hashCode)
+      h
+    end constantHash
+
+    def cannotHash(what: String, elem: Any, pos: Positioned): Unit =
+      internalError(i"Don't know how to produce a stable hash for $what", pos.sourcePos)
 
     def positionedHash(p: ast.Positioned, initHash: Int): Int =
+      var h = initHash
+
       p match
-        case p: WithLazyField[?] =>
-          p.forceIfLazy
+        case p: WithLazyFields => p.forceFields()
         case _ =>
+
+      if inlineOrigin.exists then
+        p match
+          case ref: RefTree @unchecked =>
+            val sym = ref.symbol
+            if sym.is(Inline, butNot = Param) && !seenInlineCache.contains(sym) then
+              // An inline method that calls another inline method will eventually inline the call
+              // at a non-inline callsite, in this case if the implementation of the nested call
+              // changes, then the callsite will have a different API, we should hash the definition
+              h = MurmurHash3.mix(h, apiDefinition(sym, inlineOrigin).hashCode)
+          case _ =>
+
       // FIXME: If `p` is a tree we should probably take its type into account
       // when hashing it, but producing a stable hash for a type is not trivial
       // since the same type might have multiple representations, for method
@@ -635,12 +830,11 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
       // in Zinc that generates hashes from that, if we can reliably produce
       // stable hashes for types ourselves then we could bypass all that and
       // send Zinc hashes directly.
-      val h = MurmurHash3.mix(initHash, p.productPrefix.hashCode)
+      h = MurmurHash3.mix(h, p.productPrefix.hashCode)
       iteratorHash(p.productIterator, h)
     end positionedHash
 
     def iteratorHash(it: Iterator[Any], initHash: Int): Int =
-      import core.Constants._
       var h = initHash
       while it.hasNext do
         it.next() match
@@ -649,30 +843,11 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
           case xs: List[?] =>
             h = iteratorHash(xs.iterator, h)
           case c: Constant =>
-            h = MurmurHash3.mix(h, c.tag)
-            c.tag match
-              case NullTag =>
-                // No value to hash, the tag is enough.
-              case ClazzTag =>
-                // Go through `apiType` to get a value with a stable hash, it'd
-                // be better to use Murmur here too instead of relying on
-                // `hashCode`, but that would essentially mean duplicating
-                // https://github.com/sbt/zinc/blob/develop/internal/zinc-apiinfo/src/main/scala/xsbt/api/HashAPI.scala
-                // and at that point we might as well do type hashing on our own
-                // representation.
-                val apiValue = apiType(c.typeValue)
-                h = MurmurHash3.mix(h, apiValue.hashCode)
-              case _ =>
-                h = MurmurHash3.mix(h, c.value.hashCode)
+            h = constantHash(c, h)
           case n: Name =>
-            // The hashCode of the name itself is not stable across compiler instances
-            h = MurmurHash3.mix(h, n.toString.hashCode)
+            h = nameHash(n, h)
           case elem =>
-            internalError(
-              i"Don't know how to produce a stable hash for `$elem` of unknown class ${elem.getClass}",
-              tree.sourcePos)
-
-            h = MurmurHash3.mix(h, elem.toString.hashCode)
+            cannotHash(what = i"`${elem.tryToShow}` of unknown class ${elem.getClass}", elem, tree)
       h
     end iteratorHash
 
@@ -680,6 +855,38 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
     val h = positionedHash(tree, seed)
     MurmurHash3.finalizeHash(h, 0)
   end treeHash
+
+  /** Hash secondary type parameters in separate marker annotation.
+   *  We hash them separately because the position of type parameters is important.
+   */
+  private def hashTparamsExtras(tparamsExtras: List[(Int, List[api.TypeParameter])])(initHash: Int): Int =
+
+    def mixTparams(tparams: List[api.TypeParameter])(initHash: Int) =
+      var h = initHash
+      var elems = tparams
+      while elems.nonEmpty do
+        h = MurmurHash3.mix(h, elems.head.hashCode)
+        elems = elems.tail
+      h
+
+    def mixIndexAndTparams(index: Int, tparams: List[api.TypeParameter])(initHash: Int) =
+      mixTparams(tparams)(MurmurHash3.mix(initHash, index))
+
+    var h = initHash
+    var extras = tparamsExtras
+    var len = 0
+    while extras.nonEmpty do
+      h = mixIndexAndTparams(index = extras.head(0), tparams = extras.head(1))(h)
+      extras = extras.tail
+      len += 1
+    MurmurHash3.finalizeHash(h, len)
+  end hashTparamsExtras
+
+  /** Mix in the name hash also because otherwise switching which
+   *  parameter is inline will not affect the hash.
+   */
+  private def hashInlineParam(p: Symbol, h: Int) =
+    MurmurHash3.mix(p.name.toString.hashCode, MurmurHash3.mix(h, InlineParamHash))
 
   def apiAnnotation(annot: Annotation): api.Annotation = {
     // Like with inline defs, the whole body of the annotation and not just its
@@ -691,6 +898,6 @@ private class ExtractAPICollector(using Context) extends ThunkHolder {
     // annotated @org.junit.Test).
     api.Annotation.of(
       apiType(annot.tree.tpe), // Used by sbt to find tests to run
-      Array(api.AnnotationArgument.of("TREE_HASH", treeHash(annot.tree).toString)))
+      Array(api.AnnotationArgument.of("TREE_HASH", treeHash(annot.tree, inlineOrigin = NoSymbol).toString)))
   }
 }

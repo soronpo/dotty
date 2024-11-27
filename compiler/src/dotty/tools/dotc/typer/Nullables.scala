@@ -2,15 +2,15 @@ package dotty.tools
 package dotc
 package typer
 
-import core._
-import Types._, Contexts._, Symbols._, Decorators._, Constants._
+import core.*
+import Types.*, Contexts.*, Symbols.*, Decorators.*, Constants.*
 import annotation.tailrec
 import StdNames.nme
 import util.Property
 import Names.Name
 import util.Spans.Span
-import Flags._
-import NullOpsDecorator._
+import Flags.*
+import NullOpsDecorator.*
 import collection.mutable
 import config.Printers.nullables
 import ast.{tpd, untpd}
@@ -18,7 +18,11 @@ import ast.Trees.mods
 
 /** Operations for implementing a flow analysis for nullability */
 object Nullables:
-  import ast.tpd._
+  import ast.tpd.*
+
+  def importUnsafeNulls(using Context): Import = Import(
+    ref(defn.LanguageModule),
+    List(untpd.ImportSelector(untpd.Ident(nme.unsafeNulls), EmptyTree, EmptyTree)))
 
   inline def unsafeNullsEnabled(using Context): Boolean =
     ctx.explicitNulls && !ctx.mode.is(Mode.SafeNulls)
@@ -29,20 +33,24 @@ object Nullables:
     && hi.isValueType
     // We cannot check if hi is nullable, because it can cause cyclic reference.
 
+  private def nullifiedHi(lo: Type, hi: Type)(using Context): Type =
+    if needNullifyHi(lo, hi) then
+      if ctx.flexibleTypes then FlexibleType(hi) else OrNull(hi)
+    else hi
+
   /** Create a nullable type bound
    *  If lo is `Null`, `| Null` is added to hi
    */
   def createNullableTypeBounds(lo: Type, hi: Type)(using Context): TypeBounds =
-    val newHi = if needNullifyHi(lo, hi) then OrType(hi, defn.NullType, soft = false) else hi
-    TypeBounds(lo, newHi)
+    TypeBounds(lo, nullifiedHi(lo, hi))
 
   /** Create a nullable type bound tree
    *  If lo is `Null`, `| Null` is added to hi
    */
   def createNullableTypeBoundsTree(lo: Tree, hi: Tree, alias: Tree = EmptyTree)(using Context): TypeBoundsTree =
-    val hiTpe = hi.typeOpt
-    val newHi = if needNullifyHi(lo.typeOpt, hiTpe) then TypeTree(OrType(hiTpe, defn.NullType, soft = false)) else hi
-    TypeBoundsTree(lo, newHi, alias)
+    val hiTpe = nullifiedHi(lo.typeOpt, hi.typeOpt)
+    val hiTree = if(hiTpe eq hi.typeOpt) hi else TypeTree(hiTpe)
+    TypeBoundsTree(lo, hiTree, alias)
 
   /** A set of val or var references that are known to be not null, plus a set of
    *  variable references that are not known (anymore) to be not null
@@ -111,12 +119,23 @@ object Nullables:
         testSym(tree.symbol, l)
       case Apply(Select(Literal(Constant(null)), _), r :: Nil) =>
         testSym(tree.symbol, r)
+      case Apply(Apply(op, l :: Nil), Literal(Constant(null)) :: Nil) =>
+        testPredefSym(op.symbol, l)
+      case Apply(Apply(op, Literal(Constant(null)) :: Nil), r :: Nil) =>
+        testPredefSym(op.symbol, r)
       case _ =>
         None
 
     private def testSym(sym: Symbol, operand: Tree)(using Context) =
       if sym == defn.Any_== || sym == defn.Object_eq then Some((operand, true))
       else if sym == defn.Any_!= || sym == defn.Object_ne then Some((operand, false))
+      else None
+
+    private def testPredefSym(opSym: Symbol, operand: Tree)(using Context) =
+      if opSym.owner == defn.ScalaPredefModuleClass then
+        if opSym.name == nme.eq then Some((operand, true))
+        else if opSym.name == nme.ne then Some((operand, false))
+        else None
       else None
 
   end CompareNull
@@ -158,10 +177,11 @@ object Nullables:
   def isTracked(ref: TermRef)(using Context) =
     ref.isStable
     || { val sym = ref.symbol
+         val unit = ctx.compilationUnit
          !ref.usedOutOfOrder
          && sym.span.exists
-         && ctx.compilationUnit != null // could be null under -Ytest-pickler
-         && ctx.compilationUnit.assignmentSpans.contains(sym.span.start)
+         && (unit ne NoCompilationUnit) // could be null under -Ytest-pickler
+         && unit.assignmentSpans.contains(sym.span.start)
       }
 
   /** The nullability context to be used after a case that matches pattern `pat`.
@@ -183,6 +203,16 @@ object Nullables:
     case _: Typed | _: UnApply => true
     case Alternative(pats) => pats.forall(matchesNotNull)
     // TODO: Add constant pattern if the constant type is not nullable
+    case _ => false
+
+  def matchesNull(cdef: CaseDef)(using Context): Boolean =
+    cdef.guard.isEmpty && patMatchesNull(cdef.pat)
+
+  private def patMatchesNull(pat: Tree)(using Context): Boolean = pat match
+    case Literal(Constant(null)) => true
+    case Bind(_, pat) => patMatchesNull(pat)
+    case Alternative(trees) => trees.exists(patMatchesNull)
+    case _ if isVarPattern(pat) => true
     case _ => false
 
   extension (infos: List[NotNullInfo])
@@ -257,12 +287,12 @@ object Nullables:
     */
     def usedOutOfOrder(using Context): Boolean =
       val refSym = ref.symbol
-      val refOwner = refSym.owner
+      val refOwner = refSym.maybeOwner
 
       @tailrec def recur(s: Symbol): Boolean =
         s != NoSymbol
         && s != refOwner
-        && (s.isOneOf(Lazy | Method) // not at the rhs of lazy ValDef or in a method (or lambda)
+        && (s.isOneOf(MethodOrLazy) // not at the rhs of lazy ValDef or in a method (or lambda)
             || s.isClass // not in a class
             || recur(s.owner))
 
@@ -396,7 +426,7 @@ object Nullables:
    *  because of shadowing.
    */
   def assignmentSpans(using Context): Map[Int, List[Span]] =
-    import ast.untpd._
+    import ast.untpd.*
 
     object populate extends UntypedTreeTraverser:
 
@@ -440,7 +470,7 @@ object Nullables:
                 else candidates -= name
               case None =>
             traverseChildren(tree)
-          case _: (If | WhileDo | Typed) =>
+          case _: (If | WhileDo | Typed | Match | CaseDef | untpd.ParsedTry) =>
             traverseChildren(tree)      // assignments to candidate variables are OK here ...
           case _ =>
             reachable = Set.empty       // ... but not here
@@ -502,7 +532,7 @@ object Nullables:
   def postProcessByNameArgs(fn: TermRef, app: Tree)(using Context): Tree =
     fn.widen match
       case mt: MethodType
-      if mt.paramInfos.exists(_.isInstanceOf[ExprType]) && !fn.symbol.is(Inline) =>
+      if mt.isMethodWithByNameArgs && !fn.symbol.is(Inline) =>
         app match
           case Apply(fn, args) =>
             object dropNotNull extends TreeMap:

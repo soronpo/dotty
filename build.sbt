@@ -13,25 +13,35 @@ val `scala3-tasty-inspector` = Build.`scala3-tasty-inspector`
 val `scala3-language-server` = Build.`scala3-language-server`
 val `scala3-bench` = Build.`scala3-bench`
 val `scala3-bench-bootstrapped` = Build.`scala3-bench-bootstrapped`
-val `stdlib-bootstrapped` = Build.`stdlib-bootstrapped`
-val `stdlib-bootstrapped-tasty-tests` = Build.`stdlib-bootstrapped-tasty-tests`
+val `scala3-bench-micro` = Build.`scala3-bench-micro`
+val `scala2-library-bootstrapped` = Build.`scala2-library-bootstrapped`
+val `scala2-library-tasty` = Build.`scala2-library-tasty`
+val `scala2-library-cc` = Build.`scala2-library-cc`
+val `scala2-library-cc-tasty` = Build.`scala2-library-cc-tasty`
 val `tasty-core` = Build.`tasty-core`
 val `tasty-core-bootstrapped` = Build.`tasty-core-bootstrapped`
 val `tasty-core-scala2` = Build.`tasty-core-scala2`
 val scaladoc = Build.scaladoc
 val `scaladoc-testcases` = Build.`scaladoc-testcases`
-val `scaladoc-js` = Build.`scaladoc-js`
+val `scaladoc-js-common` = Build.`scaladoc-js-common`
+val `scaladoc-js-main` = Build.`scaladoc-js-main`
+val `scaladoc-js-contributors` = Build.`scaladoc-js-contributors`
 val `scala3-bench-run` = Build.`scala3-bench-run`
 val dist = Build.dist
+val `dist-mac-x86_64` = Build.`dist-mac-x86_64`
+val `dist-mac-aarch64` = Build.`dist-mac-aarch64`
+val `dist-win-x86_64` = Build.`dist-win-x86_64`
+val `dist-linux-x86_64` = Build.`dist-linux-x86_64`
+val `dist-linux-aarch64` = Build.`dist-linux-aarch64`
 val `community-build` = Build.`community-build`
 val `sbt-community-build` = Build.`sbt-community-build`
+val `scala3-presentation-compiler` = Build.`scala3-presentation-compiler`
 
 val sjsSandbox = Build.sjsSandbox
 val sjsJUnitTests = Build.sjsJUnitTests
 val sjsCompilerTests = Build.sjsCompilerTests
 
 val `sbt-test` = Build.`sbt-test`
-val `vscode-dotty` = Build.`vscode-dotty`
 
 inThisBuild(Build.thisBuildSettings)
 inScope(Global)(Build.globalSettings)

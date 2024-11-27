@@ -2,14 +2,16 @@ package dotty.tools
 package dotc
 package config
 
-import core._
-import Contexts._, Symbols._, Names._, NameOps._, Phases._
+import core.*
+import Contexts.*, Symbols.*, Names.*
 import StdNames.nme
-import Decorators.{_, given}
+import Decorators.*
 import util.{SrcPos, NoSourcePosition}
-import SourceVersion._
+import SourceVersion.*
 import reporting.Message
 import NameKinds.QualifiedName
+import Annotations.ExperimentalAnnotation
+import Settings.Setting.ChoiceWithHelp
 
 object Feature:
 
@@ -27,6 +29,56 @@ object Feature:
   val erasedDefinitions = experimental("erasedDefinitions")
   val symbolLiterals = deprecated("symbolLiterals")
   val fewerBraces = experimental("fewerBraces")
+  val saferExceptions = experimental("saferExceptions")
+  val clauseInterleaving = experimental("clauseInterleaving")
+  val pureFunctions = experimental("pureFunctions")
+  val captureChecking = experimental("captureChecking")
+  val into = experimental("into")
+  val modularity = experimental("modularity")
+  val betterMatchTypeExtractors = experimental("betterMatchTypeExtractors")
+  val quotedPatternsWithPolymorphicFunctions = experimental("quotedPatternsWithPolymorphicFunctions")
+  val betterFors = experimental("betterFors")
+
+  def experimentalAutoEnableFeatures(using Context): List[TermName] =
+    defn.languageExperimentalFeatures
+      .map(sym => experimental(sym.name))
+      .filterNot(_ == captureChecking) // TODO is this correct?
+
+  val values = List(
+    (nme.help, "Display all available features"),
+    (nme.noAutoTupling, "Disable automatic tupling"),
+    (nme.dynamics, "Allow direct or indirect subclasses of scala.Dynamic"),
+    (nme.unsafeNulls, "Enable unsafe nulls for explicit nulls"),
+    (nme.postfixOps, "Allow postfix operators (not recommended)"),
+    (nme.strictEquality, "Enable strict equality (disable canEqualAny)"),
+    (nme.implicitConversions, "Allow implicit conversions without warnings"),
+    (nme.adhocExtensions, "Allow ad-hoc extension methods"),
+    (namedTypeArguments, "Allow named type arguments"),
+    (genericNumberLiterals, "Allow generic number literals"),
+    (scala2macros, "Allow Scala 2 macros"),
+    (dependent, "Allow dependent method types"),
+    (erasedDefinitions, "Allow erased definitions"),
+    (symbolLiterals, "Allow symbol literals"),
+    (fewerBraces, "Enable support for using indentation for arguments"),
+    (saferExceptions, "Enable safer exceptions"),
+    (clauseInterleaving, "Enable clause interleaving"),
+    (pureFunctions, "Enable pure functions for capture checking"),
+    (captureChecking, "Enable experimental capture checking"),
+    (into, "Allow into modifier on parameter types"),
+    (modularity, "Enable experimental modularity features"),
+    (betterMatchTypeExtractors, "Enable better match type extractors"),
+    (betterFors, "Enable improvements in `for` comprehensions")
+  )
+
+  // legacy language features from Scala 2 that are no longer supported.
+  val legacyFeatures = List(
+    "higherKinds",
+    "existentials",
+    "reflectiveCalls"
+  )
+
+  private def enabledLanguageFeaturesBySetting(using Context): List[String] =
+    ctx.settings.language.value.asInstanceOf
 
   /** Is `feature` enabled by by a command-line setting? The enabling setting is
    *
@@ -36,7 +88,7 @@ object Feature:
    *  but subtracting the prefix `scala.language.` at the front.
    */
   def enabledBySetting(feature: TermName)(using Context): Boolean =
-    ctx.base.settings.language.value.contains(feature.toString)
+    enabledLanguageFeaturesBySetting.contains(feature.toString)
 
   /** Is `feature` enabled by by an import? This is the case if the feature
    *  is imported by a named import
@@ -49,7 +101,8 @@ object Feature:
    */
   def enabledByImport(feature: TermName)(using Context): Boolean =
     //atPhase(typerPhase) {
-      ctx.importInfo != null && ctx.importInfo.featureImported(feature)
+      val info = ctx.importInfo
+      info != null && info.featureImported(feature)
     //}
 
   /** Is `feature` enabled by either a command line setting or an import?
@@ -69,63 +122,122 @@ object Feature:
 
   def namedTypeArgsEnabled(using Context) = enabled(namedTypeArguments)
 
+  def clauseInterleavingEnabled(using Context) =
+    sourceVersion.isAtLeast(`3.6`) || enabled(clauseInterleaving)
+
+  def betterForsEnabled(using Context) = enabled(betterFors)
+
   def genericNumberLiteralsEnabled(using Context) = enabled(genericNumberLiterals)
 
   def scala2ExperimentalMacroEnabled(using Context) = enabled(scala2macros)
+
+  def quotedPatternsWithPolymorphicFunctionsEnabled(using Context) =
+    enabled(quotedPatternsWithPolymorphicFunctions)
+
+  /** Is pureFunctions enabled for this compilation unit? */
+  def pureFunsEnabled(using Context) =
+    enabledBySetting(pureFunctions)
+    || ctx.compilationUnit.knowsPureFuns
+    || ccEnabled
+
+  /** Is captureChecking enabled for this compilation unit? */
+  def ccEnabled(using Context) =
+    enabledBySetting(captureChecking)
+    || ctx.compilationUnit.needsCaptureChecking
+
+  /** Is pureFunctions enabled for any of the currently compiled compilation units? */
+  def pureFunsEnabledSomewhere(using Context) =
+    enabledBySetting(pureFunctions)
+    || ctx.run != null && ctx.run.nn.pureFunsImportEncountered
+    || ccEnabledSomewhere
+
+  /** Is captureChecking enabled for any of the currently compiled compilation units? */
+  def ccEnabledSomewhere(using Context) =
+    if ctx.run != null then ctx.run.nn.ccEnabledSomewhere
+    else enabledBySetting(captureChecking)
 
   def sourceVersionSetting(using Context): SourceVersion =
     SourceVersion.valueOf(ctx.settings.source.value)
 
   def sourceVersion(using Context): SourceVersion =
-    if ctx.compilationUnit == null then sourceVersionSetting
-    else ctx.compilationUnit.sourceVersion match
+    ctx.compilationUnit.sourceVersion match
       case Some(v) => v
       case none => sourceVersionSetting
 
-  def migrateTo3(using Context): Boolean = sourceVersion == `3.0-migration`
+  def migrateTo3(using Context): Boolean =
+    sourceVersion == `3.0-migration`
+
+  def fewerBracesEnabled(using Context) =
+    sourceVersion.isAtLeast(`3.3`) || enabled(fewerBraces)
 
   /** If current source migrates to `version`, issue given warning message
    *  and return `true`, otherwise return `false`.
    */
-  def warnOnMigration(msg: Message, pos: SrcPos,
-      version: SourceVersion = defaultSourceVersion)(using Context): Boolean =
+  def warnOnMigration(msg: Message, pos: SrcPos, version: SourceVersion)(using Context): Boolean =
     if sourceVersion.isMigrating && sourceVersion.stable == version
-       || version == `3.0` && migrateTo3
+       || (version == `3.0` || version == `3.1`) && migrateTo3
     then
       report.migrationWarning(msg, pos)
       true
     else
       false
 
-  private val assumeExperimentalIn = Set("dotty.tools.vulpix.ParallelTesting")
-
-  def checkExperimentalFeature(which: String, srcPos: SrcPos)(using Context) =
+  def checkExperimentalFeature(which: String, srcPos: SrcPos, note: => String = "")(using Context) =
     if !isExperimentalEnabled then
-      report.error(i"Experimental $which may only be used with a nightly or snapshot version of the compiler", srcPos)
+      report.error(experimentalUseSite(which) + note, srcPos)
+
+  private def ccException(sym: Symbol)(using Context): Boolean =
+    ccEnabled && defn.ccExperimental.contains(sym)
 
   def checkExperimentalDef(sym: Symbol, srcPos: SrcPos)(using Context) =
-    if !isExperimentalEnabled then
-      val symMsg =
-        if sym eq defn.ExperimentalAnnot then
-          i"use of @experimental is experimental"
-        else if sym.hasAnnotation(defn.ExperimentalAnnot) then
-          i"$sym is marked @experimental"
-        else if sym.owner.hasAnnotation(defn.ExperimentalAnnot) then
-          i"${sym.owner} is marked @experimental"
-        else
-          i"$sym inherits @experimental"
-      report.error(s"$symMsg and therefore may only be used with a nightly or snapshot version of the compiler", srcPos)
+    val experimentalSym =
+      if sym.hasAnnotation(defn.ExperimentalAnnot) then sym
+      else if sym.owner.hasAnnotation(defn.ExperimentalAnnot) then sym.owner
+      else NoSymbol
+    if !isExperimentalEnabled && !ccException(experimentalSym) then
+      val msg =
+        experimentalSym.getAnnotation(defn.ExperimentalAnnot).map {
+          case ExperimentalAnnotation(msg) if msg.nonEmpty => s": $msg"
+          case _ => ""
+        }.getOrElse("")
+      val markedExperimental =
+        if experimentalSym.exists
+        then i"$experimentalSym is marked @experimental$msg"
+        else i"$sym inherits @experimental$msg"
+      report.error(markedExperimental + "\n\n" + experimentalUseSite("definition"), srcPos)
 
-  /** Check that experimental compiler options are only set for snapshot or nightly compiler versions. */
-  def checkExperimentalSettings(using Context): Unit =
-    for setting <- ctx.settings.language.value
-        if setting.startsWith("experimental.") && setting != "experimental.macros"
-    do checkExperimentalFeature(s"feature $setting", NoSourcePosition)
+  private def experimentalUseSite(which: String): String =
+    s"""Experimental $which may only be used under experimental mode:
+       |  1. in a definition marked as @experimental, or
+       |  2. an experimental feature is imported at the package level, or
+       |  3. compiling with the -experimental compiler flag.
+       |""".stripMargin
 
   def isExperimentalEnabled(using Context): Boolean =
-    def hasSpecialPermission =
-      Thread.currentThread.getStackTrace.exists(elem =>
-        assumeExperimentalIn.exists(elem.getClassName().startsWith(_)))
-    (Properties.experimental || hasSpecialPermission) && !ctx.settings.YnoExperimental.value
+    ctx.settings.experimental.value ||
+    experimentalAutoEnableFeatures.exists(enabled)
 
+  def experimentalEnabledByLanguageSetting(using Context): Option[TermName] =
+    experimentalAutoEnableFeatures.find(enabledBySetting)
+
+  def isExperimentalEnabledByImport(using Context): Boolean =
+    experimentalAutoEnableFeatures.exists(enabledByImport)
+
+  /** Handle language import `import language.<prefix>.<imported>` if it is one
+   *  of the global imports `pureFunctions` or `captureChecking`. In this case
+   *  make the compilation unit's and current run's fields accordingly.
+   *  @return true iff import that was handled
+   */
+  def handleGlobalLanguageImport(prefix: TermName, imported: Name)(using Context): Boolean =
+    val fullFeatureName = QualifiedName(prefix, imported.asTermName)
+    if fullFeatureName == pureFunctions then
+      ctx.compilationUnit.knowsPureFuns = true
+      if ctx.run != null then ctx.run.nn.pureFunsImportEncountered = true
+      true
+    else if fullFeatureName == captureChecking then
+      ctx.compilationUnit.needsCaptureChecking = true
+      if ctx.run != null then ctx.run.nn.ccEnabledSomewhere = true
+      true
+    else
+      false
 end Feature

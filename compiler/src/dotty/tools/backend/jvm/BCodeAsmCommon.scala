@@ -2,8 +2,10 @@ package dotty.tools
 package backend
 package jvm
 
-import dotty.tools.dotc.core.Flags._
-import dotty.tools.dotc.core.Symbols._
+import scala.language.unsafeNulls
+
+import dotty.tools.dotc.core.Flags.*
+import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.report
 
 /**
@@ -11,7 +13,7 @@ import dotty.tools.dotc.report
  * the compiler cake (Global).
  */
 final class BCodeAsmCommon[I <: DottyBackendInterface](val interface: I) {
-  import interface.{_, given}
+  import interface.given
   import DottyBackendInterface.symExtensions
 
   /**
@@ -58,7 +60,7 @@ final class BCodeAsmCommon[I <: DottyBackendInterface](val interface: I) {
     assert(classSym.isClass, classSym)
     def enclosingMethod(sym: Symbol): Option[Symbol] = {
       if (sym.isClass || sym == NoSymbol) None
-      else if (sym.is(Method)) Some(sym)
+      else if (sym.is(Method, butNot=Synthetic)) Some(sym)
       else enclosingMethod(sym.originalOwner)
     }
     enclosingMethod(classSym.originalOwner)

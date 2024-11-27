@@ -2,6 +2,8 @@ package dotty
 package tools
 package backend.jvm
 
+import scala.language.unsafeNulls
+
 import vulpix.TestConfiguration
 
 import dotc.core.Contexts.{Context, ContextBase, ctx}
@@ -13,10 +15,9 @@ import dotty.tools.io.{VirtualDirectory => Directory}
 import scala.tools.asm
 import asm._
 import asm.tree._
-import scala.collection.JavaConverters._
 
 import io.{AbstractFile, JavaClassPath, VirtualDirectory}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.tools.asm.{ClassWriter, ClassReader}
 import scala.tools.asm.tree._
 import java.io.{File => JFile, InputStream}
@@ -120,7 +121,7 @@ trait DottyBytecodeTest {
   def assertSameCode(method: MethodNode, expected: List[Instruction]): Unit =
     assertSameCode(instructionsFromMethod(method).dropNonOp, expected)
   def assertSameCode(actual: List[Instruction], expected: List[Instruction]): Unit = {
-    assert(actual === expected, s"\nExpected: $expected\nActual  : $actual")
+    assert(actual === expected, "\n" + diffInstructions(actual, expected))
   }
 
   def assertInvoke(m: MethodNode, receiver: String, method: String): Unit =
@@ -201,7 +202,7 @@ trait DottyBytecodeTest {
     assert(succ, msg)
   }
 
-  private def sameCharacteristics(clazzA: ClassNode, clazzB: ClassNode)(f: AsmNode[_] => String): (Boolean, String) = {
+  private def sameCharacteristics(clazzA: ClassNode, clazzB: ClassNode)(f: AsmNode[?] => String): (Boolean, String) = {
     val ms1 = clazzA.fieldsAndMethods.toIndexedSeq
     val ms2 = clazzB.fieldsAndMethods.toIndexedSeq
     val name1 = clazzA.name
@@ -253,7 +254,7 @@ trait DottyBytecodeTest {
     }
     .getOrElse(fail("Could not find constructor for object `Test`"))
 
-  private def boxingError(ins: List[_], source: String) =
+  private def boxingError(ins: List[?], source: String) =
     s"""|----------------------------------
         |${ins.mkString("\n")}
         |----------------------------------
@@ -270,7 +271,7 @@ trait DottyBytecodeTest {
     }
     .getOrElse(fail("Could not find constructor for object `Test`"))
 
-  protected def boxingInstructions(method: MethodNode): (List[_], Boolean) = {
+  protected def boxingInstructions(method: MethodNode): (List[?], Boolean) = {
     val ins = instructionsFromMethod(method)
     val boxed = ins.exists {
       case Invoke(op, owner, name, desc, itf) =>
@@ -294,4 +295,3 @@ trait DottyBytecodeTest {
 object DottyBytecodeTest {
   extension [T](l: List[T]) def stringLines = l.mkString("\n")
 }
-

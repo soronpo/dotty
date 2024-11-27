@@ -1,5 +1,7 @@
 package dotty.tools.dotc
 
+import scala.language.unsafeNulls
+
 import org.junit.Test
 import org.junit.Assert._
 import org.junit.Rule
@@ -15,7 +17,7 @@ class ScalaCommandTest:
   def temporaryFolder = _temporaryFolder
 
   @Test def `Simple one parameter`: Unit = inContext {
-    val settings = config.ScalaSettings()
+    val settings = config.ScalaSettings
     val args = "-cp path/to/classes1:other/path/to/classes2 files".split(" ")
     val summary = ScalacCommand.distill(args, settings)()
     given SettingsState = summary.sstate
@@ -24,7 +26,7 @@ class ScalaCommandTest:
   }
 
   @Test def `Unfold @file`: Unit = inContext {
-    val settings = config.ScalaSettings()
+    val settings = config.ScalaSettings
     val file = temporaryFolder.newFile("config")
     val writer = java.io.FileWriter(file);
     writer.write("-sourceroot myNewRoot someMoreFiles");

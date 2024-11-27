@@ -3,11 +3,11 @@ type Id[T] = T match {
   case _ => T
 }
 
-class Foo2[T <: Id[T]] // error // error
+class Foo2[T <: Id[T]] // error
 
 object Foo { // error
   object Foo { }
-  Foo { }
+  Foo { } // error
 }
 implicit class Foo(a: Float)  // error
 case class Foo()

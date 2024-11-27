@@ -2,8 +2,9 @@ package dotty.tools
 package dotc
 package core
 
-import Types._, Contexts._
+import Types.*, Contexts.*
 import printing.Showable
+import util.{SimpleIdentitySet, SimpleIdentityMap}
 
 /** Constraint over undetermined type parameters. Constraints are built
  *  over values of the following types:
@@ -70,6 +71,9 @@ abstract class Constraint extends Showable {
    */
   def nonParamBounds(param: TypeParamRef)(using Context): TypeBounds
 
+  /** The current bounds of type parameter `param` */
+  def bounds(param: TypeParamRef)(using Context): TypeBounds
+
   /** A new constraint which is derived from this constraint by adding
    *  entries for all type parameters of `poly`.
    *  @param tvars   A list of type variables associated with the params,
@@ -87,19 +91,23 @@ abstract class Constraint extends Showable {
    *   - Another type, indicating a solution for the parameter
    *
    * @pre  `this contains param`.
+   * @pre  `tp` does not contain top-level references to `param`
+   *       (see `validBoundsFor`)
    */
   def updateEntry(param: TypeParamRef, tp: Type)(using Context): This
 
   /** A constraint that includes the relationship `p1 <: p2`.
    *  `<:` relationships between parameters ("edges") are propagated, but
    *  non-parameter bounds are left alone.
+   *
+   *  @param direction  Must be set to `KeepParam1` or `KeepParam2` when
+   *                    `p2 <: p1` is already true depending on which parameter
+   *                    the caller intends to keep. This will avoid propagating
+   *                    bounds that will be redundant after `p1` and `p2` are
+   *                    unified.
    */
-  def addLess(p1: TypeParamRef, p2: TypeParamRef)(using Context): This
-
-  /** A constraint resulting from adding p2 = p1 to this constraint, and at the same
-   *  time transferring all bounds of p2 to p1
-   */
-  def unify(p1: TypeParamRef, p2: TypeParamRef)(using Context): This
+  def addLess(p1: TypeParamRef, p2: TypeParamRef,
+    direction: UnificationDirection = UnificationDirection.NoUnification)(using Context): This
 
   /** A new constraint which is derived from this constraint by removing
    *  the type parameter `param` from the domain and replacing all top-level occurrences
@@ -123,6 +131,15 @@ abstract class Constraint extends Showable {
    *  Type variables are left alone.
    */
   def subst(from: TypeLambda, to: TypeLambda)(using Context): This
+
+  /** Is `tv` marked as hard in the constraint? */
+  def isHard(tv: TypeVar): Boolean
+
+  /** The same as this constraint, but with `tv` marked as hard. */
+  def withHard(tv: TypeVar)(using Context): This
+
+  /** Mark toplevel type vars in `tp` as hard. */
+  def hardenTypeVars(tp: Type)(using Context): This
 
   /** Gives for each instantiated type var that does not yet have its `inst` field
    *  set, the instance value stored in the constraint. Storing instances in constraints
@@ -152,24 +169,53 @@ abstract class Constraint extends Showable {
    */
   def uninstVars: collection.Seq[TypeVar]
 
-  /** The weakest constraint that subsumes both this constraint and `other`.
-   *  The constraints should be _compatible_, meaning that a type lambda
-   *  occurring in both constraints is associated with the same typevars in each.
-   *
-   *  @param otherHasErrors    If true, handle incompatible constraints by
-   *                           returning an approximate constraint, instead of
-   *                           failing with an exception
+  /** Whether `tl` is present in both `this` and `that` but is associated with
+   *  different TypeVars there, meaning that the constraints cannot be merged.
    */
-  def & (other: Constraint, otherHasErrors: Boolean)(using Context): Constraint
-
-  /** Check that no constrained parameter contains itself as a bound */
-  def checkNonCyclic()(using Context): this.type
+  def hasConflictingTypeVarsFor(tl: TypeLambda, that: Constraint): Boolean
 
   /** Does `param` occur at the toplevel in `tp` ?
    *  Toplevel means: the type itself or a factor in some
    *  combination of `&` or `|` types.
    */
   def occursAtToplevel(param: TypeParamRef, tp: Type)(using Context): Boolean
+
+  /** Sanitize `bound` to make it either a valid upper or lower bound for
+   *  `param` depending on `isUpper`.
+   *
+   *  Toplevel references to `param`, are replaced by `Any` if `isUpper` is true
+   *  and `Nothing` otherwise.
+   *
+   *  @see `occursAtTopLevel` for a definition of "toplevel"
+   *  @see `validBoundsFor` to sanitize both the lower and upper bound at once.
+   */
+  def validBoundFor(param: TypeParamRef, bound: Type, isUpper: Boolean)(using Context): Type
+
+  /** Sanitize `bounds` to make them valid constraints for `param`.
+   *
+   *  @see `validBoundFor` for details.
+   */
+  def validBoundsFor(param: TypeParamRef, bounds: TypeBounds)(using Context): Type
+
+  /** A string that shows the reverse dependencies maintained by this constraint
+   *  (coDeps and contraDeps for OrderingConstraints).
+   */
+  def depsToString(using Context): String
+
+  /** Does the constraint restricted to variables outside `except` depend on `tv`
+   *  in the given direction `co`?
+   *  @param `co`  If true, test whether the constraint would change if the variable is made larger
+   *               otherwise, test whether the constraint would change if the variable is made smaller.
+   */
+  def dependsOn(tv: TypeVar, except: TypeVars, co: Boolean)(using Context): Boolean
+
+  /** Depending on Config settngs:
+   *   - Under `checkConstraintsNonCyclic`, check that no constrained
+   *     parameter contains itself as a bound.
+   *   - Under `checkConstraintDeps`, check hat reverse dependencies in
+   *     constraints are correct and complete.
+   */
+  def checkWellFormed()(using Context): this.type
 
   /** Check that constraint only refers to TypeParamRefs bound by itself */
   def checkClosed()(using Context): Unit
@@ -178,7 +224,16 @@ abstract class Constraint extends Showable {
    *  of athe type lambda that is associated with the typevar itself.
    */
   def checkConsistentVars()(using Context): Unit
-
-  /** A string describing the constraint's contents without a header or trailer */
-  def contentsToString(using Context): String
 }
+
+/** When calling `Constraint#addLess(p1, p2, ...)`, the caller might end up
+ *  unifying one parameter with the other, this enum lets `addLess` know which
+ *  direction the unification will take.
+ */
+enum UnificationDirection:
+  /** Neither p1 nor p2 will be instantiated. */
+  case NoUnification
+  /** `p2 := p1`, p1 left uninstantiated. */
+  case KeepParam1
+  /** `p1 := p2`, p2 left uninstantiated. */
+  case KeepParam2

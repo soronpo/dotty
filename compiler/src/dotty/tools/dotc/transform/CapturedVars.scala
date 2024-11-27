@@ -1,36 +1,32 @@
 package dotty.tools.dotc
 package transform
 
-import MegaPhase._
-import core.DenotTransformers._
-import core.Symbols._
-import core.Contexts._
-import core.Flags._
-import core.Decorators._
+import MegaPhase.*
+import core.DenotTransformers.*
+import core.Symbols.*
+import core.Contexts.*
+import core.Flags.*
+import core.Decorators.*
 import core.StdNames.nme
-import core.Names._
+import core.Names.*
 import core.NameKinds.TempResultName
-import ast.Trees._
+import core.Constants.*
 import util.Store
-import collection.mutable
+import dotty.tools.uncheckedNN
+import ast.tpd.*
+import compiletime.uninitialized
 
 /** This phase translates variables that are captured in closures to
  *  heap-allocated refs.
  */
-class CapturedVars extends MiniPhase with IdentityDenotTransformer { thisPhase =>
-  import ast.tpd._
+class CapturedVars extends MiniPhase with IdentityDenotTransformer:
+  thisPhase =>
 
-  /** the following two members override abstract members in Transform */
-  val phaseName: String = "capturedVars"
+  override def phaseName: String = CapturedVars.name
 
-  override def runsAfterGroupsOf: Set[String] = Set(LiftTry.name)
-    // lifting tries changes what variables are considered to be captured
+  override def description: String = CapturedVars.description
 
-  private[this] var Captured: Store.Location[util.ReadOnlySet[Symbol]] = _
-  private def captured(using Context) = ctx.store(Captured)
-
-  override def initContext(ctx: FreshContext): Unit =
-    Captured = ctx.addLocation(util.ReadOnlySet.empty)
+  private val captured = util.HashSet[Symbol]()
 
   private class RefInfo(using Context) {
     /** The classes for which a Ref type exists. */
@@ -45,41 +41,21 @@ class CapturedVars extends MiniPhase with IdentityDenotTransformer { thisPhase =
 
     val boxedRefClasses: collection.Set[Symbol] =
       refClassKeys.flatMap(k => Set(refClass(k), volatileRefClass(k)))
+
+    val objectRefClasses: collection.Set[Symbol] =
+      Set(refClass(defn.ObjectClass), volatileRefClass(defn.ObjectClass))
   }
 
-  private var myRefInfo: RefInfo = null
-  private def refInfo(using Context) = {
+  private var myRefInfo: RefInfo | Null = null
+  private def refInfo(using Context): RefInfo = {
     if (myRefInfo == null) myRefInfo = new RefInfo()
-    myRefInfo
+    myRefInfo.uncheckedNN
   }
 
-  private class CollectCaptured extends TreeTraverser {
-    private val captured = util.HashSet[Symbol]()
-    def traverse(tree: Tree)(using Context) = tree match {
-      case id: Ident =>
-        val sym = id.symbol
-        if (sym.is(Mutable, butNot = Method) && sym.owner.isTerm) {
-          val enclMeth = ctx.owner.enclosingMethod
-          if (sym.enclosingMethod != enclMeth) {
-            report.log(i"capturing $sym in ${sym.enclosingMethod}, referenced from $enclMeth")
-            captured += sym
-          }
-        }
-      case _ =>
-        traverseChildren(tree)
-    }
-    def runOver(tree: Tree)(using Context): util.ReadOnlySet[Symbol] = {
-      traverse(tree)
-      captured
-    }
-  }
-
-  override def prepareForUnit(tree: Tree)(using Context): Context = {
-    val captured = atPhase(thisPhase) {
-      CollectCaptured().runOver(ctx.compilationUnit.tpdTree)
-    }
-    ctx.fresh.updateStore(Captured, captured)
-  }
+  override def prepareForUnit(tree: Tree)(using Context): Context =
+    captured.clear()
+    atPhase(thisPhase)(CapturedVars.collect(captured)).traverse(tree)
+    ctx
 
   /** The {Volatile|}{Int|Double|...|Object}Ref class corresponding to the class `cls`,
     *  depending on whether the reference should be @volatile
@@ -123,32 +99,32 @@ class CapturedVars extends MiniPhase with IdentityDenotTransformer { thisPhase =
   }
 
   /** If assignment is to a boxed ref type, e.g.
-    *
-    *      intRef.elem = expr
-    *
-    *  rewrite using a temporary var to
-    *
-    *      val ev$n = expr
-    *      intRef.elem = ev$n
-    *
-    *  That way, we avoid the problem that `expr` might contain a `try` that would
-    *  run on a non-empty stack (which is illegal under JVM rules). Note that LiftTry
-    *  has already run before, so such `try`s would not be eliminated.
-    *
-    *  Also: If the ref type lhs is followed by a cast (can be an artifact of nested translation),
-    *  drop the cast.
-    */
-  override def transformAssign(tree: Assign)(using Context): Tree = {
-    def recur(lhs: Tree): Tree = lhs match {
-      case TypeApply(Select(qual, nme.asInstanceOf_), _) =>
-        val Select(_, nme.elem) = qual
-        recur(qual)
-      case Select(_, nme.elem) if refInfo.boxedRefClasses.contains(lhs.symbol.maybeOwner) =>
-        val tempDef = transformFollowing(SyntheticValDef(TempResultName.fresh(), tree.rhs))
-        transformFollowing(Block(tempDef :: Nil, cpy.Assign(tree)(lhs, ref(tempDef.symbol))))
+   *
+   *      intRef.elem = expr
+   *
+   *  the lhs can be followed by a cast as an artifact of nested translation.
+   *  In that case, drop the cast.
+   */
+  override def transformAssign(tree: Assign)(using Context): Tree =
+    tree.lhs match
+      case TypeApply(Select(qual@Select(_, nme.elem), nme.asInstanceOf_), _) =>
+        cpy.Assign(tree)(qual, tree.rhs)
       case _ =>
         tree
-    }
-    recur(tree.lhs)
-  }
-}
+
+object CapturedVars:
+  val name: String = "capturedVars"
+  val description: String = "represent vars captured by closures as heap objects"
+
+  def collect(captured: util.HashSet[Symbol]): TreeTraverser = new:
+    def traverse(tree: Tree)(using Context) = tree match
+      case id: Ident =>
+        val sym = id.symbol
+        if sym.is(Mutable, butNot = Method) && sym.owner.isTerm then
+          val enclMeth = ctx.owner.enclosingMethod
+          if sym.enclosingMethod != enclMeth then
+            report.log(i"capturing $sym in ${sym.enclosingMethod}, referenced from $enclMeth")
+            captured += sym
+      case _ =>
+        traverseChildren(tree)
+end CapturedVars

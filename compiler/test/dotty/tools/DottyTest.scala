@@ -1,16 +1,15 @@
 package dotty
 package tools
 
+import scala.language.unsafeNulls
+
 import vulpix.TestConfiguration
 
 import dotc.core._
 import dotc.core.Comments.{ContextDoc, ContextDocstrings}
 import dotc.core.Contexts._
 import dotc.core.Symbols._
-import dotc.core.Flags._
 import Types._, Symbols._, Decorators._
-import dotc.printing.Texts._
-import dotc.reporting.ConsoleReporter
 import dotc.core.Decorators._
 import dotc.ast.tpd
 import dotc.Compiler
@@ -25,7 +24,6 @@ trait DottyTest extends ContextEscapeDetection {
 
   protected def initialCtx: FreshContext = {
     val base = new ContextBase {}
-    import base.settings._
     val ctx = base.initialCtx.fresh
     initializeCtx(ctx)
     // when classpath is changed in ctx, we need to re-initialize to get the
@@ -42,13 +40,18 @@ trait DottyTest extends ContextEscapeDetection {
   protected def initializeCtx(fc: FreshContext): Unit = {
     fc.setSetting(fc.settings.encoding, "UTF8")
     fc.setSetting(fc.settings.classpath, TestConfiguration.basicClasspath)
-    fc.setSetting(fc.settings.language, List("experimental.erasedDefinitions"))
+    fc.setSetting(fc.settings.language, List("experimental.erasedDefinitions").asInstanceOf)
     fc.setProperty(ContextDoc, new ContextDocstrings)
   }
 
-  private def compilerWithChecker(phase: String)(assertion: (tpd.Tree, Context) => Unit) = new Compiler {
+  protected def defaultCompiler: Compiler = new Compiler()
+
+  protected def compilerWithChecker(phase: String)(assertion: (tpd.Tree, Context) => Unit) = new Compiler {
+
+    private val baseCompiler = defaultCompiler
+
     override def phases = {
-      val allPhases = super.phases
+      val allPhases = baseCompiler.phases
       val targetPhase = allPhases.flatten.find(p => p.phaseName == phase).get
       val groupsBefore = allPhases.takeWhile(x => !x.contains(targetPhase))
       val lastGroup = allPhases.find(x => x.contains(targetPhase)).get.takeWhile(x => !(x eq targetPhase))
@@ -67,6 +70,15 @@ trait DottyTest extends ContextEscapeDetection {
     val run = c.newRun
     run.compileFromStrings(List(source))
     run.runContext
+  }
+
+  def checkAfterCompile(checkAfterPhase: String, sources: List[String])(assertion: Context => Unit): Context = {
+    val c = defaultCompiler
+    val run = c.newRun
+    run.compileFromStrings(sources)
+    val rctx = run.runContext
+    assertion(rctx)
+    rctx
   }
 
   def checkTypes(source: String, typeStrings: String*)(assertion: (List[Type], Context) => Unit): Unit =

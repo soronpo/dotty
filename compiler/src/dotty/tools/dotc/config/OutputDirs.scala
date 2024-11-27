@@ -2,7 +2,9 @@ package dotty.tools
 package dotc
 package config
 
-import io._
+import scala.language.unsafeNulls
+
+import io.*
 
 /** A class for holding mappings from source directories to
  *  their output location. This functionality can be accessed

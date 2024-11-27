@@ -3,28 +3,56 @@ package dotc
 package core
 package classfile
 
+import scala.language.unsafeNulls
+
 import dotty.tools.tasty.{ TastyReader, TastyHeaderUnpickler }
 
-import Contexts._, Symbols._, Types._, Names._, StdNames._, NameOps._, Scopes._, Decorators._
-import SymDenotations._, unpickleScala2.Scala2Unpickler._, Constants._, Annotations._, util.Spans._
-import Phases._
-import NameKinds.DefaultGetterName
+import Contexts.*, Symbols.*, Types.*, Names.*, StdNames.*, NameOps.*, Scopes.*, Decorators.*
+import SymDenotations.*, unpickleScala2.Scala2Unpickler.*, Constants.*, Annotations.*, util.Spans.*
+import Phases.*
 import ast.{ tpd, untpd }
-import ast.tpd._, util._
-import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, DataInputStream, IOException }
+import ast.tpd.*, util.*
+import java.io.IOException
 
 import java.lang.Integer.toHexString
-import java.net.URLClassLoader
 import java.util.UUID
 
 import scala.collection.immutable
 import scala.collection.mutable.{ ListBuffer, ArrayBuffer }
 import scala.annotation.switch
 import typer.Checking.checkNonCyclic
-import io.{AbstractFile, PlainFile, ZipArchive}
+import io.{AbstractFile, ZipArchive}
 import scala.util.control.NonFatal
+import dotty.tools.dotc.classpath.FileUtils.hasSiblingTasty
+
+import scala.compiletime.uninitialized
 
 object ClassfileParser {
+
+  object Header:
+    opaque type Version = Long
+
+    object Version:
+      val Unknown: Version = -1L
+
+      def brokenVersionAddendum(classfileVersion: Version)(using Context): String =
+        if classfileVersion.exists then
+          val (maj, min) = (classfileVersion.majorVersion, classfileVersion.minorVersion)
+          val scalaVersion = config.Properties.versionNumberString
+          i""" (version $maj.$min),
+            |  please check the JDK compatibility of your Scala version ($scalaVersion)"""
+        else
+          ""
+
+      def apply(major: Int, minor: Int): Version =
+        (major.toLong << 32) | (minor.toLong & 0xFFFFFFFFL)
+      extension (version: Version)
+        def exists: Boolean = version != Unknown
+        def majorVersion: Int = (version >> 32).toInt
+        def minorVersion: Int = (version & 0xFFFFFFFFL).toInt
+
+  import ClassfileConstants.*
+
   /** Marker trait for unpicklers that can be embedded in classfiles. */
   trait Embedded
 
@@ -50,6 +78,192 @@ object ClassfileParser {
         mapOver(tp)
     }
   }
+
+  private[classfile] def parseHeader(classfile: AbstractFile)(using in: DataReader): Header.Version = {
+    val magic = in.nextInt
+    if (magic != JAVA_MAGIC)
+      throw new IOException(s"class file '${classfile}' has wrong magic number 0x${toHexString(magic)}, should be 0x${toHexString(JAVA_MAGIC)}")
+    val minorVersion = in.nextChar.toInt
+    val majorVersion = in.nextChar.toInt
+    if ((majorVersion < JAVA_MAJOR_VERSION) ||
+        ((majorVersion == JAVA_MAJOR_VERSION) &&
+         (minorVersion < JAVA_MINOR_VERSION)))
+      throw new IOException(
+        s"class file '${classfile}' has unknown version $majorVersion.$minorVersion, should be at least $JAVA_MAJOR_VERSION.$JAVA_MINOR_VERSION")
+    Header.Version(majorVersion, minorVersion)
+  }
+
+  abstract class AbstractConstantPool(using in: DataReader) {
+    protected val len = in.nextChar
+    protected val starts = new Array[Int](len)
+    protected val values = new Array[AnyRef](len)
+    protected val internalized = new Array[NameOrString](len)
+
+    { var i = 1
+      while (i < starts.length) {
+        starts(i) = in.bp
+        i += 1
+        (in.nextByte.toInt: @switch) match {
+          case CONSTANT_UTF8 | CONSTANT_UNICODE =>
+            in.skip(in.nextChar)
+          case CONSTANT_CLASS | CONSTANT_STRING | CONSTANT_METHODTYPE
+             | CONSTANT_MODULE | CONSTANT_PACKAGE =>
+            in.skip(2)
+          case CONSTANT_METHODHANDLE =>
+            in.skip(3)
+          case CONSTANT_FIELDREF | CONSTANT_METHODREF | CONSTANT_INTFMETHODREF
+             | CONSTANT_NAMEANDTYPE | CONSTANT_INTEGER | CONSTANT_FLOAT
+             | CONSTANT_INVOKEDYNAMIC | CONSTANT_DYNAMIC =>
+            in.skip(4)
+          case CONSTANT_LONG | CONSTANT_DOUBLE =>
+            in.skip(8)
+            i += 1
+          case _ =>
+            errorBadTag(in.bp - 1)
+        }
+      }
+    }
+
+    /** Return the name found at given index. */
+    def getName(index: Int)(using in: DataReader): NameOrString = {
+      if (index <= 0 || len <= index)
+        errorBadIndex(index)
+
+      values(index) match {
+        case name: NameOrString => name
+        case null   =>
+          val start = starts(index)
+          if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
+          val len   = in.getChar(start + 1).toInt
+          val name = new NameOrString(in.getUTF(start + 1, len + 2))
+          values(index) = name
+          name
+      }
+    }
+
+    /** Return the name found at given index in the constant pool, with '/' replaced by '.'. */
+    def getExternalName(index: Int)(using in: DataReader): NameOrString = {
+      if (index <= 0 || len <= index)
+        errorBadIndex(index)
+
+      if (internalized(index) == null)
+        internalized(index) = new NameOrString(getName(index).value.replace('/', '.'))
+
+      internalized(index)
+    }
+
+    def getClassSymbol(index: Int)(using ctx: Context, in: DataReader): Symbol
+
+    /** Return the external name of the class info structure found at 'index'.
+     *  Use 'getClassSymbol' if the class is sure to be a top-level class.
+     */
+    def getClassName(index: Int)(using in: DataReader): NameOrString = {
+      val start = starts(index)
+      if (in.getByte(start).toInt != CONSTANT_CLASS) errorBadTag(start)
+      getExternalName(in.getChar(start + 1))
+    }
+
+    /** Return the type of a class constant entry. Since
+     *  arrays are considered to be class types, they might
+     *  appear as entries in 'newarray' or 'cast' opcodes.
+     */
+    def getClassOrArrayType(index: Int)(using ctx: Context, in: DataReader): Type
+
+    def getType(index: Int, isVarargs: Boolean = false)(using Context, DataReader): Type
+
+    def getSuperClass(index: Int)(using Context, DataReader): Symbol = {
+      assert(index != 0, "attempt to parse java.lang.Object from classfile")
+      getClassSymbol(index)
+    }
+
+    def getConstant(index: Int)(using ctx: Context, in: DataReader): Constant = {
+      if (index <= 0 || len <= index) errorBadIndex(index)
+      var value = values(index)
+      if (value eq null) {
+        val start = starts(index)
+        value = (in.getByte(start).toInt: @switch) match {
+          case CONSTANT_STRING =>
+            Constant(getName(in.getChar(start + 1).toInt).value)
+          case CONSTANT_INTEGER =>
+            Constant(in.getInt(start + 1))
+          case CONSTANT_FLOAT =>
+            Constant(in.getFloat(start + 1))
+          case CONSTANT_LONG =>
+            Constant(in.getLong(start + 1))
+          case CONSTANT_DOUBLE =>
+            Constant(in.getDouble(start + 1))
+          case CONSTANT_CLASS =>
+            getClassOrArrayType(index).typeSymbol
+          case _ =>
+            errorBadTag(start)
+        }
+        values(index) = value
+      }
+      value match {
+        case ct: Constant  => ct
+        case cls: Symbol   => Constant(cls.typeRef)
+        case arr: Type     => Constant(arr)
+      }
+    }
+
+    private def getSubArray(bytes: Array[Byte]): Array[Byte] = {
+      val decodedLength = ByteCodecs.decode(bytes)
+      val arr           = new Array[Byte](decodedLength)
+      System.arraycopy(bytes, 0, arr, 0, decodedLength)
+      arr
+    }
+
+    def getBytes(index: Int)(using in: DataReader): Array[Byte] = {
+      if (index <= 0 || len <= index) errorBadIndex(index)
+      var value = values(index).asInstanceOf[Array[Byte]]
+      if (value eq null) {
+        val start = starts(index)
+        if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
+        val len   = in.getChar(start + 1)
+        val bytes = new Array[Byte](len)
+        in.getBytes(start + 3, bytes)
+        value = getSubArray(bytes)
+        values(index) = value
+      }
+      value
+    }
+
+    def getBytes(indices: List[Int])(using in: DataReader): Array[Byte] = {
+      assert(!indices.isEmpty, indices)
+      var value = values(indices.head).asInstanceOf[Array[Byte]]
+      if (value eq null) {
+        val bytesBuffer = ArrayBuffer.empty[Byte]
+        for (index <- indices) {
+          if (index <= 0 || AbstractConstantPool.this.len <= index) errorBadIndex(index)
+          val start = starts(index)
+          if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
+          val len = in.getChar(start + 1)
+          val buf = new Array[Byte](len)
+          in.getBytes(start + 3, buf)
+          bytesBuffer ++= buf
+        }
+        value = getSubArray(bytesBuffer.toArray)
+        values(indices.head) = value
+      }
+      value
+    }
+
+    /** Throws an exception signaling a bad constant index. */
+    protected def errorBadIndex(index: Int)(using in: DataReader) =
+      throw new RuntimeException("bad constant pool index: " + index + " at pos: " + in.bp)
+
+    /** Throws an exception signaling a bad tag at given address. */
+    protected def errorBadTag(start: Int)(using in: DataReader) =
+      throw new RuntimeException("bad constant pool tag " + in.getByte(start) + " at byte " + start)
+  }
+
+  protected class NameOrString(val value: String) {
+    private var _name: SimpleName = null
+    def name: SimpleName = {
+      if (_name eq null) _name = termName(value)
+      _name
+    }
+  }
 }
 
 class ClassfileParser(
@@ -57,19 +271,20 @@ class ClassfileParser(
     classRoot: ClassDenotation,
     moduleRoot: ClassDenotation)(ictx: Context) {
 
-  import ClassfileConstants._
-  import ClassfileParser._
+  import ClassfileConstants.*
+  import ClassfileParser.*
 
   protected val staticModule: Symbol = moduleRoot.sourceModule(using ictx)
 
-  protected val instanceScope: MutableScope = newScope     // the scope of all instance definitions
-  protected val staticScope: MutableScope = newScope       // the scope of all static definitions
-  protected var pool: ConstantPool = _              // the classfile's constant pool
+  protected val instanceScope: MutableScope = newScope(0) // the scope of all instance definitions
+  protected val staticScope: MutableScope = newScope(0)   // the scope of all static definitions
+  protected var pool: ConstantPool = uninitialized        // the classfile's constant pool
 
-  protected var currentClassName: SimpleName = _      // JVM name of the current class
+  protected var currentClassName: SimpleName = uninitialized // JVM name of the current class
   protected var classTParams: Map[Name, Symbol] = Map()
 
   private var Scala2UnpicklingMode = Mode.Scala2Unpickling
+  private var classfileVersion: Header.Version = Header.Version.Unknown
 
   classRoot.info = NoLoader().withDecls(instanceScope)
   moduleRoot.info = NoLoader().withDecls(staticScope).withSourceModule(staticModule)
@@ -82,7 +297,7 @@ class ClassfileParser(
   def run()(using Context): Option[Embedded] = try ctx.base.reusableDataReader.withInstance { reader =>
     implicit val reader2 = reader.reset(classfile)
     report.debuglog("[class] >> " + classRoot.fullName)
-    parseHeader()
+    classfileVersion = parseHeader(classfile)
     this.pool = new ConstantPool
     val res = parseClass()
     this.pool =  null
@@ -91,29 +306,47 @@ class ClassfileParser(
   catch {
     case e: RuntimeException =>
       if (ctx.debug) e.printStackTrace()
+      val addendum = Header.Version.brokenVersionAddendum(classfileVersion)
       throw new IOException(
-        i"""class file ${classfile.canonicalPath} is broken, reading aborted with ${e.getClass}
-           |${Option(e.getMessage).getOrElse("")}""")
-  }
-
-  private def parseHeader()(using in: DataReader): Unit = {
-    val magic = in.nextInt
-    if (magic != JAVA_MAGIC)
-      throw new IOException(s"class file '${classfile}' has wrong magic number 0x${toHexString(magic)}, should be 0x${toHexString(JAVA_MAGIC)}")
-    val minorVersion = in.nextChar.toInt
-    val majorVersion = in.nextChar.toInt
-    if ((majorVersion < JAVA_MAJOR_VERSION) ||
-        ((majorVersion == JAVA_MAJOR_VERSION) &&
-         (minorVersion < JAVA_MINOR_VERSION)))
-      throw new IOException(
-        s"class file '${classfile}' has unknown version $majorVersion.$minorVersion, should be at least $JAVA_MAJOR_VERSION.$JAVA_MINOR_VERSION")
+        i"""  class file ${classfile.canonicalPath} is broken$addendum,
+          |  reading aborted with ${e.getClass}:
+          |  ${Option(e.getMessage).getOrElse("")}""")
   }
 
   /** Return the class symbol of the given name. */
-  def classNameToSymbol(name: Name)(using Context): Symbol = innerClasses.get(name.toString) match {
-    case Some(entry) => innerClasses.classSymbol(entry)
-    case None => requiredClass(name)
-  }
+  def classNameToSymbol(name: Name)(using Context): Symbol =
+    val nameStr = name.toString
+    innerClasses.get(nameStr) match
+      case Some(entry) => innerClasses.classSymbol(entry)
+      case None =>
+        def lookupTopLevel(): Symbol = requiredClass(name)
+        // For inner classes we usually don't get to this branch: `innerClasses.classSymbol` already returns the symbol
+        // of the inner class based on the InnerClass table. However, if the classfile is missing the
+        // InnerClass entry for `name`, it might still be that there exists an inner symbol (because
+        // some other classfile _does_ have an InnerClass entry for `name`). In this case, we want to
+        // return the actual inner symbol (C.D, with owner C), not the top-level symbol C$D. This is
+        // what the logic below is for (see scala/bug#9937 / lampepfl/dotty#12086).
+        val split = nameStr.lastIndexOf('$')
+        if split < 0 || split >= nameStr.length - 1 then
+          lookupTopLevel()
+        else
+          val outerNameStr = nameStr.substring(0, split)
+          val innerNameStr = nameStr.substring(split + 1, nameStr.length)
+          val outerSym = classNameToSymbol(outerNameStr.toTypeName)
+          outerSym.denot.infoOrCompleter match
+            case _: StubInfo =>
+              // If the outer class C cannot be found, look for a top-level class C$D
+              lookupTopLevel()
+            case _ =>
+              // We have a java-defined class name C$D and look for a member D of C. But we don't know if
+              // D is declared static or not, so we have to search both in class C and its companion.
+              val innerName = innerNameStr.toTypeName
+              val r =
+                if outerSym eq classRoot.symbol then
+                  instanceScope.lookup(innerName).orElse(staticScope.lookup(innerName))
+                else
+                  outerSym.info.member(innerName).orElse(outerSym.asClass.companionModule.info.member(innerName)).symbol
+              r.orElse(lookupTopLevel())
 
   var sawPrivateConstructor: Boolean = false
 
@@ -136,11 +369,7 @@ class ClassfileParser(
      *  Updates the read pointer of 'in'. */
     def parseParents: List[Type] = {
       val superType =
-        if (isAnnotation) {
-          in.nextChar
-          defn.AnnotationClass.typeRef
-        }
-        else if (classRoot.symbol == defn.ComparableClass ||
+        if (classRoot.symbol == defn.ComparableClass ||
                  classRoot.symbol == defn.JavaCloneableClass ||
                  classRoot.symbol == defn.JavaSerializableClass) {
           // Treat these interfaces as universal traits
@@ -157,7 +386,6 @@ class ClassfileParser(
         // Consequently, no best implicit for the "Integral" evidence parameter of "range"
         // is found. Previously, this worked because of weak conformance, which has been dropped.
 
-      if (isAnnotation) ifaces = defn.ClassfileAnnotationClass.typeRef :: ifaces
       superType :: ifaces
     }
 
@@ -175,9 +403,10 @@ class ClassfileParser(
 
       val privateWithin = getPrivateWithin(jflags)
 
-      classRoot.setPrivateWithin(privateWithin)
-      moduleRoot.setPrivateWithin(privateWithin)
-      moduleRoot.sourceModule.setPrivateWithin(privateWithin)
+      if privateWithin.exists then
+        classRoot.setPrivateWithin(privateWithin)
+        moduleRoot.setPrivateWithin(privateWithin)
+        moduleRoot.sourceModule.setPrivateWithin(privateWithin)
 
       for (i <- 0 until in.nextChar) parseMember(method = false)
       for (i <- 0 until in.nextChar) parseMember(method = true)
@@ -246,6 +475,9 @@ class ClassfileParser(
     def complete(denot: SymDenotation)(using Context): Unit = {
       val sym = denot.symbol
       val isEnum = (jflags & JAVA_ACC_ENUM) != 0
+      val isNative = (jflags & JAVA_ACC_NATIVE) != 0
+      val isTransient = (jflags & JAVA_ACC_TRANSIENT) != 0
+      val isVolatile = (jflags & JAVA_ACC_VOLATILE) != 0
       val isConstructor = name eq nme.CONSTRUCTOR
 
       /** Strip leading outer param from constructor and trailing access tag for
@@ -253,7 +485,7 @@ class ClassfileParser(
         */
       def normalizeConstructorParams() = innerClasses.get(currentClassName.toString) match {
         case Some(entry) if !isStatic(entry.jflags) =>
-          val mt @ MethodTpe(paramNames, paramTypes, resultType) = denot.info
+          val mt @ MethodTpe(paramNames, paramTypes, resultType) = denot.info: @unchecked
           var normalizedParamNames = paramNames.tail
           var normalizedParamTypes = paramTypes.tail
           if ((jflags & JAVA_ACC_SYNTHETIC) != 0) {
@@ -284,6 +516,12 @@ class ClassfileParser(
       val isVarargs = denot.is(Flags.Method) && (jflags & JAVA_ACC_VARARGS) != 0
       denot.info = sigToType(sig, isVarargs = isVarargs)
       if (isConstructor) normalizeConstructorParams()
+      if isNative then
+        attrCompleter.annotations ::= Annotation.deferredSymAndTree(defn.NativeAnnot)(New(defn.NativeAnnot.typeRef, Nil))
+      if isTransient then
+        attrCompleter.annotations ::= Annotation.deferredSymAndTree(defn.TransientAnnot)(New(defn.TransientAnnot.typeRef, Nil))
+      if isVolatile then
+        attrCompleter.annotations ::= Annotation.deferredSymAndTree(defn.VolatileAnnot)(New(defn.VolatileAnnot.typeRef, Nil))
       denot.info = translateTempPoly(attrCompleter.complete(denot.info, isVarargs))
       if (isConstructor) normalizeConstructorInfo()
 
@@ -293,7 +531,7 @@ class ClassfileParser(
       if (isEnum) {
         val enumClass = sym.owner.linkedClass
         if (!enumClass.exists)
-          report.warning(s"no linked class for java enum $sym in ${sym.owner}. A referencing class file might be missing an InnerClasses entry.")
+          report.warning(em"no linked class for java enum $sym in ${sym.owner}. A referencing class file might be missing an InnerClasses entry.")
         else {
           if (!enumClass.is(Flags.Sealed)) enumClass.setFlag(Flags.AbstractSealed)
           enumClass.addAnnotation(Annotation.Child(sym, NoSpan))
@@ -623,7 +861,7 @@ class ClassfileParser(
       case tp: TypeRef if tp.denot.infoOrCompleter.isInstanceOf[StubInfo] =>
         // Silently ignore missing annotation classes like javac
         if ctx.debug then
-          report.warning(i"Error while parsing annotations in ${classfile}: annotation class $tp not present on classpath")
+          report.warning(em"Error while parsing annotations in ${classfile}: annotation class $tp not present on classpath")
         None
       case _ =>
         if (hasError || skip) None
@@ -638,7 +876,7 @@ class ClassfileParser(
       // the classpath would *not* end up here. A class not found is signaled
       // with a `FatalError` exception, handled above. Here you'd end up after a NPE (for example),
       // and that should never be swallowed silently.
-      report.warning("Caught: " + ex + " while parsing annotations in " + classfile)
+      report.warning(em"Caught: $ex while parsing annotations in $classfile")
       if (ctx.debug) ex.printStackTrace()
 
       None // ignore malformed annotations
@@ -720,18 +958,20 @@ class ClassfileParser(
         case tpnme.ConstantValueATTR =>
           val c = pool.getConstant(in.nextChar)
           if (c ne null) res.constant = c
-          else report.warning(s"Invalid constant in attribute of ${sym.showLocated} while parsing ${classfile}")
+          else report.warning(em"Invalid constant in attribute of ${sym.showLocated} while parsing ${classfile}")
 
         case tpnme.MethodParametersATTR =>
           val paramCount = in.nextByte
           for i <- 0 until paramCount do
-            val name = pool.getName(in.nextChar)
+            val index = in.nextChar
             val flags = in.nextChar
-            if (flags & JAVA_ACC_SYNTHETIC) == 0 then
-              res.namedParams += (i -> name.name)
+            if index != 0 then
+              val name = pool.getName(index)
+              if (flags & JAVA_ACC_SYNTHETIC) == 0 then
+                res.namedParams += (i -> name.name)
 
         case tpnme.AnnotationDefaultATTR =>
-          sym.addAnnotation(Annotation(defn.AnnotationDefaultAnnot, Nil))
+          sym.addAnnotation(Annotation(defn.AnnotationDefaultAnnot, Nil, sym.span))
 
         // Java annotations on classes / methods / fields with RetentionPolicy.RUNTIME
         case tpnme.RuntimeVisibleAnnotationATTR
@@ -807,7 +1047,7 @@ class ClassfileParser(
 
   class AnnotConstructorCompleter(classInfo: TempClassInfoType) extends LazyType {
     def complete(denot: SymDenotation)(using Context): Unit = {
-      val attrs = classInfo.decls.toList.filter(sym => sym.isTerm && sym != denot.symbol)
+      val attrs = classInfo.decls.toList.filter(sym => sym.isTerm && sym != denot.symbol && sym.name != nme.CONSTRUCTOR)
       val paramNames = attrs.map(_.name.asTermName)
       val paramTypes = attrs.map(_.info.resultType)
       denot.info = MethodType(paramNames, paramTypes, classRoot.typeRef)
@@ -820,11 +1060,13 @@ class ClassfileParser(
   private def enterOwnInnerClasses()(using Context, DataReader): Unit = {
     def enterClassAndModule(entry: InnerClassEntry, file: AbstractFile, jflags: Int) =
       SymbolLoaders.enterClassAndModule(
-          getOwner(jflags),
-          entry.originalName,
-          new ClassfileLoader(file),
-          classTranslation.flags(jflags),
-          getScope(jflags))
+        getOwner(jflags),
+        entry.originalName,
+        new ClassfileLoader(file),
+        classTranslation.flags(jflags),
+        getScope(jflags),
+        getPrivateWithin(jflags),
+      )
 
     for entry <- innerClasses.valuesIterator do
       // create a new class member for immediate inner classes
@@ -841,7 +1083,7 @@ class ClassfileParser(
 
   /** Parse inner classes. Expects `in.bp` to point to the superclass entry.
    *  Restores the old `bp`.
-   *  @return true iff classfile is from Scala, so no Java info needs to be read.
+   *  @return Some(unpickler) iff classfile is from Scala, so no Java info needs to be read.
    */
   def unpickleOrParseInnerClasses()(using ctx: Context, in: DataReader): Option[Embedded] = {
     val oldbp = in.bp
@@ -883,12 +1125,6 @@ class ClassfileParser(
         Some(unpickler)
       }
 
-      def unpickleTASTY(bytes: Array[Byte]): Some[Embedded]  = {
-        val unpickler = new tasty.DottyUnpickler(bytes)
-        unpickler.enter(roots = Set(classRoot, moduleRoot, moduleRoot.sourceModule))(using ctx.withSource(util.NoSource))
-        Some(unpickler)
-      }
-
       def parseScalaSigBytes: Array[Byte] = {
         val tag = in.nextByte.toChar
         assert(tag == STRING_TAG, tag)
@@ -909,57 +1145,17 @@ class ClassfileParser(
       }
 
       if (scan(tpnme.TASTYATTR)) {
-        val attrLen = in.nextInt
-        val bytes = in.nextBytes(attrLen)
-        if (attrLen == 16) { // A tasty attribute with that has only a UUID (16 bytes) implies the existence of the .tasty file
-          val tastyBytes: Array[Byte] = classfile match { // TODO: simplify when #3552 is fixed
-            case classfile: io.ZipArchive#Entry => // We are in a jar
-              val path = classfile.parent.lookupName(
-                classfile.name.stripSuffix(".class") + ".tasty", directory = false
-              )
-              if (path != null) {
-                val stream = path.input
-                try {
-                  val tastyOutStream = new ByteArrayOutputStream()
-                  val buffer = new Array[Byte](1024)
-                  var read = stream.read(buffer, 0, buffer.length)
-                  while (read != -1) {
-                    tastyOutStream.write(buffer, 0, read)
-                    read = stream.read(buffer, 0, buffer.length)
-                  }
-                  tastyOutStream.flush()
-                  tastyOutStream.toByteArray
-                } finally {
-                  stream.close()
-                }
-              }
-              else {
-                report.error(s"Could not find $path in ${classfile.underlyingSource}")
-                Array.empty
-              }
-            case _ =>
-              val dir = classfile.container
-              val name = classfile.name.stripSuffix(".class") + ".tasty"
-              val tastyFileOrNull = dir.lookupName(name, false)
-              if (tastyFileOrNull == null) {
-                report.error(s"Could not find TASTY file $name under $dir")
-                Array.empty
-              } else
-                tastyFileOrNull.toByteArray
-          }
-          if (tastyBytes.nonEmpty) {
-            val reader = new TastyReader(bytes, 0, 16)
-            val expectedUUID = new UUID(reader.readUncompressedLong(), reader.readUncompressedLong())
-            val tastyUUID = new TastyHeaderUnpickler(tastyBytes).readHeader()
-            if (expectedUUID != tastyUUID)
-              report.warning(s"$classfile is out of sync with its TASTy file. Loaded TASTy file. Try cleaning the project to fix this issue", NoSourcePosition)
-            return unpickleTASTY(tastyBytes)
-          }
-        }
-        else return unpickleTASTY(bytes)
+        val hint =
+          if classfile.hasSiblingTasty then "This is likely a bug in the compiler. Please report."
+          else "This `.tasty` file is missing. Try cleaning the project to fix this issue."
+        report.error(s"Loading Scala 3 binary from $classfile. It should have been loaded from `.tasty` file. $hint", NoSourcePosition)
+        return None
       }
 
-      if (scan(tpnme.ScalaATTR) && !scalaUnpickleWhitelist.contains(classRoot.name))
+      if scan(tpnme.ScalaATTR) && !scalaUnpickleWhitelist.contains(classRoot.name)
+        && !(classRoot.name.startsWith("Tuple") && classRoot.name.endsWith("$sp"))
+        && !(classRoot.name.startsWith("Product") && classRoot.name.endsWith("$sp"))
+      then
         // To understand the situation, it's helpful to know that:
         // - Scalac emits the `ScalaSig` attribute for classfiles with pickled information
         // and the `Scala` attribute for everything else.
@@ -970,7 +1166,10 @@ class ClassfileParser(
         // attribute isn't, this classfile is a compilation artifact.
         return Some(NoEmbedded)
 
-      if (scan(tpnme.RuntimeVisibleAnnotationATTR) || scan(tpnme.RuntimeInvisibleAnnotationATTR)) {
+      if (scan(tpnme.ScalaSignatureATTR)) {
+        if !scan(tpnme.RuntimeVisibleAnnotationATTR) then
+          report.error(em"No RuntimeVisibleAnnotations in classfile with ScalaSignature attribute: ${classRoot.fullName}")
+          return None
         val attrLen = in.nextInt
         val nAnnots = in.nextChar
         var i = 0
@@ -981,14 +1180,10 @@ class ClassfileParser(
           while (j < nArgs) {
             val argName = pool.getName(in.nextChar)
             if (argName.name == nme.bytes) {
-              if (attrClass == defn.ScalaSignatureAnnot)
+              if attrClass == defn.ScalaSignatureAnnot then
                 return unpickleScala(parseScalaSigBytes)
-              else if (attrClass == defn.ScalaLongSignatureAnnot)
+              else if attrClass == defn.ScalaLongSignatureAnnot then
                 return unpickleScala(parseScalaLongSigBytes)
-              else if (attrClass == defn.TASTYSignatureAnnot)
-                return unpickleTASTY(parseScalaSigBytes)
-              else if (attrClass == defn.TASTYLongSignatureAnnot)
-                return unpickleTASTY(parseScalaLongSigBytes)
             }
             parseAnnotArg(skip = true)
             j += 1
@@ -1054,20 +1249,31 @@ class ClassfileParser(
           if (sym == classRoot.symbol)
             staticScope.lookup(name)
           else {
-            var module = sym.companionModule
-            if (!module.exists && sym.isAbsent())
-              module = sym.scalacLinkedClass
-            module.info.member(name).symbol
+            var moduleClass = sym.registeredCompanion
+            if (!moduleClass.exists && sym.isAbsent())
+              moduleClass = sym.scalacLinkedClass
+            moduleClass.info.member(name).symbol
           }
         else if (sym == classRoot.symbol)
           instanceScope.lookup(name)
+        else if (sym == classRoot.symbol.owner && name == classRoot.name)
+          classRoot.symbol
         else
           sym.info.member(name).symbol
 
       val outerName = entry.strippedOuter
       val innerName = entry.originalName
       val owner = classNameToSymbol(outerName)
-      val result = atPhase(typerPhase)(getMember(owner, innerName.toTypeName))
+      val result = owner.denot.infoOrCompleter match
+        case _: StubInfo if hasAnnotation(entry.jflags) =>
+          requiredClass(innerName.toTypeName)
+            // It's okay for the classfiles of Java annotations to be missing
+            // from the classpath. If an annotation is defined as an inner class
+            // we need to avoid forcing the outer class symbol here, and instead
+            // return a new stub symbol for the inner class. This is tested by
+            // `surviveMissingInnerClassAnnot` in AnnotationsTests.scala
+        case _ =>
+          atPhase(typerPhase)(getMember(owner, innerName.toTypeName))
       assert(result ne NoSymbol,
         i"""failure to resolve inner class:
            |externalName = ${entry.externalName},
@@ -1115,78 +1321,7 @@ class ClassfileParser(
   private def isStatic(flags: Int)      = (flags & JAVA_ACC_STATIC) != 0
   private def hasAnnotation(flags: Int) = (flags & JAVA_ACC_ANNOTATION) != 0
 
-  protected class NameOrString(val value: String) {
-    private var _name: SimpleName = null
-    def name: SimpleName = {
-      if (_name eq null) _name = termName(value)
-      _name
-    }
-  }
-
-  def getClassSymbol(name: SimpleName)(using Context): Symbol =
-    if (name.endsWith("$") && (name ne nme.nothingRuntimeClass) && (name ne nme.nullRuntimeClass))
-      // Null$ and Nothing$ ARE classes
-      requiredModule(name.dropRight(1))
-    else classNameToSymbol(name)
-
-  class ConstantPool(using in: DataReader) {
-    private val len = in.nextChar
-    private val starts = new Array[Int](len)
-    private val values = new Array[AnyRef](len)
-    private val internalized = new Array[NameOrString](len)
-
-    { var i = 1
-      while (i < starts.length) {
-        starts(i) = in.bp
-        i += 1
-        (in.nextByte.toInt: @switch) match {
-          case CONSTANT_UTF8 | CONSTANT_UNICODE =>
-            in.skip(in.nextChar)
-          case CONSTANT_CLASS | CONSTANT_STRING | CONSTANT_METHODTYPE =>
-            in.skip(2)
-          case CONSTANT_METHODHANDLE =>
-            in.skip(3)
-          case CONSTANT_FIELDREF | CONSTANT_METHODREF | CONSTANT_INTFMETHODREF
-             | CONSTANT_NAMEANDTYPE | CONSTANT_INTEGER | CONSTANT_FLOAT
-             | CONSTANT_INVOKEDYNAMIC =>
-            in.skip(4)
-          case CONSTANT_LONG | CONSTANT_DOUBLE =>
-            in.skip(8)
-            i += 1
-          case _ =>
-            errorBadTag(in.bp - 1)
-        }
-      }
-    }
-
-    /** Return the name found at given index. */
-    def getName(index: Int)(using in: DataReader): NameOrString = {
-      if (index <= 0 || len <= index)
-        errorBadIndex(index)
-
-      values(index) match {
-        case name: NameOrString => name
-        case null   =>
-          val start = starts(index)
-          if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
-          val len   = in.getChar(start + 1).toInt
-          val name = new NameOrString(in.getUTF(start + 1, len + 2))
-          values(index) = name
-          name
-      }
-    }
-
-    /** Return the name found at given index in the constant pool, with '/' replaced by '.'. */
-    def getExternalName(index: Int)(using in: DataReader): NameOrString = {
-      if (index <= 0 || len <= index)
-        errorBadIndex(index)
-
-      if (internalized(index) == null)
-        internalized(index) = new NameOrString(getName(index).value.replace('/', '.'))
-
-      internalized(index)
-    }
-
+  class ConstantPool(using in: DataReader) extends AbstractConstantPool {
     def getClassSymbol(index: Int)(using ctx: Context, in: DataReader): Symbol = {
       if (index <= 0 || len <= index) errorBadIndex(index)
       var c = values(index).asInstanceOf[Symbol]
@@ -1200,19 +1335,6 @@ class ClassfileParser(
       c
     }
 
-    /** Return the external name of the class info structure found at 'index'.
-     *  Use 'getClassSymbol' if the class is sure to be a top-level class.
-     */
-    def getClassName(index: Int)(using in: DataReader): NameOrString = {
-      val start = starts(index)
-      if (in.getByte(start).toInt != CONSTANT_CLASS) errorBadTag(start)
-      getExternalName(in.getChar(start + 1))
-    }
-
-    /** Return the type of a class constant entry. Since
-     *  arrays are considered to be class types, they might
-     *  appear as entries in 'newarray' or 'cast' opcodes.
-     */
     def getClassOrArrayType(index: Int)(using ctx: Context, in: DataReader): Type = {
       if (index <= 0 || len <= index) errorBadIndex(index)
       val value = values(index)
@@ -1240,90 +1362,12 @@ class ClassfileParser(
 
     def getType(index: Int, isVarargs: Boolean = false)(using Context, DataReader): Type =
       sigToType(getExternalName(index).value, isVarargs = isVarargs)
-
-    def getSuperClass(index: Int)(using Context, DataReader): Symbol = {
-      assert(index != 0, "attempt to parse java.lang.Object from classfile")
-      getClassSymbol(index)
-    }
-
-    def getConstant(index: Int)(using ctx: Context, in: DataReader): Constant = {
-      if (index <= 0 || len <= index) errorBadIndex(index)
-      var value = values(index)
-      if (value eq null) {
-        val start = starts(index)
-        value = (in.getByte(start).toInt: @switch) match {
-          case CONSTANT_STRING =>
-            Constant(getName(in.getChar(start + 1).toInt).value)
-          case CONSTANT_INTEGER =>
-            Constant(in.getInt(start + 1))
-          case CONSTANT_FLOAT =>
-            Constant(in.getFloat(start + 1))
-          case CONSTANT_LONG =>
-            Constant(in.getLong(start + 1))
-          case CONSTANT_DOUBLE =>
-            Constant(in.getDouble(start + 1))
-          case CONSTANT_CLASS =>
-            getClassOrArrayType(index).typeSymbol
-          case _ =>
-            errorBadTag(start)
-        }
-        values(index) = value
-      }
-      value match {
-        case ct: Constant  => ct
-        case cls: Symbol   => Constant(cls.typeRef)
-        case arr: Type     => Constant(arr)
-      }
-    }
-
-    private def getSubArray(bytes: Array[Byte]): Array[Byte] = {
-      val decodedLength = ByteCodecs.decode(bytes)
-      val arr           = new Array[Byte](decodedLength)
-      System.arraycopy(bytes, 0, arr, 0, decodedLength)
-      arr
-    }
-
-    def getBytes(index: Int)(using in: DataReader): Array[Byte] = {
-      if (index <= 0 || len <= index) errorBadIndex(index)
-      var value = values(index).asInstanceOf[Array[Byte]]
-      if (value eq null) {
-        val start = starts(index)
-        if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
-        val len   = in.getChar(start + 1)
-        val bytes = new Array[Byte](len)
-        in.getBytes(start + 3, bytes)
-        value = getSubArray(bytes)
-        values(index) = value
-      }
-      value
-    }
-
-    def getBytes(indices: List[Int])(using in: DataReader): Array[Byte] = {
-      assert(!indices.isEmpty, indices)
-      var value = values(indices.head).asInstanceOf[Array[Byte]]
-      if (value eq null) {
-        val bytesBuffer = ArrayBuffer.empty[Byte]
-        for (index <- indices) {
-          if (index <= 0 || ConstantPool.this.len <= index) errorBadIndex(index)
-          val start = starts(index)
-          if (in.getByte(start).toInt != CONSTANT_UTF8) errorBadTag(start)
-          val len = in.getChar(start + 1)
-          val buf = new Array[Byte](len)
-          in.getBytes(start + 3, buf)
-          bytesBuffer ++= buf
-        }
-        value = getSubArray(bytesBuffer.toArray)
-        values(indices.head) = value
-      }
-      value
-    }
-
-    /** Throws an exception signaling a bad constant index. */
-    private def errorBadIndex(index: Int)(using in: DataReader) =
-      throw new RuntimeException("bad constant pool index: " + index + " at pos: " + in.bp)
-
-    /** Throws an exception signaling a bad tag at given address. */
-    private def errorBadTag(start: Int)(using in: DataReader) =
-      throw new RuntimeException("bad constant pool tag " + in.getByte(start) + " at byte " + start)
   }
+
+  def getClassSymbol(name: SimpleName)(using Context): Symbol =
+    if (name.endsWith("$") && (name ne nme.nothingRuntimeClass) && (name ne nme.nullRuntimeClass))
+      // Null$ and Nothing$ ARE classes
+      requiredModule(name.dropRight(1))
+    else classNameToSymbol(name)
+
 }

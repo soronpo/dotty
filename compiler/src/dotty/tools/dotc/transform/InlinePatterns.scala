@@ -2,14 +2,13 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import MegaPhase._
-import Symbols._, Contexts._, Types._, Decorators._
-import StdNames.nme
-import NameOps._
-import Names._
-import ast.Trees._
-import ast.TreeTypeMap
+import core.*
+import MegaPhase.*
+import Symbols.*, Contexts.*, Types.*, Decorators.*
+import NameOps.*
+import Names.*
+
+import scala.collection.mutable.ListBuffer
 
 /** Rewrite an application
  *
@@ -27,9 +26,11 @@ import ast.TreeTypeMap
  *  This removes placeholders added by inline `unapply`/`unapplySeq` patterns.
  */
 class InlinePatterns extends MiniPhase:
-  import ast.tpd._
+  import ast.tpd.*
 
-  def phaseName: String = "inlinePatterns"
+  override def phaseName: String = InlinePatterns.name
+
+  override def description: String = InlinePatterns.description
 
   // This phase needs to run after because it need to transform trees that are generated
   // by the pattern matcher but are still not visible in that group of phases.
@@ -39,7 +40,7 @@ class InlinePatterns extends MiniPhase:
     if app.symbol.name.isUnapplyName && !app.tpe.isInstanceOf[MethodicType] then
       app match
         case App(Select(fn, name), argss) =>
-          val app1 = betaReduce(app, fn, name, argss.flatten)
+          val app1 = betaReduce(app, fn, name, argss)
           if app1 ne app then report.log(i"beta reduce $app -> $app1")
           app1
         case _ =>
@@ -52,10 +53,22 @@ class InlinePatterns extends MiniPhase:
         case Apply(App(fn, argss), args) => (fn, argss :+ args)
         case _ => (app, Nil)
 
-  private def betaReduce(tree: Apply, fn: Tree, name: Name, args: List[Tree])(using Context): Tree =
+  // TODO merge with BetaReduce.scala
+  private def betaReduce(tree: Apply, fn: Tree, name: Name, argss: List[List[Tree]])(using Context): Tree =
     fn match
       case Block(TypeDef(_, template: Template) :: Nil, Apply(Select(New(_),_), Nil)) if template.constr.rhs.isEmpty =>
         template.body match
-          case List(ddef @ DefDef(`name`, _, _, _)) => BetaReduce(ddef, args)
+          case List(ddef @ DefDef(`name`, _, _, _)) =>
+            val bindings = new ListBuffer[DefTree]()
+            BetaReduce.reduceApplication(ddef, argss, bindings) match
+              case Some(expansion1) =>
+                val bindings1 = bindings.result()
+                seq(bindings1, expansion1)
+              case None => tree
           case _ => tree
       case _ => tree
+
+object InlinePatterns:
+  val name: String = "inlinePatterns"
+  val description: String = "remove placeholders of inlined patterns"
+

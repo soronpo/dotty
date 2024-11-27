@@ -1,42 +1,30 @@
 package dotty.tools.scaladoc
 
-import java.util.ServiceLoader
 import java.io.File
-import java.util.jar._
-import collection.JavaConverters._
-import collection.immutable.ArraySeq
+import java.io.FileWriter
+import java.nio.file.Paths
 
-import java.nio.file.Files
+import collection.immutable.ArraySeq
 
 import dotty.tools.dotc.config.Settings._
 import dotty.tools.dotc.config.{ CommonScalaSettings, AllScalaSettings }
 import dotty.tools.dotc.reporting.Reporter
 import dotty.tools.dotc.core.Contexts._
+import dotty.tools.scaladoc.Inkuire._
 
 object Scaladoc:
-  enum CommentSyntax:
-    case Wiki
-    case Markdown
-
-  object CommentSyntax:
-    def parse(str: String) = str match
-        case "wiki" => Some(CommentSyntax.Wiki)
-        case "markdown" => Some(CommentSyntax.Markdown)
-        case _ => None
-
-    val default = CommentSyntax.Markdown
-
   case class Args(
     name: String,
     tastyDirs: Seq[File] = Nil,
     tastyFiles: Seq[File] = Nil,
     classpath: String = "",
+    bootclasspath: String = "",
     output: File,
     docsRoot: Option[String] = None,
     projectVersion: Option[String] = None,
     projectLogo: Option[String] = None,
     projectFooter: Option[String] = None,
-    defaultSyntax: CommentSyntax = CommentSyntax.Markdown,
+    defaultSyntax: List[String] = Nil,
     sourceLinks: List[String] = Nil,
     revision: Option[String] = None,
     externalMappings: List[ExternalDocLink] = Nil,
@@ -49,6 +37,16 @@ object Scaladoc:
     includePrivateAPI: Boolean = false,
     docCanonicalBaseUrl: String = "",
     documentSyntheticTypes: Boolean = false,
+    snippetCompiler: List[String] = Nil,
+    noLinkWarnings: Boolean = false,
+    noLinkAssetWarnings: Boolean = false,
+    versionsDictionaryUrl: Option[String] = None,
+    generateInkuire : Boolean = false,
+    apiSubdirectory : Boolean = false,
+    scastieConfiguration: String = "",
+    defaultTemplate: Option[String] = None,
+    quickLinks: List[QuickLink] = List.empty,
+    dynamicSideMenu: Boolean = false,
   )
 
   def run(args: Array[String], rootContext: CompilerContext): Reporter =
@@ -65,7 +63,7 @@ object Scaladoc:
       val tastyFiles = parsedArgs.tastyFiles ++ parsedArgs.tastyDirs.flatMap(listTastyFiles)
 
       if !ctx.reporter.hasErrors then
-        val updatedArgs = parsedArgs.copy(tastyDirs = Nil, tastyFiles = tastyFiles)
+        val updatedArgs = parsedArgs.copy(tastyDirs = parsedArgs.tastyDirs, tastyFiles = tastyFiles)
 
         if (parsedArgs.output.exists()) util.IO.delete(parsedArgs.output)
 
@@ -73,9 +71,27 @@ object Scaladoc:
         report.inform("Done")
       else report.error("Failure")
 
+      if parsedArgs.generateInkuire then dumpInkuireDB(parsedArgs.output.getAbsolutePath, parsedArgs)
     }
+
     ctx.reporter
 
+  def dumpInkuireDB(output: String, parsedArgs: Args) = {
+    val dbPath = Paths.get(output, "inkuire-db.json")
+    val dbFile = dbPath.toFile()
+    dbFile.createNewFile()
+    val dbWriter = new FileWriter(dbFile, false)
+    Inkuire.beforeSave()
+    dbWriter.write(s"${EngineModelSerializers.serialize(Inkuire.db)}")
+    dbWriter.close()
+
+    val configPath = Paths.get(output, "scripts/inkuire-config.json")
+    val configFile = configPath.toFile()
+    configFile.createNewFile()
+    val configWriter = new FileWriter(configFile, false)
+    configWriter.write(Inkuire.generateInkuireConfig(parsedArgs.externalMappings.map(_.documentationUrl.toString)))
+    configWriter.close()
+  }
 
   def extract(args: Array[String], rootCtx: CompilerContext): (Option[Scaladoc.Args], CompilerContext) =
     val newContext = rootCtx.fresh
@@ -127,19 +143,15 @@ object Scaladoc:
       )
 
       if other.nonEmpty then report.warning(
-        s"scaladoc suports only .tasty and .jar files, following files will be ignored: ${other.mkString(", ")}"
+        s"scaladoc supports only .tasty and .jar files, following files will be ignored: ${other.mkString(", ")}"
       )
 
       def defaultDest(): File =
         report.warning("Destination is not provided, please provide '-d' parameter pointing to directory where docs should be created")
         File("output")
 
-      val parseSyntax: CommentSyntax = syntax.nonDefault.fold(CommentSyntax.default){ str =>
-        CommentSyntax.parse(str).getOrElse{
-          report.error(s"unrecognized value for -syntax option: $str")
-          CommentSyntax.default
-        }
-      }
+      val legacySourceLinkList = if legacySourceLink.get.nonEmpty then List(legacySourceLink.get) else Nil
+
       val externalMappings =
         externalDocumentationMappings.get.flatMap( s =>
             ExternalDocLink.parse(s).fold(left => {
@@ -149,6 +161,15 @@ object Scaladoc:
           )
         )
 
+      val legacyExternalMappings =
+        legacyExternalDocumentationMappings.get.flatMap { s =>
+          ExternalDocLink.parseLegacy(s).fold(left => {
+              report.warning(left)
+              None
+            }, right => Some(right)
+          )
+        }
+
       val socialLinksParsed =
         socialLinks.get.flatMap { s =>
           SocialLinks.parse(s).fold(left => {
@@ -157,13 +178,22 @@ object Scaladoc:
           },right => Some(right))
         }
 
+      val quickLinksParsed =
+        quickLinks.get.flatMap { s =>
+          QuickLink.parse(s) match
+            case Left(err) =>
+              report.warning(err)
+              None
+            case Right(value) => Some(value)
+        }
+
       unsupportedSettings.filter(s => s.get != s.default).foreach { s =>
         report.warning(s"Setting ${s.name} is currently not supported.")
       }
       val destFile = outputDir.nonDefault.fold(defaultDest())(_.file)
       val printableProjectName = projectName.nonDefault.fold("")("for " + _ )
       report.inform(
-        s"Generating documenation $printableProjectName in $destFile")
+        s"Generating documentation $printableProjectName in $destFile")
 
       if deprecatedSkipPackages.get.nonEmpty then report.warning(deprecatedSkipPackages.description)
 
@@ -172,15 +202,16 @@ object Scaladoc:
         dirs,
         validFiles,
         classpath.get,
+        bootclasspath.get,
         destFile,
-        siteRoot.nonDefault,
+        Option(siteRoot.withDefault(siteRoot.default)),
         projectVersion.nonDefault,
         projectLogo.nonDefault,
         projectFooter.nonDefault,
-        parseSyntax,
-        sourceLinks.get,
+        syntax.get,
+        sourceLinks.get ++ legacySourceLinkList,
         revision.nonDefault,
-        externalMappings,
+        externalMappings ++ legacyExternalMappings,
         socialLinksParsed,
         skipById.get ++ deprecatedSkipPackages.get,
         skipByRegex.get,
@@ -189,7 +220,17 @@ object Scaladoc:
         groups.get,
         visibilityPrivate.get,
         docCanonicalBaseUrl.get,
-        YdocumentSyntheticTypes.get
+        YdocumentSyntheticTypes.get,
+        snippetCompiler.get,
+        noLinkWarnings.get,
+        noLinkAssetWarnings.get,
+        versionsDictionaryUrl.nonDefault,
+        generateInkuire.get,
+        apiSubdirectory.get,
+        scastieConfiguration.get,
+        defaultTemplate.nonDefault,
+        quickLinksParsed,
+        dynamicSideMenu.get,
       )
       (Some(docArgs), newContext)
     }
@@ -197,7 +238,7 @@ object Scaladoc:
   private [scaladoc] def run(args: Args)(using ctx: CompilerContext): DocContext =
     given docContext: DocContext = new DocContext(args, ctx)
     val module = ScalaModuleProvider.mkModule()
-
     new dotty.tools.scaladoc.renderers.HtmlRenderer(module.rootPackage, module.members).render()
+    docContext.reportPathCompatIssues()
     report.inform("generation completed successfully")
     docContext

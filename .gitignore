@@ -30,26 +30,14 @@ node_modules
 .metals/
 metals.sbt
 
-# Scala-IDE specific
-.scala_dependencies
-.cache
-.cache-main
-.cache-tests
-.classpath
-.project
-.settings
-classes/
-*/bin/
-
-# Dotty IDE
-/.dotty-ide-dev-port
-/.dotty-ide-artifact
-/.dotty-ide.json
-
 # idea
 .idea
 .idea_modules
 /.worksheet/
+
+# scala-cli
+.scala-build
+sbt-launch.jar
 
 # Partest
 dotty.jar
@@ -57,6 +45,9 @@ dotty-lib.jar
 tests/partest-generated/
 tests/locks/
 /test-classes/
+
+# Benchmarks
+bench/tests-generated
 
 # Ignore output files but keep the directory
 out/
@@ -73,15 +64,14 @@ testlogs/
 local/
 compiler/test/debug/Gen.jar
 
-compiler/before-pickling.txt
-compiler/after-pickling.txt
-bench/compile.txt
-*.dotty-ide-version
+/bin/.cp
 
-# The vscode app for testing
-vscode-dotty/.vscode-test
+before-pickling.txt
+after-pickling.txt
+bench/compile.txt
 
 community-build/scala3-bootstrapped.version
+community-build/sbt-injected-plugins
 community-build/sbt-dotty-sbt
 community-build/sbt-scalajs-sbt
 community-build/dotty-community-build-deps
@@ -96,3 +86,18 @@ community-build/dotty-community-build-deps
 
 # Bloop
 .bsp
+
+# Coursier
+cs
+
+# Coursier test product
+compiler/test-coursier/run/*.jar
+
+# docs related
+contributors.js
+content-contributors.css
+docs/_spec/_site/
+docs/_spec/.jekyll-metadata
+
+# scaladoc related
+scaladoc/output/

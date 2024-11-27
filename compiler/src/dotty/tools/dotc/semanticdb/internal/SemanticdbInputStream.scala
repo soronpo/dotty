@@ -1,11 +1,13 @@
 package dotty.tools.dotc.semanticdb.internal
 
+import scala.language.unsafeNulls
+
 import java.io.IOException
 import java.io.InputStream
 import java.util.Arrays
 import java.nio.charset.StandardCharsets
 
-import SemanticdbInputStream._
+import SemanticdbInputStream.*
 
 import scala.collection.mutable
 
@@ -141,8 +143,7 @@ class SemanticdbInputStream private (buffer: Array[Byte], input: InputStream) {
       throw new IllegalStateException(
         s"refillBuffer() called when $n bytes were already available in buffer")
     }
-    if (totalBytesRetired + bufferPos + n > currentLimit) false
-    else if (input != null) {
+    if totalBytesRetired + bufferPos + n <= currentLimit && input != null then
       val pos: Int = bufferPos
       if (pos > 0) {
         if (bufferSize > pos) {
@@ -164,7 +165,6 @@ class SemanticdbInputStream private (buffer: Array[Byte], input: InputStream) {
         recomputeBufferSizeAfterLimit()
         return ((bufferSize >= n) || tryRefillBuffer(n))
       }
-    }
     false
   }
 
@@ -446,6 +446,29 @@ class SemanticdbInputStream private (buffer: Array[Byte], input: InputStream) {
     else {
       return new String(readRawBytesSlowPath(size), StandardCharsets.UTF_8)
     }
+  }
+
+  def readStringRequireUtf8(): String = {
+    val size: Int = readRawVarint32()
+    var bytes: Array[Byte] = Array()
+    var pos = bufferPos;
+    if (size <= (bufferSize - pos) && size > 0) {
+      // Fast path:  We already have the bytes in a contiguous buffer, so
+      //   just copy directly from it.
+      bytes = buffer;
+      bufferPos = pos + size;
+    } else if (size == 0) {
+      return "";
+    } else {
+      // Slow path:  Build a byte array first then copy it.
+      bytes = readRawBytesSlowPath(size);
+      pos = 0;
+    }
+    // TODO(martinrb): We could save a pass by validating while decoding.
+    // if (!Utf8.isValidUtf8(bytes, pos, pos + size)) {
+    //   throw InvalidProtocolBufferException.invalidUtf8();
+    // }
+    return new String(bytes, pos, size, "UTF-8");
   }
 
   def checkLastTagWas(value: Int): Unit = {

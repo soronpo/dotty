@@ -5,6 +5,8 @@
 
 package dotty.tools.io
 
+import scala.language.unsafeNulls
+
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, InputStream, OutputStream }
 
 /** This class implements an in-memory file.
@@ -26,15 +28,15 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
   def this(name: String) = this(name, name)
 
   /**
-    * Initializes this instance with the specified name and an
-    * identical path.
+    * Initializes this instance with the specified path
+    * and a name taken from the last path element.
     *
-    * @param name the name of the virtual file to be created
+    * @param path the path of the virtual file to be created
     * @param content the initial contents of the virtual file
     * @return     the created virtual file
     */
-  def this(name: String, content: Array[Byte]) = {
-    this(name)
+  def this(path: String, content: Array[Byte]) = {
+    this(VirtualFile.nameOf(path), path)
     this.content = content
   }
 
@@ -80,12 +82,6 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
     Iterator.empty
   }
 
-  /** Does this abstract file denote an existing file? */
-  def create(): Unit = unsupported()
-
-  /** Delete the underlying file or directory (recursively). */
-  def delete(): Unit = unsupported()
-
   /**
    * Returns the abstract file in this abstract directory with the
    * specified name. If there is no such file, returns null. The
@@ -102,3 +98,7 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
    */
   def lookupNameUnchecked(name: String, directory: Boolean): AbstractFile = unsupported()
 }
+object VirtualFile:
+  private def nameOf(path: String): String =
+    val i = path.lastIndexOf('/')
+    if i >= 0 && i < path.length - 1 then path.substring(i + 1) else path

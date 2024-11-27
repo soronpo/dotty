@@ -2,7 +2,7 @@ package dotty.tools.scaladoc
 package renderers
 
 import util.HTML._
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import java.net.URI
 import java.net.URL
 import java.util.{List => JList, Set => JSet}
@@ -15,10 +15,10 @@ trait SignatureRenderer:
   def currentDri: DRI
   def link(dri: DRI): Option[String]
 
-  def renderElement(e: String | (String, DRI) | Link) = renderElementWith(e)
+  def renderElement(e: SignaturePart, modifiers: AppliedAttr*): AppliedTag = renderElementWith(e, modifiers*)
 
   def renderLink(name: String, dri: DRI, modifiers: AppliedAttr*) =
-    renderLinkContent(name, dri, modifiers:_*)
+    renderLinkContent(name, dri, modifiers*)
 
   def unresolvedLink(content: TagArg, modifiers: AppliedAttr*) =
     span(Attr("data-unresolved-link") := "", modifiers)(content)
@@ -26,9 +26,15 @@ trait SignatureRenderer:
   def renderLinkContent(content: TagArg, dri: DRI, modifiers: AppliedAttr*) =
     link(dri) match
       case Some(link) => a(href := link, modifiers)(content)
-      case _ => unresolvedLink(content, modifiers:_*)
+      case _ => unresolvedLink(content, modifiers*)
 
-  def renderElementWith(e: String | (String, DRI) | Link, modifiers: AppliedAttr*) = e match
-    case (name, dri) => renderLink(name, dri, modifiers:_*)
-    case name: String => raw(name)
-    case Link(name, dri) => renderLink(name, dri, modifiers:_*)
+  def renderElementWith(e: SignaturePart, modifiers: AppliedAttr*) = e match
+    case Name(name, dri) =>
+      val attrs = Seq(Attr("t") := "n") ++ modifiers
+      renderLink(name, dri, attrs*)
+    case Type(name, Some(dri)) =>
+      val attrs = Seq(Attr("t") := "t") ++ modifiers
+      renderLink(name, dri, attrs*)
+    case Type(name, None) => span(Attr("t") := "t")(name)
+    case Keyword(name) => span(Attr("t") := "k")(name)
+    case Plain(name) => raw(name)

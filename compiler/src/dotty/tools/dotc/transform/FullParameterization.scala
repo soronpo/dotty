@@ -1,16 +1,13 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Types._
-import Contexts._
-import Symbols._
-import Decorators._
-import TypeUtils._
+import core.*
+import Types.*
+import Contexts.*
+import Symbols.*
+import Decorators.*
 import StdNames.nme
-import NameOps._
-import ast._
-import ast.Trees._
+import ast.*
 
 /** Provides methods to produce fully parameterized versions of instance methods,
  *  where the `this` of the enclosing class is abstracted out in an extra leading
@@ -51,7 +48,7 @@ import ast.Trees._
  */
 trait FullParameterization {
 
-  import tpd._
+  import tpd.*
 
   /** If references to original symbol `referenced` from within fully parameterized method
    *  `derived` should be rewired to some fully parameterized method, the rewiring target symbol,
@@ -154,7 +151,7 @@ trait FullParameterization {
       val origClass = origMeth.enclosingClass.asClass
       val origLeadingTypeParamSyms = allInstanceTypeParams(originalDef, abstractOverClass)
       val origOtherParamSyms = originalDef.trailingParamss.flatten.map(_.symbol)
-      val thisRef :: argRefs = vrefss.flatten
+      val thisRef :: argRefs = vrefss.flatten: @unchecked
 
       /** If tree should be rewired, the rewired tree, otherwise EmptyTree.
        *  @param   targs  Any type arguments passed to the rewired tree.
@@ -209,7 +206,7 @@ trait FullParameterization {
           .subst(origLeadingTypeParamSyms ++ origOtherParamSyms, (trefs ++ argRefs).tpes)
           .substThisUnlessStatic(origClass, thisRef.tpe),
         treeMap = {
-          case tree: This if tree.symbol == origClass => thisRef
+          case tree: This if tree.symbol == origClass => thisRef.withSpan(tree.span)
           case tree => rewireTree(tree, Nil) orElse tree
         },
         oldOwners = origMeth :: Nil,

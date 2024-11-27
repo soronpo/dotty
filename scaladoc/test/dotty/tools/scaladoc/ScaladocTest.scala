@@ -11,12 +11,13 @@ abstract class ScaladocTest(val name: String):
     val ctx = Scaladoc.run(args)(using testContext)
     op(using ctx)
 
+  def moduleDocContext = testDocContext(tastyFiles(name))
 
   def withModule(op: DocContext ?=> Module => Unit) =
-    given DocContext = testDocContext(tastyFiles(name))
+    given DocContext = moduleDocContext
     op(ScalaModuleProvider.mkModule())
 
-  private def getTempDir() : TemporaryFolder =
+  protected def getTempDir() : TemporaryFolder =
     val folder = new TemporaryFolder()
     folder.create()
     folder
@@ -26,7 +27,7 @@ abstract class ScaladocTest(val name: String):
       tastyFiles = tastyFiles(name),
       output = getTempDir().getRoot,
       projectVersion = Some("1.0"),
-      sourceLinks = List("github://lampepfl/dotty/master")
+      sourceLinks = List("github://scala/scala3/master")
     )
 
   @Test

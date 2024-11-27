@@ -1,16 +1,13 @@
 package dotty.tools.dotc
 package sbt
 
-import core._
-import Annotations._
-import Contexts._
-import Decorators._
-import Denotations._
-import Flags._
-import Phases._
-import Types._
-import Symbols._
-import NameOps._
+import scala.language.unsafeNulls
+
+import core.*
+import Contexts.*
+import Flags.*
+import Symbols.*
+import NameOps.*
 
 import xsbti.api
 import xsbti.api.SafeLazy.strict
@@ -27,7 +24,7 @@ object APIUtils {
     val EmptyType = api.EmptyType.of()
   }
 
-  import Constants._
+  import Constants.*
 
   /** Registers a dummy class for sbt's incremental compilation.
    *
@@ -38,9 +35,9 @@ object APIUtils {
    *  a dummy empty class can be registered instead, using this method.
    */
   def registerDummyClass(classSym: ClassSymbol)(using Context): Unit = {
-    if (ctx.sbtCallback != null) {
+    ctx.withIncCallback { cb =>
       val classLike = emptyClassLike(classSym)
-      ctx.sbtCallback.api(ctx.compilationUnit.source.file.file, classLike)
+      cb.api(ctx.compilationUnit.source, classLike)
     }
   }
 

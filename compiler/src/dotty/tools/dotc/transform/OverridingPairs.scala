@@ -1,11 +1,16 @@
-package dotty.tools.dotc
+package dotty.tools
+package dotc
 package transform
 
-import core._
-import Flags._, Symbols._, Contexts._, Scopes._, Decorators._
-import collection.mutable
+import core.*
+import Flags.*, Symbols.*, Contexts.*, Scopes.*, Decorators.*, Types.Type
+import NameKinds.DefaultGetterName
+import NullOpsDecorator.*
 import collection.immutable.BitSet
 import scala.annotation.tailrec
+import cc.isCaptureChecking
+
+import scala.compiletime.uninitialized
 
 /** A module that can produce a kind of iterator (`Cursor`),
  *  which yields all pairs of overriding/overridden symbols
@@ -15,29 +20,33 @@ import scala.annotation.tailrec
  *  Adapted from the 2.9 version of OverridingPairs. The 2.10 version is IMO
  *  way too unwieldy to be maintained.
  */
-object OverridingPairs {
+object OverridingPairs:
 
   /** The cursor class
    *  @param base   the base class that contains the overriding pairs
    */
-  class Cursor(base: Symbol)(using Context) {
+  class Cursor(base: Symbol)(using Context):
 
     private val self = base.thisType
 
     /** Symbols to exclude: Here these are constructors and private locals.
      *  But it may be refined in subclasses.
      */
-    protected def exclude(sym: Symbol): Boolean = !sym.memberCanMatchInheritedSymbols
+    protected def exclude(sym: Symbol): Boolean =
+      !sym.memberCanMatchInheritedSymbols
+      || isCaptureChecking && atPhase(ctx.phase.prev)(sym.is(Private))
+        // for capture checking we drop the private flag of certain parameter accessors
+        // but these still need no overriding checks
 
     /** The parents of base that are checked when deciding whether an overriding
      *  pair has already been treated in a parent class.
      *  This may be refined in subclasses. @see Bridges for a use case.
      */
-    protected def parents: Array[Symbol] = base.info.parents.toArray.map(_.typeSymbol)
+    protected def parents: Array[Symbol] = base.info.parents.toArray.map(_.classSymbol)
 
-    /** Does `sym1` match `sym2` so that it qualifies as overriding.
-     *  Types always match. Term symbols match if their membertypes
-     *  relative to <base>.this do
+    /** Does `sym1` match `sym2` so that it qualifies as overriding when both symbols are
+     *  seen as members of `self`? Types always match. Term symbols match if their membertypes
+     *  relative to `self` do.
      */
     protected def matches(sym1: Symbol, sym2: Symbol): Boolean =
       sym1.isType || sym1.asSeenFrom(self).matches(sym2.asSeenFrom(self))
@@ -85,11 +94,22 @@ object OverridingPairs {
         then bits += i
       subParents(bc) = bits
 
-    private def hasCommonParentAsSubclass(cls1: Symbol, cls2: Symbol): Boolean =
-      (subParents(cls1) intersect subParents(cls2)).nonEmpty
+    /** Is the override of `sym1` and `sym2` already handled when checking
+     *  a parent of `self`?
+     */
+    private def isHandledByParent(sym1: Symbol, sym2: Symbol): Boolean =
+      val commonParents = subParents(sym1.owner).intersect(subParents(sym2.owner))
+      commonParents.nonEmpty
+      && commonParents.exists(i => canBeHandledByParent(sym1, sym2, parents(i)))
+
+    /** Can pair `sym1`/`sym2` be handled by parent `parentType` which is a common subtype
+     *  of both symbol's owners? Assumed to be true by default, but overridden in RefChecks.
+     */
+    protected def canBeHandledByParent(sym1: Symbol, sym2: Symbol, parent: Symbol): Boolean =
+      true
 
     /** The scope entries that have already been visited as overridden
-     *  (maybe excluded because of hasCommonParentAsSubclass).
+     *  (maybe excluded because of already handled by a parent).
      *  These will not appear as overriding
      */
     private val visited = util.HashSet[Symbol]()
@@ -102,13 +122,13 @@ object OverridingPairs {
     private var nextEntry = curEntry
 
     /** The current candidate symbol for overriding */
-    var overriding: Symbol = _
+    var overriding: Symbol = uninitialized
 
     /** If not null: The symbol overridden by overriding */
-    var overridden: Symbol = _
+    var overridden: Symbol = uninitialized
 
     //@M: note that next is called once during object initialization
-    final def hasNext: Boolean = nextEntry ne null
+    final def hasNext: Boolean = nextEntry != null
 
     /**  @post
      *     curEntry   = the next candidate that may override something else
@@ -117,10 +137,10 @@ object OverridingPairs {
      */
     private def nextOverriding(): Unit = {
       @tailrec def loop(): Unit =
-        if (curEntry ne null) {
-          overriding = curEntry.sym
+        if (curEntry != null) {
+          overriding = curEntry.uncheckedNN.sym
           if (visited.contains(overriding)) {
-            curEntry = curEntry.prev
+            curEntry = curEntry.uncheckedNN.prev
             loop()
           }
         }
@@ -134,30 +154,82 @@ object OverridingPairs {
      *    overridden = overridden member of the pair, provided hasNext is true
      */
     @tailrec final def next(): Unit =
-      if (nextEntry ne null) {
-        nextEntry = decls.lookupNextEntry(nextEntry)
-        if (nextEntry ne null)
-          try {
-            overridden = nextEntry.sym
-            if (overriding.owner != overridden.owner && matches(overriding, overridden)) {
+      if nextEntry != null then
+        nextEntry = decls.lookupNextEntry(nextEntry.uncheckedNN)
+        if nextEntry != null then
+          try
+            overridden = nextEntry.uncheckedNN.sym
+            if overriding.owner != overridden.owner && matches(overriding, overridden) then
               visited += overridden
-              if (!hasCommonParentAsSubclass(overriding.owner, overridden.owner)) return
-            }
-          }
-          catch {
-            case ex: TypeError =>
-              // See neg/i1750a for an example where a cyclic error can arise.
-              // The root cause in this example is an illegal "override" of an inner trait
-              report.error(ex, base.srcPos)
-          }
-        else {
-          curEntry = curEntry.prev
+              if !isHandledByParent(overriding, overridden) then return
+          catch case ex: TypeError =>
+            // See neg/i1750a for an example where a cyclic error can arise.
+            // The root cause in this example is an illegal "override" of an inner trait
+            report.error(ex, base.srcPos)
+        else
+          curEntry = curEntry.nn.prev
           nextOverriding()
-        }
         next()
-      }
 
     nextOverriding()
     next()
-  }
-}
+  end Cursor
+
+  /** Is this `sym1` considered an override of `sym2` (or vice versa) if both are
+   *  seen as members of `site`?
+   *  We declare a match if either we have a full match including matching names
+   *  or we have a loose match with different target name but the types are the same.
+   *  We leave out pairs of methods in Java classes under the assumption since these
+   *  have already been checked and handled by javac.
+   *  This leaves two possible sorts of discrepancies to be reported as errors
+   *  in `RefChecks`:
+   *
+   *    - matching names, target names, and signatures but different types
+   *    - matching names and types, but different target names
+   *
+   *  This method is used as a replacement of `matches` in some subclasses of
+   *  OverridingPairs.
+   */
+  def isOverridingPair(sym1: Symbol, sym2: Symbol, self: Type)(using Context): Boolean =
+    if     sym1.owner.is(JavaDefined, butNot = Trait)
+        && sym2.owner.is(JavaDefined, butNot = Trait)
+    then false // javac already handles these checks and inserts bridges
+    else if sym1.isType then true
+    else
+      val sd1 = sym1.asSeenFrom(self)
+      val sd2 = sym2.asSeenFrom(self)
+      sd1.matchesLoosely(sd2)
+        && (sym1.hasTargetName(sym2.targetName)
+            || isOverridingPair(sym1, sd1.info, sym2, sd2.info))
+
+  /** Let `member` and `other` be members of some common class C with types
+   *  `memberTp` and `otherTp` in C. Are the two symbols considered an overriding
+   *  pair in C? We assume that names already match so we test only the types here.
+   *  @param fallBack   A function called if the initial test is false and
+   *                    `member` and `other` are term symbols.
+   *  @param isSubType  A function to be used for checking subtype relationships
+   *                    between term fields.
+   */
+  def isOverridingPair(member: Symbol, memberTp: Type, other: Symbol, otherTp: Type, fallBack: => Boolean = false,
+                       isSubType: (Type, Type) => Context ?=> Boolean = (tp1, tp2) => tp1 frozen_<:< tp2)(using Context): Boolean =
+    if member.isType then // intersection of bounds to refined types must be nonempty
+      memberTp.bounds.hi.hasSameKindAs(otherTp.bounds.hi)
+      && (
+        (memberTp frozen_<:< otherTp)
+        || !member.owner.derivesFrom(other.owner)
+            && {
+              // if member and other come from independent classes or traits, their
+              // bounds must have non-empty-intersection
+              val jointBounds = (memberTp.bounds & otherTp.bounds).bounds
+              jointBounds.lo frozen_<:< jointBounds.hi
+            }
+      )
+    else
+      // releaxed override check for explicit nulls if one of the symbols is Java defined,
+      // force `Null` to be a subtype of non-primitive value types during override checking.
+      val relaxedOverriding = ctx.explicitNulls && (member.is(JavaDefined) || other.is(JavaDefined))
+      member.name.is(DefaultGetterName) // default getters are not checked for compatibility
+      || memberTp.overrides(otherTp, relaxedOverriding,
+            member.matchNullaryLoosely || other.matchNullaryLoosely || fallBack, isSubType = isSubType)
+
+end OverridingPairs

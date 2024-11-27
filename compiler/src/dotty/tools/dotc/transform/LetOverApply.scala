@@ -2,10 +2,9 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import Contexts._, Symbols._, Decorators._
-import MegaPhase._
-import ast.Trees._
+import core.*
+import Contexts.*, Symbols.*, Decorators.*
+import MegaPhase.*
 
 /** Rewrite `{ stats; expr}.f(args)` to `{ stats; expr.f(args) }` and
  *  `{ stats; expr }(args)` to `{ stats; expr(args) }` before proceeding,
@@ -13,9 +12,11 @@ import ast.Trees._
  *  collapse applies of IFTs (this is done in Erasure).
  */
 class LetOverApply extends MiniPhase:
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "letOverApply"
+  override def phaseName: String = LetOverApply.name
+
+  override def description: String = LetOverApply.description
 
   override def transformApply(tree: Apply)(using Context): Tree =
     tree.fun match
@@ -30,3 +31,7 @@ class LetOverApply extends MiniPhase:
         tree
 
 end LetOverApply
+
+object LetOverApply:
+  val name: String = "letOverApply"
+  val description: String = "lift blocks from receivers of applications"

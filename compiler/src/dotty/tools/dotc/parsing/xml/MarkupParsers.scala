@@ -3,16 +3,22 @@ package dotc
 package parsing
 package xml
 
+import scala.language.unsafeNulls
+import scala.compiletime.uninitialized
+
 import scala.collection.mutable
+import scala.collection.BufferedIterator
+import core.Contexts.Context
 import mutable.{ Buffer, ArrayBuffer, ListBuffer }
 import scala.util.control.ControlThrowable
 import util.Chars.SU
-import Parsers._
-import util.Spans._
-import core._
-import Constants._
+import Parsers.*
+import util.Spans.*
+import core.*
+import Constants.*
+import Decorators.{em, toMessage}
 import util.SourceFile
-import Utility._
+import Utility.*
 
 
 // XXX/Note: many/most of the functions in here are almost direct cut and pastes
@@ -33,7 +39,7 @@ import Utility._
  */
 object MarkupParsers {
 
-  import ast.untpd._
+  import ast.untpd.*
 
   case object MissingEndTagControl extends ControlThrowable {
     override def getMessage: String = "start tag was here: "
@@ -47,7 +53,7 @@ object MarkupParsers {
     override def getMessage: String = "input ended while parsing XML"
   }
 
-  class MarkupParser(parser: Parser, final val preserveWS: Boolean)(implicit src: SourceFile) extends MarkupParserCommon {
+  class MarkupParser(parser: Parser, final val preserveWS: Boolean)(using Context) extends MarkupParserCommon {
 
     import Tokens.{ LBRACE, RBRACE }
 
@@ -66,7 +72,7 @@ object MarkupParsers {
       if (ch == SU) throw TruncatedXMLControl
       else reportSyntaxError(msg)
 
-    var input : CharArrayReader = _
+    var input : CharArrayReader = uninitialized
     def lookahead(): BufferedIterator[Char] =
       (input.buf drop input.charOffset).iterator.buffered
 
@@ -131,7 +137,7 @@ object MarkupParsers {
             try handle.parseAttribute(Span(start, curOffset, mid), tmp)
             catch {
               case e: RuntimeException =>
-                errorAndResult("error parsing attribute value", parser.errorTermTree)
+                errorAndResult("error parsing attribute value", parser.errorTermTree(parser.in.offset))
             }
 
           case '{'  =>
@@ -271,7 +277,7 @@ object MarkupParsers {
      *                | xmlTag1 '/' '>'
      */
     def element: Tree = {
-      val start = curOffset
+      val start = curOffset // FIXME should be `curOffset - 1` (scalatest and tests/neg/i19100.scala must be updated)
       val (qname, attrMap) = xTag(())
       if (ch == '/') { // empty element
         xToken("/>")
@@ -327,14 +333,14 @@ object MarkupParsers {
         case c @ TruncatedXMLControl  =>
           ifTruncated(c.getMessage)
         case c @ (MissingEndTagControl | ConfusedAboutBracesControl) =>
-          parser.syntaxError(c.getMessage + debugLastElem + ">", debugLastPos)
+          parser.syntaxError(em"${c.getMessage}$debugLastElem>", debugLastPos)
         case _: ArrayIndexOutOfBoundsException =>
-          parser.syntaxError("missing end tag in XML literal for <%s>" format debugLastElem, debugLastPos)
+          parser.syntaxError(em"missing end tag in XML literal for <$debugLastElem>", debugLastPos)
       }
       finally parser.in.resume(saved)
 
       if (output == null)
-        parser.errorTermTree
+        parser.errorTermTree(parser.in.offset)
       else
         output
     }
@@ -367,7 +373,7 @@ object MarkupParsers {
           while {
             xSpaceOpt()
             nextch()
-            ts.append(element)
+            content_LT(ts)
             charComingAfter(xSpaceOpt()) == '<'
           } do ()
           handle.makeXMLseq(Span(start, curOffset, start), ts)
@@ -377,7 +383,7 @@ object MarkupParsers {
           ts(0)
         }
       },
-      msg => parser.incompleteInputError(msg)
+      msg => parser.incompleteInputError(msg.toMessage)
     )
 
     /** @see xmlPattern. resynchronizes after successful parse
@@ -393,7 +399,7 @@ object MarkupParsers {
           tree
         }
       },
-      msg => parser.syntaxError(msg, curOffset)
+      msg => parser.syntaxError(msg.toMessage, curOffset)
     )
 
     def escapeToScala[A](op: => A, kind: String): A = {
@@ -419,7 +425,7 @@ object MarkupParsers {
      */
     def xScalaPatterns: List[Tree] = escapeToScala(parser.patterns(), "pattern")
 
-    def reportSyntaxError(offset: Int, str: String): Unit = parser.syntaxError(str, offset)
+    def reportSyntaxError(offset: Int, str: String): Unit = parser.syntaxError(str.toMessage, offset)
     def reportSyntaxError(str: String): Unit = {
       reportSyntaxError(curOffset, "in XML literal: " + str)
       nextch()
@@ -429,7 +435,7 @@ object MarkupParsers {
      *                  | Name [S] '/' '>'
      */
     def xPattern: Tree = {
-      var start = curOffset
+      var start = curOffset // FIXME should be `curOffset - 1` (scalatest and tests/neg/i19100.scala must be updated)
       val qname = xName
       debugLastStartElement = (start, qname) :: debugLastStartElement
       xSpaceOpt()

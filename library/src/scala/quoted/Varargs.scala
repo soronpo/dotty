@@ -7,7 +7,8 @@ package scala.quoted
  */
 object Varargs {
 
-  /** Lifts this sequence of expressions into an expression of a sequence
+  /**
+   *  Lifts this sequence of expressions into an expression of a sequence
    *
    *  Transforms a sequence of expression
    *    `Seq(e1, e2, ...)` where `ei: Expr[T]`
@@ -16,12 +17,18 @@ object Varargs {
    *
    *  Usage:
    *  ```scala
-   *  '{ List(${Varargs(List(1, 2, 3))}: _*) } // equivalent to '{ List(1, 2, 3) }
+   *  //{
+   *  def f(using Quotes) = {
+   *    import quotes.reflect.*
+   *  //}
+   *    '{ List(${Varargs(List('{1}, '{2}, '{3}))}: _*) } // equivalent to '{ List(1, 2, 3) }
+   *  //{
+   *  }
+   *  //}
    *  ```
-   *  @syntax markdown
    */
   def apply[T](xs: Seq[Expr[T]])(using Type[T])(using Quotes): Expr[Seq[T]] = {
-    import quotes.reflect._
+    import quotes.reflect.*
     Repeated(xs.map(_.asTerm).toList, TypeTree.of[T]).asExpr.asInstanceOf[Expr[Seq[T]]]
   }
 
@@ -31,15 +38,12 @@ object Varargs {
    *  ```scala
    *  inline def sum(args: Int*): Int = ${ sumExpr('args) }
    *  def sumExpr(argsExpr: Expr[Seq[Int]])(using Quotes): Expr[Int] = argsExpr match
-   *    case Varargs(argVarargs) =>
+   *    case Varargs(argVarargs) => ???
    *      // argVarargs: Seq[Expr[Int]]
-   *      ...
-   *  }
-   *  ```
-   *  @syntax markdown
+   *
    */
   def unapply[T](expr: Expr[Seq[T]])(using Quotes): Option[Seq[Expr[T]]] = {
-    import quotes.reflect._
+    import quotes.reflect.*
     def rec(tree: Term): Option[Seq[Expr[T]]] = tree match {
       case Repeated(elems, _) => Some(elems.map(x => x.asExpr.asInstanceOf[Expr[T]]))
       case Typed(e, _) => rec(e)

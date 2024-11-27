@@ -2,26 +2,24 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import Contexts._
-import Symbols._
-import Flags._
-import Names._
-import NameOps._
-import Decorators._
-import TypeUtils._
-import Types._
-import NameKinds.ClassifiedNameKind
-import ast.Trees._
+import core.*
+import Contexts.*
+import Symbols.*
+import Flags.*
+import Names.*
+import NameOps.*
+import Decorators.*
+import Types.*
 import util.Spans.Span
 import config.Printers.transforms
+import Annotations.ExperimentalAnnotation
 
 /** A utility class for generating access proxies. Currently used for
  *  inline accessors and protected accessors.
  */
 abstract class AccessProxies {
-  import ast.tpd._
-  import AccessProxies._
+  import ast.tpd.*
+  import AccessProxies.*
 
   /** accessor -> accessed */
   private val accessedBy = MutableSymbolMap[Symbol]()
@@ -31,13 +29,14 @@ abstract class AccessProxies {
    */
   protected def passReceiverAsArg(accessorName: Name)(using Context): Boolean = false
 
-  /** The accessor definitions that need to be added to class `cls`
-   *  As a side-effect, this method removes entries from the `accessedBy` map.
-   *  So a second call of the same method will yield the empty list.
-   */
+  /** The accessor definitions that need to be added to class `cls` */
   private def accessorDefs(cls: Symbol)(using Context): Iterator[DefDef] =
-    for (accessor <- cls.info.decls.iterator; accessed <- accessedBy.remove(accessor).toOption) yield
-      DefDef(accessor.asTerm, prefss => {
+    for accessor <- cls.info.decls.iterator; accessed <- accessedBy.get(accessor) yield
+      accessorDef(accessor, accessed)
+
+  protected def accessorDef(accessor: Symbol, accessed: Symbol)(using Context): DefDef =
+    DefDef(accessor.asTerm,
+      prefss => {
         def numTypeParams = accessed.info match {
           case info: PolyType => info.paramNames.length
           case _ => 0
@@ -47,40 +46,46 @@ abstract class AccessProxies {
           if (passReceiverAsArg(accessor.name))
             (argss.head.head.select(accessed), targs.takeRight(numTypeParams), argss.tail)
           else
-            (if (accessed.isStatic) ref(accessed) else ref(TermRef(cls.thisType, accessed)),
+            (if (accessed.isStatic) ref(accessed) else ref(TermRef(accessor.owner.thisType, accessed)),
              targs, argss)
         val rhs =
           if (accessor.name.isSetterName &&
               forwardedArgss.nonEmpty && forwardedArgss.head.nonEmpty) // defensive conditions
             accessRef.becomes(forwardedArgss.head.head)
           else
-            accessRef.appliedToTypeTrees(forwardedTpts).appliedToArgss(forwardedArgss)
+            accessRef
+              .appliedToTypeTrees(forwardedTpts)
+              .appliedToArgss(forwardedArgss)
+              .etaExpandCFT(using ctx.withOwner(accessor))
         rhs.withSpan(accessed.span)
-      })
+      }
+    )
 
   /** Add all needed accessors to the `body` of class `cls` */
   def addAccessorDefs(cls: Symbol, body: List[Tree])(using Context): List[Tree] = {
-    val accDefs = accessorDefs(cls)
+    val accDefs = accessorDefs(cls).toList
     transforms.println(i"add accessors for $cls: $accDefs%, %")
     if (accDefs.isEmpty) body else body ++ accDefs
   }
 
   trait Insert {
-    import ast.tpd._
+    import ast.tpd.*
 
     /** The name of the accessor for definition with given `name` in given `site` */
     def accessorNameOf(name: TermName, site: Symbol)(using Context): TermName
     def needsAccessor(sym: Symbol)(using Context): Boolean
 
     def ifNoHost(reference: RefTree)(using Context): Tree = {
-      assert(false, "no host found for $reference with ${reference.symbol.showLocated} from ${ctx.owner}")
+      assert(false, i"no host found for $reference with ${reference.symbol.showLocated} from ${ctx.owner}")
       reference
     }
 
     /** A fresh accessor symbol */
-    private def newAccessorSymbol(owner: Symbol, name: TermName, info: Type, span: Span)(using Context): TermSymbol = {
-      val sym = newSymbol(owner, name, Synthetic | Method, info, coord = span).entered
-      if (sym.allOverriddenSymbols.exists(!_.is(Deferred))) sym.setFlag(Override)
+    private def newAccessorSymbol(owner: Symbol, name: TermName, info: Type, accessed: Symbol)(using Context): TermSymbol = {
+      val sym = newSymbol(owner, name, Synthetic | Method, info, coord = accessed.span).entered
+      if accessed.is(Private) then sym.setFlag(Final)
+      else if sym.allOverriddenSymbols.exists(!_.is(Deferred)) then sym.setFlag(Override)
+      ExperimentalAnnotation.copy(accessed).foreach(sym.addAnnotation)
       sym
     }
 
@@ -88,7 +93,7 @@ abstract class AccessProxies {
     protected def accessorSymbol(owner: Symbol, accessorName: TermName, accessorInfo: Type, accessed: Symbol)(using Context): Symbol = {
       def refersToAccessed(sym: Symbol) = accessedBy.get(sym).contains(accessed)
       owner.info.decl(accessorName).suchThat(refersToAccessed).symbol.orElse {
-        val acc = newAccessorSymbol(owner, accessorName, accessorInfo, accessed.span)
+        val acc = newAccessorSymbol(owner, accessorName, accessorInfo, accessed)
         accessedBy(acc) = accessed
         acc
       }
@@ -148,7 +153,7 @@ abstract class AccessProxies {
     def accessorIfNeeded(tree: Tree)(using Context): Tree = tree match {
       case tree: RefTree if needsAccessor(tree.symbol) =>
         if (tree.symbol.isConstructor) {
-          report.error("Implementation restriction: cannot use private constructors in inlineable methods", tree.srcPos)
+          report.error("Cannot use private constructors in inline methods. You can use @publicInBinary to make constructor accessible in inline methods.", tree.srcPos)
           tree // TODO: create a proper accessor for the private constructor
         }
         else useAccessor(tree)

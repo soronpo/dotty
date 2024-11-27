@@ -1,24 +1,25 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import MegaPhase._
-import dotty.tools.dotc.ast.tpd._
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.StdNames._
-import ast._
-import Trees._
-import Flags._
-import NameOps._
-import SymUtils._
-import Symbols._
-import Decorators._
-import DenotTransformers._
-import Constants.Constant
+import core.*
+import MegaPhase.*
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.StdNames.*
+import ast.*
+import Flags.*
+import Names.Name
+import NameOps.*
+import NameKinds.{FieldName, ExplicitFieldName}
+
+import Symbols.*
+import Decorators.*
+import DenotTransformers.*
 import collection.mutable
+import Types.*
 
 object Constructors {
   val name: String = "constructors"
+  val description: String = "collect initialization code in primary constructors"
 }
 
 /** This transform
@@ -28,9 +29,12 @@ object Constructors {
  *     into the constructor if possible.
  */
 class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =>
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = Constructors.name
+
+  override def description: String = Constructors.description
+
   override def runsAfter: Set[String] = Set(HoistSuperArgs.name)
   override def runsAfterGroupsOf: Set[String] = Set(Memoize.name)
     // Memoized needs to be finished because we depend on the ownerchain after Memoize
@@ -127,7 +131,7 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
   override def transformTemplate(tree: Template)(using Context): Tree = {
     val cls = ctx.owner.asClass
 
-    val constr @ DefDef(nme.CONSTRUCTOR, (vparams: List[ValDef] @unchecked) :: Nil, _, EmptyTree) = tree.constr
+    val constr @ DefDef(nme.CONSTRUCTOR, (vparams: List[ValDef] @unchecked) :: Nil, _, EmptyTree) = tree.constr: @unchecked
 
     // Produce aligned accessors and constructor parameters. We have to adjust
     // for any outer parameters, which are last in the sequence of original
@@ -146,11 +150,26 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
     //  (2) If the parameter accessor reference was to an alias getter,
     //      drop the () when replacing by the parameter.
     object intoConstr extends TreeMap {
+      private var inSuperCall = false
       override def transform(tree: Tree)(using Context): Tree = tree match {
         case Ident(_) | Select(This(_), _) =>
           var sym = tree.symbol
-          if (sym.is(ParamAccessor, butNot = Mutable)) sym = sym.subst(accessors, paramSyms)
-          if (sym.maybeOwner.isConstructor) ref(sym).withSpan(tree.span) else tree
+          def isOverridableSelect = tree.isInstanceOf[Select] && !sym.isEffectivelyFinal
+          def switchOutsideSupercall = !sym.is(Mutable) && !isOverridableSelect
+            // If true, switch to constructor parameters also in the constructor body
+            // that follows the super call.
+            // Variables need to go through the getter since they might have been updated.
+            // References via this need to use the getter as well as long as that getter
+            // can be overridden. This is needed to handle overrides correctly. See run/i15723.scala.
+            // Note that in a supercall we need to switch to parameters in any case since then
+            // calling the virtual getter call would be illegal.
+            //
+            // Note: We intentionally treat references via this and identifiers differently
+            // here. Identifiers in a constructor always bind to the parameter. This is
+            // done for backwards compatbility.
+          if sym.is(ParamAccessor) && (switchOutsideSupercall || inSuperCall) then
+            sym = sym.subst(accessors, paramSyms)
+          if sym.maybeOwner.isConstructor then ref(sym).withSpan(tree.span) else tree
         case Apply(fn, Nil) =>
           val fn1 = transform(fn)
           if ((fn1 ne fn) && fn1.symbol.is(Param) && fn1.symbol.owner.isPrimaryConstructor)
@@ -161,6 +180,7 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
       }
 
       def apply(tree: Tree, prevOwner: Symbol)(using Context): Tree =
+        inSuperCall = isSuperConstrCall(tree)
         transform(tree).changeOwnerAfter(prevOwner, constr.symbol, thisPhase)
     }
 
@@ -178,6 +198,10 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
              ) &&
              fn.symbol.info.resultType.classSymbol == outerParam.info.classSymbol =>
           ref(outerParam)
+        case Assign(lhs, rhs) if lhs.symbol.name == nme.OUTER => // not transform LHS of assignment to $outer field
+            cpy.Assign(tree)(lhs, super.transform(rhs))
+        case dd: DefDef if dd.name.endsWith(nme.OUTER.asSimpleName) => // not transform RHS of outer accessor
+          dd
         case tree: RefTree if tree.symbol.is(ParamAccessor) && tree.symbol.name == nme.OUTER =>
           ref(outerParam)
         case _ =>
@@ -207,31 +231,39 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
               constrStats += intoConstr(stat, sym)
             } else
               dropped += sym
-          case stat @ DefDef(name, _, tpt, _)
-              if stat.symbol.isGetter && stat.symbol.owner.is(Trait) && !stat.symbol.is(Lazy) && !stat.symbol.isConstExprFinalVal =>
+          case stat @ DefDef(name, _, tpt, _) if stat.symbol.isGetter && !stat.symbol.is(Lazy) =>
             val sym = stat.symbol
             assert(isRetained(sym), sym)
-            if !stat.rhs.isEmpty && !isWildcardArg(stat.rhs) then
-              /* !!! Work around #9390
-               * This should really just be `sym.setter`. However, if we do that, we'll miss
-               * setters for mixed in `private var`s. Even though the scope clearly contains the
-               * setter symbol with the correct Name structure (since the `find` finds it),
-               * `.decl(setterName)` used by `.setter` through `.accessorNamed` will *not* find it.
-               * Could it be that the hash table of the `Scope` is corrupted?
-               * We still try `sym.setter` first as an optimization, since it will work for all
-               * public vars in traits and all (public or private) vars in classes.
-               */
-              val symSetter =
-                if sym.setter.exists then
-                  sym.setter
-                else
-                  val setterName = sym.asTerm.name.setterName
-                  sym.owner.info.decls.find(d => d.is(Accessor) && d.name == setterName)
-              val setter =
-                if (symSetter.exists) symSetter
-                else sym.accessorNamed(Mixin.traitSetterName(sym.asTerm))
-              constrStats += Apply(ref(setter), intoConstr(stat.rhs, sym).withSpan(stat.span) :: Nil)
-            clsStats += cpy.DefDef(stat)(rhs = EmptyTree)
+            if sym.isConstExprFinalVal then
+              if stat.rhs.isInstanceOf[Literal] then
+                clsStats += stat
+              else
+                constrStats += intoConstr(stat.rhs, sym)
+                clsStats += cpy.DefDef(stat)(rhs = Literal(sym.constExprFinalValConstantType.value).withSpan(stat.span))
+            else if !sym.owner.is(Trait) then
+              clsStats += stat
+            else
+              if !stat.rhs.isEmpty && !isWildcardArg(stat.rhs) then
+                /* !!! Work around #9390
+                 * This should really just be `sym.setter`. However, if we do that, we'll miss
+                 * setters for mixed in `private var`s. Even though the scope clearly contains the
+                 * setter symbol with the correct Name structure (since the `find` finds it),
+                 * `.decl(setterName)` used by `.setter` through `.accessorNamed` will *not* find it.
+                 * Could it be that the hash table of the `Scope` is corrupted?
+                 * We still try `sym.setter` first as an optimization, since it will work for all
+                 * public vars in traits and all (public or private) vars in classes.
+                 */
+                val symSetter =
+                  if sym.setter.exists then
+                    sym.setter
+                  else
+                    val setterName = sym.asTerm.name.setterName
+                    sym.owner.info.decls.find(d => d.is(Accessor) && d.name == setterName)
+                val setter =
+                  if (symSetter.exists) symSetter
+                  else sym.accessorNamed(Mixin.traitSetterName(sym.asTerm))
+                constrStats += Apply(ref(setter), intoConstr(stat.rhs, sym).withSpan(stat.span) :: Nil)
+              clsStats += cpy.DefDef(stat)(rhs = EmptyTree)
           case DefDef(nme.CONSTRUCTOR, ((outerParam @ ValDef(nme.OUTER, _, _)) :: _) :: Nil, _, _) =>
             clsStats += mapOuter(outerParam.symbol).transform(stat)
           case _: DefTree =>
@@ -242,7 +274,28 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
         splitStats(stats1)
       case Nil =>
     }
+
+    /** Check that we do not have both a private field with name `x` and a private field
+     *  with name `FieldName(x)`. These will map to the same JVM name and therefore cause
+     *  a duplicate field error. If that case arises (as in i13862.scala), use an explicit
+     *  name `x$field` instead of `FieldName(x).
+     */
+    def checkNoFieldClashes() =
+      val fieldNames = mutable.HashSet[Name]()
+      for case field: ValDef <- clsStats do
+        field.symbol.name match
+          case FieldName(_) =>
+          case name => fieldNames += name
+      for case field: ValDef <- clsStats do
+        field.symbol.name match
+          case fldName @ FieldName(name) if fieldNames.contains(name) =>
+            val newName = ExplicitFieldName(name)
+            report.log(i"avoid field/field conflict by renaming $fldName to $newName")
+            field.symbol.copySymDenotation(name = newName).installAfter(thisPhase)
+          case _ =>
+
     splitStats(tree.body)
+    checkNoFieldClashes()
 
     // The initializers for the retained accessors */
     val copyParams = accessors flatMap { acc =>
@@ -304,7 +357,7 @@ class Constructors extends MiniPhase with IdentityDenotTransformer { thisPhase =
     val expandedConstr =
       if (cls.isAllOf(NoInitsTrait)) {
         assert(finalConstrStats.isEmpty || {
-          import dotty.tools.dotc.transform.sjs.JSSymUtils._
+          import dotty.tools.dotc.transform.sjs.JSSymUtils.*
           ctx.settings.scalajs.value && cls.isJSType
         })
         constr

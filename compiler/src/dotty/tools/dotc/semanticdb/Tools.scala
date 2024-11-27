@@ -1,10 +1,10 @@
 package dotty.tools.dotc.semanticdb
 
-import java.nio.file._
+import java.nio.file.*
 import java.nio.charset.StandardCharsets
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 import dotty.tools.dotc.util.SourceFile
-import dotty.tools.dotc.semanticdb.Scala3.{_, given}
+import dotty.tools.dotc.semanticdb.Scala3.given
 
 object Tools:
 
@@ -12,8 +12,10 @@ object Tools:
   def mkURIstring(path: Path): String =
     // Calling `.toUri` on a relative path will convert it to absolute. Iteration through its parts instead preserves
     // the resulting URI as relative.
-    val uriParts = for part <- path.asScala yield new java.net.URI(null, null, part.toString, null)
-    uriParts.mkString("/")
+    // To prevent colon `:` from being treated as a scheme separator, prepend a slash `/` to each part to trick the URI
+    // parser into treating it as an absolute path, and then strip the spurious leading slash from the final result.
+    val uriParts = for part <- path.asScala yield new java.net.URI(null, null, "/" + part.toString, null)
+    uriParts.mkString.stripPrefix("/")
 
   /** Load SemanticDB TextDocument for a single Scala source file
    *
@@ -41,14 +43,22 @@ object Tools:
         document.copy(text = text)
   end loadTextDocument
 
+  def loadTextDocumentUnsafe(scalaAbsolutePath: Path, semanticdbAbsolutePath: Path): TextDocument =
+    val docs = parseTextDocuments(semanticdbAbsolutePath).documents
+    assert(docs.length == 1)
+    docs.head.copy(text = new String(Files.readAllBytes(scalaAbsolutePath), StandardCharsets.UTF_8))
+
   /** Parses SemanticDB text documents from an absolute path to a `*.semanticdb` file. */
   private def parseTextDocuments(path: Path): TextDocuments =
-    val bytes = Files.readAllBytes(path) // NOTE: a semanticdb file is a TextDocuments message, not TextDocument
+    val bytes = Files.readAllBytes(path).nn // NOTE: a semanticdb file is a TextDocuments message, not TextDocument
     TextDocuments.parseFrom(bytes)
 
   def metac(doc: TextDocument, realPath: Path)(using sb: StringBuilder): StringBuilder =
+    val symtab = PrinterSymtab.fromTextDocument(doc)
+    val symPrinter = SymbolInformationPrinter(symtab)
     val realURI = realPath.toString
-    given SourceFile = SourceFile.virtual(doc.uri, doc.text)
+    given sourceFile: SourceFile = SourceFile.virtual(doc.uri, doc.text)
+    val synthPrinter = SyntheticPrinter(symtab, sourceFile)
     sb.append(realURI).nl
     sb.append("-" * realURI.length).nl
     sb.nl
@@ -59,17 +69,30 @@ object Tools:
     sb.append("Language => ").append(languageString(doc.language)).nl
     sb.append("Symbols => ").append(doc.symbols.length).append(" entries").nl
     sb.append("Occurrences => ").append(doc.occurrences.length).append(" entries").nl
+    if doc.diagnostics.nonEmpty then
+      sb.append("Diagnostics => ").append(doc.diagnostics.length).append(" entries").nl
+    if doc.synthetics.nonEmpty then
+      sb.append("Synthetics => ").append(doc.synthetics.length).append(" entries").nl
     sb.nl
     sb.append("Symbols:").nl
-    doc.symbols.sorted.foreach(processSymbol)
+    doc.symbols.sorted.foreach(s => processSymbol(s, symPrinter))
     sb.nl
     sb.append("Occurrences:").nl
     doc.occurrences.sorted.foreach(processOccurrence)
     sb.nl
+    if doc.diagnostics.nonEmpty then
+      sb.append("Diagnostics:").nl
+      doc.diagnostics.sorted.foreach(d => processDiag(d))
+      sb.nl
+    if doc.synthetics.nonEmpty then
+      sb.append("Synthetics:").nl
+      doc.synthetics.sorted.foreach(s => processSynth(s, synthPrinter))
+      sb.nl
+    sb
   end metac
 
   private def schemaString(schema: Schema) =
-    import Schema._
+    import Schema.*
     schema match
     case SEMANTICDB3     => "SemanticDB v3"
     case SEMANTICDB4     => "SemanticDB v4"
@@ -78,58 +101,37 @@ object Tools:
   end schemaString
 
   private def languageString(language: Language) =
-    import Language._
+    import Language.*
     language match
     case SCALA                              => "Scala"
     case JAVA                               => "Java"
     case UNKNOWN_LANGUAGE | Unrecognized(_) => "unknown"
   end languageString
 
-  private def processSymbol(info: SymbolInformation)(using sb: StringBuilder): Unit =
-    import SymbolInformation.Kind._
-    sb.append(info.symbol).append(" => ")
-    if info.isAbstract then sb.append("abstract ")
-    if info.isFinal then sb.append("final ")
-    if info.isSealed then sb.append("sealed ")
-    if info.isImplicit then sb.append("implicit ")
-    if info.isLazy then sb.append("lazy ")
-    if info.isCase then sb.append("case ")
-    if info.isCovariant then sb.append("covariant ")
-    if info.isContravariant then sb.append("contravariant ")
-    if info.isVal then sb.append("val ")
-    if info.isVar then sb.append("var ")
-    if info.isStatic then sb.append("static ")
-    if info.isPrimary then sb.append("primary ")
-    if info.isEnum then sb.append("enum ")
-    if info.isDefault then sb.append("default ")
-    info.kind match
-      case LOCAL => sb.append("local ")
-      case FIELD => sb.append("field ")
-      case METHOD => sb.append("method ")
-      case CONSTRUCTOR => sb.append("ctor ")
-      case MACRO => sb.append("macro ")
-      case TYPE => sb.append("type ")
-      case PARAMETER => sb.append("param ")
-      case SELF_PARAMETER => sb.append("selfparam ")
-      case TYPE_PARAMETER => sb.append("typeparam ")
-      case OBJECT => sb.append("object ")
-      case PACKAGE => sb.append("package ")
-      case PACKAGE_OBJECT => sb.append("package object ")
-      case CLASS => sb.append("class ")
-      case TRAIT => sb.append("trait ")
-      case INTERFACE => sb.append("interface ")
-      case UNKNOWN_KIND | Unrecognized(_) => sb.append("unknown ")
-    sb.append(info.displayName).nl
-  end processSymbol
+  private def processSymbol(info: SymbolInformation, printer: SymbolInformationPrinter)(using sb: StringBuilder): Unit =
+    sb.append(printer.pprintSymbolInformation(info)).nl
+
+  private def processSynth(synth: Synthetic, printer: SyntheticPrinter)(using sb: StringBuilder): Unit =
+    sb.append(printer.pprint(synth)).nl
+
+  private def processDiag(d: Diagnostic)(using sb: StringBuilder): Unit =
+    d.range match
+      case Some(range) => processRange(sb, range)
+      case _ => sb.append("[):")
+    sb.append(" ")
+    d.severity match
+      case Diagnostic.Severity.ERROR => sb.append("[error]")
+      case Diagnostic.Severity.WARNING => sb.append("[warning]")
+      case Diagnostic.Severity.INFORMATION => sb.append("[info]")
+      case _ => sb.append("[unknown]")
+    sb.append(" ")
+    sb.append(d.message)
+    sb.nl
 
   private def processOccurrence(occ: SymbolOccurrence)(using sb: StringBuilder, sourceFile: SourceFile): Unit =
     occ.range match
     case Some(range) =>
-      sb.append('[')
-        .append(range.startLine).append(':').append(range.startCharacter)
-        .append("..")
-        .append(range.endLine).append(':').append(range.endCharacter)
-        .append("):")
+      processRange(sb, range)
       if range.endLine == range.startLine
       && range.startCharacter != range.endCharacter
       && !(occ.symbol.isConstructor && occ.role.isDefinition) then

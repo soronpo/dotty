@@ -2,12 +2,12 @@ package dotty.tools
 package dotc
 package core
 
-import Names._
-import NameOps._
-import StdNames._
-import NameTags._
-import Contexts._
-import Decorators._
+import Names.*
+import NameOps.*
+import StdNames.*
+import NameTags.*
+import Contexts.*
+import Decorators.*
 
 import scala.annotation.internal.sharable
 
@@ -85,7 +85,7 @@ object NameKinds {
       case _ => None
     }
 
-    simpleNameKinds(tag) = this
+    simpleNameKinds(tag) = this: @unchecked
   }
 
   /** The kind of names that get formed by adding a prefix to an underlying name */
@@ -152,7 +152,7 @@ object NameKinds {
 
     def infoString: String = s"Qualified $separator"
 
-    qualifiedNameKinds(tag) = this
+    qualifiedNameKinds(tag) = this: @unchecked
   }
 
   /** An extractor for qualified names of an arbitrary kind */
@@ -182,15 +182,15 @@ object NameKinds {
       case DerivedName(underlying, info: this.NumberedInfo) => Some((underlying, info.num))
       case _ => None
     }
-    protected def skipSeparatorAndNum(name: SimpleName, separator: String): Int = {
+    protected def skipSeparatorAndNum(name: SimpleName, separator: String): Int =
       var i = name.length
-      while (i > 0 && name(i - 1).isDigit) i -= 1
-      if (i > separator.length && i < name.length &&
-          name.slice(i - separator.length, i).toString == separator) i
+      while i > 0 && name(i - 1).isDigit do i -= 1
+      if i >= separator.length && i < name.length
+          && name.slice(i - separator.length, i).toString == separator
+      then i
       else -1
-    }
 
-    numberedNameKinds(tag) = this
+    numberedNameKinds(tag) = this: @unchecked
   }
 
   /** An extractor for numbered names of arbitrary kind */
@@ -225,7 +225,7 @@ object NameKinds {
     def fresh(prefix: TypeName)(using Context): TypeName =
       fresh(prefix.toTermName).toTypeName
 
-    uniqueNameKinds(separator) = this
+    uniqueNameKinds(separator) = this: @unchecked
   }
 
   /** An extractor for unique names of arbitrary kind */
@@ -239,6 +239,16 @@ object NameKinds {
       case _ => None
     }
   }
+
+  /** Unique names that can be unmangled */
+  class UniqueNameKindWithUnmangle(separator: String) extends UniqueNameKind(separator):
+    override def unmangle(name: SimpleName): TermName =
+      val i = skipSeparatorAndNum(name, separator)
+      if i > 0 then
+        val index = name.drop(i).toString.toInt
+        val original = name.take(i - separator.length).asTermName
+        apply(original, index)
+      else name
 
   /** Names of the form `prefix . name` */
   val QualifiedName: QualifiedNameKind = new QualifiedNameKind(QUALIFIED, ".")
@@ -278,9 +288,31 @@ object NameKinds {
       if (underlying.isEmpty) "$" + info.num + "$" else super.mkString(underlying, info)
   }
 
+  /** The name of the term parameter generated for a context bound:
+   *
+   *      def foo[T: A](...): ...
+   *
+   *  becomes:
+   *
+   *      def foo[T](...)(using evidence$1: A[T]): ...
+   *
+   *  The "evidence$" prefix is a convention copied from Scala 2.
+   */
+  val ContextBoundParamName: UniqueNameKind = new UniqueNameKindWithUnmangle("evidence$")
+
+  /** The name of an inferred contextual function parameter:
+   *
+   *      val x: A ?=> B = b
+   *
+   *  becomes:
+   *
+   *      val x: A ?=> B = (contextual$1: A) ?=> b
+   */
+  val ContextFunctionParamName: UniqueNameKind = new UniqueNameKind("contextual$")
+
   /** Other unique names */
+  val CanThrowEvidenceName: UniqueNameKind   = new UniqueNameKind("canThrow$")
   val TempResultName: UniqueNameKind         = new UniqueNameKind("ev$")
-  val EvidenceParamName: UniqueNameKind      = new UniqueNameKind("evidence$")
   val DepParamName: UniqueNameKind           = new UniqueNameKind("(param)")
   val LazyImplicitName: UniqueNameKind       = new UniqueNameKind("$_lazy_implicit_$")
   val LazyLocalName: UniqueNameKind          = new UniqueNameKind("$lzy")
@@ -293,28 +325,16 @@ object NameKinds {
   val TailLocalName: UniqueNameKind          = new UniqueNameKind("$tailLocal")
   val TailTempName: UniqueNameKind           = new UniqueNameKind("$tmp")
   val ExceptionBinderName: UniqueNameKind    = new UniqueNameKind("ex")
+  val ExistentialBinderName: UniqueNameKind  = new UniqueNameKind("ex$")
   val SkolemName: UniqueNameKind             = new UniqueNameKind("?")
-  val LiftedTreeName: UniqueNameKind         = new UniqueNameKind("liftedTree")
   val SuperArgName: UniqueNameKind           = new UniqueNameKind("$superArg$")
   val DocArtifactName: UniqueNameKind        = new UniqueNameKind("$doc")
   val UniqueInlineName: UniqueNameKind       = new UniqueNameKind("$i")
   val InlineScrutineeName: UniqueNameKind    = new UniqueNameKind("$scrutinee")
   val InlineBinderName: UniqueNameKind       = new UniqueNameKind("$proxy")
+  val MacroNames: UniqueNameKind             = new UniqueNameKind("$macro$")
 
-  /** A kind of unique extension methods; Unlike other unique names, these can be
-   *  unmangled.
-   */
-  val UniqueExtMethName: UniqueNameKind = new UniqueNameKind("$extension") {
-    override def unmangle(name: SimpleName): TermName = {
-      val i = skipSeparatorAndNum(name, separator)
-      if (i > 0) {
-        val index = name.drop(i).toString.toInt
-        val original = name.take(i - separator.length).asTermName
-        apply(original, index)
-      }
-      else name
-    }
-  }
+  val UniqueExtMethName: UniqueNameKind = new UniqueNameKindWithUnmangle("$extension")
 
   /** Kinds of unique names generated by the pattern matcher */
   val PatMatStdBinderName: UniqueNameKind    = new UniqueNameKind("x")
@@ -323,6 +343,8 @@ object NameKinds {
   val PatMatGivenVarName: UniqueNameKind     = new UniqueNameKind("$given")
 
   val LocalOptInlineLocalObj: UniqueNameKind = new UniqueNameKind("ilo")
+
+  val BoundaryName: UniqueNameKind           = new UniqueNameKind("boundary")
 
   /** The kind of names of default argument getters */
   val DefaultGetterName: NumberedNameKind = new NumberedNameKind(DEFAULTGETTER, "DefaultGetter") {
@@ -358,14 +380,22 @@ object NameKinds {
   val ProtectedAccessorName: PrefixNameKind = new PrefixNameKind(PROTECTEDACCESSOR, "protected$")
   val InlineAccessorName: PrefixNameKind = new PrefixNameKind(INLINEACCESSOR, "inline$")
 
+  /** See `ConstraintHandling#LevelAvoidMap`. */
+  enum AvoidNameKind(tag: Int, prefix: String) extends PrefixNameKind(tag, prefix):
+    override def definesNewName = true
+    case UpperBound extends AvoidNameKind(AVOIDUPPER, "(upper)")
+    case LowerBound extends AvoidNameKind(AVOIDLOWER, "(lower)")
+    case BothBounds extends AvoidNameKind(AVOIDBOTH, "(avoid)")
+
   val BodyRetainerName: SuffixNameKind = new SuffixNameKind(BODYRETAINER, "$retainedBody")
   val FieldName: SuffixNameKind = new SuffixNameKind(FIELD, "$$local") {
       override def mkString(underlying: TermName, info: ThisInfo) = underlying.toString
   }
+  val ExplicitFieldName: SuffixNameKind = new SuffixNameKind(EXPLICITFIELD, "$field")
   val ExtMethName: SuffixNameKind = new SuffixNameKind(EXTMETH, "$extension")
   val ParamAccessorName: SuffixNameKind = new SuffixNameKind(PARAMACC, "$accessor")
   val ModuleClassName: SuffixNameKind = new SuffixNameKind(OBJECTCLASS, "$", optInfoString = "ModuleClass")
-  val ImplMethName: SuffixNameKind = new SuffixNameKind(IMPLMETH, "$")
+  val DirectMethName: SuffixNameKind = new SuffixNameKind(DIRECT, "$direct")
   val AdaptedClosureName: SuffixNameKind = new SuffixNameKind(ADAPTEDCLOSURE, "$adapted") { override def definesNewName = true }
   val SyntheticSetterName: SuffixNameKind = new SuffixNameKind(SETTER, "_$eq")
 

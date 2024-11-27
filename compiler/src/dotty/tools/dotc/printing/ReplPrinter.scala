@@ -2,16 +2,16 @@ package dotty.tools.dotc.printing
 
 import dotty.tools.dotc.core.Constants
 import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.Flags._
-import dotty.tools.dotc.core.NameOps._
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.Flags.*
+import dotty.tools.dotc.core.NameOps.*
 import dotty.tools.dotc.core.Names.Name
-import dotty.tools.dotc.core.Symbols._
-import dotty.tools.dotc.core.Types._
-import dotty.tools.dotc.printing.Texts._
+import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.core.Types.*
+import dotty.tools.dotc.printing.Texts.*
 
 
-class ReplPrinter(_ctx: Context) extends DecompilerPrinter(_ctx) {
+class ReplPrinter(_ctx: Context) extends RefinedPrinter(_ctx) {
 
   val debugPrint = _ctx.settings.YprintDebug.value
 
@@ -37,7 +37,7 @@ class ReplPrinter(_ctx: Context) extends DecompilerPrinter(_ctx) {
       if (sym.is(Method)) {
         sym.info match {
           case tp: ExprType => ":" ~~ toText(tp.resType)
-          case _ => toText(sym.info)
+          case info => toText(info)
         }
       }
       else if (sym.isType && sym.info.isTypeAlias) toText(sym.info)

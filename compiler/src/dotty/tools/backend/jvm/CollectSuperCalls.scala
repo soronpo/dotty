@@ -1,9 +1,9 @@
 package dotty.tools.backend.jvm
 
 import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.Phases._
-import dotty.tools.dotc.core.Symbols._
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.Phases.*
+import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Flags.Trait
 import dotty.tools.dotc.transform.MegaPhase.MiniPhase
 
@@ -18,9 +18,11 @@ import dotty.tools.dotc.transform.MegaPhase.MiniPhase
  *  the redundant mixin class could be required as a parent by the JVM.
  */
 class CollectSuperCalls extends MiniPhase {
-  import tpd._
+  import tpd.*
 
-  def phaseName: String = "collectSuperCalls"
+  override def phaseName: String = CollectSuperCalls.name
+
+  override def description: String = CollectSuperCalls.description
 
   override def transformSelect(tree: Select)(using Context): Tree = {
     tree.qualifier match {
@@ -40,3 +42,7 @@ class CollectSuperCalls extends MiniPhase {
     }
   }
 }
+
+object CollectSuperCalls:
+  val name: String = "collectSuperCalls"
+  val description: String = "find classes that are called with super"

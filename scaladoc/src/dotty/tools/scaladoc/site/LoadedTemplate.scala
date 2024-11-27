@@ -6,7 +6,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 import org.jsoup.Jsoup
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 case class LazyEntry(getKey: String, value: () => String) extends JMapEntry[String, Object]:
@@ -16,7 +16,8 @@ case class LazyEntry(getKey: String, value: () => String) extends JMapEntry[Stri
 case class LoadedTemplate(
   templateFile: TemplateFile,
   children: List[LoadedTemplate],
-  file: File):
+  file: File,
+  hidden: Boolean = false):
 
   private def brief(ctx: StaticSiteContext): String =
     try
@@ -32,23 +33,22 @@ case class LoadedTemplate(
     lazy val entrySet: JSet[JMapEntry[String, Object]] =
       val site = templateFile.settings.getOrElse("page", Map.empty).asInstanceOf[Map[String, Object]]
       site.asJava.entrySet() ++ JSet(
-        LazyEntry("url", () => ctx.relativePath(LoadedTemplate.this).toString),
-        LazyEntry("title", () => templateFile.title),
+        LazyEntry("url", () => "/" ++ ctx.pathFromRoot(LoadedTemplate.this).toString),
+        LazyEntry("title", () => templateFile.title.name),
         LazyEntry("excerpt", () => brief(ctx))
       )
 
   def resolveToHtml(ctx: StaticSiteContext): ResolvedPage =
-    val posts = children.map(_.lazyTemplateProperties(ctx))
+    val subpages = children.filterNot(_.hidden).map(_.lazyTemplateProperties(ctx))
     def getMap(key: String) = templateFile.settings.getOrElse(key, Map.empty).asInstanceOf[Map[String, Object]]
-    val sourceLinks = if !file.exists() then Nil else
-      // TODO (https://github.com/lampepfl/scala3doc/issues/240): configure source root
-      // toRealPath is used to turn symlinks into proper paths
-      val actualPath = Paths.get("").toAbsolutePath.relativize(file.toPath.toRealPath())
+
+    val sourceLinks = if !templateFile.file.exists() then Nil else
+      val actualPath = templateFile.file.toPath
       ctx.sourceLinks.pathTo(actualPath).map("viewSource" -> _ ) ++
-        ctx.sourceLinks.pathTo(actualPath, operation = "edit").map("editSource" -> _ )
+        ctx.sourceLinks.pathTo(actualPath, operation = "edit").map("editSource" -> _)
 
     val updatedSettings = templateFile.settings ++ ctx.projectWideProperties +
-      ("site" -> (getMap("site") + ("posts" -> posts))) + ("urls" -> sourceLinks.toMap) +
-      ("page" -> (getMap("page") + ("title" -> templateFile.title)))
+      ("site" -> (getMap("site") + ("subpages" -> subpages))) + ("urls" -> sourceLinks.toMap) +
+      ("page" -> (getMap("page") + ("title" -> templateFile.title.name)))
 
-    templateFile.resolveInner(RenderingContext(updatedSettings, ctx.layouts))
+    templateFile.resolveInner(RenderingContext(updatedSettings, ctx.layouts))(using ctx)

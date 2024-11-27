@@ -1,8 +1,9 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Contexts._, Types._, MegaPhase._, ast.Trees._, Symbols._, Decorators._, Flags._
+import core.*
+import Contexts.*, Types.*, MegaPhase.*, ast.Trees.*, Symbols.*, Decorators.*, Flags.*
+
 
 /** Transform references of the form
  *
@@ -19,15 +20,23 @@ import Contexts._, Types._, MegaPhase._, ast.Trees._, Symbols._, Decorators._, F
  *  Also replaces idents referring to the self type with ThisTypes.
  */
 class ExplicitSelf extends MiniPhase {
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "explicitSelf"
+  override def phaseName: String = ExplicitSelf.name
+
+  override def description: String = ExplicitSelf.description
 
   private def needsCast(tree: RefTree, cls: ClassSymbol)(using Context) =
-    !cls.is(Package) && cls.givenSelfType.exists && !cls.derivesFrom(tree.symbol.owner)
+    !cls.is(Package)
+    && cls.givenSelfType.exists
+    && tree.symbol.exists
+    && !cls.derivesFrom(tree.symbol.owner)
 
   private def castQualifier(tree: RefTree, cls: ClassSymbol, thiz: Tree)(using Context) =
-    cpy.Select(tree)(thiz.cast(AndType(cls.classInfo.selfType, thiz.tpe)), tree.name)
+    val selfType = cls.classInfo.selfType
+    if selfType.classSymbols.exists(_.isValueClass) && !cls.isUniversalTrait then
+      report.error(em"self type $selfType of $cls may not be a value class", thiz.srcPos)
+    cpy.Select(tree)(thiz.cast(AndType(selfType, thiz.tpe)), tree.name)
 
   override def transformIdent(tree: Ident)(using Context): Tree = tree.tpe match {
     case tp: ThisType =>
@@ -49,3 +58,7 @@ class ExplicitSelf extends MiniPhase {
     case _ => tree
   }
 }
+
+object ExplicitSelf:
+  val  name: String = "explicitSelf"
+  val description: String = "make references to non-trivial self types explicit as casts"

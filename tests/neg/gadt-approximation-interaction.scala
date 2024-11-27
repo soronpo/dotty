@@ -28,7 +28,7 @@ object GivenLookup {
 
   class Tag[T]
 
-  given ti: Tag[Int] with {}
+  given ti: Tag[Int]()
 
   def foo[T](t: T, ev: T SUB Int) =
     ev match { case SUB.Refl() =>
@@ -47,7 +47,7 @@ object ImplicitConversion {
 
   def foo[T](t: T, ev: T SUB Int) =
     ev match { case SUB.Refl() =>
-      t ** 2 // error // implementation limitation
+      t ** 2
     }
 
   def bar[T](t: T, ev: T SUB Int) =
@@ -67,7 +67,7 @@ object GivenConversion {
 
   def foo[T](t: T, ev: T SUB Int) =
     ev match { case SUB.Refl() =>
-      t ** 2 // error (implementation limitation)
+      t ** 2
     }
 
   def bar[T](t: T, ev: T SUB Int) =

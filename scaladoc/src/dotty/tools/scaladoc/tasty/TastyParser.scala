@@ -5,7 +5,7 @@ package tasty
 import java.util.regex.Pattern
 
 import scala.util.{Try, Success, Failure}
-import scala.tasty.inspector.DocTastyInspector
+import scala.tasty.inspector.{ScaladocInternalTastyInspector, Inspector, Tasty}
 import scala.quoted._
 
 import dotty.tools.dotc
@@ -24,24 +24,12 @@ import ScaladocSupport._
   *
   * Delegates most of the work to [[TastyParser]] [[dotty.tools.scaladoc.tasty.TastyParser]].
   */
-case class ScaladocTastyInspector()(using ctx: DocContext) extends DocTastyInspector:
+case class ScaladocTastyInspector()(using ctx: DocContext) extends Inspector:
 
   private val topLevels = Seq.newBuilder[(String, Member)]
   private var rootDoc: Option[Comment] = None
 
-  def processCompilationUnit(using Quotes)(root: reflect.Tree): Unit = ()
-
-  override def postProcess(using Quotes): Unit =
-    // hack into the compiler to get a list of all top-level trees
-    // in principle, to do this, one would collect trees in processCompilationUnit
-    // however, path-dependent types disallow doing so w/o using casts
-    inline def hackForeachTree(thunk: reflect.Tree => Unit): Unit =
-      given dctx: dotc.core.Contexts.Context = quotes.asInstanceOf[scala.quoted.runtime.impl.QuotesImpl].ctx
-      dctx.run.units.foreach { compilationUnit =>
-        // mirrors code from TastyInspector
-        thunk(compilationUnit.tpdTree.asInstanceOf[reflect.Tree])
-      }
-
+  def inspect(using Quotes)(tastys: List[scala.tasty.inspector.Tasty[quotes.type]]): Unit =
     val symbolsToSkip: Set[reflect.Symbol] =
       ctx.args.identifiersToSkip.flatMap { ref =>
         val qrSymbol = reflect.Symbol
@@ -116,60 +104,76 @@ case class ScaladocTastyInspector()(using ctx: DocContext) extends DocTastyInspe
           rootDoc = Some(parseCommentString(using parser.qctx, summon[DocContext])(content, topLevelPck, None))
         }
 
-    hackForeachTree { root =>
+    for tasty <- tastys do {
+      val root = tasty.ast
       if !isSkipped(root.symbol) then
         val treeRoot = root.asInstanceOf[parser.qctx.reflect.Tree]
         processRootDocIfNeeded(treeRoot)
         topLevels ++= parser.parseRootTree(treeRoot)
     }
 
-    val defn = ctx.compilerContext.definitions
-
     if ctx.args.documentSyntheticTypes then
-      val intrinsicClassDefs = Seq(
-        defn.AnyClass,
-        defn.MatchableClass,
-        defn.AnyKindClass,
-        defn.AnyValClass,
-        defn.NullClass,
-        defn.NothingClass,
-        defn.SingletonClass,
-        defn.andType,
-        defn.orType,
-      ).map { s =>
-        "scala" -> s.asInstanceOf[parser.qctx.reflect.Symbol].tree.match {
-          case cd: parser.qctx.reflect.ClassDef => parser.parseClasslike(cd)
-          case td: parser.qctx.reflect.TypeDef  => parser.parseTypeDef(td)
-        }
+      import parser.qctx.reflect._
+      val intrinsicTypeDefs = parser.intrinsicTypeDefs.toSeq.map { s =>
+        "scala" -> parser.parseTypeDef(
+          s.tree.asInstanceOf[TypeDef],
+          defn.AnyClass.tree.asInstanceOf[ClassDef],
+        )
+      }
+      val intrinsicClassDefs = parser.intrinsicClassDefs.toSeq.map { s =>
+        "scala" -> parser.parseClasslike(s.tree.asInstanceOf[ClassDef])
       }
       topLevels ++= intrinsicClassDefs
+      topLevels ++= intrinsicTypeDefs
+      val scalaPckg = defn.ScalaPackage
+      given parser.qctx.type = parser.qctx
+      topLevels += "scala" -> Member(scalaPckg.fullName, "", scalaPckg.dri, Kind.Package)
       topLevels += mergeAnyRefAliasAndObject(parser)
 
-  def result(): (List[Member], Option[Comment]) =
-    topLevels.clear()
-    rootDoc = None
+
+
+  def mergeAnyRefAliasAndObject(parser: TastyParser) =
+    import parser.qctx.reflect._
+    val javaLangObjectDef = defn.ObjectClass.tree.asInstanceOf[ClassDef]
+    val objectMembers = parser.extractPatchedMembers(javaLangObjectDef)
+    val aM = parser.parseTypeDef(
+      defn.AnyRefClass.tree.asInstanceOf[TypeDef],
+      defn.AnyClass.tree.asInstanceOf[ClassDef],
+    )
+    "scala" -> aM.copy(
+      kind = Kind.Class(Nil, Nil),
+      members = objectMembers
+    )
+
+object ScaladocTastyInspector:
+
+  def loadDocs()(using ctx: DocContext): (List[Member], Option[Comment]) =
     val filePaths = ctx.args.tastyFiles.map(_.getAbsolutePath).toList
     val classpath = ctx.args.classpath.split(java.io.File.pathSeparator).toList
 
-    if filePaths.nonEmpty then inspectFilesInContext(classpath, filePaths)
+    val inspector = new ScaladocTastyInspector
 
-    val all = topLevels.result()
+    val (tastyPaths, nonTastyPaths) = filePaths.partition(_.endsWith(".tasty"))
+    val (jarPaths, invalidPaths) = nonTastyPaths.partition(_.endsWith(".jar"))
+
+    for invalidPath <- invalidPaths do
+      report.error("File extension is not `tasty` or `jar`: " + invalidPath)
+
+    if tastyPaths.nonEmpty then
+      ScaladocInternalTastyInspector.inspectAllTastyFilesInContext(tastyPaths, jarPaths, classpath)(inspector)(using ctx.compilerContext)
+
+    val all = inspector.topLevels.result()
     all.groupBy(_._1).map { case (pckName, members) =>
       val (pcks, rest) = members.map(_._2).partition(_.kind == Kind.Package)
       val basePck = pcks.reduce( (p1, p2) =>
-        p1.withNewMembers(p2.members) // TODO add doc
+        val withNewMembers = p1.withNewMembers(p2.members)
+        if withNewMembers.docs.isEmpty then withNewMembers.withDocs(p2.docs) else withNewMembers
       )
       basePck.withMembers((basePck.members ++ rest).sortBy(_.name))
-    }.toList -> rootDoc
+    }.toList -> inspector.rootDoc
 
-  def mergeAnyRefAliasAndObject(parser: TastyParser) =
-    val defn = ctx.compilerContext.definitions
-    val oM = parser.parseClasslike(defn.ObjectClass.asInstanceOf[parser.qctx.reflect.Symbol].tree.asInstanceOf[parser.qctx.reflect.ClassDef])
-    val aM = parser.parseTypeDef(defn.AnyRefAlias.asInstanceOf[parser.qctx.reflect.Symbol].tree.asInstanceOf[parser.qctx.reflect.TypeDef])
-    "scala" -> aM.copy(
-      kind = oM.kind,
-      members = oM.members
-    )
+end ScaladocTastyInspector
+
 /** Parses a single Tasty compilation unit. */
 case class TastyParser(
   qctx: Quotes,
@@ -178,11 +182,30 @@ case class TastyParser(
   isSkipped: qctx.reflect.Symbol => Boolean
 )(
   using val ctx: DocContext
-) extends BasicSupport with TypesSupport with ClassLikeSupport with PackageSupport:
+) extends BasicSupport with TypesSupport with ClassLikeSupport with PackageSupport with InkuireSupport:
   import qctx.reflect._
 
   private given qctx.type = qctx
 
+  val intrinsicClassDefs = Set(
+    defn.AnyClass,
+    defn.MatchableClass,
+    defn.ScalaPackage.typeMember("AnyKind"),
+    defn.AnyValClass,
+    defn.NullClass,
+    defn.NothingClass,
+    defn.ScalaPackage.typeMember("Singleton"),
+  )
+
+  val noPosClassDefs = intrinsicClassDefs ++ Set(
+    defn.ObjectClass,
+    defn.AnyRefClass
+  )
+
+  val intrinsicTypeDefs = Set(
+    defn.ScalaPackage.typeMember("&"),
+    defn.ScalaPackage.typeMember("|"),
+  )
   def processTree[T](tree: Tree)(op: => T): Option[T] = try Option(op) catch
     case e: Exception  =>
       report.warning(throwableToString(e), tree.pos)
@@ -214,6 +237,6 @@ case class TastyParser(
     try Traverser.traverseTree(root)(Symbol.spliceOwner)
     catch case e: Throwable =>
       println(s"Problem parsing ${root.pos}, documentation may not be generated.")
-      e.printStackTrace()
+      // e.printStackTrace()
 
     docs.result()

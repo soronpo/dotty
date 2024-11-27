@@ -1,28 +1,36 @@
 package scala.runtime
 
+import java.util.concurrent.CountDownLatch
+
+import scala.annotation.*
+
 /**
  * Helper methods used in thread-safe lazy vals.
  */
 object LazyVals {
-  private[this] val unsafe: sun.misc.Unsafe =
-      classOf[sun.misc.Unsafe].getDeclaredFields.find { field =>
-        field.getType == classOf[sun.misc.Unsafe] && {
-          field.setAccessible(true)
-          true
-        }
-      }
-      .map(_.get(null).asInstanceOf[sun.misc.Unsafe])
-      .getOrElse {
-        throw new ExceptionInInitializerError {
-          new IllegalStateException("Can't find instance of sun.misc.Unsafe")
-        }
-      }
+  @nowarn
+  private val unsafe: sun.misc.Unsafe = {
+    def throwInitializationException() =
+      throw new ExceptionInInitializerError(
+        new IllegalStateException("Can't find instance of sun.misc.Unsafe")
+      )
+    try
+      val unsafeField = classOf[sun.misc.Unsafe].getDeclaredField("theUnsafe").nn
+      if unsafeField.getType == classOf[sun.misc.Unsafe] then
+        unsafeField.setAccessible(true)
+        unsafeField.get(null).asInstanceOf[sun.misc.Unsafe]
+      else
+        throwInitializationException()
+    catch case _: NoSuchFieldException =>
+      throwInitializationException()
+  }
 
-  private[this] val base: Int = {
-    val processors = java.lang.Runtime.getRuntime.availableProcessors()
+  private val base: Int = {
+    val processors = java.lang.Runtime.getRuntime.nn.availableProcessors()
     8 * processors * processors
   }
-  private[this] val monitors: Array[Object] =
+
+  private val monitors: Array[Object] =
     Array.tabulate(base)(_ => new Object)
 
   private def getMonitor(obj: Object, fieldId: Int = 0) = {
@@ -36,6 +44,43 @@ object LazyVals {
   private final val debug = false
 
   /* ------------- Start of public API ------------- */
+
+  // This trait extends Serializable to fix #16806 that caused a race condition
+  sealed trait LazyValControlState extends Serializable
+
+  /**
+   * Used to indicate the state of a lazy val that is being
+   * evaluated and of which other threads await the result.
+   */
+  final class Waiting extends CountDownLatch(1) with LazyValControlState {
+    /* #20856 If not fully evaluated yet, serialize as if not-evaluat*ing* yet.
+     * This strategy ensures the "serializability" condition of parallel
+     * programs--not to be confused with the data being `java.io.Serializable`.
+     * Indeed, if thread A is evaluating the lazy val while thread B attempts
+     * to serialize its owner object, there is also an alternative schedule
+     * where thread B serializes the owner object *before* A starts evaluating
+     * the lazy val. Therefore, forcing B to see the non-evaluating state is
+     * correct.
+     */
+    private def writeReplace(): Any = null
+  }
+
+  /**
+   * Used to indicate the state of a lazy val that is currently being
+   * evaluated with no other thread awaiting its result.
+   */
+  object Evaluating extends LazyValControlState {
+    /* #20856 If not fully evaluated yet, serialize as if not-evaluat*ing* yet.
+     * See longer comment in `Waiting.writeReplace()`.
+     */
+    private def writeReplace(): Any = null
+  }
+
+  /**
+   * Used to indicate the state of a lazy val that has been evaluated to
+   * `null`.
+   */
+  object NullValue extends LazyValControlState
 
   final val BITS_PER_LAZY_VAL = 2L
 
@@ -52,6 +97,12 @@ object LazyVals {
     val mask = ~(LAZY_VAL_MASK << ord * BITS_PER_LAZY_VAL)
     val n = (e & mask) | (v.toLong << (ord * BITS_PER_LAZY_VAL))
     unsafe.compareAndSwapLong(t, offset, e, n)
+  }
+
+  def objCAS(t: Object, offset: Long, exp: Object, n: Object): Boolean = {
+    if (debug)
+      println(s"objCAS($t, $exp, $n)")
+    unsafe.compareAndSwapObject(t, offset, exp, n)
   }
 
   def setFlag(t: Object, offset: Long, v: Int, ord: Int): Unit = {
@@ -99,12 +150,30 @@ object LazyVals {
     unsafe.getLongVolatile(t, off)
   }
 
-  def getOffset(clz: Class[_], name: String): Long = {
+  // kept for backward compatibility
+  def getOffset(clz: Class[?], name: String): Long = {
+    @nowarn
     val r = unsafe.objectFieldOffset(clz.getDeclaredField(name))
     if (debug)
       println(s"getOffset($clz, $name) = $r")
     r
   }
+
+  def getStaticFieldOffset(field: java.lang.reflect.Field): Long = {
+    @nowarn
+    val r = unsafe.staticFieldOffset(field)
+    if (debug)
+      println(s"getStaticFieldOffset(${field.getDeclaringClass}, ${field.getName}) = $r")
+    r
+  }
+
+  def getOffsetStatic(field: java.lang.reflect.Field) =
+    @nowarn
+    val r = unsafe.objectFieldOffset(field)
+    if (debug)
+      println(s"getOffset(${field.getDeclaringClass}, ${field.getName}) = $r")
+    r
+
 
   object Names {
     final val state = "STATE"

@@ -1,19 +1,19 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import MegaPhase._
-import Contexts._
-import Flags._
-import SymUtils._
-import Symbols._
-import Decorators._
-import DenotTransformers._
-import Names._
-import StdNames._
-import NameOps._
-import NameKinds._
-import ResolveSuper._
+import core.*
+import MegaPhase.*
+import Contexts.*
+import Flags.*
+
+import Symbols.*
+import Decorators.*
+import DenotTransformers.*
+import Names.*
+import NameOps.*
+import NameKinds.*
+import NullOpsDecorator.*
+import ResolveSuper.*
 import reporting.IllegalSuperAccessor
 
 /** This phase implements super accessors in classes that need them.
@@ -31,9 +31,11 @@ import reporting.IllegalSuperAccessor
  *  Mixin, which runs after erasure.
  */
 class ResolveSuper extends MiniPhase with IdentityDenotTransformer { thisPhase =>
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = ResolveSuper.name
+
+  override def description: String = ResolveSuper.description
 
   override def runsAfter: Set[String] = Set(ElimByName.name, // verified empirically, need to figure out what the reason is.
                                PruneErasedDefs.name) // Erased decls make `isCurrent` work incorrectly
@@ -43,14 +45,15 @@ class ResolveSuper extends MiniPhase with IdentityDenotTransformer { thisPhase =
   override def transformTemplate(impl: Template)(using Context): Template = {
     val cls = impl.symbol.owner.asClass
     val ops = new MixinOps(cls, thisPhase)
-    import ops._
+    import ops.*
 
     def superAccessors(mixin: ClassSymbol): List[Tree] =
-      for (superAcc <- mixin.info.decls.filter(_.isSuperAccessor))
-        yield {
-          util.Stats.record("super accessors")
-          DefDef(mkForwarderSym(superAcc.asTerm), forwarderRhsFn(rebindSuper(cls, superAcc)))
-      }
+      for superAcc <- mixin.info.decls.filter(_.isSuperAccessor)
+      yield
+        util.Stats.record("super accessors")
+        val fwd = mkForwarderSym(superAcc.asTerm)
+        DefDef(fwd, forwarderRhsFn(rebindSuper(cls, superAcc))
+          .andThen(_.etaExpandCFT(using ctx.withOwner(fwd))))
 
     val overrides = mixins.flatMap(superAccessors)
 
@@ -63,7 +66,7 @@ class ResolveSuper extends MiniPhase with IdentityDenotTransformer { thisPhase =
       assert(ddef.rhs.isEmpty, ddef.symbol)
       val cls = meth.owner.asClass
       val ops = new MixinOps(cls, thisPhase)
-      import ops._
+      import ops.*
       DefDef(meth, forwarderRhsFn(rebindSuper(cls, meth)))
     }
     else ddef
@@ -72,6 +75,7 @@ class ResolveSuper extends MiniPhase with IdentityDenotTransformer { thisPhase =
 
 object ResolveSuper {
   val name: String = "resolveSuper"
+  val description: String = "implement super accessors"
 
   /** Returns the symbol that is accessed by a super-accessor in a mixin composition.
    *
@@ -107,12 +111,21 @@ object ResolveSuper {
         // of the superaccessor's type, see i5433.scala for an example where this matters
         val otherTp = other.asSeenFrom(base.typeRef).info
         val accTp = acc.asSeenFrom(base.typeRef).info
-        if (!(otherTp.overrides(accTp, matchLoosely = true)))
+        // Since the super class can be Java defined,
+        // we use relaxed overriding check for explicit nulls if one of the symbols is Java defined.
+        // This forces `Null` to be a subtype of non-primitive value types during override checking.
+        val relaxedOverriding = ctx.explicitNulls && (sym.is(JavaDefined) || acc.is(JavaDefined))
+        if !otherTp.overrides(accTp, relaxedOverriding, matchLoosely = true) then
           report.error(IllegalSuperAccessor(base, memberName, targetName, acc, accTp, other.symbol, otherTp), base.srcPos)
-
       bcs = bcs.tail
     }
-    assert(sym.exists, i"cannot rebind $acc, ${acc.targetName} $memberName")
-    sym
+    if sym.is(Accessor) then
+      report.error(
+        em"parent ${acc.owner} has a super call which binds to the value ${sym.showFullName}. Super calls can only target methods.", base)
+    sym.orElse {
+      val originalName = acc.name.asTermName.originalOfSuperAccessorName
+      report.error(em"Member method ${originalName.debugString} of mixin ${acc.owner} is missing a concrete super implementation in $base.", base.srcPos)
+      acc
+    }
   }
 }

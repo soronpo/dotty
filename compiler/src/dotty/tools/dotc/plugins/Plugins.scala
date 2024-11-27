@@ -1,12 +1,18 @@
 package dotty.tools.dotc
 package plugins
 
-import core._
-import Contexts._
+import scala.language.unsafeNulls
+
+import core.*
+import Contexts.*
+import Decorators.em
 import config.{ PathResolver, Feature }
-import dotty.tools.io._
-import Phases._
+import dotty.tools.io.*
+import Phases.*
 import config.Printers.plugins.{ println => debug }
+import config.Properties
+
+import scala.compiletime.uninitialized
 
 /** Support for run-time loading of compiler plugins.
  *
@@ -34,14 +40,14 @@ trait Plugins {
     // Explicit parameterization of recover to avoid -Xlint warning about inferred Any
     errors foreach (_.recover[Any] {
       // legacy behavior ignores altogether, so at least warn devs
-      case e: MissingPluginException => report.warning(e.getMessage)
-      case e: Exception              => report.inform(e.getMessage)
+      case e: MissingPluginException => report.warning(e.getMessage.nn)
+      case e: Exception              => report.inform(e.getMessage.nn)
     })
 
     goods map (_.get)
   }
 
-  private var _roughPluginsList: List[Plugin] = _
+  private var _roughPluginsList: List[Plugin] = uninitialized
   protected def roughPluginsList(using Context): List[Plugin] =
     if (_roughPluginsList == null) {
       _roughPluginsList = loadRoughPluginsList
@@ -49,7 +55,7 @@ trait Plugins {
     }
     else _roughPluginsList
 
-  /** Load all available plugins.  Skips plugins that
+  /** Load all available plugins. Skips plugins that
    *  either have the same name as another one, or which
    *  define a phase name that another one does.
    */
@@ -60,7 +66,7 @@ trait Plugins {
       plugNames: Set[String]): List[Plugin] = {
       if (plugins.isEmpty) return Nil // early return
 
-      val plug :: tail      = plugins
+      val plug :: tail      = plugins: @unchecked
       def withoutPlug       = pick(tail, plugNames)
       def withPlug          = plug :: pick(tail, plugNames + plug.name)
 
@@ -81,19 +87,19 @@ trait Plugins {
 
     // Verify required plugins are present.
     for (req <- ctx.settings.require.value ; if !(plugs exists (_.name == req)))
-      report.error("Missing required plugin: " + req)
+      report.error(em"Missing required plugin: $req")
 
     // Verify no non-existent plugin given with -P
     for {
       opt <- ctx.settings.pluginOptions.value
       if !(plugs exists (opt startsWith _.name + ":"))
     }
-    report.error("bad option: -P:" + opt)
+    report.error(em"bad option: -P:$opt")
 
     plugs
   }
 
-  private var _plugins: List[Plugin] = _
+  private var _plugins: List[Plugin] = uninitialized
   def plugins(using Context): List[Plugin] =
     if (_plugins == null) {
       _plugins = loadPlugins
@@ -113,19 +119,17 @@ trait Plugins {
 
   /** Add plugin phases to phase plan */
   def addPluginPhases(plan: List[List[Phase]])(using Context): List[List[Phase]] = {
-    // plugin-specific options.
-    // The user writes `-P:plugname:opt1,opt2`, but the plugin sees `List(opt1, opt2)`.
     def options(plugin: Plugin): List[String] = {
       def namec = plugin.name + ":"
       ctx.settings.pluginOptions.value filter (_ startsWith namec) map (_ stripPrefix namec)
     }
 
     // schedule plugins according to ordering constraints
-    val pluginPhases = plugins.collect { case p: StandardPlugin => p }.flatMap { plug => plug.init(options(plug)) }
+    val pluginPhases = plugins.collect { case p: StandardPlugin => p }.flatMap { plug => plug.initialize(options(plug)) }
     val updatedPlan = Plugins.schedule(plan, pluginPhases)
 
     // add research plugins
-    if (Feature.isExperimentalEnabled)
+    if Properties.researchPluginEnabled then
       plugins.collect { case p: ResearchPlugin => p }.foldRight(updatedPlan) {
         (plug, plan) => plug.init(options(plug), plan)
       }

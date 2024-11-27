@@ -1,6 +1,9 @@
-trait ToString[A] {
-  def print(a: A): Unit
-}
+package toString:
+  trait ToString[A] {
+    def print(a: A): Unit
+  }
+
+import toString._
 
 package A {
   case class AA(text: String)
@@ -10,7 +13,7 @@ package A {
   given ToString[AB] = ab => println(ab)
 
   opaque type AC = String
-  given ToString[AC] with {
+  given ToString[AC] {
     def print(ac: AC): Unit = println(ac)
   }
 }
@@ -28,7 +31,7 @@ package B {
 
   opaque type BC = String
   object BC {
-    given ToString[BC] with {
+    given ToString[BC] {
       def print(bc: BC): Unit = println(bc)
     }
   }

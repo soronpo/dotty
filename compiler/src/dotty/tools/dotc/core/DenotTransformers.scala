@@ -1,13 +1,13 @@
 package dotty.tools.dotc
 package core
 
-import Periods._
-import SymDenotations._
-import Contexts._
-import Types._
-import Symbols._
-import Denotations._
-import Phases._
+import Periods.*
+import SymDenotations.*
+import Contexts.*
+import Types.*
+import Symbols.*
+import Denotations.*
+import Phases.*
 
 object DenotTransformers {
 
@@ -28,6 +28,8 @@ object DenotTransformers {
 
     /** The transformation method */
     def transform(ref: SingleDenotation)(using Context): SingleDenotation
+
+    override def isRunnable(using Context) = super.isRunnable && !ctx.usedBestEffortTasty
   }
 
   /** A transformer that only transforms the info field of denotations */

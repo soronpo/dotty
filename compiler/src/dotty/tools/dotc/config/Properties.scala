@@ -2,13 +2,15 @@ package dotty.tools
 package dotc
 package config
 
+import scala.language.unsafeNulls
+
 import scala.annotation.internal.sharable
 
 import java.io.IOException
 import java.util.jar.Attributes.{ Name => AttributeName }
 import java.nio.charset.StandardCharsets
 
-/** Loads `library.properties` from the jar. */
+/** Loads `compiler.properties` from the jar. */
 object Properties extends PropertiesTrait {
   protected def propCategory: String = "compiler"
   protected def pickJarBasedOn: Class[PropertiesTrait] = classOf[PropertiesTrait]
@@ -82,13 +84,8 @@ trait PropertiesTrait {
    */
   val versionString: String = "version " + simpleVersionString
 
-  /** Whether the current version of compiler is experimental
-   *
-   *  1. Snapshot and nightly releases are experimental.
-   *  2. Features supported by experimental versions of the compiler:
-   *     - research plugins
-   */
-  val experimental: Boolean = versionString.contains("SNAPSHOT") || versionString.contains("NIGHTLY")
+  /** Whether the current version of compiler supports research plugins. */
+  val researchPluginEnabled: Boolean = versionString.contains("SNAPSHOT") || versionString.contains("NIGHTLY") || versionString.contains("nonbootstrapped")
 
   val copyrightString: String       = scalaPropOrElse("copyright.string", "(c) 2002-2017 LAMP/EPFL")
 

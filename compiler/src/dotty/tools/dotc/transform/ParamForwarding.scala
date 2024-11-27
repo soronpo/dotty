@@ -2,13 +2,11 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import ast.Trees._
-import Contexts._, Types._, Symbols._, Flags._, TypeUtils._, DenotTransformers._, StdNames._
-import Decorators._
-import MegaPhase._
+import core.*
+import Contexts.*, Types.*, Symbols.*, Flags.*, DenotTransformers.*, StdNames.*
+import Decorators.*
+import MegaPhase.*
 import NameKinds.ParamAccessorName
-import config.Printers.typr
 
 /** For all private parameter accessors
  *
@@ -32,27 +30,16 @@ import config.Printers.typr
  *  The aim of this transformation is to avoid redundant parameter accessor fields.
  */
 class ParamForwarding extends MiniPhase with IdentityDenotTransformer:
-  import ast.tpd._
+  import ast.tpd.*
+  import ParamForwarding.inheritedAccessor
 
   private def thisPhase: ParamForwarding = this
 
-  val phaseName: String = "paramForwarding"
+  override def phaseName: String = ParamForwarding.name
+
+  override def description: String = ParamForwarding.description
 
   def transformIfParamAlias(mdef: ValOrDefDef)(using Context): Tree =
-
-    def inheritedAccessor(sym: Symbol)(using Context): Symbol =
-      val candidate = sym.owner.asClass.superClass
-        .info.decl(sym.name).suchThat(_.is(ParamAccessor, butNot = Mutable))
-        .symbol
-      if !candidate.is(Private)  // candidate might be private and accessible if it is in an outer class
-         && candidate.isAccessibleFrom(currentClass.thisType, superAccess = true)
-      then
-        candidate
-      else if candidate.is(SuperParamAlias) then
-        inheritedAccessor(candidate)
-      else
-        NoSymbol
-
     val sym = mdef.symbol.asTerm
     if sym.is(SuperParamAlias) then
       assert(sym.is(ParamAccessor, butNot = Mutable))
@@ -60,7 +47,7 @@ class ParamForwarding extends MiniPhase with IdentityDenotTransformer:
       if alias.exists then
         sym.copySymDenotation(
             name = ParamAccessorName(sym.name),
-            initFlags = sym.flags | Method | StableRealizable,
+            initFlags = sym.flags | StableMethod,
             info = sym.info.ensureMethodic
           ).installAfter(thisPhase)
         val superAcc =
@@ -80,3 +67,21 @@ class ParamForwarding extends MiniPhase with IdentityDenotTransformer:
 
   override def transformDefDef(mdef: DefDef)(using Context): Tree =
     transformIfParamAlias(mdef)
+
+object ParamForwarding:
+  val name: String = "paramForwarding"
+  val description: String = "add forwarders for aliases of superclass parameters"
+
+  def inheritedAccessor(sym: Symbol)(using Context): Symbol =
+    val candidate = sym.owner.asClass.superClass
+      .info.decl(sym.name).suchThat(_.is(ParamAccessor, butNot = Mutable))
+      .symbol
+    if !candidate.is(Private)  // candidate might be private and accessible if it is in an outer class
+        && candidate.isAccessibleFrom(currentClass.thisType, superAccess = true)
+    then
+      candidate
+    else if candidate.is(SuperParamAlias) then
+      inheritedAccessor(candidate)
+    else
+      NoSymbol
+end ParamForwarding

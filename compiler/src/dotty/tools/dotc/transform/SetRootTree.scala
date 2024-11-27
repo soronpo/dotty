@@ -1,14 +1,16 @@
 package dotty.tools.dotc.transform
 
-import dotty.tools.dotc.CompilationUnit
 import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.core.Phases.Phase
 
 /** Set the `rootTreeOrProvider` property of class symbols. */
 class SetRootTree extends Phase {
 
   override val phaseName: String = SetRootTree.name
+
+  override val description: String = SetRootTree.description
+
   override def isRunnable(using Context) =
     super.isRunnable && ctx.settings.YretainTrees.value
 
@@ -43,4 +45,5 @@ class SetRootTree extends Phase {
 
 object SetRootTree {
   val name: String = "SetRootTree"
+  val description: String = "set the rootTreeOrProvider on class symbols"
 }

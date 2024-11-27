@@ -2,11 +2,11 @@ package dotty.tools.dotc
 package transform
 
 import ast.{Trees, tpd}
-import core._, core.Decorators._
-import MegaPhase._, Phases.Phase
-import Types._, Contexts._, Constants._, Names._, NameOps._, Flags._, DenotTransformers._
-import SymDenotations._, Symbols._, StdNames._, Annotations._, Trees._, Scopes._, Denotations._
-import TypeErasure.ErasedValueType, ValueClasses._
+import core.*, core.Decorators.*
+import MegaPhase.*, Phases.Phase
+import Types.*, Contexts.*, Constants.*, Names.*, NameOps.*, Flags.*, DenotTransformers.*
+import SymDenotations.*, Symbols.*, StdNames.*, Annotations.*, Trees.*, Scopes.*, Denotations.*
+import TypeErasure.ErasedValueType, ValueClasses.*
 
 /** This phase rewrite PolyFunction subclasses to FunctionN subclasses
  *
@@ -20,9 +20,11 @@ import TypeErasure.ErasedValueType, ValueClasses._
  */
 class ElimPolyFunction extends MiniPhase with DenotTransformer {
 
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = ElimPolyFunction.name
+
+  override def description: String = ElimPolyFunction.description
 
   override def runsAfter = Set(Erasure.name)
 
@@ -63,6 +65,7 @@ class ElimPolyFunction extends MiniPhase with DenotTransformer {
 }
 
 object ElimPolyFunction {
-  val name = "elimPolyFunction"
+  val name: String = "elimPolyFunction"
+  val description: String = "rewrite PolyFunction subclasses to FunctionN subclasses"
 }
 

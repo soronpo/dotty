@@ -1,6 +1,10 @@
-package dotty.tools.dotc.core
+package dotty.tools
+package dotc
+package core
 
-import Contexts._
+import Contexts.*
+import printing.*
+import Texts.*
 import Phases.unfusedPhases
 
 object Periods {
@@ -20,7 +24,7 @@ object Periods {
   /** Are all base types in the current period guaranteed to be the same as in period `p`? */
   def currentHasSameBaseTypesAs(p: Period)(using Context): Boolean =
     val period = ctx.period
-    period == p ||
+    period.code == p.code ||
     period.runId == p.runId &&
       unfusedPhases(period.phaseId).sameBaseTypesStartId ==
       unfusedPhases(p.phaseId).sameBaseTypesStartId
@@ -35,7 +39,7 @@ object Periods {
    *
    *     // Dmitry: sign == 0 isn't actually always true, in some cases phaseId == -1 is used for shifts, that easily creates code < 0
    */
-  class Period(val code: Int) extends AnyVal {
+  class Period(val code: Int) extends AnyVal with Showable {
 
     /** The run identifier of this period. */
     def runId: RunId = code >>> (PhaseWidth * 2)
@@ -97,7 +101,25 @@ object Periods {
           this.firstPhaseId min that.firstPhaseId,
           this.lastPhaseId max that.lastPhaseId)
 
-    override def toString: String = s"Period($firstPhaseId..$lastPhaseId, run = $runId)"
+    def toText(p: Printer): Text =
+      inContext(p.printerContext):
+        this match
+          case Nowhere                           => "Nowhere"
+          case InitialPeriod                     => "InitialPeriod"
+          case InvalidPeriod                     => "InvalidPeriod"
+          case Period(NoRunId, 0, PhaseMask)     => s"Period(NoRunId.all)"
+          case Period(runId, 0, PhaseMask)       => s"Period($runId.all)"
+          case Period(runId, p1, pn) if p1 == pn => s"Period($runId.$p1(${ctx.base.phases(p1)}))"
+          case Period(runId, p1, pn)             => s"Period($runId.$p1(${ctx.base.phases(p1)})-$pn(${ctx.base.phases(pn)}))"
+
+    override def toString: String = this match
+      case Nowhere                           => "Nowhere"
+      case InitialPeriod                     => "InitialPeriod"
+      case InvalidPeriod                     => "InvalidPeriod"
+      case Period(NoRunId, 0, PhaseMask)     => s"Period(NoRunId.all)"
+      case Period(runId, 0, PhaseMask)       => s"Period($runId.all)"
+      case Period(runId, p1, pn) if p1 == pn => s"Period($runId.$p1)"
+      case Period(runId, p1, pn)             => s"Period($runId.$p1-$pn)"
 
     def ==(that: Period): Boolean = this.code == that.code
     def !=(that: Period): Boolean = this.code != that.code
@@ -116,9 +138,21 @@ object Periods {
     /** The interval consisting of all periods of given run id */
     def allInRun(rid: RunId): Period =
       apply(rid, 0, PhaseMask)
+
+    def unapply(p: Period): Extractor = new Extractor(p.code)
+
+    final class Extractor(private val code: Int) extends AnyVal {
+      private def p = new Period(code)
+      def isEmpty: false = false
+      def get: this.type = this
+      def _1 = p.runId
+      def _2 = p.firstPhaseId
+      def _3 = p.lastPhaseId
+    }
   }
 
-  final val Nowhere: Period = new Period(0)
+  inline val NowhereCode = 0
+  final val Nowhere: Period = new Period(NowhereCode)
 
   final val InitialPeriod: Period = Period(InitialRunId, FirstPhaseId)
 
@@ -126,18 +160,18 @@ object Periods {
 
   /** An ordinal number for compiler runs. First run has number 1. */
   type RunId = Int
-  final val NoRunId = 0
-  final val InitialRunId = 1
-  final val RunWidth = java.lang.Integer.SIZE - PhaseWidth * 2 - 1/* sign */
-  final val MaxPossibleRunId = (1 << RunWidth) - 1
+  inline val NoRunId = 0
+  inline val InitialRunId = 1
+  inline val RunWidth = java.lang.Integer.SIZE - PhaseWidth * 2 - 1/* sign */
+  inline val MaxPossibleRunId = (1 << RunWidth) - 1
 
   /** An ordinal number for phases. First phase has number 1. */
   type PhaseId = Int
-  final val NoPhaseId = 0
-  final val FirstPhaseId = 1
+  inline val NoPhaseId = 0
+  inline val FirstPhaseId = 1
 
   /** The number of bits needed to encode a phase identifier. */
-  final val PhaseWidth = 7
-  final val PhaseMask = (1 << PhaseWidth) - 1
-  final val MaxPossiblePhaseId = PhaseMask
+  inline val PhaseWidth = 7
+  inline val PhaseMask = (1 << PhaseWidth) - 1
+  inline val MaxPossiblePhaseId = PhaseMask
 }

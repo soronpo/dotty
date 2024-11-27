@@ -2,42 +2,44 @@ package dotty.tools
 package dotc
 package reporting
 
-import core.Contexts._
+import core.Contexts.*
 import java.io.{ BufferedReader, PrintWriter }
-import Diagnostic.{ Error, ConditionalWarning }
+import Diagnostic.*
+import dotty.tools.dotc.interfaces.Diagnostic.INFO
 
 /**
   * This class implements a Reporter that displays messages on a text console
   */
 class ConsoleReporter(
   reader: BufferedReader = Console.in,
-  writer: PrintWriter = new PrintWriter(Console.err, true)
-) extends AbstractReporter {
+  writer: PrintWriter = new PrintWriter(Console.err, true),
+  echoer: PrintWriter = new PrintWriter(Console.out, true)
+) extends ConsoleReporter.AbstractConsoleReporter {
+  override def printMessage(msg: String): Unit = { writer.println(msg); writer.flush() }
+  override def echoMessage(msg: String): Unit = { echoer.println(msg); echoer.flush() }
+  override def flush()(using Context): Unit    = writer.flush()
 
-  import Diagnostic._
-
-  /** Prints the message. */
-  def printMessage(msg: String): Unit = { writer.print(msg + "\n"); writer.flush() }
-
-  /** Prints the message with the given position indication. */
-  def doReport(dia: Diagnostic)(using Context): Unit = {
-    val didPrint = dia match {
-      case dia: Error =>
-        printMessage(messageAndPos(dia.msg, dia.pos, diagnosticLevel(dia)))
-        if (ctx.settings.Xprompt.value) Reporter.displayPrompt(reader, writer)
-        true
-      case dia: ConditionalWarning if !dia.enablingOption.value =>
-        false
-      case dia =>
-        printMessage(messageAndPos(dia.msg, dia.pos, diagnosticLevel(dia)))
-        true
-    }
-
-    if (didPrint && shouldExplain(dia))
-      printMessage(explanation(dia.msg))
-    else if (didPrint && dia.msg.canExplain)
-      printMessage("\nlonger explanation available when compiling with `-explain`")
+  override def doReport(dia: Diagnostic)(using Context): Unit = {
+    super.doReport(dia)
+    if ctx.settings.Xprompt.value then
+      dia match
+        case _: Error                                        => Reporter.displayPrompt(reader, writer)
+        case _: Warning if ctx.settings.XfatalWarnings.value => Reporter.displayPrompt(reader, writer)
+        case _                                               =>
   }
+}
 
-  override def flush()(using Context): Unit = { writer.flush() }
+object ConsoleReporter {
+  abstract class AbstractConsoleReporter extends AbstractReporter {
+    /** Print the diagnostic message. */
+    def printMessage(msg: String): Unit
+
+    /** Print the informative message. */
+    def echoMessage(msg: String): Unit
+
+    /** Print the message with the given position indication. */
+    def doReport(dia: Diagnostic)(using Context): Unit =
+      if dia.level == INFO then echoMessage(messageAndPos(dia))
+      else printMessage(messageAndPos(dia))
+  }
 }

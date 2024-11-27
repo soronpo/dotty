@@ -9,7 +9,9 @@
 package dotty.tools.dotc
 package sbt
 
-import xsbti.api._
+import scala.language.unsafeNulls
+
+import xsbti.api.*
 
 import scala.util.Try
 

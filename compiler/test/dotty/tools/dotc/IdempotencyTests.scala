@@ -2,6 +2,8 @@ package dotty
 package tools
 package dotc
 
+import scala.language.unsafeNulls
+
 import java.io.{File => JFile}
 import java.nio.file.{Files, Path, Paths}
 
@@ -10,6 +12,7 @@ import org.junit.{AfterClass, Test}
 import org.junit.experimental.categories.Category
 
 import scala.concurrent.duration._
+import reporting.TestReporter
 import vulpix._
 
 
@@ -18,9 +21,8 @@ class IdempotencyTests {
   import IdempotencyTests._
   import CompilationTest.aggregateTests
 
-  // Flaky test on Windows
-  // https://github.com/lampepfl/dotty/issues/11885
-  val filter = FileFilter.exclude("i6507b.scala")
+  // ignore flaky tests
+  val filter = FileFilter.NoFilter
 
   @Category(Array(classOf[SlowTests]))
   @Test def idempotency: Unit = {
@@ -43,7 +45,7 @@ class IdempotencyTests {
             compileList(testDir.getName, sources.reverse, opt)(TestGroup("idempotency/orderIdempotency2"))
           )
         }
-      aggregateTests(tests: _*)
+      aggregateTests(tests*)
     }
 
     def check(name: String) = {
@@ -75,6 +77,7 @@ object IdempotencyTests extends ParallelTesting {
   def isInteractive = SummaryReport.isInteractive
   def testFilter = Properties.testsFilter
   def updateCheckFiles: Boolean = Properties.testsUpdateCheckfile
+  def failedTests = TestReporter.lastRunFailedTests
 
   implicit val summaryReport: SummaryReporting = new SummaryReport
   @AfterClass def tearDown(): Unit = {

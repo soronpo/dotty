@@ -3,16 +3,14 @@ package dotc
 package printing
 
 import scala.collection.mutable
-import core.Contexts._
+import core.Contexts.*
 
 object Highlighting {
 
   abstract class Highlight(private val highlight: String) {
     def text: String
 
-    def show(using Context): String =
-      if (ctx.settings.color.value == "never") text
-      else highlight + text + Console.RESET
+    def show(using Context): String = if ctx.useColors then highlight + text + Console.RESET else text
 
     override def toString: String =
       highlight + text + Console.RESET

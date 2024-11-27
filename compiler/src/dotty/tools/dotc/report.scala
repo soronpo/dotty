@@ -1,15 +1,15 @@
 package dotty.tools.dotc
 
-import reporting._
-import Diagnostic._
+import reporting.*
+import Diagnostic.*
 import util.{SourcePosition, NoSourcePosition, SrcPos}
-import core._
-import Contexts._, Symbols._, Decorators._
+import core.*
+import Contexts.*, Flags.*, Symbols.*, Decorators.*
 import config.SourceVersion
-import ast._
+import ast.*
 import config.Feature.sourceVersion
 import java.lang.System.currentTimeMillis
-
+import dotty.tools.dotc.config.MigrationVersion
 
 object report:
 
@@ -18,34 +18,26 @@ object report:
     if ctx.settings.verbose.value then echo(msg, pos)
 
   def echo(msg: => String, pos: SrcPos = NoSourcePosition)(using Context): Unit =
-    ctx.reporter.report(new Info(msg, pos.sourcePos))
+    ctx.reporter.report(new Info(msg.toMessage, pos.sourcePos))
 
   private def issueWarning(warning: Warning)(using Context): Unit =
-    if (!ctx.settings.silentWarnings.value)
-      if (ctx.settings.XfatalWarnings.value)
-        warning match {
-          case warning: ConditionalWarning if !warning.enablingOption.value =>
-            ctx.reporter.report(warning) // conditional warnings that are not enabled are not fatal
-          case _ =>
-            ctx.reporter.report(warning.toError)
-        }
-      else ctx.reporter.report(warning)
+    ctx.reporter.report(warning)
 
-  def deprecationWarning(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
-    issueWarning(new DeprecationWarning(msg, pos.sourcePos))
+  def deprecationWarning(msg: Message, pos: SrcPos, origin: String = "")(using Context): Unit =
+    issueWarning(new DeprecationWarning(msg, pos.sourcePos, origin))
 
-  def migrationWarning(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
+  def migrationWarning(msg: Message, pos: SrcPos)(using Context): Unit =
     issueWarning(new MigrationWarning(msg, pos.sourcePos))
 
-  def uncheckedWarning(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
+  def uncheckedWarning(msg: Message, pos: SrcPos)(using Context): Unit =
     issueWarning(new UncheckedWarning(msg, pos.sourcePos))
 
-  def featureWarning(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
+  def featureWarning(msg: Message, pos: SrcPos)(using Context): Unit =
     issueWarning(new FeatureWarning(msg, pos.sourcePos))
 
   def featureWarning(feature: String, featureDescription: => String,
-      featureUseSite: Symbol, required: Boolean, pos: SrcPos)(using Context): Unit = {
-    val req = if (required) "needs to" else "should"
+      featureUseSite: Symbol, required: Boolean, pos: SrcPos)(using Context): Unit =
+    val req = if required then "needs to" else "should"
     val fqname = s"scala.language.$feature"
 
     val explain =
@@ -56,30 +48,60 @@ object report:
            |See the Scala docs for value $fqname for a discussion
            |why the feature $req be explicitly enabled.""".stripMargin
 
-    def msg = s"""$featureDescription $req be enabled
-                 |by adding the import clause 'import $fqname'
-                 |or by setting the compiler option -language:$feature.$explain""".stripMargin
-    if (required) error(msg, pos)
+    def msg = em"""$featureDescription $req be enabled
+                  |by adding the import clause 'import $fqname'
+                  |or by setting the compiler option -language:$feature.$explain"""
+    if required then error(msg, pos)
     else issueWarning(new FeatureWarning(msg, pos.sourcePos))
-  }
+  end featureWarning
 
-  def warning(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
+  def warning(msg: Message, pos: SrcPos)(using Context): Unit =
     issueWarning(new Warning(msg, addInlineds(pos)))
 
-  def error(msg: Message, pos: SrcPos = NoSourcePosition, sticky: Boolean = false)(using Context): Unit =
+  def warning(msg: Message)(using Context): Unit =
+    warning(msg, NoSourcePosition)
+
+  def warning(msg: => String, pos: SrcPos = NoSourcePosition)(using Context): Unit =
+    warning(msg.toMessage, pos)
+
+  def error(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
     val fullPos = addInlineds(pos)
-    ctx.reporter.report(if (sticky) new StickyError(msg, fullPos) else new Error(msg, fullPos))
+    ctx.reporter.report(new Error(msg, fullPos))
     if ctx.settings.YdebugError.value then Thread.dumpStack()
 
+  def error(msg: => String, pos: SrcPos)(using Context): Unit =
+    error(msg.toMessage, pos)
+
+  def error(msg: => String)(using Context): Unit =
+    error(msg, NoSourcePosition)
+
   def error(ex: TypeError, pos: SrcPos)(using Context): Unit =
-    error(ex.toMessage, pos, sticky = true)
+    val fullPos = addInlineds(pos)
+    ctx.reporter.report(new StickyError(ex.toMessage, fullPos))
+    if ctx.settings.YdebugError.value then Thread.dumpStack()
     if ctx.settings.YdebugTypeError.value then ex.printStackTrace()
 
-  def errorOrMigrationWarning(msg: Message, pos: SrcPos = NoSourcePosition,
-      from: SourceVersion = SourceVersion.defaultSourceVersion)(using Context): Unit =
-    if sourceVersion.isAtLeast(from) then
-      if sourceVersion.isMigrating && sourceVersion.ordinal <= from.ordinal then migrationWarning(msg, pos)
-      else error(msg, pos)
+  def bestEffortError(ex: Throwable, msg: String)(using Context): Unit =
+    val stackTrace =
+      Option(ex.getStackTrace()).map { st =>
+        if st.nn.isEmpty then ""
+        else s"Stack trace: \n ${st.nn.mkString("\n ")}".stripMargin
+      }.getOrElse("")
+    // Build tools and dotty's test framework may check precisely for
+    // "Unsuccessful best-effort compilation." error text.
+    val fullMsg =
+      em"""Unsuccessful best-effort compilation.
+          |${msg}
+          |Cause:
+          | ${ex.toString.replace("\n", "\n ")}
+          |${stackTrace}"""
+    ctx.reporter.report(new Error(fullMsg, NoSourcePosition))
+
+  def errorOrMigrationWarning(msg: Message, pos: SrcPos, migrationVersion: MigrationVersion)(using Context): Unit =
+    if sourceVersion.isAtLeast(migrationVersion.errorFrom) then
+      if sourceVersion != migrationVersion.errorFrom.prevMigrating then error(msg, pos)
+      else if ctx.settings.rewrite.value.isEmpty then migrationWarning(msg, pos)
+    else if sourceVersion.isAtLeast(migrationVersion.warnFrom) then warning(msg, pos)
 
   def restrictionError(msg: Message, pos: SrcPos = NoSourcePosition)(using Context): Unit =
     error(msg.mapMsg("Implementation restriction: " + _), pos)
@@ -120,4 +142,48 @@ object report:
       case Nil => pos
     recur(pos.sourcePos, tpd.enclosingInlineds)
 
+  private object messageRendering extends MessageRendering
+
+  // Should only be called from Run#enrichErrorMessage.
+  def enrichErrorMessage(errorMessage: String)(using Context): String =
+    if ctx.settings.XnoEnrichErrorMessages.value then errorMessage
+    else try enrichErrorMessage1(errorMessage)
+    catch case _: Throwable => errorMessage // don't introduce new errors trying to report errors, so swallow exceptions
+
+  private def enrichErrorMessage1(errorMessage: String)(using Context): String = {
+    import untpd.*, config.Settings.*
+    def formatExplain(pairs: List[(String, Any)]) = pairs.map((k, v) => f"$k%20s: $v").mkString("\n")
+
+    val settings = ctx.settings.userSetSettings(ctx.settingsState).sortBy(_.name)
+    def showSetting(s: Setting[?]): String = if s.value == "" then s"${s.name} \"\"" else s"${s.name} ${s.value}"
+
+    val info1 = formatExplain(List(
+      "while compiling"    -> ctx.compilationUnit,
+      "during phase"       -> ctx.phase.megaPhase,
+      "mode"               -> ctx.mode,
+      "library version"    -> scala.util.Properties.versionString,
+      "compiler version"   -> dotty.tools.dotc.config.Properties.versionString,
+      "settings"           -> settings.map(showSetting).mkString(" "),
+    ))
+    val fileAReportMsg =
+      if ctx.phase.isInstanceOf[plugins.PluginPhase]
+      then
+        s"""|  An unhandled exception was thrown in the compiler plugin named "${ctx.phase.megaPhase}".
+            |  Please report the issue to the plugin's maintainers.
+            |  For non-enriched exceptions, compile with -Xno-enrich-error-messages.
+            |""".stripMargin
+      else
+        s"""|  An unhandled exception was thrown in the compiler.
+            |  Please file a crash report here:
+            |  https://github.com/scala/scala3/issues/new/choose
+            |  For non-enriched exceptions, compile with -Xno-enrich-error-messages.
+            |""".stripMargin
+    s"""
+       |  $errorMessage
+       |
+       |$fileAReportMsg
+       |
+       |$info1
+       |""".stripMargin
+  }
 end report

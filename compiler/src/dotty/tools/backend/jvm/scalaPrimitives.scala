@@ -2,18 +2,17 @@ package dotty.tools
 package backend.jvm
 
 import dotc.ast.Trees.Select
-import dotc.ast.tpd._
-import dotc.core._
-import Contexts._
-import Names.TermName, StdNames._
+import dotc.ast.tpd.*
+import dotc.core.*
+import Contexts.*
+import Names.TermName, StdNames.*
 import Types.{JavaArrayType, UnspecifiedErrorType, Type}
 import Symbols.{Symbol, NoSymbol}
+import Decorators.em
 import dotc.report
 import dotc.util.ReadOnlyMap
 
 import scala.annotation.threadUnsafe
-import scala.collection.immutable
-
 
 /** Scala primitive operations are represented as methods in `Any` and
  *  `AnyVal` subclasses. Here we demultiplex them by providing a mapping
@@ -33,7 +32,7 @@ import scala.collection.immutable
  * Inspired from the `scalac` compiler.
  */
 class DottyPrimitives(ictx: Context) {
-  import dotty.tools.backend.ScalaPrimitivesOps._
+  import dotty.tools.backend.ScalaPrimitivesOps.*
 
   @threadUnsafe private lazy val primitives: ReadOnlyMap[Symbol, Int] = init
 
@@ -68,7 +67,7 @@ class DottyPrimitives(ictx: Context) {
       case defn.ArrayOf(el) => el
       case JavaArrayType(el) => el
       case _ =>
-        report.error(s"expected Array $tpe")
+        report.error(em"expected Array $tpe")
         UnspecifiedErrorType
     }
 
@@ -135,7 +134,7 @@ class DottyPrimitives(ictx: Context) {
     def addPrimitives(cls: Symbol, method: TermName, code: Int)(using Context): Unit = {
       val alts = cls.info.member(method).alternatives.map(_.symbol)
       if (alts.isEmpty)
-        report.error(s"Unknown primitive method $cls.$method")
+        report.error(em"Unknown primitive method $cls.$method")
       else alts foreach (s =>
         addPrimitive(s,
           s.info.paramInfoss match {

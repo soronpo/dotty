@@ -1,14 +1,10 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Contexts._
-import DenotTransformers.SymTransformer
-import Flags._
-import SymDenotations._
-import Symbols._
-import Types._
-import typer.RefChecks
+import core.*
+import Contexts.*
+import Flags.*
+import Symbols.*
 import MegaPhase.MiniPhase
 import StdNames.nme
 import ast.tpd
@@ -23,9 +19,11 @@ import ast.tpd
  *  @syntax markdown
  */
 class UninitializedDefs extends MiniPhase:
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = UninitializedDefs.name
+
+  override def description: String = UninitializedDefs.description
 
   override def transformValDef(tree: ValDef)(using Context): Tree =
     if !hasUninitializedRHS(tree) then tree
@@ -45,5 +43,6 @@ class UninitializedDefs extends MiniPhase:
 end UninitializedDefs
 
 object UninitializedDefs:
-  val name: String = "uninitializedDefs"
+  val name: String = "uninitialized"
+  val description: String = "eliminates `compiletime.uninitialized`"
 end UninitializedDefs

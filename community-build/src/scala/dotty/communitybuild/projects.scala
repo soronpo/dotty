@@ -10,22 +10,19 @@ lazy val compilerVersion: String =
   val file = communitybuildDir.resolve("scala3-bootstrapped.version")
   new String(Files.readAllBytes(file), UTF_8)
 
-lazy val compilerSupportExperimental: Boolean =
-  compilerVersion.contains("SNAPSHOT") || compilerVersion.contains("NIGHTLY")
-
 lazy val sbtPluginFilePath: String =
   // Workaround for https://github.com/sbt/sbt/issues/4395
   new File(sys.props("user.home") + "/.sbt/1.0/plugins").mkdirs()
-  communitybuildDir.resolve("sbt-dotty-sbt").toAbsolutePath().toString()
+  communitybuildDir.resolve("sbt-injected-plugins").toAbsolutePath().toString()
 
 def log(msg: String) = println(Console.GREEN + msg + Console.RESET)
 
 /** Executes shell command, returns false in case of error. */
 def exec(projectDir: Path, binary: String, arguments: Seq[String], environment: Map[String, String]): Int =
-  import collection.JavaConverters._
+  import scala.jdk.CollectionConverters._
   val command = binary +: arguments
   log(command.mkString(" "))
-  val builder = new ProcessBuilder(command: _*).directory(projectDir.toFile).inheritIO()
+  val builder = new ProcessBuilder(command*).directory(projectDir.toFile).inheritIO()
   builder.environment.putAll(environment.asJava)
   val process = builder.start()
   val exitCode = process.waitFor()
@@ -43,7 +40,6 @@ sealed trait CommunityProject:
   val testOnlyDependencies: () => List[CommunityProject]
   val binaryName: String
   val runCommandsArgs: List[String] = Nil
-  val requiresExperimental: Boolean
   val environment: Map[String, String] = Map.empty
 
   final val projectDir = communitybuildDir.resolve("community-projects").resolve(project)
@@ -53,7 +49,6 @@ sealed trait CommunityProject:
 
   /** Publish this project to the local Maven repository */
   final def publish(): Unit =
-    // TODO what should this do with .requiresExperimental?
     if !published then
       publishDependencies()
       log(s"Publishing $project")
@@ -65,11 +60,6 @@ sealed trait CommunityProject:
       published = true
 
   final def doc(): Unit =
-    if this.requiresExperimental && !compilerSupportExperimental then
-      log(
-        s"Skipping ${this.project} - it needs experimental features unsupported in this build."
-      )
-      return
     publishDependencies()
     log(s"Documenting $project")
     if docCommand eq null then
@@ -89,8 +79,7 @@ final case class MillCommunityProject(
     baseCommand: String,
     dependencies: List[CommunityProject] = Nil,
     testOnlyDependencies: () => List[CommunityProject] = () => Nil,
-    ignoreDocs: Boolean = false,
-    requiresExperimental: Boolean = false,
+    ignoreDocs: Boolean = false
     ) extends CommunityProject:
   override val binaryName: String = "./mill"
   override val testCommand = s"$baseCommand.test"
@@ -99,7 +88,7 @@ final case class MillCommunityProject(
     // uncomment once mill is released
     // if ignoreDocs then null else s"$baseCommand.docJar"
   override val runCommandsArgs = List("-i", "-D", s"dottyVersion=$compilerVersion")
-  override val environment = Map("MILL_VERSION" -> "0.9.6-16-a5da34")
+  override val environment = Map("MILL_VERSION" -> "0.10.5")
 
 final case class SbtCommunityProject(
     project: String,
@@ -109,8 +98,7 @@ final case class SbtCommunityProject(
     testOnlyDependencies: () => List[CommunityProject] = () => Nil,
     sbtPublishCommand: String = null,
     sbtDocCommand: String = null,
-    scalacOptions: List[String] = SbtCommunityProject.scalacOptions,
-    requiresExperimental: Boolean = false,
+    scalacOptions: List[String] = SbtCommunityProject.scalacOptions
   ) extends CommunityProject:
   override val binaryName: String = "sbt"
 
@@ -140,7 +128,7 @@ final case class SbtCommunityProject(
       case Some(ivyHome) => List(s"-Dsbt.ivy.home=$ivyHome")
       case _ => Nil
     extraSbtArgs ++ sbtProps ++ List(
-      "-sbt-version", "1.5.0",
+      "-sbt-version", "1.10.5",
       "-Dsbt.supershell=false",
       s"-Ddotty.communitybuild.dir=$communitybuildDir",
       s"--addPluginSbtFile=$sbtPluginFilePath"
@@ -149,7 +137,7 @@ final case class SbtCommunityProject(
 object SbtCommunityProject:
   def scalacOptions = List(
     "-Xcheck-macros",
-    "-Ysafe-init",
+    "-Wsafe-init",
   )
 
 object projects:
@@ -260,25 +248,28 @@ object projects:
     project       = "intent",
     sbtTestCommand   = "test",
     sbtDocCommand = "doc",
-    requiresExperimental = true,
-  )
-
-  lazy val algebra = SbtCommunityProject(
-    project       = "algebra",
-    sbtTestCommand   = "coreJVM/compile",
-    sbtDocCommand = forceDoc("coreJVM")
   )
 
   lazy val scalacheck = SbtCommunityProject(
     project       = "scalacheck",
-    sbtTestCommand   = "jvm/test;js/test",
-    sbtPublishCommand = "jvm/publishLocal;js/publishLocal",
-    sbtDocCommand = forceDoc("jvm")
+    sbtTestCommand   = "coreJVM/test;coreJS/test",
+    sbtPublishCommand = "coreJVM/publishLocal;coreJS/publishLocal"
   )
 
   lazy val scalatest: SbtCommunityProject = SbtCommunityProject(
     project       = "scalatest",
-    sbtTestCommand   = "scalacticDotty/clean; scalacticDottyJS/clean; scalacticTestDotty/test; scalatestTestDotty/test; scalacticDottyJS/compile; scalatestDottyJS/compile",
+    sbtTestCommand   =
+      List(
+        "scalacticDotty/clean; scalacticDottyJS/clean",
+
+        // Some scalatest's tests are flaky (https://github.com/scalatest/scalatest/issues/2049)
+        // so we disable them, this list is based on the one used in the Scala 2 community build
+        // (https://github.com/scala/community-build/blob/2.13.x/proj/scalatest.conf).
+        """set scalatestTestDotty / Test / managedSources ~= (_.filterNot(_.getName == "GeneratorSpec.scala").filterNot(_.getName == "FrameworkSuite.scala").filterNot(_.getName == "WaitersSpec.scala").filterNot(_.getName == "TestSortingReporterSpec.scala").filterNot(_.getName == "JavaFuturesSpec.scala").filterNot(_.getName == "ParallelTestExecutionSpec.scala").filterNot(_.getName == "TimeLimitsSpec.scala").filterNot(_.getName == "DispatchReporterSpec.scala").filterNot(_.getName == "TestThreadsStartingCounterSpec.scala").filterNot(_.getName == "SuiteSortingReporterSpec.scala").filterNot(_.getName == "CommonGeneratorsSpec.scala").filterNot(_.getName == "PropCheckerAssertingSpec.scala").filterNot(_.getName == "ConductorMethodsSuite.scala").filterNot(_.getName == "EventuallySpec.scala"))""",
+        """set scalacticTestDotty / Test / managedSources ~= (_.filterNot(_.getName == "NonEmptyArraySpec.scala"))""",
+        """set genRegularTests4 / Test / managedSources ~= (_.filterNot(_.getName == "FrameworkSuite.scala").filterNot(_.getName == "GeneratorSpec.scala").filterNot(_.getName == "CommonGeneratorsSpec.scala").filterNot(_.getName == "ParallelTestExecutionSpec.scala").filterNot(_.getName == "DispatchReporterSpec.scala").filterNot(_.getName == "TestThreadsStartingCounterSpec.scala").filterNot(_.getName == "EventuallySpec.scala"))""",
+        "scalacticTestDotty/test; scalatestTestDotty/test; scalacticDottyJS/compile; scalatestDottyJS/compile"
+      ).mkString("; "),
     sbtPublishCommand = "scalacticDotty/publishLocal; scalatestDotty/publishLocal; scalacticDottyJS/publishLocal; scalatestDottyJS/publishLocal",
     sbtDocCommand = ";scalacticDotty/doc", // fails with missing type ;scalatestDotty/doc"
     // cannot take signature of (test: org.scalatest.concurrent.ConductorFixture#OneArgTest):
@@ -332,7 +323,7 @@ object projects:
 
   lazy val scalaPB = SbtCommunityProject(
     project       = "ScalaPB",
-    sbtTestCommand   = "dotty-community-build/compile",
+    sbtTestCommand   = "lensesJVM3/compile; runtimeJVM3/compile; grpcRuntimeJVM3/compile; compilerPluginJVM3/compile",
     // aggregateDoc("runtimeJVM")("scalapbc", "grpcRuntime", "compilerPlugin") fails with
     // module class ScalaPbCodeGenerator$ has non-class parent: TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module protocbridge),ProtocCodeGenerator)
     // Also it seems that we do not handle correctly aggreagation projects
@@ -354,20 +345,11 @@ object projects:
     // sbtDocCommand = "dotty-community-build/doc"
   )
 
-  lazy val stdLib213 = SbtCommunityProject(
-    project       = "stdLib213",
-    extraSbtArgs  = List("-Dscala.build.compileWithDotty=true"),
-    sbtTestCommand   = """library/compile""",
-    sbtPublishCommand = """set library/Compile/packageDoc/publishArtifact := false; library/publishLocal""",
-    // sbtDocCommand = "library/doc" // Does no compile? No idea :/
-  )
-
-
-  lazy val shapeless = SbtCommunityProject(
-    project       = "shapeless",
-    sbtTestCommand   = "test",
-    sbtDocCommand = forceDoc("typeable", "deriving", "data"),
-    scalacOptions = Nil // disable -Ysafe-init, due to -Xfatal-warnings
+  lazy val shapeless3 = SbtCommunityProject(
+    project = "shapeless-3",
+    sbtTestCommand = "testJVM; testJS",
+    sbtDocCommand = forceDoc("typeable", "deriving"),
+    scalacOptions = "-source" :: "3.3" :: SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"), // due to -Xfatal-warnings
   )
 
   lazy val xmlInterpolator = SbtCommunityProject(
@@ -409,7 +391,8 @@ object projects:
     project = "zio",
     sbtTestCommand = "testJVMDotty",
     sbtDocCommand = forceDoc("coreJVM"),
-    dependencies = List(izumiReflect)
+    scalacOptions = "-source" :: "3.3" :: SbtCommunityProject.scalacOptions.filter(_ != "-Xcheck-macros"),
+    dependencies =List(izumiReflect)
   )
 
   lazy val munit = SbtCommunityProject(
@@ -426,7 +409,6 @@ object projects:
     sbtPublishCommand = "coreJVM/publishLocal;coreJS/publishLocal",
     sbtDocCommand   = "coreJVM/doc",
     dependencies = List(munit),
-    requiresExperimental = true,
   )
 
   lazy val scodec = SbtCommunityProject(
@@ -434,13 +416,13 @@ object projects:
     sbtTestCommand   = "unitTests/test",
     // Adds <empty> package
     sbtDocCommand   = "coreJVM/doc",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"),
     dependencies = List(munit, scodecBits),
-    requiresExperimental = true,
   )
 
   lazy val scalaParserCombinators = SbtCommunityProject(
     project          = "scala-parser-combinators",
-    sbtTestCommand   = "parserCombinatorsJVM/test",
+    sbtTestCommand   = "set every versionPolicyIntention := Compatibility.None; parserCombinatorsJVM/test",
     sbtDocCommand   = forceDoc("parserCombinatorsJVM"),
   )
 
@@ -477,16 +459,10 @@ object projects:
     sbtDocCommand = ";json-schemaJVM/doc ;algebraJVM/doc; openapiJVM/doc; http4s-server/doc ;http4s-client/doc ;play-server/doc ;play-client/doc ;akka-http-server/doc ;akka-http-client/doc",
   )
 
-  lazy val catsEffect2 = SbtCommunityProject(
-    project        = "cats-effect-2",
-    sbtTestCommand = "test",
-    sbtDocCommand  = ";coreJVM/doc ;lawsJVM/doc",
-    dependencies   = List(cats, disciplineMunit)
-  )
-
   lazy val catsEffect3 = SbtCommunityProject(
     project        = "cats-effect-3",
-    sbtTestCommand = "test",
+    sbtTestCommand = "ciJVM",
+    sbtPublishCommand = "publishLocal",
     sbtDocCommand  = ";coreJVM/doc ;lawsJVM/doc ;kernelJVM/doc",
     dependencies   = List(cats, coop, disciplineSpecs2, scalacheck)
   )
@@ -500,8 +476,14 @@ object projects:
 
   lazy val scalaCollectionCompat = SbtCommunityProject(
     project        = "scala-collection-compat",
-    sbtTestCommand = "compat30/test",
-    sbtPublishCommand = "compat30/publishLocal",
+    sbtTestCommand = "compat3/test",
+    sbtPublishCommand = "compat3/publishLocal",
+  )
+
+  lazy val scalaJava8Compat = SbtCommunityProject(
+    project        = "scala-java8-compat",
+    sbtTestCommand = "test",
+    sbtPublishCommand = "publishLocal",
   )
 
   lazy val verify = SbtCommunityProject(
@@ -515,12 +497,13 @@ object projects:
     project = "discipline",
     sbtTestCommand = "coreJVM/test;coreJS/test",
     sbtPublishCommand = "set every credentials := Nil;coreJVM/publishLocal;coreJS/publishLocal",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"),
     dependencies = List(scalacheck)
   )
 
   lazy val disciplineMunit = SbtCommunityProject(
     project = "discipline-munit",
-    sbtTestCommand = "test",
+    sbtTestCommand = "coreJVM/test;coreJS/test",
     sbtPublishCommand = "coreJVM/publishLocal;coreJS/publishLocal",
     dependencies = List(discipline, munit)
   )
@@ -530,7 +513,7 @@ object projects:
     sbtTestCommand = "test",
     sbtPublishCommand = "coreJVM/publishLocal;coreJS/publishLocal",
     dependencies = List(discipline),
-    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Ysafe-init")
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init")
   )
 
   lazy val simulacrumScalafixAnnotations = SbtCommunityProject(
@@ -541,11 +524,10 @@ object projects:
 
   lazy val cats = SbtCommunityProject(
     project = "cats",
-    sbtTestCommand = "set Global/scalaJSStage := FastOptStage;buildJVM;validateAllJS",
-    sbtPublishCommand = "catsJVM/publishLocal;catsJS/publishLocal",
+    sbtTestCommand = "set Global/scalaJSStage := FastOptStage;rootJVM/test;rootJS/test",
+    sbtPublishCommand = "rootJVM/publishLocal;rootJS/publishLocal",
     dependencies = List(discipline, disciplineMunit, scalacheck, simulacrumScalafixAnnotations),
-    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Ysafe-init") // disable -Ysafe-init, due to -Xfatal-warning
-
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init") // disable -Ysafe-init or -Wsafe-init, due to -Xfatal-warning
   )
 
   lazy val catsMtl = SbtCommunityProject(
@@ -609,7 +591,7 @@ object projects:
     project           = "AsyncFile",
     sbtTestCommand    = "rootJVM/test",
     sbtPublishCommand = "rootJVM/publishLocal",
-    dependencies      = List(scissLog, scalatest),
+    dependencies      = List(scissLog, scissModel, scalatest),
   )
 
   lazy val scissSpan = SbtCommunityProject(
@@ -628,9 +610,9 @@ object projects:
 
   lazy val scissLucre = SbtCommunityProject(
     project           = "Lucre",
-    sbtTestCommand    = "adjunctJVM/test;baseJVM/test;confluentJVM/test;coreJVM/test;dataJVM/test;expr0JVM/test;expr1JVM/test;exprJVM/test;geomJVM/test;lucre-bdb/test;testsJVM/test",
+    sbtTestCommand    = "adjunctJVM/test;baseJVM/test;confluentJVM/test;coreJVM/test;dataJVM/test;exprJVM/test;geomJVM/test;lucre-bdb/test;testsJVM/test",
     extraSbtArgs      = List("-Dde.sciss.lucre.ShortTests=true"),
-    sbtPublishCommand = "adjunctJVM/publishLocal;baseJVM/publishLocal;confluentJVM/publishLocal;coreJVM/publishLocal;dataJVM/publishLocal;expr0JVM/publishLocal;expr1JVM/publishLocal;exprJVM/publishLocal;geomJVM/publishLocal;lucre-bdb/publishLocal",
+    sbtPublishCommand = "adjunctJVM/publishLocal;baseJVM/publishLocal;confluentJVM/publishLocal;coreJVM/publishLocal;dataJVM/publishLocal;exprJVM/publishLocal;geomJVM/publishLocal;lucre-bdb/publishLocal",
     dependencies      = List(scalaSTM, scissAsyncFile, scissEqual, scissFingerTree, scissLog, scissModel, scissNumbers, scissSerial, scissSpan, scalatest),
   )
 
@@ -652,16 +634,31 @@ object projects:
   lazy val akka = SbtCommunityProject(
     project = "akka",
     extraSbtArgs = List(s"-Dakka.build.scalaVersion=$compilerVersion"),
-    sbtTestCommand = "set every targetSystemJdk := true; akka-actor-tests/Test/compile",
+    sbtTestCommand = List(
+      "set every targetSystemJdk := true",
+      // selectively disable -Xfatal-warnings due to deprecations
+      """set actor/Compile/scalacOptions -= "-Xfatal-warnings"""",
+      """set testkit/Compile/scalacOptions -= "-Xfatal-warnings"""",
+      """set actorTests/Compile/scalacOptions -= "-Xfatal-warnings"""",
+      "akka-actor-tests/Test/compile",
+    ).mkString("; "),
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"),
     dependencies = List(scalatest, scalatestplusJunit, scalatestplusScalacheck)
+  )
+
+  lazy val monocle = SbtCommunityProject(
+    project = "Monocle",
+    sbtTestCommand = "coreJVM/test; macrosJVM/test; testJVM/test",
+    dependencies = List(cats, munit, discipline, disciplineMunit)
   )
 
   lazy val protoquill = SbtCommunityProject(
     project = "protoquill",
-    sbtTestCommand = "test",
+    extraSbtArgs  = List("-Dcommunity=true", "-DcommunityRemote=true", "-Dquill.macro.stdout=true"),
+    sbtTestCommand = "runCommunityBuild",
     sbtPublishCommand = "publishLocal",
-    dependencies = List(), // TODO add scalatest and pprint (see protoquill/build.sbt)
-    scalacOptions = List("-language:implicitConversions"), // disabled -Ysafe-init, due to bug in macro
+    dependencies = List(scalatest),
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Xcheck-macros") :+ "-language:implicitConversions", // disabled -Xcheck-macros, due to bug in macro
   )
 
   lazy val onnxScala = SbtCommunityProject(
@@ -676,6 +673,73 @@ object projects:
     sbtTestCommand = "test",
     sbtPublishCommand = "publishLocal",
     dependencies = List(scalatest, scalatestplusScalacheck),
+  )
+
+  lazy val munitCatsEffect = SbtCommunityProject(
+    project = "munit-cats-effect",
+    sbtTestCommand = "ce3JVM/test; ce3JS/test",
+    sbtPublishCommand = "ce3JVM/publishLocal; ce3JS/publishLocal",
+    dependencies = List(munit, catsEffect3)
+  )
+
+  lazy val scalacheckEffect = SbtCommunityProject(
+    project = "scalacheck-effect",
+    sbtTestCommand = "test",
+    sbtPublishCommand = "publishLocal",
+    dependencies = List(cats, catsEffect3, munit, scalacheck)
+  )
+
+  lazy val fs2 = SbtCommunityProject(
+    project = "fs2",
+    sbtTestCommand = "coreJVM/test; coreJS/test",  // io/test requires JDK9+
+    sbtPublishCommand = "coreJVM/publishLocal; coreJS/publishLocal",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"),
+    dependencies = List(cats, catsEffect3, munitCatsEffect, scalacheckEffect, scodecBits)
+  )
+
+  lazy val libretto = SbtCommunityProject(
+    project = "libretto",
+    sbtTestCommand = "core/test; examples/compile",
+    sbtPublishCommand = "core/publishLocal; examples/publishLocal",
+    dependencies = List(scalatest)
+  )
+
+  lazy val jacksonModuleScala = SbtCommunityProject(
+    project = "jackson-module-scala",
+    sbtTestCommand = "test",
+    sbtPublishCommand = "publishLocal",
+    dependencies = List(scalaJava8Compat, scalatest)
+  )
+
+  lazy val specs2 = SbtCommunityProject(
+    project = "specs2",
+    sbtTestCommand = "core/testOnly -- exclude ci",
+    sbtPublishCommand = "core/publishLocal",
+    dependencies = List()
+  )
+
+  lazy val spire = SbtCommunityProject(
+    project = "spire",
+    sbtTestCommand = "test",
+    sbtPublishCommand = "publishLocal",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Xcheck-macros"),
+    dependencies = List(cats, disciplineMunit)
+  )
+
+  lazy val http4s = SbtCommunityProject(
+    project = "http4s",
+    sbtTestCommand = """set ThisBuild / tlFatalWarnings := false; rootJVM/test""",
+    sbtPublishCommand = "publishLocal",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Wsafe-init"),
+    dependencies = List(cats, catsEffect3, fs2, disciplineMunit, scalacheckEffect)
+  )
+
+  lazy val parboiled2 = SbtCommunityProject(
+    project = "parboiled2",
+    sbtTestCommand = "parboiledCoreJVM/test; parboiledJVM/test",
+    sbtPublishCommand = "publishLocal",
+    scalacOptions = SbtCommunityProject.scalacOptions.filter(_ != "-Xcheck-macros"),
+    dependencies = List(utest, scalacheck)
   )
 
 end projects
@@ -697,7 +761,6 @@ def allProjects = List(
   projects.cask,
   projects.scas,
   projects.intent,
-  projects.algebra,
   projects.scalacheck,
   projects.scalatest,
   projects.scalatestplusScalacheck,
@@ -708,8 +771,7 @@ def allProjects = List(
   projects.scalaPB,
   projects.minitest,
   projects.fastparse,
-  projects.stdLib213,
-  projects.shapeless,
+  projects.shapeless3,
   projects.xmlInterpolator,
   projects.effpi,
   projects.sconfig,
@@ -721,10 +783,10 @@ def allProjects = List(
   projects.dottyCpsAsync,
   projects.scalaz,
   projects.endpoints4s,
-  projects.catsEffect2,
   projects.catsEffect3,
   projects.scalaParallelCollections,
   projects.scalaCollectionCompat,
+  projects.scalaJava8Compat,
   projects.verify,
   projects.discipline,
   projects.disciplineMunit,
@@ -746,10 +808,21 @@ def allProjects = List(
   projects.izumiReflect,
   projects.perspective,
   projects.akka,
+  projects.monocle,
   projects.protoquill,
   projects.onnxScala,
   projects.playJson,
   projects.scalatestplusTestNG,
+  projects.munitCatsEffect,
+  projects.scalacheckEffect,
+  projects.fs2,
+  projects.libretto,
+  projects.jacksonModuleScala,
+  projects.specs2,
+  projects.coop,
+  projects.spire,
+  projects.http4s,
+  projects.parboiled2,
 )
 
 lazy val projectMap = allProjects.groupBy(_.project)

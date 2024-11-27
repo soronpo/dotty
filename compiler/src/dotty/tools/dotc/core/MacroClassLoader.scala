@@ -1,11 +1,9 @@
 package dotty.tools.dotc.core
 
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.util.Property
 import dotty.tools.dotc.reporting.trace
 import dotty.tools.io.ClassPath
-
-import scala.collection.mutable
 
 object MacroClassLoader {
 
@@ -21,9 +19,11 @@ object MacroClassLoader {
     ctx.setProperty(MacroClassLoaderKey, makeMacroClassLoader(using ctx))
 
   private def makeMacroClassLoader(using Context): ClassLoader = trace("new macro class loader") {
+    import scala.language.unsafeNulls
+
     val entries = ClassPath.expandPath(ctx.settings.classpath.value, expandStar=true)
     val urls = entries.map(cp => java.nio.file.Paths.get(cp).toUri.toURL).toArray
-    val out = ctx.settings.outputDir.value.jpath.toUri.toURL // to find classes in case of suspended compilation
-    new java.net.URLClassLoader(urls :+ out, getClass.getClassLoader)
+    val out = Option(ctx.settings.outputDir.value.toURL) // to find classes in case of suspended compilation
+    new java.net.URLClassLoader(urls ++ out.toList, getClass.getClassLoader)
   }
 }

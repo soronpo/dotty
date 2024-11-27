@@ -2,7 +2,7 @@ package dotty.tools
 package dotc
 package config
 
-import java.security.AccessControlException
+import scala.language.unsafeNulls
 
 /** For placing a wrapper function around property functions.
  *  Motivated by places like google app engine throwing exceptions
@@ -22,13 +22,21 @@ trait WrappedProperties extends PropertiesTrait {
   override def envOrNone(name: String): Option[String]       = wrap(super.envOrNone(name)).flatten
 
   def systemProperties: Iterator[(String, String)] = {
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters.*
     wrap(System.getProperties.asScala.iterator) getOrElse Iterator.empty
   }
 }
 
 object WrappedProperties {
   object AccessControl extends WrappedProperties {
-    def wrap[T](body: => T): Option[T] = try Some(body) catch { case _: AccessControlException => None }
+    def wrap[T](body: => T): Option[T] =
+      try Some(body)
+      catch {
+        // the actual exception we are concerned with is AccessControlException,
+        // but that's deprecated on JDK 17, so catching its superclass is a convenient
+        // way to avoid a deprecation warning
+        case _: SecurityException =>
+          None
+      }
   }
 }

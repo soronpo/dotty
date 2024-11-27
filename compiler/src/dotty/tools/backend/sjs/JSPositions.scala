@@ -1,20 +1,23 @@
 package dotty.tools.backend.sjs
 
+import scala.language.unsafeNulls
+
 import java.net.{URI, URISyntaxException}
 
-import dotty.tools.dotc.core._
-import Contexts._
+import dotty.tools.dotc.core.*
+import Contexts.*
+import Decorators.em
 
 import dotty.tools.dotc.report
 
 import dotty.tools.dotc.util.{SourceFile, SourcePosition}
 import dotty.tools.dotc.util.Spans.Span
 
-import org.scalajs.ir
+import dotty.tools.sjs.ir
 
 /** Conversion utilities from dotty Positions to IR Positions. */
 class JSPositions()(using Context) {
-  import JSPositions._
+  import JSPositions.*
 
   private val sourceURIMaps: List[URIMap] = {
     ctx.settings.scalajsMapSourceURI.value.flatMap { option =>
@@ -29,7 +32,7 @@ class JSPositions()(using Context) {
           URIMap(from, to) :: Nil
         } catch {
           case e: URISyntaxException =>
-            report.error(s"${e.getInput} is not a valid URI")
+            report.error(em"${e.getInput} is not a valid URI")
             Nil
         }
       }
@@ -39,11 +42,11 @@ class JSPositions()(using Context) {
   private def sourceAndSpan2irPos(source: SourceFile, span: Span): ir.Position = {
     if (!span.exists) ir.Position.NoPosition
     else {
-      // dotty positions are 1-based but IR positions are 0-based
+      // dotty positions and IR positions are both 0-based
       val irSource = span2irPosCache.toIRSource(source)
       val point = span.point
-      val line = source.offsetToLine(point) - 1
-      val column = source.column(point) - 1
+      val line = source.offsetToLine(point)
+      val column = source.column(point)
       ir.Position(irSource, line, column)
     }
   }
@@ -60,8 +63,8 @@ class JSPositions()(using Context) {
   implicit def implicitSourcePos2irPos(implicit sourcePos: SourcePosition): ir.Position =
     sourceAndSpan2irPos(sourcePos.source, sourcePos.span)
 
-  private object span2irPosCache { // scalastyle:ignore
-    import dotty.tools.dotc.util._
+  private object span2irPosCache {
+    import dotty.tools.dotc.util.*
 
     private var lastDotcSource: SourceFile = null
     private var lastIRSource: ir.Position.SourceFile = null

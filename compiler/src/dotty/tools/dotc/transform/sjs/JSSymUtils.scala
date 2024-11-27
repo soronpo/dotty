@@ -2,29 +2,22 @@ package dotty.tools.dotc
 package transform
 package sjs
 
-import core._
-import util.SrcPos
-import Annotations._
-import Constants._
-import Contexts._
-import Decorators._
-import DenotTransformers._
-import Flags._
-import NameKinds.DefaultGetterName
-import NameOps._
-import Names._
-import Phases._
-import Scopes._
-import StdNames._
-import Symbols._
-import SymDenotations._
-import SymUtils._
-import ast.Trees._
-import Types._
+import core.*
+import Constants.*
+import Contexts.*
+import Flags.*
+import NameOps.*
+import Names.*
+import Phases.*
+import StdNames.*
+import Symbols.*
+
+import ast.Trees.*
+import Types.*
 
 import dotty.tools.backend.sjs.JSDefinitions.jsdefn
 
-import org.scalajs.ir.{Trees => js}
+import dotty.tools.sjs.ir.{Trees => js}
 
 /** Additional extensions for `Symbol`s that are only relevant for Scala.js. */
 object JSSymUtils {
@@ -92,6 +85,24 @@ object JSSymUtils {
     }
   }
 
+  /** Info about a Scala method param when called as JS method.
+   *
+   *  @param info
+   *    Parameter type (type of a single element if repeated).
+   *  @param repeated
+   *    Whether the parameter is repeated.
+   *  @param capture
+   *    Whether the parameter is a capture.
+   */
+  final class JSParamInfo(
+    val info: Type,
+    val repeated: Boolean = false,
+    val capture: Boolean = false
+  ) {
+    override def toString(): String =
+      s"ParamSpec($info, repeated = $repeated, capture = $capture)"
+  }
+
   extension (sym: Symbol) {
     /** Is this symbol a JavaScript type? */
     def isJSType(using Context): Boolean =
@@ -138,33 +149,6 @@ object JSSymUtils {
     def isJSBracketCall(using Context): Boolean =
       sym.hasAnnotation(jsdefn.JSBracketCallAnnot)
 
-    /** Is this symbol a default param accessor for a JS method?
-     *
-     *  For default param accessors of *constructors*, we need to test whether
-     *  the companion *class* of the owner is a JS type; not whether the owner
-     *  is a JS type.
-     */
-    def isJSDefaultParam(using Context): Boolean = {
-      sym.name.is(DefaultGetterName) && {
-        val owner = sym.owner
-        val methName = sym.name.exclude(DefaultGetterName)
-        if (methName == nme.CONSTRUCTOR) {
-          owner.linkedClass.isJSType
-        } else {
-          def isAttachedMethodExposed: Boolean =
-            owner.info.decl(methName).hasAltWith(_.symbol.isJSExposed)
-          owner.isJSType && (!owner.isNonNativeJSClass || isAttachedMethodExposed)
-        }
-      }
-    }
-
-    /** Is this symbol a default param accessor for the constructor of a native JS class? */
-    def isJSNativeCtorDefaultParam(using Context): Boolean = {
-      sym.name.is(DefaultGetterName)
-        && sym.name.exclude(DefaultGetterName) == nme.CONSTRUCTOR
-        && sym.owner.linkedClass.hasAnnotation(jsdefn.JSNativeAnnot)
-    }
-
     def jsCallingConvention(using Context): JSCallingConvention =
       JSCallingConvention.of(sym)
 
@@ -190,6 +174,60 @@ object JSSymUtils {
     def defaultJSName(using Context): String =
       if (sym.isTerm) sym.asTerm.name.unexpandedName.getterName.toString()
       else sym.name.unexpandedName.stripModuleClassSuffix.toString()
+
+    def jsParamInfos(using Context): List[JSParamInfo] = {
+      assert(sym.is(Method), s"trying to take JS param info of non-method: $sym")
+
+      def paramNamesAndTypes(using Context): List[(Names.TermName, Type)] =
+        sym.info.paramNamess.flatten.zip(sym.info.paramInfoss.flatten)
+
+      val paramInfosAtElimRepeated = atPhase(elimRepeatedPhase) {
+        val list =
+          for ((name, info) <- paramNamesAndTypes) yield {
+            val v =
+              if (info.isRepeatedParam) Some(TypeErasure.erasure(info.repeatedToSingle))
+              else None
+            name -> v
+          }
+        list.toMap
+      }
+
+      val paramInfosAtElimEVT = atPhase(elimErasedValueTypePhase) {
+        paramNamesAndTypes.toMap
+      }
+
+      for ((paramName, paramInfoNow) <- paramNamesAndTypes) yield {
+        paramInfosAtElimRepeated.get(paramName) match {
+          case None =>
+            // This is a capture parameter introduced by erasure or lambdalift
+            new JSParamInfo(paramInfoNow, capture = true)
+
+          case Some(Some(info)) =>
+            new JSParamInfo(info, repeated = true)
+
+          case Some(None) =>
+            val info = paramInfosAtElimEVT.getOrElse(paramName, paramInfoNow)
+            new JSParamInfo(info)
+        }
+      }
+    }
+
+    /** Tests whether the semantics of Scala.js require a field for this symbol,
+     *  irrespective of any optimization we think we can do.
+     *
+     *  This is the case if one of the following is true:
+     *
+     *  - it is a member of a JS type, since it needs to be visible as a JavaScript field
+     *  - is is exported as static member of the companion class, since it needs to be visible as a JavaScript static field
+     *  - it is exported to the top-level, since that can only be done as a true top-level variable, i.e., a field
+     */
+    def sjsNeedsField(using Context): Boolean =
+      ctx.settings.scalajs.value && (
+        sym.owner.isJSType
+          || sym.hasAnnotation(jsdefn.JSExportTopLevelAnnot)
+          || sym.hasAnnotation(jsdefn.JSExportStaticAnnot)
+      )
+    end sjsNeedsField
   }
 
   private object JSUnaryOpMethodName {

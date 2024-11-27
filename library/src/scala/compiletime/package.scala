@@ -1,27 +1,39 @@
 package scala
 package compiletime
 
-import annotation.compileTimeOnly
+import annotation.{compileTimeOnly, experimental}
 
 /** Use this method when you have a type, do not have a value for it but want to
  *  pattern match on it. For example, given a type `Tup <: Tuple`, one can
  *  pattern-match on it as follows:
  *  ```scala
+ *  //{
+ *  type Tup
+ *  inline def f = {
+ *  //}
  *  inline erasedValue[Tup] match {
- *    case _: EmptyTuple => ...
- *    case _: h *: t => ...
+ *    case _: EmptyTuple => ???
+ *    case _: (h *: t) => ???
  *  }
+ *  //{
+ *  }
+ *  //}
  *  ```
  *  This value can only be used in an inline match and the value cannot be used in
  *  the branches.
  *  @syntax markdown
  */
 // TODO add `erased` once it is not an experimental feature anymore
-def erasedValue[T]: T = ???
+def erasedValue[T]: T = erasedValue[T]
 
 /** Used as the initializer of a mutable class or object field, like this:
  *
- *    var x: T = uninitialized
+ *  ```scala
+ *  //{
+ *  type T
+ *  //}
+ *  var x: T = uninitialized
+ *  ```
  *
  *  This signifies that the field is not initialized on its own. It is still initialized
  *  as part of the bulk initialization of the object it belongs to, which assigns zero
@@ -30,10 +42,23 @@ def erasedValue[T]: T = ???
 @compileTimeOnly("`uninitialized` can only be used as the right hand side of a mutable field definition")
 def uninitialized: Nothing = ???
 
+/** Used as the right hand side of a given in a trait, like this
+ *
+ *  ```
+ *  given T = deferred
+ *  ```
+ *
+ *  This signifies that the given will get a synthesized definition in all classes
+ *  that implement the enclosing trait and that do not contain an explicit overriding
+ *  definition of that given.
+ */
+@compileTimeOnly("`deferred` can only be used as the right hand side of a given definition in a trait")
+def deferred: Nothing = ???
+
 /** The error method is used to produce user-defined compile errors during inline expansion.
  *  If an inline expansion results in a call error(msgStr) the compiler produces an error message containing the given msgStr.
  *
- *  ```scala
+ *  ```scala sc:fail
  *  error("My error message")
  *  ```
  *  or
@@ -71,13 +96,13 @@ transparent inline def codeOf(arg: Any): String =
  *  inlining and constant folding.
  *
  *  Usage:
- *  ```scala
+ *  ```scala sc:fail
  *  inline def twice(inline n: Int): Int =
  *    requireConst(n) // compile-time assertion that the parameter `n` is a constant
  *    n + n
  *
  *  twice(1)
- *  val m: Int = ...
+ *  val m: Int = ???
  *  twice(m) // error: expected a constant value but found: m
  *  ```
  *  @syntax markdown
@@ -105,18 +130,20 @@ transparent inline def constValue[T]: T =
  *  `(constValue[X1], ..., constValue[Xn])`.
  */
 inline def constValueTuple[T <: Tuple]: T =
-  val res =
-    inline erasedValue[T] match
-      case _: EmptyTuple => EmptyTuple
-      case _: (t *: ts) => constValue[t] *: constValueTuple[ts]
-    end match
-  res.asInstanceOf[T]
-end constValueTuple
+  // implemented in dotty.tools.dotc.typer.Inliner
+  error("Compiler bug: `constValueTuple` was not evaluated by the compiler")
+
 
 /** Summons first given matching one of the listed cases. E.g. in
  *
  *  ```scala
- *  given B { ... }
+ *  //{
+ *  type A
+ *  trait B
+ *  type C
+ *  inline def f = {
+ *  //}
+ *  given B with { }
  *
  *  summonFrom {
  *    case given A => 1
@@ -124,6 +151,9 @@ end constValueTuple
  *    case given C => 3
  *    case _ => 4
  *  }
+ *  //{
+ *  }
+ *  //}
  *  ```
  *  the returned value would be `2`.
  *  @syntax markdown
@@ -137,9 +167,8 @@ transparent inline def summonFrom[T](f: Nothing => T): T =
  *  @tparam T the type of the value to be summoned
  *  @return the given value typed as the provided type parameter
  */
-transparent inline def summonInline[T]: T = summonFrom {
-  case t: T => t
-}
+transparent inline def summonInline[T]: T =
+  error("Compiler bug: `summonInline` was not evaluated by the compiler")
 
 /** Given a tuple T, summons each of its member types and returns them in
  *  a Tuple.
@@ -148,13 +177,8 @@ transparent inline def summonInline[T]: T = summonFrom {
  *  @return the given values typed as elements of the tuple
  */
 inline def summonAll[T <: Tuple]: T =
-  val res =
-    inline erasedValue[T] match
-      case _: EmptyTuple => EmptyTuple
-      case _: (t *: ts) => summonInline[t] *: summonAll[ts]
-    end match
-  res.asInstanceOf[T]
-end summonAll
+  // implemented in dotty.tools.dotc.typer.Inliner
+  error("Compiler bug: `summonAll` was not evaluated by the compiler")
 
 /** Assertion that an argument is by-name. Used for nullability checking. */
 def byName[T](x: => T): T = x
@@ -168,4 +192,3 @@ def byName[T](x: => T): T = x
   */
 extension [T](x: T)
   transparent inline def asMatchable: x.type & Matchable = x.asInstanceOf[x.type & Matchable]
-

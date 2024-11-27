@@ -2,7 +2,6 @@ package dotty.tools.scaladoc
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import dotty.tools.dotc.core.Contexts.Context
 import scala.util.matching.Regex
 
 def pathToString(p: Path) =
@@ -12,37 +11,43 @@ def pathToString(p: Path) =
 
 trait SourceLink:
   val path: Option[Path] = None
-  def render(memberName: String, path: Path, operation: String, line: Option[Int]): String
+  def render(memberName: String, path: Path, operation: String, line: Option[Int], optionalRevision: Option[String]): String
+  def repoSummary: RepoSummary
 
 case class TemplateSourceLink(val urlTemplate: String) extends SourceLink:
   override val path: Option[Path] = None
-  override def render(memberName: String, path: Path, operation: String, line: Option[Int]): String =
+  override def render(memberName: String, path: Path, operation: String, line: Option[Int], optionalRevision: Option[String]): String =
     val pathString = "/" + pathToString(path)
     val mapping = Map(
       "\\{\\{ path \\}\\}".r -> pathString,
       "\\{\\{ line \\}\\}".r -> line.fold("")(_.toString),
       "\\{\\{ ext \\}\\}".r -> Some(
-        pathString).filter(_.lastIndexOf(".") == -1).fold("")(p => p.substring(p.lastIndexOf("."))
+        pathString).filter(_.lastIndexOf(".") != -1).fold("")(p => p.substring(p.lastIndexOf("."))
       ),
       "\\{\\{ path_no_ext \\}\\}".r -> Some(
-        pathString).filter(_.lastIndexOf(".") == -1).fold(pathString)(p => p.substring(0, p.lastIndexOf("."))
+        pathString).filter(_.lastIndexOf(".") != -1).fold(pathString)(p => p.substring(0, p.lastIndexOf("."))
       ),
       "\\{\\{ name \\}\\}".r -> memberName
     )
     mapping.foldLeft(urlTemplate) {
       case (sourceLink, (regex, value)) => regex.replaceAllIn(sourceLink, Regex.quoteReplacement(value))
     }
+  override def repoSummary = UnknownRepoSummary
 
+sealed class RepoSummary
+case class DefinedRepoSummary(origin: String, org: String, repo: String) extends RepoSummary
+case object UnknownRepoSummary extends RepoSummary // we cannot easily get that information from template source links
 
-case class WebBasedSourceLink(prefix: String, revision: String, subPath: String) extends SourceLink:
+case class WebBasedSourceLink(repoSummary: RepoSummary, prefix: String, revision: String, subPath: String) extends SourceLink:
   override val path: Option[Path] = None
-  override def render(memberName: String, path: Path, operation: String, line: Option[Int]): String =
+  override def render(memberName: String, path: Path, operation: String, line: Option[Int], optionalRevision: Option[String] = None): String =
     val action = if operation == "view" then "blob" else operation
+    val finalRevision = optionalRevision.getOrElse(revision)
     val linePart = line.fold("")(l => s"#L$l")
-    s"$prefix/$action/$revision$subPath/${pathToString(path)}$linePart"
+    s"$prefix/$action/$finalRevision$subPath/${pathToString(path)}$linePart"
 
 class SourceLinkParser(revision: Option[String]) extends ArgParser[SourceLink]:
-  val KnownProvider = raw"(\w+):\/\/([^\/#]+)\/([^\/#]+)(\/[^\/#]+)?(#.+)?".r
+  val KnownProvider = raw"(\w+):\/\/([^\/#]+)\/([^\/#]+)(\/[^#]+)?(#.+)?".r
   val BrokenKnownProvider = raw"(\w+):\/\/.+".r
   val ScalaDocPatten = raw"€\{(TPL_NAME|TPL_OWNER|FILE_PATH|FILE_EXT|FILE_LINE|FILE_PATH_EXT)\}".r
   val SupportedScalaDocPatternReplacements = Map(
@@ -62,6 +67,12 @@ class SourceLinkParser(revision: Option[String]) extends ArgParser[SourceLink]:
 
   def parse(string: String): Either[String, SourceLink] =
     val res = string match
+      case scaladocSetting if ScalaDocPatten.findFirstIn(scaladocSetting).nonEmpty =>
+        val all = ScalaDocPatten.findAllIn(scaladocSetting)
+        val (supported, unsupported) = all.partition(SupportedScalaDocPatternReplacements.contains)
+        if unsupported.nonEmpty then Left(s"Unsupported patterns from scaladoc format are used: ${unsupported.mkString(" ")}")
+        else Right(TemplateSourceLink(supported.foldLeft(string)((template, pattern) =>
+          template.replace(pattern, SupportedScalaDocPatternReplacements(pattern)))))
       case KnownProvider(name, organization, repo, rawRevision, rawSubPath) =>
         val subPath = Option(rawSubPath).fold("")("/" + _.drop(1))
         val pathRev = Option(rawRevision).map(_.drop(1)).orElse(revision)
@@ -72,20 +83,14 @@ class SourceLinkParser(revision: Option[String]) extends ArgParser[SourceLink]:
         name match
           case "github" =>
             withRevision(rev =>
-              WebBasedSourceLink(githubPrefix(organization, repo), rev, subPath))
+              WebBasedSourceLink(DefinedRepoSummary("github", organization, repo), githubPrefix(organization, repo), rev, subPath))
           case "gitlab" =>
             withRevision(rev =>
-              WebBasedSourceLink(gitlabPrefix(organization, repo), rev, subPath))
+              WebBasedSourceLink(DefinedRepoSummary("gitlab", organization, repo), gitlabPrefix(organization, repo), rev, subPath))
           case other =>
             Left(s"'$other' is not a known provider, please provide full source path template.")
       case BrokenKnownProvider("gitlab" | "github") =>
         Left(s"Does not match known provider syntax: `<name>://organization/repository`")
-      case scaladocSetting if ScalaDocPatten.findFirstIn(scaladocSetting).nonEmpty =>
-        val all = ScalaDocPatten.findAllIn(scaladocSetting)
-        val (supported, unsupported) = all.partition(SupportedScalaDocPatternReplacements.contains)
-        if unsupported.nonEmpty then Left(s"Unsupported patterns from scaladoc format are used: ${unsupported.mkString(" ")}")
-        else Right(TemplateSourceLink(supported.foldLeft(string)((template, pattern) =>
-          template.replace(pattern, SupportedScalaDocPatternReplacements(pattern)))))
       case other =>
         Left("Does not match any implemented source link syntax")
     res match {
@@ -96,12 +101,21 @@ class SourceLinkParser(revision: Option[String]) extends ArgParser[SourceLink]:
 
 type Operation = "view" | "edit"
 
-class SourceLinks(val sourceLinks: PathBased[SourceLink]):
-  def pathTo(rawPath: Path, memberName: String = "", line: Option[Int] = None, operation: Operation = "view"): Option[String] =
-    sourceLinks.get(rawPath).map(res => res.elem.render(memberName, res.path, operation, line))
+class SourceLinks(private val sourceLinks: PathBased[SourceLink]):
+  def pathTo(rawPath: Path, memberName: String = "", line: Option[Int] = None, operation: Operation = "view", optionalRevision: Option[String] = None): Option[String] =
+    sourceLinks.get(rawPath).map(res => res.elem.render(memberName, res.path, operation, line, optionalRevision))
 
   def pathTo(member: Member): Option[String] =
     member.sources.flatMap(s => pathTo(s.path, member.name, Option(s.lineNumber).map(_ + 1)))
+
+  def repoSummary(path: Path): Option[RepoSummary] =
+    sourceLinks.get(path).map(_.elem.repoSummary)
+
+  def fullPath(path: Path): Option[Path] =
+    sourceLinks.get(path).map { case PathBased.Result(path, elem) => elem match
+      case e: WebBasedSourceLink => Paths.get(e.subPath, path.toString)
+      case _ => path
+    }
 
 object SourceLinks:
   val usage =
@@ -125,7 +139,7 @@ object SourceLinks:
       | €{FILE_PATH}, and €{FILE_LINE} patterns
       |
       |
-      |Template can defined only by subset of sources defined by path prefix represented by `<sub-path>`.
+      |Template can be defined only by subset of sources defined by path prefix represented by `<sub-path>`.
       |In such case paths used in templates will be relativized against `<sub-path>`""".stripMargin
 
   def load(config: Seq[String], revision: Option[String], projectRoot: Path = Paths.get("").toAbsolutePath)(using CompilerContext): SourceLinks =

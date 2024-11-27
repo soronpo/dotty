@@ -1,3 +1,8 @@
-object Test:
+type Person = (name: String, age: Int)
 
-  def test = ???
+trait A:
+  type T
+
+class B:
+  type U =:= A { type T = U }
+

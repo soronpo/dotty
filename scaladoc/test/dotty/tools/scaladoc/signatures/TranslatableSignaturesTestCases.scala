@@ -1,6 +1,6 @@
 package dotty.tools.scaladoc.signatures
 
-class GenericSignaftures extends SignatureTest("genericSignatures", Seq("class"))
+class GenericSignatures extends SignatureTest("genericSignatures", Seq("class"))
 
 class ObjectSignatures extends SignatureTest("objectSignatures", Seq("object"))
 
@@ -39,11 +39,13 @@ class PackageObjectSymbolSignatures extends SignatureTest("packageObjectSymbolSi
 class MergedPackageSignatures extends SignatureTest("mergedPackage", SignatureTest.all.filterNot(_ == "object"),
   sourceFiles = List("mergedPackage1", "mergedPackage2", "mergedPackage3"))
 
-class ExtensionMethodSignature extends SignatureTest("extensionMethodSignatures", SignatureTest.all)
+class ExtensionMethodSignature extends SignatureTest("extensionMethodSignatures", SignatureTest.all.filterNot(_ == "extension"))
+
+class ExtensionMethodParamsSignature extends SignatureTest("extensionParams", SignatureTest.all)
 
 class ClassModifiers extends SignatureTest("classModifiers", SignatureTest.classlikeKinds)
 
-class EnumSignatures extends SignatureTest("enumSignatures", SignatureTest.all)
+class EnumSignatures extends SignatureTest("enumSignatures", "case" +: SignatureTest.all)
 
 class StructuralTypes extends SignatureTest("structuralTypes", SignatureTest.members)
 
@@ -57,6 +59,8 @@ class InheritanceLoop extends SignatureTest("inheritanceLoop", SignatureTest.all
 
 class InheritedMembers extends SignatureTest("inheritedMembers2", SignatureTest.all.filter(_ != "class"),
   sourceFiles = List("inheritedMembers1", "inheritedMembers2"))
+
+class InheritedFromHiddenClasslike extends SignatureTest("inheritedMembersFromHidden", SignatureTest.all)
 
 class ComplexNames extends SignatureTest("complexNames", Seq("def", "class"))
 
@@ -84,3 +88,39 @@ class ImplicitConversionsTest3 extends SignatureTest(
 )
 
 class SpecializedSignature extends SignatureTest("specializedSignature", SignatureTest.all)
+
+class ContextBounds extends SignatureTest("contextBounds", SignatureTest.all)
+
+class FBoundedTypeParameters extends SignatureTest("fboundedTypeParameters", SignatureTest.all)
+
+class Exports extends SignatureTest("exports2", SignatureTest.all, sourceFiles = List("exports1", "exports2"))
+
+class ContextFunctions extends SignatureTest("contextfunctions", SignatureTest.all)
+
+class MarkdownCode extends SignatureTest("markdowncode", SignatureTest.all)
+
+class FunctionTypeSignatures extends SignatureTest("functionTypeSignatures", SignatureTest.all)
+
+class ImplicitMembers extends SignatureTest(
+  "implicitMembers",
+  Seq("def"),
+  filterFunc = _.toString.endsWith("OuterClass$ImplicitMemberTarget.html")
+)
+
+class NonScala3Parent extends SignatureTest("nonScala3Parent", SignatureTest.all)
+
+class SupertypeParamsSubstitution extends SignatureTest("supertypeParamsSubstitution", SignatureTest.all)
+
+class ThisType extends SignatureTest("thisType", SignatureTest.all)
+
+class PathDependentTypes extends SignatureTest("pathDependentTypes", SignatureTest.all)
+
+class MatchTypeTuple extends SignatureTest("matchTypeTuple", SignatureTest.all)
+
+class InfixTypes extends SignatureTest("infixTypes", SignatureTest.all)
+
+class ExtendsCall extends SignatureTest("extendsCall", SignatureTest.all)
+
+class RefinedFunctionTypes extends SignatureTest("refinedFunctionTypes", SignatureTest.all)
+
+class RightAssocExtension extends SignatureTest("rightAssocExtension", SignatureTest.all)

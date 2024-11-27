@@ -28,13 +28,17 @@ class Base
   // Tests do not support multiline signatures
   type Elem[X] = X match { case String => Char case Array[t] => t case Iterable[t] => t }
 
-  type F = [X] => (x: X) => List[X]
+  type F = [X] => (x: X) => List[X] //expected: type F = [X] => X => List[X]
 
   type G = Int => Int
 
   type H = () => String
 
   type I = (Int, String, Int) => (String, Int)
+
+  type J = (a: A) => a.type
+
+  type K = [A] => (a: A) => a.type
 }
 
 class Operators
@@ -48,4 +52,9 @@ class Operators
 
   import scala.compiletime.ops.boolean.*
   type Unary = ![true]
+}
+
+trait ThisTypeTest
+{
+  def foo: this.type //expected: def foo: ThisTypeTest.this.type
 }

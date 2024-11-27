@@ -7,12 +7,13 @@
 package dotty.tools
 package io
 
+import scala.language.unsafeNulls
+
 import java.io.{ InputStream, OutputStream, DataOutputStream }
-import java.util.jar._
-import scala.jdk.CollectionConverters._
+import java.util.jar.*
+import scala.jdk.CollectionConverters.*
 import scala.collection.mutable
 import Attributes.Name
-import scala.language.postfixOps
 import scala.annotation.tailrec
 
 // Attributes.Name instances:
@@ -41,7 +42,7 @@ class Jar(file: File) {
 
   protected def errorFn(msg: String): Unit = Console println msg
 
-  import Jar._
+  import Jar.*
 
   lazy val jarFile: JarFile  = new JarFile(file.jpath.toFile)
   lazy val manifest: Option[Manifest] = withJarInput(s => Option(s.getManifest))
@@ -61,7 +62,7 @@ class Jar(file: File) {
     finally in.close()
   }
   def jarWriter(mainAttrs: (Attributes.Name, String)*): JarWriter = {
-    new JarWriter(file, Jar.WManifest.apply(mainAttrs: _*).underlying)
+    new JarWriter(file, Jar.WManifest.apply(mainAttrs*).underlying)
   }
 
   def toList: List[JarEntry] = withJarInput { in =>
@@ -72,6 +73,7 @@ class Jar(file: File) {
     case null   => errorFn("No such entry: " + entry) ; null
     case x      => x
   }
+
   override def toString: String = "" + file
 }
 
@@ -140,7 +142,7 @@ object Jar {
     def underlying: JManifest = manifest
     def attrs: mutable.Map[Name, String] = manifest.getMainAttributes().asInstanceOf[AttributeMap].asScala withDefaultValue null
     def initialMainAttrs: Map[Attributes.Name, String] = {
-      import scala.util.Properties._
+      import scala.util.Properties.*
       Map(
         Name.MANIFEST_VERSION -> "1.0",
         ScalaCompilerVersion  -> versionNumberString
@@ -163,7 +165,7 @@ object Jar {
 
   def isJarOrZip(f: Path): Boolean = isJarOrZip(f, true)
   def isJarOrZip(f: Path, examineFile: Boolean): Boolean =
-    f.hasExtension("zip", "jar") || (examineFile && magicNumberIsZip(f))
+    f.ext.isJarOrZip || (examineFile && magicNumberIsZip(f))
 
   def create(file: File, sourceDir: Directory, mainClass: String): Unit =  {
     val writer = new Jar(file).jarWriter(Name.MAIN_CLASS -> mainClass)

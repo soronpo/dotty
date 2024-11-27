@@ -2,10 +2,10 @@ package dotty.tools
 package dotc
 package reporting
 
-import core.Contexts._
+import core.Contexts.*
 import collection.mutable
 import config.Printers.typr
-import Diagnostic._
+import Diagnostic.*
 
 /** This class implements a Reporter that stores all messages
   *
@@ -17,27 +17,38 @@ import Diagnostic._
   * - The reporter is not flushed and the message containers capture a
   *   `Context` (about 4MB)
   */
-class StoreReporter(outer: Reporter = Reporter.NoReporter) extends Reporter {
+class StoreReporter(outer: Reporter | Null = Reporter.NoReporter, fromTyperState: Boolean = false) extends Reporter {
 
-  protected var infos: mutable.ListBuffer[Diagnostic] = null
+  protected var infos: mutable.ListBuffer[Diagnostic] | Null = null
 
-  def doReport(dia: Diagnostic)(using Context): Unit = {
+  override def doReport(dia: Diagnostic)(using Context): Unit = {
     typr.println(s">>>> StoredError: ${dia.message}") // !!! DEBUG
     if (infos == null) infos = new mutable.ListBuffer
-    infos += dia
+    infos.uncheckedNN += dia
   }
 
   override def hasUnreportedErrors: Boolean =
-    outer != null && infos != null && infos.exists(_.isInstanceOf[Error])
+    outer != null && infos != null && infos.uncheckedNN.exists(_.isInstanceOf[Error])
 
   override def hasStickyErrors: Boolean =
-    infos != null && infos.exists(_.isInstanceOf[StickyError])
+    infos != null && infos.uncheckedNN.exists(_.isInstanceOf[StickyError])
 
   override def removeBufferedMessages(using Context): List[Diagnostic] =
-    if (infos != null) try infos.toList finally infos = null
+    if (infos != null) try infos.uncheckedNN.toList finally infos = null
     else Nil
 
-  override def pendingMessages(using Context): List[Diagnostic] = infos.toList
+  override def mapBufferedMessages(f: Diagnostic => Diagnostic)(using Context): Unit =
+    if infos != null then infos.uncheckedNN.mapInPlace(f)
+
+  override def pendingMessages(using Context): List[Diagnostic] =
+    if (infos != null) infos.uncheckedNN.toList else Nil
 
   override def errorsReported: Boolean = hasErrors || (outer != null && outer.errorsReported)
+
+  // If this is a TyperState buffering reporter then buffer the messages,
+  // so that then only when the messages are unbuffered (when the reporter if flushed)
+  // do they go through -Wconf, and possibly then buffered on the Run as a suspended message
+  override def report(dia: Diagnostic)(using Context): Unit =
+    if fromTyperState then issueUnconfigured(dia)
+    else super.report(dia)
 }

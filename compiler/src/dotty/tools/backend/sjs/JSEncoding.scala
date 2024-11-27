@@ -1,37 +1,30 @@
 package dotty.tools.backend.sjs
 
-import scala.annotation.tailrec
+import scala.language.unsafeNulls
 
 import scala.collection.mutable
 
-import dotty.tools.FatalError
+import dotty.tools.dotc.core.*
+import Contexts.*
+import Flags.*
+import Types.*
+import Symbols.*
+import NameOps.*
+import Names.*
+import StdNames.*
 
-import dotty.tools.dotc.core._
-import Decorators._
-import Periods._
-import SymDenotations._
-import Contexts._
-import Flags._
-import Types._
-import Symbols._
-import Denotations._
-import NameOps._
-import Names._
-import StdNames._
+import dotty.tools.dotc.transform.sjs.JSSymUtils.*
 
-import dotty.tools.dotc.transform.sjs.JSSymUtils._
-
-import org.scalajs.ir
-import org.scalajs.ir.{Trees => js, Types => jstpe}
-import org.scalajs.ir.Names.{LocalName, LabelName, FieldName, SimpleMethodName, MethodName, ClassName}
-import org.scalajs.ir.OriginalName
-import org.scalajs.ir.OriginalName.NoOriginalName
-import org.scalajs.ir.UTF8String
-
-import ScopedVar.withScopedVars
-import JSDefinitions._
+import dotty.tools.sjs.ir
+import dotty.tools.sjs.ir.{Trees => js, Types => jstpe}
+import dotty.tools.sjs.ir.Names.{LocalName, LabelName, SimpleFieldName, FieldName, SimpleMethodName, MethodName, ClassName}
+import dotty.tools.sjs.ir.OriginalName
+import dotty.tools.sjs.ir.OriginalName.NoOriginalName
+import dotty.tools.sjs.ir.UTF8String
 
 import dotty.tools.backend.jvm.DottyBackendInterface.symExtensions
+
+import JSDefinitions.jsdefn
 
 /** Encoding of symbol names for JavaScript
  *
@@ -63,10 +56,12 @@ object JSEncoding {
   private val ScalaRuntimeNothingClassName = ClassName("scala.runtime.Nothing$")
   private val ScalaRuntimeNullClassName = ClassName("scala.runtime.Null$")
 
+  private val dynamicImportForwarderSimpleName = SimpleMethodName("dynamicImport$")
+
   // Fresh local name generator ----------------------------------------------
 
   class LocalNameGenerator {
-    import LocalNameGenerator._
+    import LocalNameGenerator.*
 
     private val usedLocalNames = mutable.Set.empty[LocalName]
     private val localSymbolNames = mutable.Map.empty[Symbol, LocalName]
@@ -178,13 +173,13 @@ object JSEncoding {
   }
 
   def encodeFieldSym(sym: Symbol)(implicit ctx: Context, pos: ir.Position): js.FieldIdent =
-    js.FieldIdent(FieldName(encodeFieldSymAsString(sym)))
+    js.FieldIdent(FieldName(encodeClassName(sym.owner), SimpleFieldName(encodeFieldSymAsString(sym))))
 
   def encodeFieldSymAsStringLiteral(sym: Symbol)(implicit ctx: Context, pos: ir.Position): js.StringLiteral =
     js.StringLiteral(encodeFieldSymAsString(sym))
 
   private def encodeFieldSymAsString(sym: Symbol)(using Context): String = {
-    require(sym.owner.isClass && sym.isTerm && !sym.isOneOf(Method | Module),
+    require(sym.owner.isClass && sym.isTerm && !sym.isOneOf(MethodOrModule),
         "encodeFieldSym called with non-field symbol: " + sym)
 
     val name0 = sym.javaSimpleName
@@ -220,14 +215,32 @@ object JSEncoding {
     js.MethodIdent(methodName)
   }
 
-  def encodeStaticMemberSym(sym: Symbol)(
-      implicit ctx: Context, pos: ir.Position): js.MethodIdent = {
+  def encodeJSNativeMemberSym(sym: Symbol)(using Context, ir.Position): js.MethodIdent = {
+    require(sym.hasAnnotation(jsdefn.JSNativeAnnot),
+        "encodeJSNativeMemberSym called with non-native symbol: " + sym)
+    if (sym.is(Method))
+      encodeMethodSym(sym)
+    else
+      encodeFieldSymAsMethod(sym)
+  }
+
+  def encodeStaticMemberSym(sym: Symbol)(using Context, ir.Position): js.MethodIdent = {
     require(sym.is(Flags.JavaStaticTerm),
         "encodeStaticMemberSym called with non-static symbol: " + sym)
+    encodeFieldSymAsMethod(sym)
+  }
 
+  private def encodeFieldSymAsMethod(sym: Symbol)(using Context, ir.Position): js.MethodIdent = {
     val name = sym.name
     val resultTypeRef = paramOrResultTypeRef(sym.info)
     val methodName = MethodName(name.mangledString, Nil, resultTypeRef)
+    js.MethodIdent(methodName)
+  }
+
+  def encodeDynamicImportForwarderIdent(params: List[Symbol])(using Context, ir.Position): js.MethodIdent = {
+    val paramTypeRefs = params.map(sym => paramOrResultTypeRef(sym.info))
+    val resultTypeRef = jstpe.ClassRef(ir.Names.ObjectClass)
+    val methodName = MethodName(dynamicImportForwarderSimpleName, paramTypeRefs, resultTypeRef)
     js.MethodIdent(methodName)
   }
 

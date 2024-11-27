@@ -1,19 +1,15 @@
 package dotty.tools.dotc
 
-import java.nio.file.{Files, Paths}
-
 import dotty.tools.FatalError
 import config.CompilerCommand
 import core.Comments.{ContextDoc, ContextDocstrings}
-import core.Contexts._
-import core.{MacroClassLoader, Mode, TypeError}
-import core.StdNames.nme
+import core.Contexts.*
+import core.{MacroClassLoader, TypeError}
 import dotty.tools.dotc.ast.Positioned
-import dotty.tools.io.AbstractFile
-import reporting._
-import core.Decorators._
+import dotty.tools.io.{AbstractFile, FileExtension}
+import reporting.*
+import core.Decorators.*
 import config.Feature
-import util.SourceFile
 
 import scala.util.control.NonFatal
 import fromtasty.{TASTYCompiler, TastyFileUtil}
@@ -32,20 +28,25 @@ class Driver {
 
   protected def emptyReporter: Reporter = new StoreReporter(null)
 
-  protected def doCompile(compiler: Compiler,  files: List[AbstractFile])(using Context): Reporter =
+  protected def doCompile(compiler: Compiler, files: List[AbstractFile])(using Context): Reporter =
     if files.nonEmpty then
+      var runOrNull = ctx.run
       try
         val run = compiler.newRun
+        runOrNull = run
         run.compile(files)
         finish(compiler, run)
       catch
         case ex: FatalError =>
-          report.error(ex.getMessage) // signals that we should fail compilation.
-        case ex: TypeError =>
-          println(s"${ex.toMessage} while compiling ${files.map(_.path).mkString(", ")}")
+          report.error(ex.getMessage.nn) // signals that we should fail compilation.
+        case ex: Throwable if ctx.usedBestEffortTasty =>
+          report.bestEffortError(ex, "Some best-effort tasty files were not able to be read.")
           throw ex
-        case ex: Throwable =>
-          println(s"$ex while compiling ${files.map(_.path).mkString(", ")}")
+        case ex: TypeError if !runOrNull.enrichedErrorMessage =>
+          println(runOrNull.enrichErrorMessage(s"${ex.toMessage} while compiling ${files.map(_.path).mkString(", ")}"))
+          throw ex
+        case ex: Throwable if !runOrNull.enrichedErrorMessage =>
+          println(runOrNull.enrichErrorMessage(s"Exception while compiling ${files.map(_.path).mkString(", ")}"))
           throw ex
     ctx.reporter
 
@@ -54,10 +55,12 @@ class Driver {
     if !ctx.reporter.errorsReported && run.suspendedUnits.nonEmpty then
       val suspendedUnits = run.suspendedUnits.toList
       if (ctx.settings.XprintSuspension.value)
+        val suspendedHints = run.suspendedHints.toList
         report.echo(i"compiling suspended $suspendedUnits%, %")
+        for (unit, (hint, atInlining)) <- suspendedHints do
+          report.echo(s"  $unit at ${if atInlining then "inlining" else "typer"}: $hint")
       val run1 = compiler.newRun
-      for unit <- suspendedUnits do unit.suspended = false
-      run1.compileUnits(suspendedUnits)
+      run1.compileSuspendedUnits(suspendedUnits, !run.suspendedAtTyperPhase)
       finish(compiler, run1)(using MacroClassLoader.init(ctx.fresh))
 
   protected def initCtx: Context = (new ContextBase).initialCtx
@@ -77,12 +80,11 @@ class Driver {
     val ictx = rootCtx.fresh
     val summary = command.distill(args, ictx.settings)(ictx.settingsState)(using ictx)
     ictx.setSettings(summary.sstate)
-    Feature.checkExperimentalSettings(using ictx)
     MacroClassLoader.init(ictx)
     Positioned.init(using ictx)
 
     inContext(ictx) {
-      if !ctx.settings.YdropComments.value || ctx.mode.is(Mode.ReadComments) then
+      if !ctx.settings.XdropComments.value || ctx.settings.XreadComments.value then
         ictx.setProperty(ContextDoc, new ContextDocstrings)
       val fileNamesOrNone = command.checkUsage(summary, sourcesRequired)(using ctx.settings)(using ctx.settingsState)
       fileNamesOrNone.map { fileNames =>
@@ -98,24 +100,24 @@ class Driver {
       val newEntries: List[String] = files
         .flatMap { file =>
           if !file.exists then
-            report.error(s"File does not exist: ${file.path}")
+            report.error(em"File does not exist: ${file.path}")
             None
-          else file.extension match
-            case "jar" => Some(file.path)
-            case "tasty" =>
-              TastyFileUtil.getClassPath(file) match
+          else file.ext match
+            case FileExtension.Jar => Some(file.path)
+            case FileExtension.Tasty | FileExtension.Betasty =>
+              TastyFileUtil.getClassPath(file, ctx.withBestEffortTasty) match
                 case Some(classpath) => Some(classpath)
                 case _ =>
-                  report.error(s"Could not load classname from: ${file.path}")
+                  report.error(em"Could not load classname from: ${file.path}")
                   None
             case _ =>
-              report.error(s"File extension is not `tasty` or `jar`: ${file.path}")
+              report.error(em"File extension is not `tasty` or `jar`: ${file.path}")
               None
         }
         .distinct
       val ctx1 = ctx.fresh
       val fullClassPath =
-        (newEntries :+ ctx.settings.classpath.value).mkString(java.io.File.pathSeparator)
+        (newEntries :+ ctx.settings.classpath.value).mkString(java.io.File.pathSeparator.nn)
       ctx1.setSetting(ctx1.settings.classpath, fullClassPath)
     else ctx
 
@@ -129,7 +131,7 @@ class Driver {
    *  The trade-off is that you can only pass a SimpleReporter to this method
    *  and not a normal Reporter which is more powerful.
    *
-   *  Usage example: [[https://github.com/lampepfl/dotty/tree/master/compiler/test/dotty/tools/dotc/InterfaceEntryPointTest.scala]]
+   *  Usage example: [[https://github.com/scala/scala3/tree/master/compiler/test/dotty/tools/dotc/InterfaceEntryPointTest.scala]]
    *
    *  @param args       Arguments to pass to the compiler.
    *  @param simple     Used to log errors, warnings, and info messages.
@@ -138,15 +140,15 @@ class Driver {
    *                    process. No callbacks will be executed if this is `null`.
    *  @return
    */
-  final def process(args: Array[String], simple: interfaces.SimpleReporter,
-    callback: interfaces.CompilerCallback): interfaces.ReporterResult = {
+  final def process(args: Array[String], simple: interfaces.SimpleReporter | Null,
+    callback: interfaces.CompilerCallback | Null): interfaces.ReporterResult = {
     val reporter = if (simple == null) null else Reporter.fromSimpleReporter(simple)
     process(args, reporter, callback)
   }
 
   /** Principal entry point to the compiler.
    *
-   *  Usage example: [[https://github.com/lampepfl/dotty/tree/master/compiler/test/dotty/tools/dotc/EntryPointsTest.scala.disabled]]
+   *  Usage example: [[https://github.com/scala/scala3/tree/master/compiler/test/dotty/tools/dotc/EntryPointsTest.scala.disabled]]
    *  in method `runCompiler`
    *
    *  @param args       Arguments to pass to the compiler.
@@ -157,8 +159,8 @@ class Driver {
    *  @return           The `Reporter` used. Use `Reporter#hasErrors` to check
    *                    if compilation succeeded.
    */
-  final def process(args: Array[String], reporter: Reporter = null,
-    callback: interfaces.CompilerCallback = null): Reporter = {
+  final def process(args: Array[String], reporter: Reporter | Null = null,
+    callback: interfaces.CompilerCallback | Null = null): Reporter = {
     val compileCtx = initCtx.fresh
     if (reporter != null)
       compileCtx.setReporter(reporter)
@@ -175,8 +177,8 @@ class Driver {
    *  the other overloads without worrying about breaking compatibility
    *  with sbt.
    */
-  final def process(args: Array[String]): Reporter =
-    process(args, null: Reporter, null: interfaces.CompilerCallback)
+  def process(args: Array[String]): Reporter =
+    process(args, null: Reporter | Null, null: interfaces.CompilerCallback | Null)
 
   /** Entry point to the compiler using a custom `Context`.
    *
@@ -185,7 +187,7 @@ class Driver {
    *  the other overloads cannot be overridden, instead you
    *  should override this one which they call internally.
    *
-   *  Usage example: [[https://github.com/lampepfl/dotty/tree/master/compiler/test/dotty/tools/dotc/EntryPointsTest.scala.disabled]]
+   *  Usage example: [[https://github.com/scala/scala3/tree/master/compiler/test/dotty/tools/dotc/EntryPointsTest.scala.disabled]]
    *  in method `runCompilerWithContext`
    *
    *  @param args       Arguments to pass to the compiler.

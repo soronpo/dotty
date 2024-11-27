@@ -3,33 +3,35 @@ package dotc
 package core
 package unpickleScala2
 
+import scala.language.unsafeNulls
+
 import java.io.IOException
 import java.lang.Float.intBitsToFloat
 import java.lang.Double.longBitsToDouble
 
-import Contexts._, Symbols._, Types._, Scopes._, SymDenotations._, Names._, NameOps._
-import StdNames._, Denotations._, NameOps._, Flags._, Constants._, Annotations._, Phases._
+import Contexts.*, Symbols.*, Types.*, Scopes.*, SymDenotations.*, Names.*, NameOps.*
+import StdNames.*, Denotations.*, NameOps.*, Flags.*, Constants.*, Annotations.*, Phases.*
 import NameKinds.{Scala2MethodNameKinds, SuperAccessorName, ExpandedName}
-import util.Spans._
-import dotty.tools.dotc.ast.{tpd, untpd}, ast.tpd._
+import util.Spans.*
+import dotty.tools.dotc.ast.{tpd, untpd}, ast.tpd.*
 import ast.untpd.Modifiers
 import backend.sjs.JSDefinitions
-import printing.Texts._
+import printing.Texts.*
 import printing.Printer
 import io.AbstractFile
-import util.common._
+import util.common.*
+import util.NoSourcePosition
 import typer.Checking.checkNonCyclic
-import typer.Nullables._
-import transform.SymUtils._
-import PickleBuffer._
-import PickleFormat._
-import Decorators._
-import TypeApplications._
+import typer.Nullables.*
+import PickleBuffer.*
+import PickleFormat.*
+import Decorators.*
+import TypeApplications.*
 import classfile.ClassfileParser
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.annotation.switch
-import reporting._
+import reporting.*
 
 object Scala2Unpickler {
 
@@ -79,13 +81,17 @@ object Scala2Unpickler {
     val (tparams, TempClassInfoType(parents, decls, clazz)) = info match {
       case TempPolyType(tps, cinfo) => (tps, cinfo)
       case cinfo => (Nil, cinfo)
-    }
+    }: @unchecked
     val ost =
       if (selfInfo eq NoType) && denot.is(ModuleClass) then
         val sourceModule = denot.sourceModule.orElse {
           // For non-toplevel modules, `sourceModule` won't be set when completing
           // the module class, we need to go find it ourselves.
-          NamerOps.findModuleBuddy(cls.name.sourceModuleName, denot.owner.info.decls)
+          val modName = cls.name.sourceModuleName
+          val alternate =
+            if cls.privateWithin.exists && cls.owner.is(Trait) then modName.expandedName(cls.owner)
+            else EmptyTermName
+          NamerOps.findModuleBuddy(modName, denot.owner.info.decls, alternate)
         }
         denot.owner.thisType.select(sourceModule)
       else selfInfo
@@ -125,9 +131,8 @@ object Scala2Unpickler {
 /** Unpickle symbol table information descending from a class and/or module root
  *  from an array of bytes.
  *  @param bytes      bytearray from which we unpickle
- *  @param classroot  the top-level class which is unpickled, or NoSymbol if inapplicable
- *  @param moduleroot the top-level module class which is unpickled, or NoSymbol if inapplicable
- *  @param filename   filename associated with bytearray, only used for error messages
+ *  @param classRoot  the top-level class which is unpickled, or NoSymbol if inapplicable
+ *  @param moduleClassRoot the top-level module class which is unpickled, or NoSymbol if inapplicable
  */
 class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClassRoot: ClassDenotation)(ictx: Context)
   extends PickleBuffer(bytes, 0, -1) with ClassfileParser.Embedded {
@@ -140,7 +145,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
 
   // print("unpickling "); showPickled() // !!! DEBUG
 
-  import Scala2Unpickler._
+  import Scala2Unpickler.*
 
   val moduleRoot: SymDenotation = inContext(ictx) { moduleClassRoot.sourceModule.denot }
   assert(moduleRoot.isTerm)
@@ -233,7 +238,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
   }
 
   /** The `decls` scope associated with given symbol */
-  protected def symScope(sym: Symbol): Scope = symScopes.getOrElseUpdate(sym, newScope)
+  protected def symScope(sym: Symbol): Scope = symScopes.getOrElseUpdate(sym, newScope(0))
 
   /** Does entry represent an (internal) symbol */
   protected def isSymbolEntry(i: Int)(using Context): Boolean = {
@@ -416,7 +421,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
               if (slowSearch(name).exists)
                 System.err.println(i"**** slow search found: ${slowSearch(name)}")
               if (ctx.settings.YdebugMissingRefs.value) Thread.dumpStack()
-              newStubSymbol(owner, name, source)
+              newStubSymbol(owner, name, CompilationUnitInfo(source))
             }
           }
         }
@@ -443,6 +448,20 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
     then
       // skip this member
       return NoSymbol
+
+    // Adapt the flags of getters so they become like vals/vars instead.
+    // The info of this symbol is adapted in the `LocalUnpickler`.
+    if flags.isAllOf(Method | Accessor) && !name.toString().endsWith("_$eq") then
+      flags &~= Method | Accessor
+      if !flags.is(StableRealizable) then flags |= Mutable
+
+    // Skip case accessor `<xyz>$access$<idx>` and keep track of their name to make `<xyz>` the case accessor
+    if flags.is(CaseAccessor) && name.toString().contains("$access$") then
+      val accessorName = name.toString().split('$').head.toTermName // <xyz>
+      symScope(owner) // we assume that the `<xyz>` is listed before the accessor and hence is already entered in the scope
+        .find(decl => decl.isAllOf(ParamAccessor) && decl.name == accessorName)
+        .setFlag(CaseAccessor)
+      return NoSymbol // skip this member
 
     name = name.adjustIfModuleClass(flags)
     if (flags.is(Method))
@@ -495,7 +514,30 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
         sym.setFlag(Scala2x)
       if (!(isRefinementClass(sym) || isUnpickleRoot(sym) || sym.is(Scala2Existential))) {
         val owner = sym.owner
-        if (owner.isClass)
+        val canEnter =
+          owner.isClass &&
+          (!sym.is(TypeParam) ||
+            owner.infoOrCompleter.match
+              case completer: ClassUnpickler =>
+                // Type parameters seen after class initialization are not
+                // actually type parameters of the current class but of some
+                // external class because of the bizarre way in which Scala 2
+                // pickles them (see
+                // https://github.com/scala/scala/blob/aa31e3e6bb945f5d69740d379ede1cd514904109/src/compiler/scala/tools/nsc/symtab/classfile/Pickler.scala#L181-L197).
+                // Make sure we don't enter them in the class otherwise the
+                // compiler will get very confused (testcase in sbt-test/scala2-compat/i12641).
+                // Note: I don't actually know if these stray type parameters
+                // can also show up before initialization, if that's the case
+                // we'll need to study more closely how Scala 2 handles type
+                // parameter unpickling and try to emulate it.
+                !completer.areParamsInitialized
+              case _ =>
+                true) &&
+            // We discard the private val representing a case accessor. We only enter the case accessor def.
+            // We do need to load these symbols to read properly unpickle the annotations on the symbol (see sbt-test/scala2-compat/i19421).
+            !flags.isAllOf(CaseAccessor | PrivateLocal, butNot = Method)
+
+        if (canEnter)
           owner.asClass.enter(sym, symScope(owner))
       }
       sym
@@ -588,14 +630,23 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
             setClassInfo(denot, tp, fromScala2 = true, selfInfo)
             NamerOps.addConstructorProxies(denot.classSymbol)
           case denot =>
-            val tp1 = translateTempPoly(tp)
+            val tp1 = translateTempPoly(tp) match
+              case ExprType(resultType) if !denot.isOneOf(Param | Method) =>
+                // Adapt the flags of getters so they become like vals/vars instead.
+                // This is the `def` of an accessor that needs to be transformed into
+                // a `val`/`var`. Note that the `Method | Accessor` flags were already
+                // striped away in `readDisambiguatedSymbol`.
+                resultType
+              case tp1 => tp1
             denot.info =
               if (tag == ALIASsym) TypeAlias(tp1)
               else if (denot.isType) checkNonCyclic(denot.symbol, tp1, reportErrors = false)
                 // we need the checkNonCyclic call to insert LazyRefs for F-bounded cycles
               else if (!denot.is(Param)) tp1.translateFromRepeated(toArray = false)
               else tp1
-            if (denot.isConstructor) addConstructorTypeParams(denot)
+            if (denot.isConstructor)
+              denot.owner.setStableConstructor()
+              addConstructorTypeParams(denot)
             if (atEnd)
               assert(!denot.symbol.isSuperAccessor, denot)
             else {
@@ -625,23 +676,30 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
   object localMemberUnpickler extends LocalUnpickler
 
   class ClassUnpickler(infoRef: Int) extends LocalUnpickler with TypeParamsCompleter {
-    private def readTypeParams()(using Context): List[TypeSymbol] = {
+    private var myTypeParams: List[TypeSymbol] = null
+
+    private def readTypeParams()(using Context): Unit = {
       val tag = readByte()
       val end = readNat() + readIndex
-      if (tag == POLYtpe) {
-        val unusedRestpeRef = readNat()
-        until(end, () => readSymbolRef()(using ctx)).asInstanceOf[List[TypeSymbol]]
-      }
-      else Nil
+      myTypeParams =
+        if (tag == POLYtpe) {
+          val unusedRestpeRef = readNat()
+          until(end, () => readSymbolRef()(using ctx)).asInstanceOf[List[TypeSymbol]]
+        } else Nil
     }
-    private def loadTypeParams(using Context) =
+    private def loadTypeParams()(using Context) =
       atReadPos(index(infoRef), () => readTypeParams()(using ctx))
 
+    /** Have the type params of this class already been unpickled? */
+    def areParamsInitialized: Boolean = myTypeParams ne null
+
     /** Force reading type params early, we need them in setClassInfo of subclasses. */
-    def init()(using Context): List[TypeSymbol] = loadTypeParams
+    def init()(using Context): List[TypeSymbol] =
+      if !areParamsInitialized then loadTypeParams()
+      myTypeParams
 
     override def completerTypeParams(sym: Symbol)(using Context): List[TypeSymbol] =
-      loadTypeParams
+      init()
   }
 
   def rootClassUnpickler(start: Coord, cls: Symbol, module: Symbol, infoRef: Int): ClassUnpickler =
@@ -673,7 +731,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
     }
     // Cannot use standard `existsPart` method because it calls `lookupRefined`
     // which can cause CyclicReference errors.
-    val isBoundAccumulator = new ExistsAccumulator(isBound, stopAtStatic = true, forceLazy = true):
+    val isBoundAccumulator = new ExistsAccumulator(isBound, StopAt.Static, forceLazy = true):
       override def foldOver(x: Boolean, tp: Type): Boolean = tp match
         case tp: TypeRef => applyToPrefix(x, tp)
         case _ => super.foldOver(x, tp)
@@ -694,8 +752,8 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
             val info1 = info.symbol.info
             assert(info1.derivesFrom(defn.SingletonClass))
             RefinedType(parent1, name, info1.mapReduceAnd(removeSingleton)(_ & _))
-          case info =>
-            tp.derivedRefinedType(parent1, name, info)
+          case _ =>
+            tp.derivedRefinedType(parent = parent1)
         }
       case tp @ AppliedType(tycon, args) =>
         val tycon1 = tycon.safeDealias
@@ -712,7 +770,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
       val anyTypes = boundSyms map (_ => defn.AnyType)
       val boundBounds = boundSyms map (_.info.bounds.hi)
       val tp2 = tp1.subst(boundSyms, boundBounds).subst(boundSyms, anyTypes)
-      report.warning(FailureToEliminateExistential(tp, tp1, tp2, boundSyms))
+      report.warning(FailureToEliminateExistential(tp, tp1, tp2, boundSyms, classRoot.symbol), NoSourcePosition)
       tp2
     }
     else tp1
@@ -791,8 +849,9 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
           // special-case in erasure, see TypeErasure#eraseInfo.
           OrType(args(0), args(1), soft = false)
         }
-        else if (args.nonEmpty) tycon.safeAppliedTo(EtaExpandIfHK(sym.typeParams, args.map(translateTempPoly)))
-        else if (sym.typeParams.nonEmpty) tycon.EtaExpand(sym.typeParams)
+        else if args.nonEmpty then
+          tycon.safeAppliedTo(EtaExpandIfHK(sym.typeParams, args.map(translateTempPoly)))
+        else if (sym.typeParams.nonEmpty) tycon.etaExpand
         else tycon
       case TYPEBOUNDStpe =>
         val lo = readTypeRef()
@@ -820,6 +879,12 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
         val maker = MethodType.companion(
           isImplicit = tag == IMPLICITMETHODtpe || params.nonEmpty && params.head.is(Implicit))
         val result = maker.fromSymbols(params, restpe)
+        result.resType match
+          case restpe1: MethodType if restpe1 ne restpe =>
+            val prevResParams = paramsOfMethodType.remove(restpe)
+            if prevResParams != null then
+              paramsOfMethodType.put(restpe1, prevResParams)
+          case _ =>
         if params.nonEmpty then paramsOfMethodType.put(result, params)
         result
       case POLYtpe =>
@@ -926,33 +991,33 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
   /** Read an annotation argument, which is pickled either
    *  as a Constant or a Tree.
    */
-  protected def readAnnotArg(i: Int)(using Context): Tree = bytes(index(i)) match {
+  protected def readAnnotArg(i: Int)(using Context): untpd.Tree = untpd.TypedSplice(bytes(index(i)) match
     case TREE => at(i, () => readTree())
     case _ => at(i, () =>
       readConstant() match
         case c: Constant => Literal(c)
         case tp: TermRef => ref(tp)
     )
-  }
+  )
 
   /** Read a ClassfileAnnotArg (argument to a classfile annotation)
    */
-  private def readArrayAnnotArg()(using Context): Tree = {
+  private def readArrayAnnotArg()(using Context): untpd.Tree = {
     readByte() // skip the `annotargarray` tag
     val end = readNat() + readIndex
     // array elements are trees representing instances of scala.annotation.Annotation
-    SeqLiteral(
+    untpd.JavaSeqLiteral(
       until(end, () => readClassfileAnnotArg(readNat())),
-      TypeTree(defn.AnnotationClass.typeRef))
+      untpd.TypeTree())
   }
 
-  private def readAnnotInfoArg()(using Context): Tree = {
+  private def readAnnotInfoArg()(using Context): untpd.Tree = untpd.TypedSplice {
     readByte() // skip the `annotinfo` tag
     val end = readNat() + readIndex
     readAnnotationContents(end)
   }
 
-  protected def readClassfileAnnotArg(i: Int)(using Context): Tree = bytes(index(i)) match {
+  protected def readClassfileAnnotArg(i: Int)(using Context): untpd.Tree = bytes(index(i)) match {
     case ANNOTINFO => at(i, () => readAnnotInfoArg())
     case ANNOTARGARRAY => at(i, () => readArrayAnnotArg())
     case _ => readAnnotArg(i)
@@ -964,7 +1029,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
   protected def readAnnotationContents(end: Int)(using Context): Tree = {
     val atp = readTypeRef()
     val args = {
-      val t = new ListBuffer[Tree]
+      val t = new ListBuffer[untpd.Tree]
 
       while (readIndex != end) {
         val argref = readNat()
@@ -972,14 +1037,14 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
           if (isNameEntry(argref)) {
             val name = at(argref, () => readName())
             val arg = readClassfileAnnotArg(readNat())
-            NamedArg(name.asTermName, arg)
+            untpd.NamedArg(name.asTermName, arg)
           }
           else readAnnotArg(argref)
         }
       }
       t.toList
     }
-    resolveConstructor(atp, args)
+    untpd.resolveConstructor(atp, args)
   }
 
   /** Read an annotation and as a side effect store it into
@@ -1066,7 +1131,7 @@ class Scala2Unpickler(bytes: Array[Byte], classRoot: ClassDenotation, moduleClas
         val tparams = until(end, () => readTypeDefRef())
         val cls = symbol.asClass
         val ((constr: DefDef) :: Nil, stats) =
-          impl.body.partition(_.symbol == cls.primaryConstructor)
+          impl.body.partition(_.symbol == cls.primaryConstructor): @unchecked
         ClassDef(cls, constr, tparams ++ stats)
 
       case MODULEtree =>

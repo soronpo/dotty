@@ -3,7 +3,7 @@ package dotty.tools.languageserver.util
 import dotty.tools.languageserver.util.embedded.{CodeInRange, CodeMarker}
 import dotty.tools.languageserver.util.server.TestFile
 
-import org.eclipse.lsp4j._
+import org.eclipse.lsp4j.{Location, Range, SymbolKind}
 
 import PositionContext._
 
@@ -14,7 +14,7 @@ import PositionContext._
  * @param end   The end marker.
  */
 case class CodeRange(start: CodeMarker, end: CodeMarker) {
-  private[this] var checked = false
+  private var checked = false
   def check(): PosCtx[Unit] = {
     if (!checked) {
       assert(start.file == end.file, s"$start and $end where not in the same file")

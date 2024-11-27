@@ -2,8 +2,10 @@ package dotty.tools
 package dotc
 package util
 
+import scala.language.unsafeNulls
+
 import printing.{Showable, Printer}
-import printing.Texts._
+import printing.Texts.*
 import core.Contexts.Context
 import Spans.{Span, NoSpan}
 import scala.annotation.internal.sharable
@@ -68,7 +70,7 @@ extends SrcPos, interfaces.SourcePosition, Showable {
     if outer == null || outer == NoSourcePosition then this else outer.outermost
 
   /** Inner most position that is contained within the `outermost` position.
-   *  Most precise position that that comes from the call site.
+   *  Most precise position that comes from the call site.
    */
   def nonInlined: SourcePosition = {
     val om = outermost
@@ -76,7 +78,6 @@ extends SrcPos, interfaces.SourcePosition, Showable {
       if om.contains(self) then self else rec(self.outer)
     rec(this)
   }
-
 
   override def toString: String =
     s"${if (source.exists) source.file.toString else "(no source)"}:$span"

@@ -4,33 +4,96 @@ package site
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.`type`.TypeReference;
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import java.util.Optional
+import scala.beans._
+import java.nio.file.{Files, Paths}
+import scala.io.Source
 
 enum Sidebar:
-  val title: String
-  case Category(title: String, nested: List[Sidebar])
-  case Page(title: String, url: String)
+  case Category(
+    title: Option[String],
+    indexPath: Option[String],
+    nested: List[Sidebar],
+    directory: Option[String]
+  )
+  case Page(title: Option[String], pagePath: String, hidden: Boolean)
 
 object Sidebar:
-  case class RawInput(var title: String,var url: String, var subsection: JList[RawInput]):
-    def this() = this("", "", JList())
+  case class RawInput(
+    @BeanProperty var title: String,
+    @BeanProperty var page: String,
+    @BeanProperty var index: String,
+    @BeanProperty var subsection: JList[RawInput],
+    @BeanProperty var directory: String,
+    @BooleanBeanProperty var hidden: Boolean
+  ):
+    def this() = this("", "", "", JList(), "", false)
 
-    def setTitle(t: String) = this.title = t
-    def setUrl(u: String) = this.url = u
-    def setSubsection(l: JList[RawInput]) = this.subsection = l
+  private object RawInputTypeRef extends TypeReference[RawInput]
 
-  type RawInnerTpe = JMap[String, JList[RawInput]]
-  private object RawTypeRef extends TypeReference[RawInnerTpe]
+  private def toSidebar(r: RawInput, content: String | java.io.File)(using CompilerContext): Sidebar = r match
+    case RawInput(title, page, index, subsection, dir, hidden) if page.nonEmpty && index.isEmpty && subsection.isEmpty() =>
+      val pagePath = content match 
+        case f: java.io.File => 
+          val pagePath = f.toPath()
+                          .getParent()
+                          .resolve(s"_docs/$page")
+          if !Files.exists(pagePath) then
+            report.error(s"Page $page does not exist.")               
+        case s: String => None
+      Sidebar.Page(Option.when(title.nonEmpty)(title), page, hidden)
+    case RawInput(title, page, index, subsection, dir, hidden) if page.isEmpty && (!subsection.isEmpty() || !index.isEmpty()) =>
+      Sidebar.Category(Option.when(title.nonEmpty)(title), Option.when(index.nonEmpty)(index), subsection.asScala.map(toSidebar(_, content)).toList, Option.when(dir.nonEmpty)(dir))
+    case RawInput(title, page, index, subsection, dir, hidden) =>
+      if title.isEmpty() && index.isEmpty() then
+        val msg = "`title` property is missing for some page."
+        report.error(s"$msg\n$schemaMessage")
+      else if title.nonEmpty && (page.isEmpty() || index.isEmpty()) then
+        val msg = s"Error parsing YAML configuration file: 'index' or 'page' path is missing for title '$title'."
+        report.error(s"$msg\n$schemaMessage")
+      else
+        val msg = "Problem when parsing YAML configuration file."
+        report.warning(s"$msg\n$schemaMessage")
+      Sidebar.Page(None, page, hidden)
 
-  private def toSidebar(r: RawInput): Sidebar = r match
-    case RawInput(title, url, list) if title.nonEmpty && url.nonEmpty && list.isEmpty() =>
-      Sidebar.Page(title, url)
-    case RawInput(title, url, list) if title.nonEmpty && url.isEmpty && !list.isEmpty() =>
-      Sidebar.Category(title, list.asScala.map(toSidebar).toList)
+  def schemaMessage: String =
+    s"""Static site YAML configuration file should comply with the following description:
+      |The root element of static site needs to be <subsection>
+      |`title` and `directory` properties are ignored in root subsection.
+      |
+      |<subsection>:
+      |  title: <string> # optional - Default value is file name. Title can be also set using front-matter.
+      |  index: <string> # optional - If not provided, default empty index template is generated.
+      |  directory: <string> # optional - By default, directory name is title name in kebab case.
+      |  subsection: # optional - If not provided, pages are loaded from the index directory
+      |    - <subsection> | <page>
+      |  # either index or subsection needs to be present
+      |<page>:
+      |  title: <string> # optional - Default value is file name. Title can be also set using front-matter.
+      |  page: <string>
+      |  hidden: <boolean> # optional - Default value is false.
+      |
+      |For more information visit:
+      |https://docs.scala-lang.org/scala3/guides/scaladoc/static-site.html""".stripMargin
 
-  def load(content: String): Seq[Sidebar] =
+  def load(content: String | java.io.File)(using CompilerContext): Sidebar.Category =
+    import scala.util.Try
     val mapper = ObjectMapper(YAMLFactory())
-    val raw: RawInnerTpe = mapper.readValue(content, RawTypeRef)
+    def readValue = content match
+      case s: String => mapper.readValue(s, RawInputTypeRef)
+      case f: java.io.File => mapper.readValue(f, RawInputTypeRef)
 
-    raw.get("sidebar").asScala.toList.map(toSidebar)
+    val root: RawInput = Try(readValue)
+      .fold(
+        { e =>
+          report.warn(schemaMessage, e)
+          new RawInput()
+        },
+        identity
+      )
+    toSidebar(root, content) match
+      case c: Sidebar.Category => c
+      case _ =>
+        report.error(s"Root element is not a subsection.\n$schemaMessage")
+        Sidebar.Category(None, None, List.empty, None)

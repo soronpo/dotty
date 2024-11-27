@@ -4,6 +4,8 @@
 package dotty.tools.dotc
 package classpath
 
+import scala.language.unsafeNulls
+
 import java.io.File
 import java.net.URL
 import java.nio.file.Files
@@ -11,9 +13,8 @@ import java.nio.file.attribute.{BasicFileAttributes, FileTime}
 
 import scala.annotation.tailrec
 import dotty.tools.io.{AbstractFile, ClassPath, ClassRepresentation, FileZipArchive, ManifestResources}
-import dotty.tools.dotc.core.Contexts._
-import FileUtils._
-import util._
+import dotty.tools.dotc.core.Contexts.*
+import FileUtils.*
 
 /**
  * A trait providing an optional cache for classpath entries obtained from zip and jar files.
@@ -24,7 +25,7 @@ sealed trait ZipAndJarFileLookupFactory {
   private val cache = new FileBasedCache[ClassPath]
 
   def create(zipFile: AbstractFile)(using Context): ClassPath =
-    val release = Option(ctx.settings.release.value).filter(_.nonEmpty)
+    val release = Option(ctx.settings.javaOutputVersion.value).filter(_.nonEmpty)
     if (ctx.settings.YdisableFlatCpCaching.value || zipFile.file == null) createForZipFile(zipFile, release)
     else createUsingCache(zipFile, release)
 
@@ -40,24 +41,19 @@ sealed trait ZipAndJarFileLookupFactory {
  */
 object ZipAndJarClassPathFactory extends ZipAndJarFileLookupFactory {
   private case class ZipArchiveClassPath(zipFile: File, override val release: Option[String])
-    extends ZipArchiveFileLookup[ClassFileEntryImpl]
+    extends ZipArchiveFileLookup[BinaryFileEntry]
     with NoSourcePaths {
 
-    override def findClassFile(className: String): Option[AbstractFile] = {
+    override def findClassFile(className: String): Option[AbstractFile] =
       val (pkg, simpleClassName) = PackageNameUtils.separatePkgAndClassNames(className)
       file(PackageName(pkg), simpleClassName + ".class").map(_.file)
-    }
 
-    // This method is performance sensitive as it is used by SBT's ExtractDependencies phase.
-    override def findClass(className: String): Option[ClassRepresentation] = {
-      val (pkg, simpleClassName) = PackageNameUtils.separatePkgAndClassNames(className)
-      file(PackageName(pkg), simpleClassName + ".class")
-    }
+    override private[dotty] def classes(inPackage: PackageName): Seq[BinaryFileEntry] = files(inPackage)
 
-    override private[dotty] def classes(inPackage: PackageName): Seq[ClassFileEntry] = files(inPackage)
+    override protected def createFileEntry(file: FileZipArchive#Entry): BinaryFileEntry = BinaryFileEntry(file)
 
-    override protected def createFileEntry(file: FileZipArchive#Entry): ClassFileEntryImpl = ClassFileEntryImpl(file)
-    override protected def isRequiredFileType(file: AbstractFile): Boolean = file.isClass
+    override protected def isRequiredFileType(file: AbstractFile): Boolean =
+      file.isTasty || (file.isClass && !file.hasSiblingTasty)
   }
 
   /**
@@ -127,10 +123,10 @@ object ZipAndJarClassPathFactory extends ZipAndJarFileLookupFactory {
         subpackages.map(packageFile => PackageEntryImpl(inPackage.entryName(packageFile.name)))
     }
 
-    override private[dotty] def classes(inPackage: PackageName): Seq[ClassFileEntry] = cachedPackages.get(inPackage.dottedString) match {
+    override private[dotty] def classes(inPackage: PackageName): Seq[BinaryFileEntry] = cachedPackages.get(inPackage.dottedString) match {
       case None => Seq.empty
       case Some(PackageFileInfo(pkg, _)) =>
-        (for (file <- pkg if file.isClass) yield ClassFileEntryImpl(file)).toSeq
+        (for (file <- pkg if file.isClass) yield ClassFileEntry(file)).toSeq
     }
 
     override private[dotty] def hasPackage(pkg: PackageName) = cachedPackages.contains(pkg.dottedString)
@@ -161,16 +157,16 @@ object ZipAndJarClassPathFactory extends ZipAndJarFileLookupFactory {
  */
 object ZipAndJarSourcePathFactory extends ZipAndJarFileLookupFactory {
   private case class ZipArchiveSourcePath(zipFile: File)
-    extends ZipArchiveFileLookup[SourceFileEntryImpl]
+    extends ZipArchiveFileLookup[SourceFileEntry]
     with NoClassPaths {
-    
+
     def release: Option[String] = None
 
     override def asSourcePathString: String = asClassPathString
 
     override private[dotty] def sources(inPackage: PackageName): Seq[SourceFileEntry] = files(inPackage)
 
-    override protected def createFileEntry(file: FileZipArchive#Entry): SourceFileEntryImpl = SourceFileEntryImpl(file)
+    override protected def createFileEntry(file: FileZipArchive#Entry): SourceFileEntry = SourceFileEntry(file)
     override protected def isRequiredFileType(file: AbstractFile): Boolean = file.isScalaOrJavaSource
   }
 

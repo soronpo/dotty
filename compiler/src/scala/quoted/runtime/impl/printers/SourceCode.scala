@@ -19,7 +19,7 @@ object SourceCode {
     symbol.fullName
 
   def showFlags(using Quotes)(flags: quotes.reflect.Flags)(syntaxHighlight: SyntaxHighlight): String = {
-    import quotes.reflect._
+    import quotes.reflect.*
     val flagList = List.newBuilder[String]
     if (flags.is(Flags.Abstract)) flagList += "abstract"
     if (flags.is(Flags.Artifact)) flagList += "artifact"
@@ -52,12 +52,11 @@ object SourceCode {
     if (flags.is(Flags.Param)) flagList += "param"
     if (flags.is(Flags.ParamAccessor)) flagList += "paramAccessor"
     if (flags.is(Flags.Private)) flagList += "private"
-    if (flags.is(Flags.PrivateLocal)) flagList += "private[this]"
+    if (flags.is(Flags.PrivateLocal)) flagList += "private"
     if (flags.is(Flags.Protected)) flagList += "protected"
     if (flags.is(Flags.Scala2x)) flagList += "scala2x"
     if (flags.is(Flags.Sealed)) flagList += "sealed"
     if (flags.is(Flags.StableRealizable)) flagList += "stableRealizable"
-    if (flags.is(Flags.Static)) flagList += "javaStatic"
     if (flags.is(Flags.Synthetic)) flagList += "synthetic"
     if (flags.is(Flags.Trait)) flagList += "trait"
     if (flags.is(Flags.Transparent)) flagList += "transparent"
@@ -65,12 +64,12 @@ object SourceCode {
   }
 
   private class SourceCodePrinter[Q <: Quotes & Singleton](syntaxHighlight: SyntaxHighlight, fullNames: Boolean)(using val quotes: Q) {
-    import syntaxHighlight._
-    import quotes.reflect._
+    import syntaxHighlight.*
+    import quotes.reflect.*
 
-    private[this] val sb: StringBuilder = new StringBuilder
+    private val sb: StringBuilder = new StringBuilder
 
-    private[this] var indent: Int = 0
+    private var indent: Int = 0
     private def indented(printIndented: => Unit): Unit = {
       indent += 1
       printIndented
@@ -159,7 +158,7 @@ object SourceCode {
           for paramClause <- paramss do
             paramClause match
               case TermParamClause(params) =>
-                printArgsDefs(params)
+                printMethdArgsDefs(params)
               case TypeParamClause(params) =>
                 printTargsDefs(stats.collect { case targ: TypeDef => targ  }.filter(_.symbol.isTypeParam).zip(params))
         }
@@ -189,7 +188,7 @@ object SourceCode {
           case Select(newTree: New, _) =>
             printType(newTree.tpe)(using Some(cdef.symbol))
           case parent: Term =>
-            throw new MatchError(parent.show(using Printer.TreeStructure))
+            cannotBeShownAsSource(parent.show(using Printer.TreeStructure))
         }
 
         def printSeparated(list: List[Tree /* Term | TypeTree */]): Unit = list match {
@@ -230,7 +229,7 @@ object SourceCode {
           this += " {"
           indented {
             if (printSelf) {
-              val Some(ValDef(name, tpt, _)) = self
+              val Some(ValDef(name, tpt, _)) = self: @unchecked
               indented {
                 val name1 = if (name == "_") "this" else name
                 this += " " += highlightValDef(name1) += ": "
@@ -314,7 +313,7 @@ object SourceCode {
         this += highlightKeyword("def ") += highlightValDef(name1)
         for clause <-  paramss do
           clause match
-            case TermParamClause(params) => printArgsDefs(params)
+            case TermParamClause(params) => printMethdArgsDefs(params)
             case TypeParamClause(params) => printTargsDefs(params.zip(params))
         if (!isConstructor) {
           this += ": "
@@ -328,7 +327,7 @@ object SourceCode {
         }
         this
 
-      case Ident("_") =>
+      case Wildcard() =>
         this += "_"
 
       case tree: Ident =>
@@ -461,7 +460,7 @@ object SourceCode {
 
       case tree @ Lambda(params, body) =>  // must come before `Block`
         inParens {
-          printArgsDefs(params)
+          printLambdaArgsDefs(params)
           this += (if tree.tpe.isContextFunctionType then " ?=> " else  " => ")
           printTree(body)
         }
@@ -530,11 +529,14 @@ object SourceCode {
       case Closure(meth, _) =>
         printTree(meth)
 
-      case _:Unapply | _:Alternatives | _:Bind =>
+      case _:TypedOrTest | _:Unapply | _:Alternatives | _:Bind =>
         printPattern(tree)
 
+      case tree: CaseDef =>
+        printCaseDef(tree)
+
       case _ =>
-        throw new MatchError(tree.show(using Printer.TreeStructure))
+        cannotBeShownAsSource(tree.show(using Printer.TreeStructure))
 
     }
 
@@ -802,29 +804,37 @@ object SourceCode {
       }
     }
 
-    private def printArgsDefs(args: List[ValDef])(using elideThis: Option[Symbol]): Unit = {
+    private def printSeparatedParamDefs(list: List[ValDef])(using elideThis: Option[Symbol]): Unit = list match {
+      case Nil =>
+      case x :: Nil => printParamDef(x)
+      case x :: xs =>
+        printParamDef(x)
+        this += ", "
+        printSeparatedParamDefs(xs)
+    }
+
+    private def printMethdArgsDefs(args: List[ValDef])(using elideThis: Option[Symbol]): Unit = {
       val argFlags = args match {
         case Nil => Flags.EmptyFlags
         case arg :: _ => arg.symbol.flags
       }
-      if (argFlags.is(Flags.Erased | Flags.Given)) {
-        if (argFlags.is(Flags.Given)) this += " given"
-        if (argFlags.is(Flags.Erased)) this += " erased"
-        this += " "
+      inParens {
+        if (argFlags.is(Flags.Implicit) && !argFlags.is(Flags.Given)) this += "implicit "
+        if (argFlags.is(Flags.Given)) this += "using "
+
+        printSeparatedParamDefs(args)
+      }
+    }
+
+    private def printLambdaArgsDefs(args: List[ValDef])(using elideThis: Option[Symbol]): Unit = {
+      val argFlags = args match {
+        case Nil => Flags.EmptyFlags
+        case arg :: _ => arg.symbol.flags
       }
       inParens {
         if (argFlags.is(Flags.Implicit) && !argFlags.is(Flags.Given)) this += "implicit "
 
-        def printSeparated(list: List[ValDef]): Unit = list match {
-          case Nil =>
-          case x :: Nil => printParamDef(x)
-          case x :: xs =>
-            printParamDef(x)
-            this += ", "
-            printSeparated(xs)
-        }
-
-        printSeparated(args)
+        printSeparatedParamDefs(args)
       }
     }
 
@@ -844,8 +854,11 @@ object SourceCode {
     private def printParamDef(arg: ValDef)(using elideThis: Option[Symbol]): Unit = {
       val name = splicedName(arg.symbol).getOrElse(arg.symbol.name)
       val sym = arg.symbol.owner
+
+      if (arg.symbol.flags.is(Flags.Erased)) this += "erased "
+
       if sym.isDefDef && sym.name == "<init>" then
-        val ClassDef(_, _, _, _, body) = sym.owner.tree
+        val ClassDef(_, _, _, _, body) = sym.owner.tree: @unchecked
         body.collectFirst {
           case vdef @ ValDef(`name`, _, _) if vdef.symbol.flags.is(Flags.ParamAccessor) =>
             if (!vdef.symbol.flags.is(Flags.Local)) {
@@ -896,13 +909,13 @@ object SourceCode {
     }
 
     private def printPattern(pattern: Tree): this.type = pattern match {
-      case Ident("_") =>
+      case Wildcard() =>
         this += "_"
 
-      case Bind(name, Ident("_")) =>
+      case Bind(name, Wildcard()) =>
         this += name
 
-      case Bind(name, Typed(Ident("_"), tpt)) =>
+      case Bind(name, Typed(Wildcard(), tpt)) =>
         this += highlightValDef(name) += ": "
         printTypeTree(tpt)
 
@@ -921,22 +934,26 @@ object SourceCode {
           case Ident("unapply" | "unapplySeq") =>
             this += fun.symbol.owner.fullName.stripSuffix("$")
           case _ =>
-            throw new MatchError(fun.show(using Printer.TreeStructure))
+            cannotBeShownAsSource(fun.show(using Printer.TreeStructure))
         }
         inParens(printPatterns(patterns, ", "))
 
       case Alternatives(trees) =>
         inParens(printPatterns(trees, " | "))
 
-      case Typed(Ident("_"), tpt) =>
-        this += "_: "
-        printTypeTree(tpt)
+      case TypedOrTest(tree1, tpt) =>
+        tree1 match
+          case Wildcard() =>
+            this += "_: "
+            printTypeTree(tpt)
+          case _ =>
+            printPattern(tree1)
 
       case v: Term =>
         printTree(v)
 
       case _ =>
-        throw new MatchError(pattern.show(using Printer.TreeStructure))
+        cannotBeShownAsSource(pattern.show(using Printer.TreeStructure))
 
     }
 
@@ -1029,10 +1046,10 @@ object SourceCode {
         inSquare(printTrees(args, ", "))
 
       case Annotated(tpt, annot) =>
-        val Annotation(ref, args) = annot
+        val Annotation(ref, args) = annot: @unchecked
         ref.tpe match {
           case tpe: TypeRef if tpe.typeSymbol == Symbol.requiredClass("scala.annotation.internal.Repeated") =>
-            val Types.Sequence(tp) = tpt.tpe
+            val Types.Sequence(tp) = tpt.tpe: @unchecked
             printType(tp)
             this += highlightTypeDef("*")
           case _ =>
@@ -1052,7 +1069,7 @@ object SourceCode {
 
       case LambdaTypeTree(tparams, body) =>
         printTargsDefs(tparams.zip(tparams), isDef = false)
-        this += highlightTypeDef(" => ")
+        this += highlightTypeDef(" =>> ")
         printTypeOrBoundsTree(body)
 
       case TypeBind(name, _) =>
@@ -1062,7 +1079,7 @@ object SourceCode {
         printTypeTree(tpt)
 
       case _ =>
-        throw new MatchError(tree.show(using Printer.TreeStructure))
+        cannotBeShownAsSource(tree.show(using Printer.TreeStructure))
 
     }
 
@@ -1133,12 +1150,23 @@ object SourceCode {
           case tp: TypeRef if tp.typeSymbol == Symbol.requiredClass("scala.<repeated>") =>
             this += "_*"
           case _ =>
-            printType(tp)
-            inSquare(printTypesOrBounds(args, ", "))
+            if !fullNames && args.lengthCompare(2) == 0 && tp.typeSymbol.flags.is(Flags.Infix) then
+              val lhs = args(0)
+              val rhs = args(1)
+              this += "("
+              printType(lhs)
+              this += " "
+              printType(tp)
+              this += " "
+              printType(rhs)
+              this += ")"
+            else
+              printType(tp)
+              inSquare(printTypesOrBounds(args, ", "))
         }
 
       case AnnotatedType(tp, annot) =>
-        val Annotation(ref, args) = annot
+        val Annotation(ref, args) = annot: @unchecked
         printType(tp)
         this += " "
         printAnnotation(annot)
@@ -1183,12 +1211,12 @@ object SourceCode {
         }
 
       case SuperType(thistpe, supertpe) =>
-        printType(supertpe)
+        printType(thistpe)
         this += highlightTypeDef(".super")
 
       case TypeLambda(paramNames, tparams, body) =>
         inSquare(printMethodicTypeParams(paramNames, tparams))
-        this += highlightTypeDef(" => ")
+        this += highlightTypeDef(" =>> ")
         printType(body)
 
       case ParamRef(lambda, idx) =>
@@ -1218,21 +1246,25 @@ object SourceCode {
         this += "]"
         printType(tpe.resType)
 
-      case tpe: TypeLambda =>
-        this += "["
-        printList(tpe.paramNames.zip(tpe.paramBounds), ", ",
-          (x: (String, TypeBounds)) => (this += x._1 += " ").printType(x._2))
-        this += "] => "
-        printType(tpe.resType)
-
       case tpe@TypeBounds(lo, hi) =>
         this += "_ >: "
         printType(lo)
         this += " <: "
         printType(hi)
 
+      case MatchCase(pat, rhs) =>
+        this += "case "
+        printType(pat)
+        this += " => "
+        printType(rhs)
+
+      case FlexibleType(tp) =>
+        this += "("
+        printType(tp)
+        this += ")?"
+
       case _ =>
-        throw new MatchError(tpe.show(using Printer.TypeReprStructure))
+        cannotBeShownAsSource(tpe.show(using Printer.TypeReprStructure))
     }
 
     private def printSelector(sel: Selector): this.type = sel match {
@@ -1256,7 +1288,7 @@ object SourceCode {
     }
 
     private def printAnnotation(annot: Term)(using elideThis: Option[Symbol]): this.type = {
-      val Annotation(ref, args) = annot
+      val Annotation(ref, args) = annot: @unchecked
       this += "@"
       printTypeTree(ref)
       if (args.isEmpty)
@@ -1271,7 +1303,9 @@ object SourceCode {
           val sym = annot.tpe.typeSymbol
           sym != Symbol.requiredClass("scala.forceInline") &&
           sym.maybeOwner != Symbol.requiredPackage("scala.annotation.internal")
-        case x => throw new MatchError(x.show(using Printer.TreeStructure))
+        case x =>
+          cannotBeShownAsSource(x.show(using Printer.TreeStructure))
+          false
       }
       printAnnotations(annots)
       if (annots.nonEmpty) this += " "
@@ -1340,18 +1374,22 @@ object SourceCode {
     }
 
     private def printBoundsTree(bounds: TypeBoundsTree)(using elideThis: Option[Symbol]): this.type = {
-      bounds.low match {
-        case Inferred() =>
-        case low =>
-          this += " >: "
-          printTypeTree(low)
-      }
-      bounds.hi match {
-        case Inferred() => this
-        case hi =>
-          this += " <: "
-          printTypeTree(hi)
-      }
+      if bounds.low.tpe == bounds.hi.tpe then
+        this += " = "
+        printTypeTree(bounds.low)
+      else
+        bounds.low match {
+          case Inferred() =>
+          case low =>
+            this += " >: "
+            printTypeTree(low)
+        }
+        bounds.hi match {
+          case Inferred() => this
+          case hi =>
+            this += " <: "
+            printTypeTree(hi)
+        }
     }
 
     private def printBounds(bounds: TypeBounds)(using elideThis: Option[Symbol]): this.type = {
@@ -1363,28 +1401,24 @@ object SourceCode {
 
     private def printProtectedOrPrivate(definition: Definition): Boolean = {
       var prefixWasPrinted = false
-      def printWithin(within: TypeRepr) = within match {
-        case TypeRef(_, name) => this += name
-        case _ => printFullClassName(within)
-      }
-      if (definition.symbol.flags.is(Flags.Protected)) {
+      def printWithin(within: Option[TypeRepr]) = within match
+        case _ if definition.symbol.flags.is(Flags.Local) => inSquare(this += "this")
+        case Some(TypeRef(_, name)) => inSquare(this += name)
+        case Some(within) => inSquare(printFullClassName(within))
+        case _ =>
+
+      if definition.symbol.flags.is(Flags.Protected) then
         this += highlightKeyword("protected")
-        definition.symbol.protectedWithin match {
-          case Some(within) =>
-            inSquare(printWithin(within))
-          case _ =>
-        }
+        printWithin(definition.symbol.protectedWithin)
         prefixWasPrinted = true
-      } else {
-        definition.symbol.privateWithin match {
-          case Some(within) =>
-            this += highlightKeyword("private")
-            inSquare(printWithin(within))
-            prefixWasPrinted = true
-          case _ =>
-        }
-      }
-      if (prefixWasPrinted)
+      else
+        val privateWithin = definition.symbol.privateWithin
+        if privateWithin.isDefined || definition.symbol.flags.is(Flags.Private) then
+          this += highlightKeyword("private")
+          printWithin(definition.symbol.privateWithin)
+          prefixWasPrinted = true
+
+      if prefixWasPrinted then
         this += " "
       prefixWasPrinted
     }
@@ -1396,7 +1430,7 @@ object SourceCode {
           this += name += "."
         case _ =>
       }
-      val TypeRef(prefix, name) = tp
+      val TypeRef(prefix, name) = tp: @unchecked
       printClassPrefix(prefix)
       this += name
     }
@@ -1420,13 +1454,13 @@ object SourceCode {
       case '"' => "\\\""
       case '\'' => "\\\'"
       case '\\' => "\\\\"
-      case _ => if (ch.isControl) "\\0" + Integer.toOctalString(ch) else String.valueOf(ch)
+      case _ => if ch.isControl then f"${"\\"}u${ch.toInt}%04x" else String.valueOf(ch).nn
     }
 
     private def escapedString(str: String): String = str flatMap escapedChar
 
-    private[this] val names = collection.mutable.Map.empty[Symbol, String]
-    private[this] val namesIndex = collection.mutable.Map.empty[String, Int]
+    private val names = collection.mutable.Map.empty[Symbol, String]
+    private val namesIndex = collection.mutable.Map.empty[String, Int]
 
     private def splicedName(sym: Symbol): Option[String] = {
       if sym.owner.isClassDef then None
@@ -1436,11 +1470,14 @@ object SourceCode {
         namesIndex(name0) = index + 1
         val name =
           if index == 1 then name0
-          else s"`$name0${index.toString.toCharArray.map {x => (x - '0' + '₀').toChar}.mkString}`"
+          else s"`$name0${index.toString.toCharArray.nn.map {x => (x - '0' + '₀').toChar}.mkString}`"
         names(sym) = name
         Some(name)
       }
     }
+
+    private def cannotBeShownAsSource(x: String): this.type =
+      this += s"<$x does not have a source representation>"
 
     private object SpecialOp {
       def unapply(arg: Tree): Option[(String, List[Term])] = arg match {

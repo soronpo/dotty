@@ -10,25 +10,27 @@ lower case letter*_ are for explanation of semantic content only, they
 can be dropped without changing the grammar.
 
 Micro-syntax:
-
+```none
   LongInt       = Digit* StopDigit        -- big endian 2's complement, value fits in a Long w/o overflow
   Int           = LongInt                 -- big endian 2's complement, fits in an Int w/o overflow
   Nat           = LongInt                 -- non-negative value, fits in an Int without overflow
   Digit         = 0 | ... | 127
   StopDigit     = 128 | ... | 255         -- value = digit - 128
+  Utf8          = Nat UTF8-CodePoint*
+```
 
 Macro-format:
-
+```none
   File          = Header majorVersion_Nat minorVersion_Nat experimentalVersion_Nat VersionString UUID
                   nameTable_Length Name* Section*
   Header        = 0x5CA1AB1F
   UUID          = Byte*16                 -- random UUID
-  VersionString = Length UTF8-CodePoint*  -- string that represents the compiler that produced the TASTy
+  VersionString = Utf8                    -- string that represents the compiler that produced the TASTy
 
   Section       = NameRef Length Bytes
   Length        = Nat                     -- length of rest of entry in bytes
 
-  Name          = UTF8              Length UTF8-CodePoint*
+  Name          = UTF8              Utf8
                   QUALIFIED         Length qualified_NameRef selector_NameRef               -- A.B
                   EXPANDED          Length qualified_NameRef selector_NameRef               -- A$$B, semantically a NameKinds.ExpandedName
                   EXPANDPREFIX      Length qualified_NameRef selector_NameRef               -- A$B, prefix of expanded name, see NamedKinds.ExpandPrefixName
@@ -39,6 +41,7 @@ Macro-format:
                   SUPERACCESSOR     Length underlying_NameRef                               -- super$A
                   INLINEACCESSOR    Length underlying_NameRef                               -- inline$A
                   OBJECTCLASS       Length underlying_NameRef                               -- A$  (name of the module class for module A)
+                  BODYRETAINER      Length underlying_NameRef                               -- A$retainedBody
 
                   SIGNED            Length original_NameRef resultSig_NameRef ParamSig*     -- name + signature
                   TARGETSIGNED      Length original_NameRef target_NameRef resultSig_NameRef ParamSig*
@@ -47,13 +50,15 @@ Macro-format:
                       // If positive, this is a NameRef for the fully qualified name of a term parameter.
 
   NameRef       = Nat                    // ordinal number of name in name table, starting from 1.
+  Utf8Ref       = Nat                    // ordinal number of UTF8 in name table, starting from 1.
+```
 
 Note: Unqualified names in the name table are strings. The context decides whether a name is
 a type-name or a term-name. The same string can represent both.
 
 
 Standard-Section: "ASTs" TopLevelStat*
-
+```none
   TopLevelStat  = PACKAGE        Length Path TopLevelStat*                         -- package path { topLevelStats }
                   Stat
 
@@ -70,14 +75,15 @@ Standard-Section: "ASTs" TopLevelStat*
                   BOUNDED               type_Term                                  -- type bound
 
   TypeParam     = TYPEPARAM      Length NameRef type_Term Modifier*                -- modifiers name bounds
-  TermParam     = PARAM          Length NameRef type_Term rhs_Term? Modifier*      -- modifiers name : type (= rhs_Term)?. `rhsTerm` is present in the case of an aliased class parameter
+  TermParam     = PARAM          Length NameRef type_Term Modifier*                -- modifiers name : type.
                   EMPTYCLAUSE                                                      -- an empty parameter clause ()
                   SPLITCLAUSE                                                      -- splits two non-empty parameter clauses of the same kind
   Param         = TypeParam
                   TermParam
   Template      = TEMPLATE       Length TypeParam* TermParam* parent_Term* Self?
-                                        Stat*                                      -- [typeparams] paramss extends parents { self => stats }, where Stat* always starts with the primary constructor.
+                                        EndParents? Stat*                          -- [typeparams] paramss extends parents { self => stats }, where Stat* always starts with the primary constructor.
   Self          = SELFDEF               selfName_NameRef selfType_Term             -- selfName : selfType
+  EndParents    = SPLITCLAUSE                                                      -- explicitly end the template header, e.g. if there is no primary constructor
 
   Term          = Path                                                             -- Paths represent both types and terms
                   IDENT                 NameRef Type                               -- Used when term ident’s type is not a TermRef
@@ -85,9 +91,11 @@ Standard-Section: "ASTs" TopLevelStat*
                   SELECTin       Length possiblySigned_NameRef qual_Term owner_Type -- qual.name, referring to a symbol declared in owner that has the given signature (see note below)
                   QUALTHIS              typeIdent_Tree                             -- id.this, different from THIS in that it contains a qualifier ident with position.
                   NEW                   clsType_Term                               -- new cls
+                  ELIDED                exprType_Type                              -- elided expression of the given type
                   THROW                 throwableExpr_Term                         -- throw throwableExpr
                   NAMEDARG              paramName_NameRef arg_Term                 -- paramName = arg
                   APPLY          Length fn_Term arg_Term*                          -- fn(args)
+                  APPLYsigpoly   Length fn_Term meth_Type arg_Term*                -- The application of a signature-polymorphic method
                   TYPEAPPLY      Length fn_Term arg_Type*                          -- fn[args]
                   SUPER          Length this_Term mixinTypeIdent_Tree?             -- super[mixin]
                   TYPED          Length expr_Term ascriptionType_Term              -- expr: ascription
@@ -102,10 +110,14 @@ Standard-Section: "ASTs" TopLevelStat*
                   WHILE          Length cond_Term body_Term                        -- while cond do body
                   REPEATED       Length elem_Type elem_Term*                       -- Varargs argument of type `elem`
                   SELECTouter    Length levels_Nat qual_Term underlying_Type       -- Follow `levels` outer links, starting from `qual`, with given `underlying` type
+                  QUOTE          Length body_Term bodyTpe_Type                     -- Quoted expression `'{ body }` of a body typed as `bodyTpe`
+                  SPLICE         Length expr_Term tpe_Type                         -- Spliced expression `${ expr }` typed as `tpe`
+                  SPLICEPATTEN   Length pat_Term tpe_Type targs_Type* args_Term*   -- Pattern splice `${pat}` or `$pat[targs*](args*)` in a quoted pattern of type `tpe`.
     -- patterns:
                   BIND           Length boundName_NameRef patType_Type pat_Term    -- name @ pat, wherev `patType` is the type of the bound symbol
                   ALTERNATIVE    Length alt_Term*                                  -- alt1 | ... | altn   as a pattern
                   UNAPPLY        Length fun_Term ImplicitArg* pat_Type pat_Term*   -- Unapply node `fun(_: pat_Type)(implicitArgs)` flowing into patterns `pat`.
+                  QUOTEPATTERN   Length body_Term quotes_Term pat_Type bindings_Term* -- Quote pattern node `'{ bindings*; body }(using quotes)`
     -- type trees:
                   IDENTtpt              NameRef Type                               -- Used for all type idents
                   SELECTtpt             NameRef qual_Term                          -- qual.name
@@ -118,7 +130,10 @@ Standard-Section: "ASTs" TopLevelStat*
                   MATCHtpt       Length bound_Term? sel_Term CaseDef*              -- sel match { CaseDef } where `bound` is optional upper bound of all rhs
                   BYNAMEtpt             underlying_Term                            -- => underlying
                   SHAREDterm            term_ASTRef                                -- Link to previously serialized term
-                  HOLE           Length idx_Nat arg_Tree*                          -- Hole where a splice goes with sequence number idx, splice is applied to arguments `arg`s
+    -- pickled quote trees:                                                        -- These trees can only appear in pickled quotes. They will never be in a TASTy file.
+                  EXPLICITtpt           tpt_Term                                   -- Tag for a type tree that in a context where it is not explicitly known that this tree is a type.
+                  HOLE           Length idx_Nat tpe_Type arg_Tree*                 -- Splice hole with index `idx`, the type of the hole `tpe`, type and term arguments of the hole `arg`s
+
 
   CaseDef       = CASEDEF        Length pat_Term rhs_Tree guard_Tree?              -- case pat if guard => rhs
   ImplicitArg   = IMPLICITARG           arg_Term                                   -- implicit unapply argument
@@ -157,7 +172,7 @@ Standard-Section: "ASTs" TopLevelStat*
                   TYPEREFin      Length NameRef qual_Type namespace_Type           -- A reference `qual.name` to a non-local member that's private in `namespace`.
                   RECtype               parent_Type                                -- A wrapper for recursive refined types
                   SUPERtype      Length this_Type underlying_Type                  -- A super type reference to `underlying`
-                  REFINEDtype    Length underlying_Type refinement_NameRef info_Type -- underlying { refinement_name : info }
+                  REFINEDtype    Length refinement_NameRef underlying_Type info_Type -- underlying { refinement_name : info }
                   APPLIEDtype    Length tycon_Type arg_Type*                       -- tycon[args]
                   TYPEBOUNDS     Length lowOrAlias_Type high_Type? Variance*       -- = alias or >: low <: high, possibly with variances of lambda parameters
                   ANNOTATEDtype  Length underlying_Type annotation_Term            -- underlying @ annotation
@@ -165,6 +180,7 @@ Standard-Section: "ASTs" TopLevelStat*
                   ORtype         Length left_Type right_Type                       -- lefgt | right
                   MATCHtype      Length bound_Type sel_Type case_Type*             -- sel match {cases} with optional upper `bound`
                   MATCHCASEtype  Length pat_type rhs_Type                          -- match cases are MATCHCASEtypes or TYPELAMBDAtypes over MATCHCASEtypes
+                  FLEXIBLEtype   Length underlying_Type                            -- (underlying)?
                   BIND           Length boundName_NameRef bounds_Type Modifier*    -- boundName @ bounds,  for type-variables defined in a type pattern
                   BYNAMEtype            underlying_Type                            -- => underlying
                   PARAMtype      Length binder_ASTRef paramNum_Nat                 -- A reference to parameter # paramNum in lambda type `binder`
@@ -212,6 +228,7 @@ Standard-Section: "ASTs" TopLevelStat*
                   EXPORTED                                                         -- An export forwarder
                   OPEN                                                             -- an open class
                   INVISIBLE                                                        -- invisible during typechecking
+                  TRACKED                                                          -- a tracked class parameter / a dependent class
                   Annotation
 
   Variance      = STABLE                                                           -- invariant
@@ -219,22 +236,23 @@ Standard-Section: "ASTs" TopLevelStat*
                 | CONTRAVARIANT
 
   Annotation    = ANNOTATION     Length tycon_Type fullAnnotation_Term             -- An annotation, given (class) type of constructor, and full application tree
+```
 
 Note: The signature of a SELECTin or TERMREFin node is the signature of the selected symbol,
       not the signature of the reference. The latter undergoes an asSeenFrom but the former
       does not.
 
 Note: Tree tags are grouped into 5 categories that determine what follows, and thus allow to compute the size of the tagged tree in a generic way.
-
-  Category 1 (tags 1-59)   :  tag
-  Category 2 (tags 60-89)  :  tag Nat
-  Category 3 (tags 90-109) :  tag AST
-  Category 4 (tags 110-127):  tag Nat AST
-  Category 5 (tags 128-255):  tag Length <payload>
-
+```none
+  Tree Category 1 (tags 1-59)   :  tag
+  Tree Category 2 (tags 60-89)  :  tag Nat
+  Tree Category 3 (tags 90-109) :  tag AST
+  Tree Category 4 (tags 110-127):  tag Nat AST
+  Tree Category 5 (tags 128-255):  tag Length <payload>
+```
 
 Standard-Section: "Positions" LinesSizes Assoc*
-
+```none
   LinesSizes    = Nat Nat*                 // Number of lines followed by the size of each line not counting the trailing `\n`
 
   Assoc         = Header offset_Delta? offset_Delta? point_Delta?
@@ -250,14 +268,36 @@ Standard-Section: "Positions" LinesSizes Assoc*
   SOURCE        = 4                         // Impossible as header, since addr_Delta = 0 implies that we refer to the
                                             // same tree as the previous one, but then hasStartDiff = 1 implies that
                                             // the tree's range starts later than the range of itself.
+```
 
 All elements of a position section are serialized as Ints
 
 
 Standard Section: "Comments" Comment*
+```none
+  Comment       = Utf8 LongInt              // Raw comment's bytes encoded as UTF-8, followed by the comment's coordinates.
+```
 
-  Comment       = Length Bytes LongInt      // Raw comment's bytes encoded as UTF-8, followed by the comment's coordinates.
+Standard Section: "Attributes" Attribute*
+```none
+  Attribute     = SCALA2STANDARDLIBRARYattr
+                  EXPLICITNULLSattr
+                  CAPTURECHECKEDattr
+                  WITHPUREFUNSattr
+                  JAVAattr
+                  OUTLINEattr
+                  SOURCEFILEattr Utf8Ref
+```
+Attribute tags cannot be repeated in an attribute section. Attributes are ordered by the tag ordinal.
 
+Note: Attribute tags are grouped into categories that determine what follows, and thus allow to compute the size of the tagged tree in a generic way.
+      Unassigned categories can be used to extend and existing category or to add new kinds of attributes
+```none
+  Attribute Category 1 (tags 1-32)  :  tag
+  Attribute Category 2 (tags 33-128): // not assigned yet
+  Attribute Category 3 (tags 129-160):  tag Utf8Ref
+  Attribute Category 4 (tags 161-255): // not assigned yet
+```
 
 **************************************************************************************/
 
@@ -271,68 +311,68 @@ object TastyFormat {
     */
   final val header: Array[Int] = Array(0x5C, 0xA1, 0xAB, 0x1F)
 
-  /**Natural number. Each increment of the `MajorVersion` begins a
-   * new series of backward compatible TASTy versions.
+  /** Natural number. Each increment of the `MajorVersion` begins a
+   *  new series of backward compatible TASTy versions.
    *
-   * A TASTy file in either the preceeding or succeeding series is
-   * incompatible with the current value.
+   *  A TASTy file in either the preceeding or succeeding series is
+   *  incompatible with the current value.
    */
   final val MajorVersion: Int = 28
 
-  /**Natural number. Each increment of the `MinorVersion`, within
-   * a series declared by the `MajorVersion`, breaks forward
-   * compatibility, but remains backwards compatible, with all
-   * preceeding `MinorVersion`.
+  /** Natural number. Each increment of the `MinorVersion`, within
+   *  a series declared by the `MajorVersion`, breaks forward
+   *  compatibility, but remains backwards compatible, with all
+   *  preceding `MinorVersion`.
    */
-  final val MinorVersion: Int = 0
+  final val MinorVersion: Int = 6
 
-  /**Natural Number. The `ExperimentalVersion` allows for
-   * experimentation with changes to TASTy without committing
-   * to any guarantees of compatibility.
+  /** Natural Number. The `ExperimentalVersion` allows for
+   *  experimentation with changes to TASTy without committing
+   *  to any guarantees of compatibility.
    *
-   * A zero value indicates that the TASTy version is from a
-   * stable, final release.
+   *  A zero value indicates that the TASTy version is from a
+   *  stable, final release.
    *
-   * A strictly positive value indicates that the TASTy
-   * version is experimental. An experimental TASTy file
-   * can only be read by a tool with the same version.
-   * However, tooling with an experimental TASTy version
-   * is able to read final TASTy documents if the file's
-   * `MinorVersion` is strictly less than the current value.
+   *  A strictly positive value indicates that the TASTy
+   *  version is experimental. An experimental TASTy file
+   *  can only be read by a tool with the same version.
+   *  However, tooling with an experimental TASTy version
+   *  is able to read final TASTy documents if the file's
+   *  `MinorVersion` is strictly less than the current value.
    */
-  final val ExperimentalVersion: Int = 3
+  final val ExperimentalVersion: Int = 1
 
   /**This method implements a binary relation (`<:<`) between two TASTy versions.
+   *
    * We label the lhs `file` and rhs `compiler`.
    * if `file <:< compiler` then the TASTy file is valid to be read.
    *
-   * TASTy versions have a partial order,
-   * for example `a <:< b` and `b <:< a` are both false if `a` and `b` have different major versions.
+   * A TASTy version, e.g. `v := 28.0-3` is composed of three fields:
+   *   - v.major == 28
+   *   - v.minor == 0
+   *   - v.experimental == 3
+   *
+   * TASTy versions have a partial order, for example,
+   * `a <:< b` and `b <:< a` are both false if
+   *   - `a` and `b` have different `major` fields.
+   *   - `a` and `b` have the same `major` & `minor` fields,
+   *     but different `experimental` fields, both non-zero.
+   *
+   * A TASTy version with a zero value for its `experimental` field
+   * is considered to be stable. Files with a stable TASTy version
+   * can be read by a compiler with an unstable TASTy version,
+   * (where the compiler's TASTy version has a higher `minor` field).
+   *
+   * A compiler with a stable TASTy version can never read a file
+   * with an unstable TASTy version.
    *
    * We follow the given algorithm:
+   *
    * ```
-   * if file.major != compiler.major then
-   *   return incompatible
-   * if compiler.experimental == 0 then
-   *   if file.experimental != 0 then
-   *     return incompatible
-   *   if file.minor > compiler.minor then
-   *     return incompatible
-   *   else
-   *     return compatible
-   * else invariant[compiler.experimental != 0]
-   *   if file.experimental == compiler.experimental then
-   *     if file.minor == compiler.minor then
-   *       return compatible (all fields equal)
-   *     else
-   *       return incompatible
-   *   else if file.experimental == 0,
-   *     if file.minor < compiler.minor then
-   *       return compatible (an experimental version can read a previous released version)
-   *     else
-   *       return incompatible (an experimental version cannot read its own minor version or any later version)
-   *   else invariant[file.experimental is non-0 and different than compiler.experimental]
-   *     return incompatible
+   * (fileMajor, fileMinor, fileExperimental) match
+   *   case (`compilerMajor`, `compilerMinor`, `compilerExperimental`) => true // full equality
+   *   case (`compilerMajor`, minor, 0) if minor < compilerMinor       => true // stable backwards compatibility
+   *   case _                                                          => false
    * ```
    * @syntax markdown
    */
@@ -344,24 +384,16 @@ object TastyFormat {
     compilerMinor: Int,
     compilerExperimental: Int
   ): Boolean = (
-    fileMajor == compilerMajor && (
-      if (fileExperimental == compilerExperimental) {
-        if (compilerExperimental == 0) {
-          fileMinor <= compilerMinor
-        }
-        else {
-          fileMinor == compilerMinor
-        }
-      }
-      else {
-        fileExperimental == 0 && fileMinor < compilerMinor
-      }
+    fileMajor == compilerMajor &&
+      (  fileMinor == compilerMinor && fileExperimental == compilerExperimental // full equality
+      || fileMinor <  compilerMinor && fileExperimental == 0 // stable backwards compatibility
     )
   )
 
   final val ASTsSection = "ASTs"
   final val PositionsSection = "Positions"
   final val CommentsSection = "Comments"
+  final val AttributesSection = "Attributes"
 
   /** Tags used to serialize names, should update [[TastyFormat$.nameTagToString]] if a new constant is added */
   class NameTags {
@@ -428,9 +460,9 @@ object TastyFormat {
 
   final val SOURCE = 4
 
- // AST tags
-  // Cat. 1:    tag
+  // AST tags
 
+  // Tree Cat. 1:    tag
   final val firstSimpleTreeTag = UNITconst
   // final val ??? = 1
   final val UNITconst = 2
@@ -478,9 +510,10 @@ object TastyFormat {
   final val INVISIBLE = 44
   final val EMPTYCLAUSE = 45
   final val SPLITCLAUSE = 46
+  final val TRACKED = 47
 
-  // Cat. 2:    tag Nat
-
+  // Tree Cat. 2:    tag Nat
+  final val firstNatTreeTag = SHAREDterm
   final val SHAREDterm = 60
   final val SHAREDtype = 61
   final val TERMREFdirect = 62
@@ -499,8 +532,8 @@ object TastyFormat {
   final val IMPORTED = 75
   final val RENAMED = 76
 
-  // Cat. 3:    tag AST
-
+  // Tree Cat. 3:    tag AST
+  final val firstASTTreeTag = THIS
   final val THIS = 90
   final val QUALTHIS = 91
   final val CLASSconst = 92
@@ -514,9 +547,11 @@ object TastyFormat {
   final val RECtype = 100
   final val SINGLETONtpt = 101
   final val BOUNDED = 102
+  final val EXPLICITtpt = 103
+  final val ELIDED = 104
 
-  // Cat. 4:    tag Nat AST
-
+  // Tree Cat. 4:    tag Nat AST
+  final val firstNatASTTreeTag = IDENT
   final val IDENT = 110
   final val IDENTtpt = 111
   final val SELECT = 112
@@ -528,8 +563,8 @@ object TastyFormat {
   final val SELFDEF = 118
   final val NAMEDARG = 119
 
-  // Cat. 5:    tag Length ...
-
+  // Tree Cat. 5:    tag Length ...
+  final val firstLengthTreeTag = PACKAGE
   final val PACKAGE = 128
   final val VALDEF = 129
   final val DEFDEF = 130
@@ -580,20 +615,41 @@ object TastyFormat {
   final val TYPEREFin = 175
   final val SELECTin = 176
   final val EXPORT = 177
-  // final val ??? = 178
-  // final val ??? = 179
+  final val QUOTE = 178
+  final val SPLICE = 179
   final val METHODtype = 180
+  final val APPLYsigpoly = 181
+  final val QUOTEPATTERN = 182
+  final val SPLICEPATTERN = 183
 
   final val MATCHtype = 190
   final val MATCHtpt = 191
   final val MATCHCASEtype = 192
+  final val FLEXIBLEtype = 193
 
   final val HOLE = 255
 
-  final val firstNatTreeTag = SHAREDterm
-  final val firstASTTreeTag = THIS
-  final val firstNatASTTreeTag = IDENT
-  final val firstLengthTreeTag = PACKAGE
+  // Attributes tags
+
+  // Attribute Category 1 (tags 1-32)  :  tag
+  def isBooleanAttrTag(tag: Int): Boolean = 1 <= tag && tag <= 32
+  final val SCALA2STANDARDLIBRARYattr = 1
+  final val EXPLICITNULLSattr = 2
+  final val CAPTURECHECKEDattr = 3
+  final val WITHPUREFUNSattr = 4
+  final val JAVAattr = 5
+  final val OUTLINEattr = 6
+
+  // Attribute Category 2 (tags 33-128): unassigned
+
+  // Attribute Category 3 (tags 129-160):  tag Utf8Ref
+  def isStringAttrTag(tag: Int): Boolean = 129 <= tag && tag <= 160
+  final val SOURCEFILEattr = 129
+
+  // Attribute Category 4 (tags 161-255): unassigned
+
+  // end of Attributes tags
+
 
   /** Useful for debugging */
   def isLegalTag(tag: Int): Boolean =
@@ -601,7 +657,7 @@ object TastyFormat {
     firstNatTreeTag <= tag && tag <= RENAMED ||
     firstASTTreeTag <= tag && tag <= BOUNDED ||
     firstNatASTTreeTag <= tag && tag <= NAMEDARG ||
-    firstLengthTreeTag <= tag && tag <= MATCHtpt ||
+    firstLengthTreeTag <= tag && tag <= FLEXIBLEtype ||
     tag == HOLE
 
   def isParamTag(tag: Int): Boolean = tag == PARAM || tag == TYPEPARAM
@@ -646,7 +702,8 @@ object TastyFormat {
        | INVISIBLE
        | ANNOTATION
        | PRIVATEqualified
-       | PROTECTEDqualified => true
+       | PROTECTEDqualified
+       | TRACKED => true
     case _ => false
   }
 
@@ -661,6 +718,7 @@ object TastyFormat {
        | ANNOTATEDtpt
        | BYNAMEtpt
        | MATCHtpt
+       | EXPLICITtpt
        | BIND => true
     case _ => false
   }
@@ -749,6 +807,7 @@ object TastyFormat {
     case BOUNDED => "BOUNDED"
     case APPLY => "APPLY"
     case TYPEAPPLY => "TYPEAPPLY"
+    case APPLYsigpoly => "APPLYsigpoly"
     case NEW => "NEW"
     case THROW => "THROW"
     case TYPED => "TYPED"
@@ -801,10 +860,27 @@ object TastyFormat {
     case MATCHCASEtype => "MATCHCASEtype"
     case MATCHtpt => "MATCHtpt"
     case PARAMtype => "PARAMtype"
+    case FLEXIBLEtype => "FLEXIBLEtype"
     case ANNOTATION => "ANNOTATION"
     case PRIVATEqualified => "PRIVATEqualified"
     case PROTECTEDqualified => "PROTECTEDqualified"
+    case EXPLICITtpt => "EXPLICITtpt"
+    case ELIDED => "ELIDED"
+    case QUOTE => "QUOTE"
+    case SPLICE => "SPLICE"
+    case QUOTEPATTERN => "QUOTEPATTERN"
+    case SPLICEPATTERN => "SPLICEPATTERN"
     case HOLE => "HOLE"
+  }
+
+  def attributeTagToString(tag: Int): String = tag match {
+    case SCALA2STANDARDLIBRARYattr => "SCALA2STANDARDLIBRARYattr"
+    case EXPLICITNULLSattr => "EXPLICITNULLSattr"
+    case CAPTURECHECKEDattr => "CAPTURECHECKEDattr"
+    case WITHPUREFUNSattr => "WITHPUREFUNSattr"
+    case JAVAattr => "JAVAattr"
+    case OUTLINEattr => "OUTLINEattr"
+    case SOURCEFILEattr => "SOURCEFILEattr"
   }
 
   /** @return If non-negative, the number of leading references (represented as nats) of a length/trees entry.

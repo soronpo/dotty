@@ -2,18 +2,24 @@ package dotty.tools
 package dotc
 package util
 
-import dotty.tools.io._
-import Spans._
-import core.Contexts._
+import scala.language.unsafeNulls
+
+import dotty.tools.io.*
+import Spans.*
+import core.Contexts.*
 
 import scala.io.Codec
-import Chars._
+import Chars.*
 import scala.annotation.internal.sharable
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import scala.compiletime.uninitialized
+import scala.util.chaining.given
 
-import java.io.IOException
+import java.io.File.separator
+import java.net.URI
 import java.nio.charset.StandardCharsets
+import java.nio.file.{FileSystemException, NoSuchFileException, Paths}
 import java.util.Optional
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
@@ -56,10 +62,12 @@ object ScriptSourceFile {
 }
 
 class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends interfaces.SourceFile {
-  import SourceFile._
+  import SourceFile.*
 
-  private var myContent: Array[Char] = null
+  private var myContent: Array[Char] | Null = null
 
+  /** The contents of the original source file. Note that this can be empty, for example when
+   * the source is read from Tasty. */
   def content(): Array[Char] = {
     if (myContent == null) myContent = computeContent
     myContent
@@ -68,18 +76,6 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
   private var _maybeInComplete: Boolean = false
 
   def maybeIncomplete: Boolean = _maybeInComplete
-
-  def this(file: AbstractFile, codec: Codec) =
-    // It would be cleaner to check if the file exists instead of catching
-    // an exception, but it turns out that Files.exists is remarkably slow,
-    // at least on Java 8 (https://rules.sonarsource.com/java/tag/performance/RSPEC-3725),
-    // this is significant enough to show up in our benchmarks.
-    this(file,
-      try new String(file.toByteArray, codec.charSet).toCharArray
-      catch case _: java.nio.file.NoSuchFileException => Array[Char]())
-
-  /** Tab increment; can be overridden */
-  def tabInc: Int = 8
 
   override def name: String = file.name
   override def path: String = file.path
@@ -97,6 +93,9 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
 
   def apply(idx: Int): Char = content().apply(idx)
 
+  /** length of the original source file
+   * Note that when the source is from Tasty, content() could be empty even though length > 0.
+   * Use content().length to determine the length of content(). */
   def length: Int =
     if lineIndicesCache ne null then lineIndicesCache.last
     else content().length
@@ -120,7 +119,8 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
    *  For regular source files, simply return the argument.
    */
   def positionInUltimateSource(position: SourcePosition): SourcePosition =
-    SourcePosition(underlying, position.span shift start)
+    if isSelfContained then position // return the argument
+    else SourcePosition(underlying, position.span shift start)
 
   private def calculateLineIndicesFromContents() = {
     val cs = content()
@@ -139,11 +139,14 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
     buf.toArray
   }
 
-  private var lineIndicesCache: Array[Int] = _
+  private var lineIndicesCache: Array[Int] = uninitialized
   private def lineIndices: Array[Int] =
     if lineIndicesCache eq null then
       lineIndicesCache = calculateLineIndicesFromContents()
     lineIndicesCache
+
+  def initialized = lineIndicesCache != null
+
   def setLineIndicesFromLineSizes(sizes: Array[Int]): Unit =
     val lines = sizes.length
     val indices = new Array[Int](lines + 1)
@@ -194,12 +197,7 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
   /** The column corresponding to `offset`, starting at 0 */
   def column(offset: Int): Int = {
     var idx = startOfLine(offset)
-    var col = 0
-    while (idx != offset) {
-      col += (if (idx < content().length && content()(idx) == '\t') (tabInc - col) % tabInc else 1)
-      idx += 1
-    }
-    col
+    offset - idx
   }
 
   /** The padding of the column corresponding to `offset`, includes tabs */
@@ -207,7 +205,7 @@ class SourceFile(val file: AbstractFile, computeContent: => Array[Char]) extends
     var idx = startOfLine(offset)
     val pad = new StringBuilder
     while (idx != offset) {
-      pad.append(if (idx < length && content()(idx) == '\t') '\t' else ' ')
+      pad.append(if (idx < content().length && content()(idx) == '\t') '\t' else ' ')
       idx += 1
     }
     pad.result()
@@ -220,10 +218,19 @@ object SourceFile {
 
   implicit def fromContext(using Context): SourceFile = ctx.source
 
+  /** A source file with an underlying virtual file. The name is taken as a file system path
+   *  with the local separator converted to "/". The last element of the path will be the simple name of the file.
+   */
   def virtual(name: String, content: String, maybeIncomplete: Boolean = false) =
-    val src = new SourceFile(new VirtualFile(name, content.getBytes(StandardCharsets.UTF_8)), scala.io.Codec.UTF8)
-    src._maybeInComplete = maybeIncomplete
-    src
+    SourceFile(new VirtualFile(name.replace(separator, "/"), content.getBytes(StandardCharsets.UTF_8)), content.toCharArray)
+      .tap(_._maybeInComplete = maybeIncomplete)
+
+  /** A helper method to create a virtual source file for given URI.
+   *  It relies on SourceFile#virtual implementation to create the virtual file.
+   */
+  def virtual(uri: URI, content: String): SourceFile =
+    val path = Paths.get(uri).toString
+    SourceFile.virtual(path, content)
 
   /** Returns the relative path of `source` within the `reference` path
    *
@@ -254,7 +261,7 @@ object SourceFile {
         // and use both slashes as separators, or on other OS and use forward slash
         // as separator, backslash as file name character.
 
-        import scala.jdk.CollectionConverters._
+        import scala.jdk.CollectionConverters.*
         val path = refPath.relativize(sourcePath)
         path.iterator.asScala.mkString("/")
       else
@@ -264,21 +271,24 @@ object SourceFile {
   /** Return true if file is a script:
    *  if filename extension is not .scala and has a script header.
    */
-  def isScript(file: AbstractFile, content: Array[Char]): Boolean =
+  def isScript(file: AbstractFile | Null, content: Array[Char]): Boolean =
     ScriptSourceFile.hasScriptHeader(content)
 
-  def apply(file: AbstractFile, codec: Codec): SourceFile =
-    // see note above re: Files.exists is remarkably slow
+  def apply(file: AbstractFile | Null, codec: Codec): SourceFile =
+    // Files.exists is slow on Java 8 (https://rules.sonarsource.com/java/tag/performance/RSPEC-3725),
+    // so cope with failure; also deal with path prefix "Not a directory".
     val chars =
-    try
-      new String(file.toByteArray, codec.charSet).toCharArray
-    catch
-      case _: java.nio.file.NoSuchFileException => Array[Char]()
+      try new String(file.toByteArray, codec.charSet).toCharArray
+      catch
+        case _: NoSuchFileException => Array.empty[Char]
+        case fse: FileSystemException if fse.getMessage.endsWith("Not a directory") => Array.empty[Char]
 
     if isScript(file, chars) then
       ScriptSourceFile(file, chars)
     else
-      new SourceFile(file, chars)
+      SourceFile(file, chars)
+
+  def apply(file: AbstractFile | Null, computeContent: => Array[Char]): SourceFile = new SourceFile(file, computeContent)
 }
 
 @sharable object NoSource extends SourceFile(NoAbstractFile, Array[Char]()) {

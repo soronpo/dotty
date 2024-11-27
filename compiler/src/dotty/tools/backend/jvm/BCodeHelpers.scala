@@ -2,30 +2,35 @@ package dotty.tools
 package backend
 package jvm
 
+import scala.language.unsafeNulls
+
 import scala.annotation.threadUnsafe
 import scala.tools.asm
 import scala.tools.asm.AnnotationVisitor
 import scala.tools.asm.ClassWriter
 import scala.collection.mutable
+import scala.compiletime.uninitialized
 
 import dotty.tools.dotc.CompilationUnit
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.Trees
-import dotty.tools.dotc.core.Annotations._
-import dotty.tools.dotc.core.Constants._
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.Phases._
-import dotty.tools.dotc.core.Decorators._
-import dotty.tools.dotc.core.Flags._
+import dotty.tools.dotc.core.Annotations.*
+import dotty.tools.dotc.core.Constants.*
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.Phases.*
+import dotty.tools.dotc.core.Decorators.*
+import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Names.Name
 import dotty.tools.dotc.core.NameKinds.ExpandedName
 import dotty.tools.dotc.core.Signature
-import dotty.tools.dotc.core.StdNames._
-import dotty.tools.dotc.core.Symbols._
+import dotty.tools.dotc.core.StdNames.*
+import dotty.tools.dotc.core.NameKinds
+import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types
-import dotty.tools.dotc.core.Types._
+import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.core.TypeErasure
 import dotty.tools.dotc.transform.GenericSignatures
+import dotty.tools.dotc.transform.ElimErasedValueType
 import dotty.tools.io.AbstractFile
 import dotty.tools.dotc.report
 
@@ -38,17 +43,18 @@ import dotty.tools.backend.jvm.DottyBackendInterface.symExtensions
  *  @version 1.0
  *
  */
-trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
+trait BCodeHelpers extends BCodeIdiomatic {
   // for some reason singleton types aren't allowed in constructor calls. will need several casts in code to enforce
-
-  //import global._
-  //import bTypes._
-  //import coreBTypes._
-  import bTypes._
-  import tpd._
-  import coreBTypes._
+  //import global.*
+  import bTypes.*
+  import tpd.*
+  import coreBTypes.*
   import int.{_, given}
-  import DottyBackendInterface._
+  import DottyBackendInterface.*
+
+  // We need to access GenBCode phase to get access to post-processor components.
+  // At this point it should always be initialized already.
+  protected lazy val backendUtils = genBCodePhase.asInstanceOf[GenBCode].postProcessor.backendUtils
 
   def ScalaATTRName: String = "Scala"
   def ScalaSignatureATTRName: String = "ScalaSig"
@@ -57,30 +63,8 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
   @threadUnsafe lazy val AnnotationRetentionSourceAttr: TermSymbol = requiredClass("java.lang.annotation.RetentionPolicy").linkedClass.requiredValue("SOURCE")
   @threadUnsafe lazy val AnnotationRetentionClassAttr: TermSymbol = requiredClass("java.lang.annotation.RetentionPolicy").linkedClass.requiredValue("CLASS")
   @threadUnsafe lazy val AnnotationRetentionRuntimeAttr: TermSymbol = requiredClass("java.lang.annotation.RetentionPolicy").linkedClass.requiredValue("RUNTIME")
-  @threadUnsafe lazy val JavaAnnotationClass: ClassSymbol = requiredClass("java.lang.annotation.Annotation")
 
   val bCodeAsmCommon: BCodeAsmCommon[int.type] = new BCodeAsmCommon(int)
-  import bCodeAsmCommon._
-
-  /*
-   * must-single-thread
-   */
-  def getFileForClassfile(base: AbstractFile, clsName: String, suffix: String): AbstractFile = {
-    getFile(base, clsName, suffix)
-  }
-
-  /*
-   * must-single-thread
-   */
-  def getOutFolder(csym: Symbol, cName: String): AbstractFile = {
-    try {
-      outputDirectory
-    } catch {
-      case ex: Throwable =>
-        report.error(s"Couldn't create file for class $cName\n${ex.getMessage}", ctx.source.atSpan(csym.span))
-        null
-    }
-  }
 
   final def traitSuperAccessorName(sym: Symbol): String = {
     val nameString = sym.javaSimpleName.toString
@@ -88,70 +72,6 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     else nameString + "$"
   }
 
-  // -----------------------------------------------------------------------------------------
-  // finding the least upper bound in agreement with the bytecode verifier (given two internal names handed by ASM)
-  // Background:
-  //  http://gallium.inria.fr/~xleroy/publi/bytecode-verification-JAR.pdf
-  //  http://comments.gmane.org/gmane.comp.java.vm.languages/2293
-  //  https://issues.scala-lang.org/browse/SI-3872
-  // -----------------------------------------------------------------------------------------
-
-  /*  An `asm.ClassWriter` that uses `jvmWiseLUB()`
-   *  The internal name of the least common ancestor of the types given by inameA and inameB.
-   *  It's what ASM needs to know in order to compute stack map frames, http://asm.ow2.org/doc/developer-guide.html#controlflow
-   */
-  final class CClassWriter(flags: Int) extends asm.ClassWriter(flags) {
-
-    /**
-     * This method is thread-safe: it depends only on the BTypes component, which does not depend
-     * on global. TODO @lry move to a different place where no global is in scope, on bTypes.
-     */
-    override def getCommonSuperClass(inameA: String, inameB: String): String = {
-      val a = classBTypeFromInternalName(inameA)
-      val b = classBTypeFromInternalName(inameB)
-      val lub = a.jvmWiseLUB(b)
-      val lubName = lub.internalName
-      assert(lubName != "scala/Any")
-      lubName // ASM caches the answer during the lifetime of a ClassWriter. We outlive that. Not sure whether caching on our side would improve things.
-    }
-  }
-
-  /*
-   * must-single-thread
-   */
-  def initBytecodeWriter(): BytecodeWriter = {
-    (None: Option[AbstractFile] /*getSingleOutput*/) match { // todo: implement
-      case Some(f) if f.hasExtension("jar") =>
-        new DirectToJarfileWriter(f.file)
-      case _ =>
-        factoryNonJarBytecodeWriter()
-    }
-  }
-
-  /*
-   * Populates the InnerClasses JVM attribute with `refedInnerClasses`.
-   * In addition to inner classes mentioned somewhere in `jclass` (where `jclass` is a class file being emitted)
-   * `refedInnerClasses` should contain those inner classes defined as direct member classes of `jclass`
-   * but otherwise not mentioned in `jclass`.
-   *
-   * `refedInnerClasses` may contain duplicates,
-   * need not contain the enclosing inner classes of each inner class it lists (those are looked up for consistency).
-   *
-   * This method serializes in the InnerClasses JVM attribute in an appropriate order,
-   * not necessarily that given by `refedInnerClasses`.
-   *
-   * can-multi-thread
-   */
-  final def addInnerClassesASM(jclass: asm.ClassVisitor, refedInnerClasses: List[ClassBType]): Unit = {
-    val allNestedClasses = refedInnerClasses.flatMap(_.enclosingNestedClassesChain).distinct
-
-    // sorting ensures nested classes are listed after their enclosing class thus satisfying the Eclipse Java compiler
-    for (nestedClass <- allNestedClasses.sortBy(_.internalName.toString)) {
-      // Extract the innerClassEntry - we know it exists, enclosingNestedClassesChain only returns nested classes.
-      val Some(e) = nestedClass.innerClassAttributeEntry
-      jclass.visitInnerClass(e.name, e.outerName, e.innerName, e.flags)
-    }
-  }
 
   /*
    * can-multi-thread
@@ -215,26 +135,16 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     final val emitLines  = debugLevel >= 2
     final val emitVars   = debugLevel >= 3
 
-    /*
-     *  Contains class-symbols that:
-     *    (a) are known to denote inner classes
-     *    (b) are mentioned somewhere in the class being generated.
-     *
-     *  In other words, the lifetime of `innerClassBufferASM` is associated to "the class being generated".
-     */
-    final val innerClassBufferASM = mutable.Set.empty[ClassBType]
-
     /**
-     * The class internal name for a given class symbol. If the symbol describes a nested class, the
-     * ClassBType is added to the innerClassBufferASM.
+     * The class internal name for a given class symbol.
      */
     final def internalName(sym: Symbol): String = {
       // For each java class, the scala compiler creates a class and a module (thus a module class).
-      // If the `sym` is a java module class, we use the java class instead. This ensures that we
-      // register the class (instead of the module class) in innerClassBufferASM.
+      // If the `sym` is a java module class, we use the java class instead. This ensures that the
+      // ClassBType is created from the main class (instead of the module class).
       // The two symbols have the same name, so the resulting internalName is the same.
       val classSym = if (sym.is(JavaDefined) && sym.is(ModuleClass)) sym.linkedClass else sym
-      getClassBTypeAndRegisterInnerClass(classSym).internalName
+      getClassBType(classSym).internalName
     }
 
     private def assertClassNotArray(sym: Symbol): Unit = {
@@ -248,8 +158,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     }
 
     /**
-     * The ClassBType for a class symbol. If the class is nested, the ClassBType is added to the
-     * innerClassBufferASM.
+     * The ClassBType for a class symbol.
      *
      * The class symbol scala.Nothing is mapped to the class scala.runtime.Nothing$. Similarly,
      * scala.Null is mapped to scala.runtime.Null$. This is because there exist no class files
@@ -261,16 +170,12 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
      * the class descriptor of the receiver (the implementation class) is obtained by creating the
      * ClassBType.
      */
-    final def getClassBTypeAndRegisterInnerClass(sym: Symbol): ClassBType = {
+    final def getClassBType(sym: Symbol): ClassBType = {
       assertClassNotArrayNotPrimitive(sym)
 
-      if (sym == defn.NothingClass) RT_NOTHING
-      else if (sym == defn.NullClass) RT_NULL
-      else {
-        val r = classBTypeFromSymbol(sym)
-        if (r.isNestedClass) innerClassBufferASM += r
-        r
-      }
+      if (sym == defn.NothingClass) srNothingRef
+      else if (sym == defn.NullClass) srNullRef
+      else classBTypeFromSymbol(sym)
     }
 
     /*
@@ -285,16 +190,14 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     }
 
     /**
-     * The jvm descriptor of a type. If `t` references a nested class, its ClassBType is added to
-     * the innerClassBufferASM.
+     * The jvm descriptor of a type.
      */
     final def typeDescriptor(t: Type): String = { toTypeKind(t).descriptor   }
 
     /**
-     * The jvm descriptor for a symbol. If `sym` represents a nested class, its ClassBType is added
-     * to the innerClassBufferASM.
+     * The jvm descriptor for a symbol.
      */
-    final def symDescriptor(sym: Symbol): String = { getClassBTypeAndRegisterInnerClass(sym).descriptor }
+    final def symDescriptor(sym: Symbol): String = getClassBType(sym).descriptor
 
     final def toTypeKind(tp: Type): BType = typeToTypeKind(tp)(BCodeHelpers.this)(this)
 
@@ -341,6 +244,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     def emitParamNames(jmethod: asm.MethodVisitor, params: List[Symbol]) =
       for param <- params do
         var access = asm.Opcodes.ACC_FINAL
+        if param.is(Artifact) then access |= asm.Opcodes.ACC_SYNTHETIC
         jmethod.visitParameter(param.name.mangledString, access)
 
     /*
@@ -388,7 +292,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
           }
         case Ident(nme.WILDCARD) =>
           // An underscore argument indicates that we want to use the default value for this parameter, so do not emit anything
-        case t: tpd.RefTree if t.symbol.owner.linkedClass.isAllOf(JavaEnumTrait) =>
+        case t: tpd.RefTree if t.symbol.owner.linkedClass.isAllOf(JavaEnum) =>
           val edesc = innerClasesStore.typeDescriptor(t.tpe) // the class descriptor of the enumeration class.
           val evalue = t.symbol.javaSimpleName // value the actual enumeration value.
           av.visitEnum(name, edesc, evalue)
@@ -428,7 +332,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
             arrAnnotV.visitEnd()
           }          // for the lazy val in ScalaSigBytes to be GC'ed, the invoker of emitAnnotations() should hold the ScalaSigBytes in a method-local var that doesn't escape.
   */
-        case t @ Apply(constr, args) if t.tpe.derivesFrom(JavaAnnotationClass) =>
+        case t @ Apply(constr, args) if t.tpe.classSymbol.is(JavaAnnotation) =>
           val typ = t.tpe.classSymbol.denot.info
           val assocs = assocsFromApply(t)
           val desc = innerClasesStore.typeDescriptor(typ) // the class descriptor of the nested annotation class
@@ -436,7 +340,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
           emitAssocs(nestedVisitor, assocs, bcodeStore)(innerClasesStore)
 
         case t =>
-          report.error(ex"Annotation argument is not a constant", t.sourcePos)
+          report.error(em"Annotation argument is not a constant", t.sourcePos)
       }
     }
 
@@ -476,7 +380,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
   } // end of trait BCAnnotGen
 
   trait BCJGenSigGen {
-    import int.{_, given}
+    import int.given
 
     def getCurrentCUnit(): CompilationUnit
 
@@ -493,6 +397,9 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
       atPhase(erasurePhase) {
         val memberTpe =
           if (sym.is(Method)) sym.denot.info
+          else if sym.denot.validFor.phaseId > erasurePhase.id && sym.isField && sym.getter.exists then
+            // Memoization field of getter entered after erasure, see run/i17069 for an example
+            sym.getter.denot.info.resultType
           else owner.denot.thisType.memberInfo(sym)
         getGenericSignatureHelper(sym, owner, memberTpe).orNull
       }
@@ -506,7 +413,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
      *
      * must-single-thread
      */
-    private def addForwarder(jclass: asm.ClassVisitor, module: Symbol, m: Symbol): Unit = {
+    private def addForwarder(jclass: asm.ClassVisitor, module: Symbol, m: Symbol, isSynthetic: Boolean): Unit = {
       val moduleName     = internalName(module)
       val methodInfo     = module.thisType.memberInfo(m)
       val paramJavaTypes: List[BType] = methodInfo.firstParamTypes map toTypeKind
@@ -517,9 +424,10 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
        *  and we don't know what classes might be subclassing the companion class.  See SI-4827.
        */
       // TODO: evaluate the other flags we might be dropping on the floor here.
-      // TODO: ACC_SYNTHETIC ?
       val flags = GenBCodeOps.PublicStatic | (
         if (m.is(JavaVarargs)) asm.Opcodes.ACC_VARARGS else 0
+      ) | (
+        if (isSynthetic) asm.Opcodes.ACC_SYNTHETIC else 0
       )
 
       // TODO needed? for(ann <- m.annotations) { ann.symbol.initialize }
@@ -594,7 +502,16 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
           report.log(s"No forwarder for non-public member $m")
         else {
           report.log(s"Adding static forwarder for '$m' from $jclassName to '$moduleClass'")
-          addForwarder(jclass, moduleClass, m)
+          // It would be simpler to not generate forwarders for these methods,
+          // but that wouldn't be binary-compatible with Scala 3.0.0, so instead
+          // we generate ACC_SYNTHETIC forwarders so Java compilers ignore them.
+          val isSynthetic =
+            m0.name.is(NameKinds.SyntheticSetterName) ||
+            // Only hide bridges generated at Erasure, mixin forwarders are also
+            // marked as bridge but shouldn't be hidden since they don't have a
+            // non-bridge overload.
+            m0.is(Bridge) && m0.initial.validFor.firstPhaseId == erasurePhase.next.id
+          addForwarder(jclass, moduleClass, m, isSynthetic)
         }
       }
     }
@@ -663,7 +580,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
   /* builder of mirror classes */
   class JMirrorBuilder extends JCommonBuilder {
 
-    private var cunit: CompilationUnit = _
+    private var cunit: CompilationUnit = uninitialized
     def getCurrentCUnit(): CompilationUnit = cunit;
 
     /* Generate a mirror class for a top-level module. A mirror class is a class
@@ -677,19 +594,18 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     def genMirrorClass(moduleClass: Symbol, cunit: CompilationUnit): asm.tree.ClassNode = {
       assert(moduleClass.is(ModuleClass))
       assert(moduleClass.companionClass == NoSymbol, moduleClass)
-      innerClassBufferASM.clear()
       this.cunit = cunit
+      val bType      = mirrorClassBTypeFromSymbol(moduleClass)
       val moduleName = internalName(moduleClass) // + "$"
-      val mirrorName = moduleName.substring(0, moduleName.length() - 1)
+      val mirrorName = bType.internalName
 
-      val flags = (asm.Opcodes.ACC_SUPER | asm.Opcodes.ACC_PUBLIC | asm.Opcodes.ACC_FINAL)
       val mirrorClass = new asm.tree.ClassNode
       mirrorClass.visit(
-        classfileVersion,
-        flags,
+        backendUtils.classfileVersion,
+        bType.info.flags,
         mirrorName,
         null /* no java-generic-signature */,
-        ObjectReference.internalName,
+        ObjectRef.internalName,
         EMPTY_STRING_ARRAY
       )
 
@@ -703,10 +619,6 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
       emitAnnotations(mirrorClass, moduleClass.annotations ++ ssa)
 
       addForwarders(mirrorClass, mirrorName, moduleClass)
-
-      innerClassBufferASM ++= classBTypeFromSymbol(moduleClass).info.memberClasses
-      addInnerClassesASM(mirrorClass, innerClassBufferASM.toList)
-
       mirrorClass.visitEnd()
 
       moduleClass.name // this side-effect is necessary, really.
@@ -740,8 +652,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
      * must-single-thread
      */
     def legacyAddCreatorCode(clinit: asm.MethodVisitor, cnode: asm.tree.ClassNode, thisName: String): Unit = {
-      // this tracks the inner class in innerClassBufferASM, if needed.
-      val androidCreatorType = getClassBTypeAndRegisterInnerClass(AndroidCreatorClass)
+      val androidCreatorType = getClassBType(AndroidCreatorClass)
       val tdesc_creator = androidCreatorType.descriptor
 
       cnode.visitField(
@@ -793,10 +704,10 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
    * classes.
    */
   private def typeToTypeKind(tp: Type)(ct: BCodeHelpers)(storage: ct.BCInnerClassGen): ct.bTypes.BType = {
-    import ct.bTypes._
+    import ct.bTypes.*
     val defn = ctx.definitions
-    import coreBTypes._
-    import Types._
+    import coreBTypes.*
+    import Types.*
     /**
       * Primitive types are represented as TypeRefs to the class symbol of, for example, scala.Int.
       * The `primitiveTypeMap` maps those class symbols to the corresponding PrimitiveBType.
@@ -804,8 +715,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     def primitiveOrClassToBType(sym: Symbol): BType = {
       assert(sym.isClass, sym)
       assert(sym != defn.ArrayClass || compilingArray, sym)
-      primitiveTypeMap.getOrElse(sym,
-        storage.getClassBTypeAndRegisterInnerClass(sym)).asInstanceOf[BType]
+      primitiveTypeMap.getOrElse(sym, storage.getClassBType(sym)).asInstanceOf[BType]
     }
 
     /**
@@ -814,7 +724,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
       */
     def nonClassTypeRefToBType(sym: Symbol): ClassBType = {
       assert(sym.isType && compilingArray, sym)
-      ObjectReference.asInstanceOf[ct.bTypes.ClassBType]
+      ObjectRef.asInstanceOf[ct.bTypes.ClassBType]
     }
 
     tp.widenDealias match {
@@ -844,11 +754,11 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
       case tp =>
         report.warning(
           s"an unexpected type representation reached the compiler backend while compiling ${ctx.compilationUnit}: $tp. " +
-            "If possible, please file a bug on https://github.com/lampepfl/dotty/issues")
+            "If possible, please file a bug on https://github.com/scala/scala3/issues")
 
         tp match {
-          case tp: ThisType if tp.cls == defn.ArrayClass => ObjectReference.asInstanceOf[ct.bTypes.ClassBType] // was introduced in 9b17332f11 to fix SI-999, but this code is not reached in its test, or any other test
-          case tp: ThisType                         => storage.getClassBTypeAndRegisterInnerClass(tp.cls)
+          case tp: ThisType if tp.cls == defn.ArrayClass => ObjectRef.asInstanceOf[ct.bTypes.ClassBType] // was introduced in 9b17332f11 to fix SI-999, but this code is not reached in its test, or any other test
+          case tp: ThisType                         => storage.getClassBType(tp.cls)
           // case t: SingletonType                   => primitiveOrClassToBType(t.classSymbol)
           case t: SingletonType                     => typeToTypeKind(t.underlying)(ct)(storage)
           case t: RefinedType                       => typeToTypeKind(t.parent)(ct)(storage) //parents.map(_.toTypeKind(ct)(storage).asClassBType).reduceLeft((a, b) => a.jvmWiseLUB(b))
@@ -882,10 +792,11 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
       try body
       catch {
         case ex: Throwable =>
-          report.error(i"""|compiler bug: created invalid generic signature for $sym in ${sym.denot.owner.showFullName}
-                      |signature: $sig
-                      |if this is reproducible, please report bug at https://github.com/lampepfl/dotty/issues
-                  """.trim, sym.sourcePos)
+          report.error(
+            em"""|compiler bug: created invalid generic signature for $sym in ${sym.denot.owner.showFullName}
+                 |signature: $sig
+                 |if this is reproducible, please report bug at https://github.com/scala/scala3/issues
+               """, sym.sourcePos)
           throw  ex
       }
     }
@@ -912,7 +823,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     // without it.  This is particularly bad because the availability of
     // generic information could disappear as a consequence of a seemingly
     // unrelated change.
-      ctx.base.settings.YnoGenericSig.value
+      ctx.base.settings.XnoGenericSig.value
     || sym.is(Artifact)
     || sym.isAllOf(LiftedMethod)
     || sym.is(Bridge)
@@ -926,7 +837,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
     // (one that doesn't erase to the actual signature). See run/t3452b for a test case.
 
     val memberTpe = atPhase(erasurePhase) { moduleClass.denot.thisType.memberInfo(sym) }
-    val erasedMemberType = TypeErasure.fullErasure(memberTpe)
+    val erasedMemberType = ElimErasedValueType.elimEVT(TypeErasure.transformInfo(sym, memberTpe))
     if (erasedMemberType =:= sym.denot.info)
       getGenericSignatureHelper(sym, moduleClass, memberTpe).orNull
     else null
@@ -944,7 +855,7 @@ trait BCodeHelpers extends BCodeIdiomatic with BytecodeWriters {
 object BCodeHelpers {
 
   class InvokeStyle(val style: Int) extends AnyVal {
-    import InvokeStyle._
+    import InvokeStyle.*
     def isVirtual: Boolean = this == Virtual
     def isStatic : Boolean = this == Static
     def isSpecial: Boolean = this == Special

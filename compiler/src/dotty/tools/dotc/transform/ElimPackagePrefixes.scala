@@ -1,10 +1,10 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Decorators._, Flags._, Types._, Contexts._, Symbols._
-import ast.tpd._
-import Flags._
+import core.*
+import Decorators.*, Flags.*, Types.*, Contexts.*, Symbols.*
+import ast.tpd.*
+import Flags.*
 import MegaPhase.MiniPhase
 
 /** Eliminates syntactic references to package terms as prefixes of classes, so that there's no chance
@@ -12,7 +12,9 @@ import MegaPhase.MiniPhase
  */
 class ElimPackagePrefixes extends MiniPhase {
 
-  override def phaseName: String = "elimPackagePrefixes"
+  override def phaseName: String = ElimPackagePrefixes.name
+
+  override def description: String = ElimPackagePrefixes.description
 
   override def transformSelect(tree: Select)(using Context): Tree =
     if (isPackageClassRef(tree)) Ident(tree.tpe.asInstanceOf[TypeRef]) else tree
@@ -29,3 +31,7 @@ class ElimPackagePrefixes extends MiniPhase {
     case _ => false
   }
 }
+
+object ElimPackagePrefixes:
+  val name: String = "elimPackagePrefixes"
+  val description: String = "eliminate references to package prefixes in Select nodes"

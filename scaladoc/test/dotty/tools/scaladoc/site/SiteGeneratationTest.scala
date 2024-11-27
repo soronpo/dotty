@@ -14,7 +14,7 @@ import dotty.tools.scaladoc.test.BuildInfo
 class SiteGeneratationTest extends BaseHtmlTest:
 
   def indexLinks(content: DocumentContext) =
-    content.assertAttr("p a","href", "docs/index.html")
+    content.assertAttr("p a","href", "_docs/index.html")
 
   def checkFile(
     path: String)(
@@ -23,11 +23,11 @@ class SiteGeneratationTest extends BaseHtmlTest:
     parents: Seq[String] = Nil,
     checks: DocumentContext => Unit = _ => ())(using ProjectContext) =
       withHtmlFile(path){ content  =>
-        content.assertTextsIn(".projectName", projectName)
+        content.assertTextsIn(".project-name", projectName, projectName) // There are two elements with project name: one for desktop, one for mobile
         content.assertTextsIn(".projectVersion", projectVersion)
         content.assertTextsIn("h1", header)
         content.assertTextsIn("title", title)
-        content.assertTextsIn(".breadcrumbs a", (parents :+ title):_*)
+        content.assertTextsIn(".breadcrumbs a", (parents :+ title)*)
         checks(content)
       }
 
@@ -40,23 +40,21 @@ class SiteGeneratationTest extends BaseHtmlTest:
   def testDocIndexPage()(using ProjectContext) =
     checkFile("docs/index.html")(title = projectName, header = s"$projectName in header")
 
-  def testMainIndexPage()(using ProjectContext) =
-    checkFile("index.html")(title = "Basic test", header = "Header", parents = Seq(projectName), indexLinks)
-
   def testApiPages(
-    mainTitle: String = "API",
-    parents: Seq[String] = Seq(projectName))(using ProjectContext) =
-      checkFile("api/index.html")(
+    mainTitle: String = projectName,
+    parents: Seq[String] = Seq.empty,
+    hasToplevelIndexIndex: Boolean = false)(using ProjectContext) =
+      checkFile((if hasToplevelIndexIndex then "api/" else "" )+ "index.html")(
         title = mainTitle,
         header = projectName,
         parents = parents
       )
-      checkFile("api/tests/site.html")(
+      checkFile("tests/site.html")(
         title = "tests.site",
         header = "tests.site",
         parents = parents :+ mainTitle
       )
-      checkFile("api/tests/site/SomeClass.html")(
+      checkFile("tests/site/SomeClass.html")(
         title = "SomeClass",
         header = "SomeClass",
         parents = parents ++ Seq(mainTitle, "tests.site")
@@ -66,16 +64,15 @@ class SiteGeneratationTest extends BaseHtmlTest:
   def basicTest() = withGeneratedSite(testDocPath.resolve("basic")){
     testDocPages()
     testDocIndexPage()
-    testMainIndexPage()
     testApiPages()
 
     withHtmlFile("docs/Adoc.html"){ content  =>
-        content.assertAttr("p a","href", "../api/tests/site/SomeClass.html")
+        content.assertAttr("p a","href", "../tests/site/SomeClass.html")
     }
 
-    withHtmlFile("api/tests/site/SomeClass.html"){ content  =>
+    withHtmlFile("tests/site/SomeClass.html"){ content  =>
       content.assertAttr(".breadcrumbs a","href",
-        "../../../docs/index.html", "../../index.html", "../site.html", "SomeClass.html"
+        "../../index.html", "../site.html", "SomeClass.html"
       )
     }
   }
@@ -84,16 +81,46 @@ class SiteGeneratationTest extends BaseHtmlTest:
   def noGlobalIndexTest() = withGeneratedSite(testDocPath.resolve("noGlobalIndex")){
     testDocPages()
     testDocIndexPage()
-    testApiPages()
+    testApiPages(hasToplevelIndexIndex = false)
   }
 
   @Test
   def noIndexesTest() = withGeneratedSite(testDocPath.resolve("noIndexes")){
     testDocPages()
-    testApiPages()
+    testApiPages(hasToplevelIndexIndex = false)
   }
 
   @Test
   def noExistingDocs() = withGeneratedSite(testDocPath.resolve("noExisting")){
-    testApiPages(mainTitle = projectName, parents = Nil)
+    testApiPages(mainTitle = projectName, parents = Nil, hasToplevelIndexIndex = false)
+  }
+
+  @Test
+  def emptyPage() = withGeneratedSite(testDocPath.resolve("emptyPage")){
+    withHtmlFile("docs/hello.html") { content =>
+      // There should be no content as the page body is empty.
+      content.assertTextsIn("#content", Nil*)
+    }
+  }
+
+  @Test
+  def noConfigEnd() = withGeneratedSite(testDocPath.resolve("noConfigEnd")){
+    withHtmlFile("docs/hello.html") { content =>
+      // There should be no content as the page body is empty.
+      content.assertTextsIn("#content", Nil*)
+    }
+  }
+
+  @Test
+  def staticLinking() = withGeneratedSite(testDocPath.resolve("static-links")){
+
+    withHtmlFile("docs/Adoc.html"){ content  =>
+        content.assertAttr("p a","href",
+        "dir/html.html",
+        "dir/name...with..dots..html",
+        "dir/name.with.md.and.html.html",
+        "dir/nested.html",
+        "dir/nested.svg"
+        )
+    }
   }

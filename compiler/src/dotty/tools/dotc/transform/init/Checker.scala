@@ -2,64 +2,90 @@ package dotty.tools.dotc
 package transform
 package init
 
-
-import dotty.tools.dotc._
+import dotty.tools.dotc.*
 import ast.tpd
+import tpd.*
 
-import dotty.tools.dotc.core._
-import Contexts._
-import Types._
-import Symbols._
+import dotty.tools.dotc.core.*
+import Contexts.*
+import Types.*
+import Symbols.*
+import StdNames.*
 
-import dotty.tools.dotc.transform._
-import MegaPhase._
-
+import dotty.tools.dotc.transform.*
+import Phases.*
 
 import scala.collection.mutable
 
+import Semantic.*
+import dotty.tools.unsupported
 
-class Checker extends MiniPhase {
-  import tpd._
+class Checker extends Phase:
 
-  val phaseName = "initChecker"
+  override def phaseName: String = Checker.name
 
-  // cache of class summary
-  private val cache = new Cache
+  override def description: String = Checker.description
 
   override val runsAfter = Set(Pickler.name)
 
   override def isEnabled(using Context): Boolean =
-    super.isEnabled && ctx.settings.YcheckInit.value
+    super.isEnabled && (ctx.settings.Whas.checkInit || ctx.settings.YcheckInitGlobal.value)
 
-  override def transformTypeDef(tree: TypeDef)(using Context): tpd.Tree = {
-    if (!tree.isClassDef) return tree
+  def traverse(traverser: InitTreeTraverser)(using Context): Boolean = monitor(phaseName):
+    val unit = ctx.compilationUnit
+    traverser.traverse(unit.tpdTree)
 
-    val cls = tree.symbol.asClass
-    val instantiable: Boolean =
-      cls.is(Flags.Module) ||
-      !cls.isOneOf(Flags.AbstractOrTrait) && {
-        // see `Checking.checkInstantiable` in typer
-        val tp = cls.appliedRef
-        val stp = SkolemType(tp)
-        val selfType = cls.givenSelfType.asSeenFrom(stp, cls)
-        !selfType.exists || stp <:< selfType
-      }
+  override def runOn(units: List[CompilationUnit])(using Context): List[CompilationUnit] =
+    val checkCtx = ctx.fresh.setPhase(this)
+    val traverser = new InitTreeTraverser()
 
-    // A concrete class may not be instantiated if the self type is not satisfied
-    if (instantiable && cls.enclosingPackageClass != defn.StdLibPatchesPackage.moduleClass) {
-      implicit val state: Checking.State = Checking.State(
-        visited = Set.empty,
-        path = Vector.empty,
-        thisClass = cls,
-        fieldsInited = mutable.Set.empty,
-        parentsInited = mutable.Set.empty,
-        safePromoted = mutable.Set.empty,
-        env = Env(ctx.withOwner(cls), cache)
-      )
+    val units0 =
+      for
+        unit <- units
+        unitContext = checkCtx.fresh.setCompilationUnit(unit)
+        if traverse(traverser)(using unitContext)
+      yield
+        unitContext.compilationUnit
 
-      Checking.checkClassBody(tree)
+    cancellable {
+      val classes = traverser.getClasses()
+
+      if ctx.settings.Whas.checkInit then
+        Semantic.checkClasses(classes)(using checkCtx)
+
+      if ctx.settings.YcheckInitGlobal.value then
+        val obj = new Objects
+        obj.checkClasses(classes)(using checkCtx)
     }
 
-    tree
-  }
-}
+    units0
+  end runOn
+
+  def run(using Context): Unit = unsupported("run")
+
+  class InitTreeTraverser extends TreeTraverser:
+    private val classes: mutable.ArrayBuffer[ClassSymbol] = new mutable.ArrayBuffer
+
+    def getClasses(): List[ClassSymbol] = classes.toList
+
+    override def traverse(tree: Tree)(using Context): Unit =
+      traverseChildren(tree)
+      tree match {
+        case mdef: MemberDef =>
+          // self-type annotation ValDef has no symbol
+          if mdef.name != nme.WILDCARD then
+            mdef.symbol.defTree = tree
+
+          mdef match
+          case tdef: TypeDef if tdef.isClassDef =>
+            val cls = tdef.symbol.asClass
+            classes.append(cls)
+          case _ =>
+
+        case _ =>
+      }
+  end InitTreeTraverser
+
+object Checker:
+  val name: String = "initChecker"
+  val description: String = "check initialization of objects"

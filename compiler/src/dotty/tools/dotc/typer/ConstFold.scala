@@ -3,20 +3,18 @@ package typer
 
 import java.lang.ArithmeticException
 
-import ast._
-import Trees._
-import core._
-import Symbols._
-import Types._
-import Constants._
-import Names._
-import StdNames._
-import Contexts._
-import transform.TypeUtils._
+import ast.*
+import core.*
+import Symbols.*
+import Types.*
+import Constants.*
+import Names.*
+import StdNames.*
+import Contexts.*
 
 object ConstFold:
 
-  import tpd._
+  import tpd.*
 
   private val foldedBinops = Set[Name](
     nme.ZOR, nme.OR, nme.XOR, nme.ZAND, nme.AND, nme.EQ, nme.NE,
@@ -24,7 +22,11 @@ object ConstFold:
     nme.ADD, nme.SUB, nme.MUL, nme.DIV, nme.MOD)
 
   val foldedUnops = Set[Name](
-    nme.UNARY_!, nme.UNARY_~, nme.UNARY_+, nme.UNARY_-)
+    nme.UNARY_!, nme.UNARY_~, nme.UNARY_+, nme.UNARY_-,
+    nme.toChar, nme.toInt, nme.toFloat, nme.toLong, nme.toDouble,
+    // toByte and toShort are NOT included because we cannot write
+    // the type of a constant byte or short
+  )
 
   def Apply[T <: Apply](tree: T)(using Context): T =
     tree.fun match
@@ -74,7 +76,7 @@ object ConstFold:
     private def withFoldedType(c: Constant | Null): T =
       if c == null then tree else tree.withType(ConstantType(c)).asInstanceOf[T]
 
-  private def foldUnop(op: Name, x: Constant): Constant = (op, x.tag) match {
+  private def foldUnop(op: Name, x: Constant): Constant | Null = (op, x.tag) match {
     case (nme.UNARY_!, BooleanTag) => Constant(!x.booleanValue)
 
     case (nme.UNARY_~ , IntTag    ) => Constant(~x.intValue)
@@ -90,13 +92,19 @@ object ConstFold:
     case (nme.UNARY_- , FloatTag  ) => Constant(-x.floatValue)
     case (nme.UNARY_- , DoubleTag ) => Constant(-x.doubleValue)
 
+    case (nme.toChar  , _ ) if x.isNumeric => Constant(x.charValue)
+    case (nme.toInt   , _ ) if x.isNumeric => Constant(x.intValue)
+    case (nme.toLong  , _ ) if x.isNumeric => Constant(x.longValue)
+    case (nme.toFloat , _ ) if x.isNumeric => Constant(x.floatValue)
+    case (nme.toDouble, _ ) if x.isNumeric => Constant(x.doubleValue)
+
     case _ => null
   }
 
   /** These are local helpers to keep foldBinop from overly taxing the
    *  optimizer.
    */
-  private def foldBooleanOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldBooleanOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.ZOR  => Constant(x.booleanValue | y.booleanValue)
     case nme.OR   => Constant(x.booleanValue | y.booleanValue)
     case nme.XOR  => Constant(x.booleanValue ^ y.booleanValue)
@@ -106,7 +114,7 @@ object ConstFold:
     case nme.NE   => Constant(x.booleanValue != y.booleanValue)
     case _ => null
   }
-  private def foldSubrangeOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldSubrangeOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.OR  => Constant(x.intValue | y.intValue)
     case nme.XOR => Constant(x.intValue ^ y.intValue)
     case nme.AND => Constant(x.intValue & y.intValue)
@@ -126,7 +134,7 @@ object ConstFold:
     case nme.MOD => Constant(x.intValue % y.intValue)
     case _ => null
   }
-  private def foldLongOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldLongOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.OR  => Constant(x.longValue | y.longValue)
     case nme.XOR => Constant(x.longValue ^ y.longValue)
     case nme.AND => Constant(x.longValue & y.longValue)
@@ -146,7 +154,7 @@ object ConstFold:
     case nme.MOD => Constant(x.longValue % y.longValue)
     case _ => null
   }
-  private def foldFloatOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldFloatOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.EQ  => Constant(x.floatValue == y.floatValue)
     case nme.NE  => Constant(x.floatValue != y.floatValue)
     case nme.LT  => Constant(x.floatValue < y.floatValue)
@@ -160,7 +168,7 @@ object ConstFold:
     case nme.MOD => Constant(x.floatValue % y.floatValue)
     case _ => null
   }
-  private def foldDoubleOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldDoubleOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.EQ  => Constant(x.doubleValue == y.doubleValue)
     case nme.NE  => Constant(x.doubleValue != y.doubleValue)
     case nme.LT  => Constant(x.doubleValue < y.doubleValue)
@@ -174,21 +182,21 @@ object ConstFold:
     case nme.MOD => Constant(x.doubleValue % y.doubleValue)
     case _ => null
   }
-  private def foldStringOp(op: Name, x: Constant, y: Constant): Constant = op match {
+  private def foldStringOp(op: Name, x: Constant, y: Constant): Constant | Null = op match {
     case nme.ADD => Constant(x.stringValue + y.stringValue)
     case nme.EQ  => Constant(x.stringValue == y.stringValue)
     case nme.NE  => Constant(x.stringValue != y.stringValue)
     case _ => null
   }
 
-  private def foldNullOp(op: Name, x: Constant, y: Constant): Constant =
+  private def foldNullOp(op: Name, x: Constant, y: Constant): Constant | Null=
     assert(x.tag == NullTag || y.tag == NullTag)
     op match
       case nme.EQ => Constant(x.tag == y.tag)
       case nme.NE => Constant(x.tag != y.tag)
       case _ => null
 
-  private def foldBinop(op: Name, x: Constant, y: Constant): Constant =
+  private def foldBinop(op: Name, x: Constant, y: Constant): Constant | Null =
     val optag =
       if (x.tag == y.tag) x.tag
       else if (x.isNumeric && y.isNumeric) math.max(x.tag, y.tag)

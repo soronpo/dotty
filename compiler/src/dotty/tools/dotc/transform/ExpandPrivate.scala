@@ -1,19 +1,18 @@
 package dotty.tools.dotc
 package transform
 
-import core._
+import core.*
 import dotty.tools.dotc.core.DenotTransformers.IdentityDenotTransformer
-import Contexts._
-import Symbols._
-import Flags._
-import SymDenotations._
+import Contexts.*
+import Symbols.*
+import Flags.*
+import SymDenotations.*
 
-import Decorators._
-import ast.Trees._
-import MegaPhase._
+import Decorators.*
+import MegaPhase.*
 import java.io.File.separatorChar
 
-import ValueClasses._
+import ValueClasses.*
 
 /** Make private term members that are accessed from another class
  *  non-private by resetting the Private flag and expanding their name.
@@ -26,13 +25,15 @@ import ValueClasses._
  *  This is necessary since private methods are not allowed to have the same name
  *  as inherited public ones.
  *
- *  See discussion in https://github.com/lampepfl/dotty/pull/784
- *  and https://github.com/lampepfl/dotty/issues/783
+ *  See discussion in https://github.com/scala/scala3/pull/784
+ *  and https://github.com/scala/scala3/issues/783
  */
 class ExpandPrivate extends MiniPhase with IdentityDenotTransformer { thisPhase =>
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "expandPrivate"
+  override def phaseName: String = ExpandPrivate.name
+
+  override def description: String = ExpandPrivate.description
 
   // This phase moves methods around (in infotransform) so it may need to make other methods public
   override def runsAfter: Set[String] = Set(MoveStatics.name)
@@ -111,3 +112,7 @@ class ExpandPrivate extends MiniPhase with IdentityDenotTransformer { thisPhase 
     tree
   }
 }
+
+object ExpandPrivate:
+  val name: String = "expandPrivate"
+  val description: String = "widen private definitions accessed from nested classes"

@@ -1,36 +1,26 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Types._
-import Symbols._
-import Contexts._
-import Phases._
-import Flags._
-import StdNames._
-import SymUtils._
+import core.*
+import Types.*
+import Symbols.*
+import Contexts.*
+import Phases.*
+import Flags.*
+import StdNames.*
 
 /** Methods that apply to user-defined value classes */
 object ValueClasses {
 
-  def isDerivedValueClass(sym: Symbol)(using Context): Boolean = sym.isClass && {
-    val d = sym.denot
-    !d.isRefinementClass &&
-    d.isValueClass &&
-    (d.initial.symbol ne defn.AnyValClass) && // Compare the initial symbol because AnyVal does not exist after erasure
-    !d.isPrimitiveValueClass
-  }
-
   def isMethodWithExtension(sym: Symbol)(using Context): Boolean =
-    atPhaseNoLater(extensionMethodsPhase) {
-      val d = sym.denot
-      d.validFor.containsPhaseId(ctx.phaseId) &&
-      d.isRealMethod &&
-      isDerivedValueClass(d.owner) &&
-      !d.isConstructor &&
-      !d.symbol.isSuperAccessor &&
-      !d.is(Macro)
-    }
+    val d = sym.denot.initial
+    d.validFor.firstPhaseId <= extensionMethodsPhase.id
+    && d.isRealMethod
+    && isDerivedValueClass(d.owner)
+    && !d.isConstructor
+    && !d.symbol.isSuperAccessor
+    && !d.isInlineMethod
+    && !d.is(Macro)
 
   /** The member of a derived value class that unboxes it. */
   def valueClassUnbox(cls: ClassSymbol)(using Context): Symbol =

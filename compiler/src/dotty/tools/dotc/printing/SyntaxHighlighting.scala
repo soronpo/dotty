@@ -1,12 +1,14 @@
 package dotty.tools.dotc
 package printing
 
+import scala.language.unsafeNulls
+
 import dotty.tools.dotc.ast.untpd
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core.StdNames._
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.StdNames.*
 import dotty.tools.dotc.parsing.Parsers.Parser
 import dotty.tools.dotc.parsing.Scanners.Scanner
-import dotty.tools.dotc.parsing.Tokens._
+import dotty.tools.dotc.parsing.Tokens.*
 import dotty.tools.dotc.reporting.Reporter
 import dotty.tools.dotc.util.Spans.Span
 import dotty.tools.dotc.util.SourceFile
@@ -17,7 +19,7 @@ import java.util.Arrays
 object SyntaxHighlighting {
 
   /** if true, log erroneous positions being highlighted */
-  private final val debug = true
+  private inline val debug = true
 
   // Keep in sync with SyntaxHighlightingTests
   val NoColor: String         = Console.RESET
@@ -81,11 +83,11 @@ object SyntaxHighlighting {
         }
       }
 
-      for (span <- scanner.commentSpans)
-        highlightPosition(span, CommentColor)
+      for (comment <- scanner.comments)
+        highlightPosition(comment.span, CommentColor)
 
       object TreeHighlighter extends untpd.UntypedTreeTraverser {
-        import untpd._
+        import untpd.*
 
         def ignored(tree: NameTree) = {
           val name = tree.name.toTermName
@@ -107,12 +109,14 @@ object SyntaxHighlighting {
             case tree: ValOrDefDef =>
               highlightAnnotations(tree)
               highlightPosition(tree.nameSpan, ValDefColor)
+              highlightPosition(tree.endSpan, ValDefColor)
             case tree: MemberDef /* ModuleDef | TypeDef */ =>
               highlightAnnotations(tree)
               highlightPosition(tree.nameSpan, TypeColor)
+              highlightPosition(tree.endSpan, TypeColor)
             case tree: Ident if tree.isType =>
               highlightPosition(tree.span, TypeColor)
-            case _: TypTree =>
+            case _: TypeTree =>
               highlightPosition(tree.span, TypeColor)
             case _ =>
           }
@@ -120,24 +124,30 @@ object SyntaxHighlighting {
         }
       }
 
-      val parser = new Parser(source)
-      val trees = parser.blockStatSeq()
-      TreeHighlighter.highlight(trees)
+      try
+        val parser = new Parser(source)
+        val trees = parser.blockStatSeq()
+        TreeHighlighter.highlight(trees)
 
-      val highlighted = new StringBuilder()
 
-      for (idx <- colorAt.indices) {
-        val prev = if (idx == 0) NoColor else colorAt(idx - 1)
-        val curr = colorAt(idx)
-        if (curr != prev)
-          highlighted.append(curr)
-        highlighted.append(in(idx))
-      }
+        val highlighted = new StringBuilder()
 
-      if (colorAt.last != NoColor)
-        highlighted.append(NoColor)
+        for (idx <- colorAt.indices) {
+          val prev = if (idx == 0) NoColor else colorAt(idx - 1)
+          val curr = colorAt(idx)
+          if (curr != prev)
+            highlighted.append(curr)
+          highlighted.append(in(idx))
+        }
 
-      highlighted.toString
+        if (colorAt.last != NoColor)
+          highlighted.append(NoColor)
+
+        highlighted.toString
+      catch
+        case e: StackOverflowError =>
+          in
     }
   }
+
 }

@@ -1,22 +1,21 @@
 package dotty.tools.dotc
 package transform
 
-import dotty.tools.dotc.ast.Trees._
 import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.core.DenotTransformers.IdentityDenotTransformer
-import dotty.tools.dotc.core.Flags._
-import dotty.tools.dotc.core.Symbols._
-import dotty.tools.dotc.core._
-import dotty.tools.dotc.transform.MegaPhase._
-import dotty.tools.dotc.transform.SymUtils._
+import dotty.tools.dotc.core.Flags.*
+import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.core.*
+import dotty.tools.dotc.transform.MegaPhase.*
+
 
 /** Removes `Select`s that would be compiled into `GetStatic`.
  *
  *  Otherwise, the backend needs to be aware that some qualifiers need to be
  *  dropped.
  *
- *  A tranformation similar to what this phase does seems to be performed by
+ *  A transformation similar to what this phase does seems to be performed by
  *  flatten in nsc.
  *
  *  The side effects of the qualifier of a dropped `Select` is normally
@@ -44,9 +43,11 @@ import dotty.tools.dotc.transform.SymUtils._
  *  @author Dmytro Petrashko
  */
 class SelectStatic extends MiniPhase with IdentityDenotTransformer {
-  import ast.tpd._
+  import ast.tpd.*
 
-  override def phaseName: String = "selectStatic"
+  override def phaseName: String = SelectStatic.name
+
+  override def description: String = SelectStatic.description
 
   override def transformSelect(tree: tpd.Select)(using Context): tpd.Tree = {
     val sym = tree.symbol
@@ -94,3 +95,7 @@ class SelectStatic extends MiniPhase with IdentityDenotTransformer {
   override def transformClosure(tree: tpd.Closure)(using Context): tpd.Tree =
     normalize(tree)
 }
+
+object SelectStatic:
+  val name: String = "selectStatic"
+  val description: String = "get rid of selects that would be compiled into GetStatic"

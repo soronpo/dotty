@@ -6,7 +6,6 @@ package dotty.tools.dotc.util
 class EqHashMap[Key, Value]
     (initialCapacity: Int = 8, capacityMultiple: Int = 2)
 extends GenericHashMap[Key, Value](initialCapacity, capacityMultiple):
-  import GenericHashMap.DenseLimit
 
   /** Hashcode is identityHashCode left-shifted by 1, so lowest bit is not lost
    *  when taking the index.
@@ -59,6 +58,22 @@ extends GenericHashMap[Key, Value](initialCapacity, capacityMultiple):
     used += 1
     if used > limit then growTable()
 
+  override def getOrElseUpdate(key: Key, value: => Value): Value =
+    // created by blending lookup and update, avoid having to recompute hash and probe
+    Stats.record(statsItem("lookup-or-update"))
+    var idx = firstIndex(key)
+    var k = keyAt(idx)
+    while k != null do
+      if isEqual(k, key) then return valueAt(idx)
+      idx = nextIndex(idx)
+      k = keyAt(idx)
+    val v = value
+    setKey(idx, key)
+    setValue(idx, v)
+    used += 1
+    if used > limit then growTable()
+    v
+
   private def addOld(key: Key, value: Value): Unit =
     Stats.record(statsItem("re-enter"))
     var idx = firstIndex(key)
@@ -69,7 +84,7 @@ extends GenericHashMap[Key, Value](initialCapacity, capacityMultiple):
     setKey(idx, key)
     setValue(idx, value)
 
-  override def copyFrom(oldTable: Array[AnyRef]): Unit =
+  override def copyFrom(oldTable: Array[AnyRef | Null]): Unit =
     if isDense then
       Array.copy(oldTable, 0, table, 0, oldTable.length)
     else

@@ -2,21 +2,24 @@ package dotty.tools
 package dotc
 package typer
 
-import dotty.tools.dotc.ast.Trees._
+import dotty.tools.dotc.ast.Trees.*
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.untpd
 import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.Flags.*
+import dotty.tools.dotc.core.Mode
 import dotty.tools.dotc.core.Names.{Name, TermName}
-import dotty.tools.dotc.core.StdNames._
-import dotty.tools.dotc.core.Types._
-import dotty.tools.dotc.core.Decorators._
+import dotty.tools.dotc.core.StdNames.*
+import dotty.tools.dotc.core.Types.*
+import dotty.tools.dotc.core.Decorators.*
 import dotty.tools.dotc.core.TypeErasure
-import util.Spans._
-import core.Symbols._
-import core.Definitions
-import ErrorReporting._
-import reporting._
+import util.Spans.*
+import core.Symbols.*
+import transform.ValueClasses
+import ErrorReporting.*
+import reporting.*
+import inlines.Inlines
 
 object Dynamic {
   private def isDynamicMethod(name: Name): Boolean =
@@ -66,8 +69,8 @@ object DynamicUnapply {
 trait Dynamic {
   self: Typer & Applications =>
 
-  import Dynamic._
-  import tpd._
+  import Dynamic.*
+  import tpd.*
 
   /** Translate selection that does not typecheck according to the normal rules into a applyDynamic/applyDynamicNamed.
    *    foo.bar(baz0, baz1, ...)                       ~~> foo.applyDynamic(bar)(baz0, baz1, ...)
@@ -81,7 +84,7 @@ trait Dynamic {
       val args = tree.args
       val dynName = if (args.exists(isNamedArg)) nme.applyDynamicNamed else nme.applyDynamic
       if (dynName == nme.applyDynamicNamed && untpd.isWildcardStarArgList(args))
-        errorTree(tree, "applyDynamicNamed does not support passing a vararg parameter")
+        errorTree(tree, em"applyDynamicNamed does not support passing a vararg parameter")
       else {
         def namedArgTuple(name: String, arg: untpd.Tree) = untpd.Tuple(List(Literal(Constant(name)), arg))
         def namedArgs = args.map {
@@ -176,17 +179,17 @@ trait Dynamic {
    *  type
    */
   def handleStructural(tree: Tree)(using Context): Tree = {
-    val fun @ Select(qual, name) = funPart(tree)
+    val fun @ Select(qual, name) = funPart(tree): @unchecked
     val vargss = termArgss(tree)
 
     def structuralCall(selectorName: TermName, classOfs: => List[Tree]) = {
-      val selectable = adapt(qual, defn.SelectableClass.typeRef)
+      val selectable = adapt(qual, defn.SelectableClass.typeRef | defn.DynamicClass.typeRef)
 
       // ($qual: Selectable).$selectorName("$name")
       val base =
         untpd.Apply(
-          untpd.TypedSplice(selectable.select(selectorName)).withSpan(fun.span),
-          (Literal(Constant(name.toString)) :: Nil).map(untpd.TypedSplice(_)))
+          untpd.Select(untpd.TypedSplice(selectable), selectorName).withSpan(fun.span),
+          (Literal(Constant(name.encode.toString)) :: Nil).map(untpd.TypedSplice(_)))
 
       val scall =
         if (vargss.isEmpty) base
@@ -209,15 +212,44 @@ trait Dynamic {
               case _ => tree
             case other => tree
         case _ => tree
-      addClassOfs(typed(scall))
+
+      // We type the application of `applyDynamic` without inlining (arguments are already typed and inlined),
+      // to be able to add the add the Class arguments before we inline the method.
+      val call = addClassOfs(withMode(Mode.NoInline)(typed(scall)))
+      if Inlines.needsInlining(call) then Inlines.inlineCall(call)
+      else call
     }
 
     def fail(reason: String): Tree =
       errorTree(tree, em"Structural access not allowed on method $name because it $reason")
 
+    extension (tree: Tree)
+      /** The implementations of `selectDynamic` and `applyDynamic` in `scala.reflect.SelectDynamic` have no information about the expected return type of a value/method which was declared in the refinement,
+       *  only the JVM type after erasure can be obtained through reflection, e.g.
+       *
+       *  class Foo(val i: Int) extends AnyVal
+       *  class Reflective extends reflect.Selectable
+       *  val reflective = new Reflective {
+       *    def foo = Foo(1) // Foo at compile time, java.lang.Integer in reflection
+       *  }
+       *
+       *  Because of that reflective access cannot be implemented properly in `scala.reflect.SelectDynamic` itself
+       *  because it's not known there if the value should be wrapped in a value class constructor call or not.
+       *  Hence the logic of wrapping is performed here, relying on the fact that the implementations of `selectDynamic` and `applyDynamic` in `scala.reflect.SelectDynamic` are final.
+       */
+      def maybeBoxingCast(tpe: Type) =
+        val maybeBoxed =
+          if tpe.classSymbol.isDerivedValueClass && qual.tpe <:< defn.ReflectSelectableTypeRef then
+            val genericUnderlying = ValueClasses.valueClassUnbox(tpe.classSymbol.asClass)
+            val underlying = tpe.select(genericUnderlying).widen.resultType
+            New(tpe.widen, tree.cast(underlying) :: Nil)
+          else
+            tree
+        maybeBoxed.cast(tpe)
+
     fun.tpe.widen match {
       case tpe: ValueType =>
-        structuralCall(nme.selectDynamic, Nil).cast(tpe)
+        structuralCall(nme.selectDynamic, Nil).maybeBoxingCast(fun.tpe.widenExpr)
 
       case tpe: MethodType =>
         def isDependentMethod(tpe: Type): Boolean = tpe match {
@@ -237,7 +269,7 @@ trait Dynamic {
               fail(i"has a parameter type with an unstable erasure") :: Nil
             else
               TypeErasure.erasure(tpe).asInstanceOf[MethodType].paramInfos.map(clsOf(_))
-          structuralCall(nme.applyDynamic, classOfs).cast(tpe.finalResultType)
+          structuralCall(nme.applyDynamic, classOfs).maybeBoxingCast(tpe.finalResultType)
         }
 
       // (@allanrenucci) I think everything below is dead code

@@ -1,9 +1,9 @@
 package dotty.tools.dotc
 package transform
 
-import MegaPhase._
-import core.DenotTransformers._
-import core.Contexts._
+import MegaPhase.*
+import core.DenotTransformers.*
+import core.Contexts.*
 import ast.tpd
 
 /** This phase transforms wildcards in valdefs with their default value.
@@ -12,9 +12,11 @@ import ast.tpd
   *
   */
 class TransformWildcards extends MiniPhase with IdentityDenotTransformer {
-  import tpd._
+  import tpd.*
 
-  override def phaseName: String = "transformWildcards"
+  override def phaseName: String = TransformWildcards.name
+
+  override def description: String = TransformWildcards.description
 
   override def checkPostCondition(tree: Tree)(using Context): Unit =
     tree match {
@@ -26,3 +28,7 @@ class TransformWildcards extends MiniPhase with IdentityDenotTransformer {
     if (ctx.owner.isClass) tree
     else cpy.ValDef(tree)(rhs = tree.rhs.wildcardToDefault)
 }
+
+object TransformWildcards:
+  val name: String = "transformWildcards"
+  val description: String = "replace wildcards with default values"

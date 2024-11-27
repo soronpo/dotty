@@ -1,22 +1,22 @@
-package dotty.tools.dotc
+package dotty.tools
+package dotc
 package transform
 
-import core._
+import core.*
 import StdNames.nme
-import Types._
-import transform.MegaPhase._
-import ast.Trees._
-import Flags._
-import Contexts._
-import Symbols._
-import Constants._
-import Decorators._
-import Denotations._, SymDenotations._
-import TypeErasure.erasure
-import DenotTransformers._
+import Types.*
+import transform.MegaPhase.*
+import Flags.*
+import Contexts.*
+import Symbols.*
+import Decorators.*
+import Denotations.*, SymDenotations.*
+import DenotTransformers.*
+import NullOpsDecorator.*
 
 object ElimRepeated {
   val name: String = "elimRepeated"
+  val description: String = "rewrite vararg parameters and arguments"
 }
 
 /** A transformer that eliminates repeated parameters (T*) from all types, replacing
@@ -24,9 +24,11 @@ object ElimRepeated {
  *  the transformed type if needed.
  */
 class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = ElimRepeated.name
+
+  override def description: String = ElimRepeated.description
 
   override def changesMembers: Boolean = true // the phase adds vararg forwarders
 
@@ -49,10 +51,10 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
           // see https://github.com/scala/bug/issues/11714
           val validJava = isValidJavaVarArgs(sym.info)
           if !validJava then
-            report.error("""To generate java-compatible varargs:
+            report.error(em"""To generate java-compatible varargs:
                       |  - there must be a single repeated parameter
                       |  - it must be the last argument in the last parameter list
-                      |""".stripMargin,
+                      |""",
               sym.sourcePos)
           else
             addVarArgsForwarder(sym, isJavaVarargsOverride, hasAnnotation, parentHasAnnotation)
@@ -76,16 +78,33 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
 
   override def infoMayChange(sym: Symbol)(using Context): Boolean = sym.is(Method)
 
-  private def overridesJava(sym: Symbol)(using Context) = sym.allOverriddenSymbols.exists(_.is(JavaDefined))
+  /** Does `sym` override a symbol defined in a Java class? One might think that
+   *  this can be expressed as
+   *
+   *      sym.allOverriddenSymbols.exists(_.is(JavaDefined))
+   *
+   *  but that does not work, since `allOverriddenSymbols` gets confused because the
+   *  signatures of a Java varargs method and a Scala varargs override are not the same.
+   */
+  private def overridesJava(sym: Symbol)(using Context) =
+    sym.memberCanMatchInheritedSymbols
+    && sym.owner.info.baseClasses.drop(1).exists { bc =>
+      bc.is(JavaDefined) && {
+        val other = bc.info.nonPrivateDecl(sym.name)
+        other.hasAltWith { alt =>
+          sym.owner.thisType.memberInfo(alt.symbol).matchesLoosely(sym.info)
+        }
+      }
+    }
 
   private def hasVarargsAnnotation(sym: Symbol)(using Context) = sym.hasAnnotation(defn.VarargsAnnot)
 
   private def parentHasVarargsAnnotation(sym: Symbol)(using Context) = sym.allOverriddenSymbols.exists(hasVarargsAnnotation)
 
   private def isVarargsMethod(sym: Symbol)(using Context) =
-    hasVarargsAnnotation(sym) ||
-      hasRepeatedParams(sym) &&
-      (sym.allOverriddenSymbols.exists(s => s.is(JavaDefined) || hasVarargsAnnotation(s)))
+    hasVarargsAnnotation(sym)
+    || hasRepeatedParams(sym)
+        && (overridesJava(sym) || sym.allOverriddenSymbols.exists(hasVarargsAnnotation))
 
   /** Eliminate repeated parameters from method types. */
   private def elimRepeated(tp: Type, isJava: Boolean)(using Context): Type = tp.stripTypeVar match
@@ -96,22 +115,7 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
         if lastIdx >= 0 then
           val last = paramTypes(lastIdx)
           if last.isRepeatedParam then
-            // We need to be careful when handling Java repeated parameters
-            // of the form `Object...` or `T...` where `T` is unbounded:
-            // in both cases, `Object` will have been translated to `FromJavaObject`
-            // to allow passing primitives as repeated arguments, but we can't
-            // pass a primitive array as argument to such a method since the
-            // parameter will be erased to `Object[]`. To handle this correctly we
-            // drop usage of `FromJavaObject` as an element type here, the
-            // tree transformer of this phase is then responsible for handling
-            // mismatches by emitting the correct adaptation (cf `adaptToArray`).
-            // See also the documentation of `FromJavaObjectSymbol`.
-            val last1 =
-              if isJava && last.elemType.isFromJavaObject then
-                defn.ArrayOf(TypeBounds.upper(defn.ObjectType))
-              else
-                last.translateFromRepeated(toArray = isJava)
-            paramTypes.updated(lastIdx, last1)
+            paramTypes.updated(lastIdx, last.translateFromRepeated(toArray = isJava))
           else paramTypes
         else paramTypes
       tp.derivedLambdaType(paramNames, paramTypes1, resultType1)
@@ -121,73 +125,43 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
       tp
 
   override def transformApply(tree: Apply)(using Context): Tree =
-    val args = tree.args.mapConserve {
-      case arg: Typed if isWildcardStarArg(arg) =>
+    val args = tree.args.mapConserve { arg =>
+      if isWildcardStarArg(arg) then
+        val expr = arg match
+          case t: Typed => t.expr
+          case _ => arg // if the argument has been lifted it's not a Typed (often it's an Ident)
+
         val isJavaDefined = tree.fun.symbol.is(JavaDefined)
-        val tpe = arg.expr.tpe
         if isJavaDefined then
-          val pt = tree.fun.tpe.widen.firstParamTypes.last
-          adaptToArray(arg.expr, pt.elemType.bounds.hi)
-        else if tpe.derivesFrom(defn.ArrayClass) then
-          arrayToSeq(arg.expr)
+          adaptToArray(expr)
+        else if expr.tpe.derivesFrom(defn.ArrayClass) then
+          arrayToSeq(expr)
         else
-          arg.expr
-      case arg => arg
+          expr
+      else
+        arg
     }
     cpy.Apply(tree)(tree.fun, args)
 
-  /** Convert sequence argument to Java array */
-  private def seqToArray(tree: Tree)(using Context): Tree = tree match
+  private def adaptToArray(tree: Tree)(implicit ctx: Context): Tree = tree match
     case SeqLiteral(elems, elemtpt) =>
-      JavaSeqLiteral(elems, elemtpt)
+      JavaSeqLiteral(elems, elemtpt).withSpan(tree.span)
     case _ =>
-      val elemType = tree.tpe.elemType
-      var elemClass = erasure(elemType).classSymbol
-      if defn.NotRuntimeClasses.contains(elemClass) then
-        elemClass = defn.ObjectClass
-      end if
-      ref(defn.DottyArraysModule)
-        .select(nme.seqToArray)
-        .appliedToType(elemType)
-        .appliedTo(tree, clsOf(elemClass.typeRef))
-
-  /** Adapt a Seq or Array tree to be a subtype of `Array[_ <: $elemPt]`.
-   *
-   *  @pre `elemPt` must either be a super type of the argument element type or `Object`.
-   *        The special handling of `Object` is required to deal with the translation
-   *        of generic Java varargs in `elimRepeated`.
-   */
-  private def adaptToArray(tree: Tree, elemPt: Type)(implicit ctx: Context): Tree =
-    val elemTp = tree.tpe.elemType
-    val elemTpMatches = elemTp <:< elemPt
-    val treeIsArray = tree.tpe.derivesFrom(defn.ArrayClass)
-    if elemTpMatches && treeIsArray then
-      tree // No adaptation necessary
-    else tree match
-      case SeqLiteral(elems, elemtpt) =>
-        // By the precondition, we only have mismatches if elemPt is Object, in
-        // that case we use `FromJavaObject` as the element type to allow the
-        // sequence literal to typecheck no matter the types of the elements,
-        // Erasure will take care of any necessary boxing (see documentation
-        // of `FromJavaObjectSymbol` for more information).
-        val adaptedElemTpt = if elemTpMatches then elemtpt else TypeTree(defn.FromJavaObjectType)
-        JavaSeqLiteral(elems, adaptedElemTpt).withSpan(tree.span)
-      case _ =>
-        if treeIsArray then
-          // Convert an Array[T] to an Array[Object]
-          ref(defn.ScalaRuntime_toObjectArray)
-            .appliedTo(tree)
-        else if elemTpMatches then
-          // Convert a Seq[T] to an Array[$elemPt]
-          ref(defn.DottyArraysModule)
-            .select(nme.seqToArray)
-            .appliedToType(elemPt)
-            .appliedTo(tree, clsOf(elemPt))
+      val elemTp = tree.tpe.elemType
+      val adapted =
+        if tree.tpe.derivesFrom(defn.ArrayClass) then
+          tree
         else
-          // Convert a Seq[T] to an Array[Object]
-          ref(defn.ScalaRuntime_toArray)
-            .appliedToType(elemTp)
-            .appliedTo(tree)
+          ref(defn.DottyArraysModule)
+          .select(nme.seqToArray)
+          .appliedToType(elemTp)
+          .appliedTo(tree, clsOf(elemTp))
+      // This seemingly redundant type ascription is needed because the result
+      // type of `adapted` might be erased to `Object`, but we need to keep
+      // the precise result type at erasure for `Erasure.Boxing.cast` to adapt
+      // a primitive array into a reference array if needed.
+      // Test case in tests/run/t1360.scala.
+      Typed(adapted, TypeTree(defn.ArrayOf(elemTp)))
 
   /** Convert an Array into a scala.Seq */
   private def arrayToSeq(tree: Tree)(using Context): Tree =
@@ -210,7 +184,7 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
         .symbol.asTerm
       // Generate the method
       val forwarderDef = DefDef(forwarderSym, prefss => {
-        val init :+ (last :+ vararg) = prefss
+        val init :+ (last :+ vararg) = prefss: @unchecked
         // Can't call `.argTypes` here because the underlying array type is of the
         // form `Array[? <: SomeType]`, so we need `.argInfos` to get the `TypeBounds`.
         val elemtp = vararg.tpe.widen.argInfos.head
@@ -231,7 +205,7 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
    */
   private def isValidJavaVarArgs(tp: Type)(using Context): Boolean = tp match
     case mt: MethodType =>
-      val initp :+ lastp = mt.paramInfoss
+      val initp :+ lastp = mt.paramInfoss: @unchecked
       initp.forall(_.forall(!_.isRepeatedParam)) &&
       lastp.nonEmpty &&
       lastp.init.forall(!_.isRepeatedParam) &&
@@ -292,6 +266,7 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
         report.error(s"$src produces a forwarder method that conflicts with ${conflict.showDcl}", original.srcPos)
       case Nil =>
         forwarder.enteredAfter(thisPhase)
+  end addVarArgsForwarder
 
   /** Convert type from Scala to Java varargs method */
   private def toJavaVarArgs(tp: Type)(using Context): Type = tp match
@@ -302,7 +277,7 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
         case m: MethodType => // multiple param lists
           tp.derivedLambdaType(tp.paramNames, tp.paramInfos, toJavaVarArgs(m))
         case _ =>
-          val init :+ last = tp.paramInfos
+          val init :+ last = tp.paramInfos: @unchecked
           val vararg = varargArrayType(last)
           tp.derivedLambdaType(tp.paramNames, init :+ vararg, tp.resultType)
 
@@ -317,6 +292,9 @@ class ElimRepeated extends MiniPhase with InfoTransformer { thisPhase =>
     val array = tp.translateFromRepeated(toArray = true) // Array[? <: T]
     val element = array.elemType.hiBound // T
 
-    if element <:< defn.AnyRefType || element.typeSymbol.isPrimitiveValueClass then array
+    if element <:< defn.AnyRefType
+      || ctx.mode.is(Mode.SafeNulls) && element.stripNull() <:< defn.AnyRefType
+      || element.typeSymbol.isPrimitiveValueClass
+    then array
     else defn.ArrayOf(TypeBounds.upper(AndType(element, defn.AnyRefType))) // Array[? <: T & AnyRef]
 }

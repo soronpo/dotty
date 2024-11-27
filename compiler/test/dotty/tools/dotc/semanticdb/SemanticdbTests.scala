@@ -1,5 +1,7 @@
 package dotty.tools.dotc.semanticdb
 
+import scala.language.unsafeNulls
+
 import java.net.URLClassLoader
 import java.util.regex.Pattern
 import java.io.File
@@ -24,6 +26,30 @@ import dotty.tools.dotc.util.SourceFile
 
 @main def updateExpect =
   SemanticdbTests().runExpectTest(updateExpectFiles = true)
+
+/** Useful for printing semanticdb metac output for one file
+ *
+ *  @param root the output directory containing semanticdb output,
+ *  only 1 semanticdb file should be present
+ *  @param source the single source file producing the semanticdb
+ */
+@main def metac(root: String, source: String) =
+  val rootSrc = Paths.get(root)
+  val sourceSrc = Paths.get(source)
+  val semanticFile = FileSystems.getDefault.getPathMatcher("glob:**.semanticdb")
+  def inputFile(): Path =
+    val ls = Files.walk(rootSrc.resolve("META-INF").resolve("semanticdb"))
+    val files =
+      try ls.filter(p => semanticFile.matches(p)).collect(Collectors.toList).asScala
+      finally ls.close()
+    require(files.sizeCompare(1) == 0, s"No semanticdb files! $rootSrc")
+    files.head
+  val metacSb: StringBuilder = StringBuilder(5000)
+  val semanticdbPath = inputFile()
+  val doc = Tools.loadTextDocumentUnsafe(sourceSrc.toAbsolutePath, semanticdbPath)
+  Tools.metac(doc, Paths.get(doc.uri))(using metacSb)
+  Files.write(rootSrc.resolve("metac.expect"), metacSb.toString.getBytes(StandardCharsets.UTF_8))
+
 
 @Category(Array(classOf[BootstrappedOnlyTests]))
 class SemanticdbTests:
@@ -76,7 +102,7 @@ class SemanticdbTests:
       |inspect with:
       |  diff $expect ${expect.resolveSibling("" + expect.getFileName + ".out")}
       |Or else update all expect files with
-      |  sbt 'scala3-compiler-bootstrapped/test:runMain dotty.tools.dotc.semanticdb.updateExpect'""".stripMargin)
+      |  sbt 'scala3-compiler-bootstrapped/Test/runMain dotty.tools.dotc.semanticdb.updateExpect'""".stripMargin)
     Files.walk(target).sorted(Comparator.reverseOrder).forEach(Files.delete)
     if errors.nonEmpty then
       fail(s"${errors.size} errors in expect test.")
@@ -104,7 +130,7 @@ class SemanticdbTests:
     val target = Files.createTempDirectory("semanticdb")
     val javaArgs = Array("-d", target.toString) ++ javaFiles().map(_.toString)
     val javac = ToolProvider.getSystemJavaCompiler
-    val exitJava = javac.run(null, null, null, javaArgs:_*)
+    val exitJava = javac.run(null, null, null, javaArgs*)
     assert(exitJava == 0, "java compiler has errors")
     val args = Array(
       "-Xsemanticdb",
@@ -116,7 +142,8 @@ class SemanticdbTests:
       "-sourceroot", expectSrc.toString,
       "-classpath", target.toString,
       "-Xignore-scala2-macros",
-      "-usejavacp"
+      "-usejavacp",
+      "-Wunused:all"
     ) ++ inputFiles().map(_.toString)
     val exit = Main.process(args)
     assertFalse(s"dotc errors: ${exit.errorCount}", exit.hasErrors)

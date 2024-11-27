@@ -3,18 +3,33 @@ package rewrites
 
 import util.{SourceFile, Spans}
 import Spans.Span
-import core.Contexts._
+import core.Contexts.*
 import collection.mutable
 import scala.annotation.tailrec
 import dotty.tools.dotc.reporting.Reporter
+import dotty.tools.dotc.util.SourcePosition;
+
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets.UTF_8
+import dotty.tools.dotc.reporting.CodeAction
 
 /** Handles rewriting of Scala2 files to Dotty */
 object Rewrites {
-  private class PatchedFiles extends mutable.HashMap[SourceFile, Patches]
+  private type PatchedFiles = mutable.HashMap[SourceFile, Patches]
 
   private case class Patch(span: Span, replacement: String) {
     def delta = replacement.length - (span.end - span.start)
   }
+
+  /** A special type of Patch that instead of just a span, contains the
+    * full SourcePosition. This is useful when being used by
+    * [[dotty.tools.dotc.reporting.CodeAction]] or if the patch doesn't
+    * belong to the same file that the actual issue it's addressing is in.
+    *
+    * @param srcPos The SourcePosition of the patch.
+    * @param replacement The Replacement that should go in that position.
+    */
+  case class ActionPatch(srcPos: SourcePosition, replacement: String)
 
   private class Patches(source: SourceFile) {
     private[Rewrites] val pbuf = new mutable.ListBuffer[Patch]()
@@ -26,7 +41,7 @@ object Rewrites {
       val delta = pbuf.map(_.delta).sum
       val patches = pbuf.toList.sortBy(_.span.start)
       if (patches.nonEmpty)
-        patches reduceLeft {(p1, p2) =>
+        patches.reduceLeft {(p1, p2) =>
           assert(p1.span.end <= p2.span.start, s"overlapping patches in $source: $p1 and $p2")
           p2
         }
@@ -51,24 +66,22 @@ object Rewrites {
       ds
     }
 
-    def writeBack(): Unit = {
+    def writeBack(): Unit =
       val chars = apply(source.underlying.content)
-      val bytes = new String(chars).getBytes
-      val out = source.file.output
-      out.write(bytes)
-      out.close()
-    }
+      val osw = OutputStreamWriter(source.file.output, UTF_8)
+      try osw.write(chars, 0, chars.length)
+      finally osw.close()
   }
 
   /** If -rewrite is set, record a patch that replaces the range
    *  given by `span` in `source` by `replacement`
    */
   def patch(source: SourceFile, span: Span, replacement: String)(using Context): Unit =
-    if (ctx.reporter != Reporter.NoReporter) // NoReporter is used for syntax highlighting
-      for (rewrites <- ctx.settings.rewrite.value)
-        rewrites.patched
-          .getOrElseUpdate(source, new Patches(source))
-          .addPatch(span, replacement)
+    if ctx.reporter != Reporter.NoReporter // NoReporter is used for syntax highlighting
+    then ctx.settings.rewrite.value.foreach(_.patched
+         .getOrElseUpdate(source, new Patches(source))
+         .addPatch(span, replacement)
+    )
 
   /** Patch position in `ctx.compilationUnit.source`. */
   def patch(span: Span, replacement: String)(using Context): Unit =
@@ -87,15 +100,20 @@ object Rewrites {
       report.echo(s"[patched file ${source.file.path}]")
       rewrites.patched(source).writeBack()
     }
+
+  /** Given a CodeAction take the patches and apply them.
+   *
+   * @param action The CodeAction containing the patches
+   */
+  def applyAction(action: CodeAction)(using Context): Unit =
+    action.patches.foreach: actionPatch =>
+      patch(actionPatch.srcPos.span, actionPatch.replacement)
 }
 
 /** A completely encapsulated class representing rewrite state, used
  *  as an optional setting.
  */
 class Rewrites {
-  import Rewrites._
+  import Rewrites.*
   private val patched = new PatchedFiles
 }
-
-
-

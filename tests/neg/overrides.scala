@@ -1,3 +1,5 @@
+//> using options -experimental
+
 class Foo {
   type A = Int
   type B >: Int <: Int
@@ -42,6 +44,7 @@ class A[T] {
 
   def next: T = ???
 
+  def b[U <: T](x: Int)[V >: T](y: String) = false
 }
 
 class B extends A[Int] {
@@ -52,6 +55,16 @@ class B extends A[Int] {
 
   override def next(): Int = ???    // error: incompatible type
 
+  override def b[T <: Int](x: Int)(y: String) = true // error
+}
+
+class C extends A[String] {
+
+  override def f(x: String) = x // error
+
+  override def next: Int = ???    // error: incompatible type
+
+  override def b[T <: String](x: Int)[U >: Int](y: String) = true // error: incompatible type
 }
 
 class X {
@@ -104,3 +117,23 @@ class C extends A {
 }
 }
 
+package p6 {
+  class A { def apply(xs: Int*) = 42 }
+  class B extends A { override def apply(xs: Seq[Int]) = 42 } // error
+}
+package p7 {
+  class A { def apply(xs: Int*) = 42 }
+  class B extends A { def apply(xs: Seq[Int]) = 42 } // error
+}
+package p8 {
+  class A { def apply(xs: Seq[Int]) = 42 }
+  class B extends A { override def apply(xs: Int*) = 42 } // error
+}
+package p9 {
+  class A { def apply(xs: Seq[Int]) = 42 }
+  class B extends A { def apply(xs: Int*) = 42 } // error
+}
+package p10 {
+  class A { def apply(s: String)(xs: Int*) = 42 }
+  class B extends A { def apply(s: String)(xs: Seq[Int]) = 42 } // error
+}

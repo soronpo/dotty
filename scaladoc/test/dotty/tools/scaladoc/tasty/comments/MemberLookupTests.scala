@@ -1,7 +1,7 @@
 package dotty.tools.scaladoc
 package tasty.comments
 
-import scala.quoted.Quotes
+import scala.quoted.*
 
 import org.junit.{Test, Rule}
 import org.junit.Assert.{assertSame, assertTrue}
@@ -13,6 +13,8 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
 
   def testAll(): Unit = {
     testOwnerlessLookup()
+    testOwnerlessLookupOfInherited()
+    testOwnerlessLookupOfClassWithinPackageWithPackageObject()
     testOwnedLookup()
     testStrictMemberLookup()
   }
@@ -46,7 +48,7 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
         cls("tests.lookupInheritedMembers.pack1.A").fun("x"),
 
       "tests.lookupInheritedMembers.pack2.B.x" ->
-        cls("tests.lookupInheritedMembers.pack1.A").fun("x"),
+        cls("tests.lookupInheritedMembers.pack2.B").fun("x"),
     )
 
     cases.foreach { case (query, sym) =>
@@ -58,8 +60,51 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
     val target = wrappedTarget.symbol
     val lookupRes = MemberLookup.lookupOpt(parseQuery(query), None)
     assertTrue(s"Couldn't look up: $query", lookupRes.nonEmpty)
-    val Some((lookedUp, _, _)) = lookupRes
+    val Some((lookedUp, _, _)) = lookupRes: @unchecked
     assertSame(query, target, lookedUp)
+  }
+
+  /**
+   * We cannot test for cls().fun() beucase it returns parent fun symbol from tasty. Hence we will look for member (val, def, type) but compare its owner to just cls()
+   */
+  def testOwnerlessLookupOfInherited(): Unit = {
+    val cases = List[(String, Sym)](
+      "tests.lookupInheritedMembers.pack2.B.x" ->
+        cls("tests.lookupInheritedMembers.pack2.B"),
+
+      "tests.lookupInheritedMembers.pack2.B.y" ->
+        cls("tests.lookupInheritedMembers.pack2.B"),
+
+      "tests.lookupInheritedMembers.pack2.B.MyType" ->
+        cls("tests.lookupInheritedMembers.pack2.B"),
+    )
+
+    cases.foreach { case (query, sym) =>
+      val target = sym.symbol
+      val lookupRes = MemberLookup.lookupOpt(parseQuery(query), None)
+      assertTrue(s"Couldn't look up: $query", lookupRes.nonEmpty)
+      val Some((_ , _, Some(owner))) = lookupRes: @unchecked
+      assertSame(query, target, owner)
+    }
+  }
+
+  /**
+   * Classes should not have owner of package object
+   */
+  def testOwnerlessLookupOfClassWithinPackageWithPackageObject(): Unit = {
+    val cases = List[(String, Sym)](
+      "<:<" ->
+        cls("scala.<:<"),
+    )
+
+    cases.foreach { case (query, sym) =>
+      val target = sym.symbol
+      val lookupRes = MemberLookup.lookupOpt(parseQuery(query), Some(cls("scala.=:=").symbol))
+      assertTrue(s"Couldn't look up: $query", lookupRes.nonEmpty)
+      println(lookupRes)
+      val Some((_ , _, owner)) = lookupRes: @unchecked
+      assertSame(query, None, owner)
+    }
   }
 
   def testOwnedLookup(): Unit = {
@@ -116,7 +161,7 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
     )
 
     cases.foreach { case ((Sym(owner), query), Sym(target)) =>
-      val Some((lookedUp, _, _)) = MemberLookup.lookup(parseQuery(query), owner)
+      val Some((lookedUp, _, _)) = MemberLookup.lookup(parseQuery(query), owner): @unchecked
       assertSame(s"$owner / $query", target, lookedUp)
     }
   }
@@ -131,7 +176,7 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
   given q.type = q
 
   def parseQuery(query: String): Query = {
-    val Right(parsed) = QueryParser(query).tryReadQuery()
+    val Right(parsed) = QueryParser(query).tryReadQuery(): @unchecked
     parsed
   }
 
@@ -141,9 +186,9 @@ class LookupTestCases[Q <: Quotes](val q: Quotes) {
         if s.flags.is(q.reflect.Flags.Module) then s.moduleClass else s
       Sym(hackResolveModule(symbol.declaredField(name)))
     def fun(name: String) =
-      val List(sym) = symbol.memberMethod(name)
+      val List(sym) = symbol.methodMember(name)
       Sym(sym)
-    def tpe(name: String) = Sym(symbol.memberType(name))
+    def tpe(name: String) = Sym(symbol.typeMember(name))
   }
 
   def cls(fqn: String) = Sym(q.reflect.Symbol.classSymbol(fqn))
@@ -153,14 +198,11 @@ class MemberLookupTests {
 
   @Test
   def test(): Unit = {
-    import scala.tasty.inspector.OldTastyInspector
-    class Inspector extends OldTastyInspector:
-      var alreadyRan: Boolean = false
+    import scala.tasty.inspector.*
+    class MyInspector extends Inspector:
 
-      override def processCompilationUnit(using ctx: quoted.Quotes)(root: ctx.reflect.Tree): Unit =
-        if !alreadyRan then
-          this.test()
-          alreadyRan = true
+      def inspect(using Quotes)(tastys: List[Tasty[quotes.type]]): Unit =
+        this.test()
 
       def test()(using q: Quotes): Unit = {
         import dotty.tools.scaladoc.tasty.comments.MemberLookup
@@ -170,6 +212,6 @@ class MemberLookupTests {
         cases.testAll()
       }
 
-    Inspector().inspectTastyFiles(TestUtils.listOurClasses())
+    TastyInspector.inspectTastyFiles(TestUtils.listOurClasses())(new MyInspector)
   }
 }

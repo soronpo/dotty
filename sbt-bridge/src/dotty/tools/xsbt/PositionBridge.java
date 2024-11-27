@@ -12,10 +12,12 @@ import xsbti.Position;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class PositionBridge implements Position {
   private final SourcePosition pos;
   private final SourceFile src;
+  private final String pathId;
 
   public static final Position noPosition = new Position() {
     public Optional<java.io.File> sourceFile() {
@@ -39,11 +41,16 @@ public class PositionBridge implements Position {
     public Optional<String> pointerSpace() {
       return Optional.empty();
     }
+
+    public String toString() {
+      return "";
+    }
   };
 
-  public PositionBridge(SourcePosition pos, SourceFile src) {
+  public PositionBridge(SourcePosition pos, String path) {
     this.pos = pos;
-    this.src = src;
+    this.src = pos.source();
+    this.pathId = path;
   }
 
   @Override
@@ -78,17 +85,7 @@ public class PositionBridge implements Position {
 
   @Override
   public Optional<String> sourcePath() {
-    if (!src.exists())
-      return Optional.empty();
-
-    AbstractFile sourceFile = pos.source().file();
-    if (sourceFile instanceof ZincPlainFile) {
-      return Optional.of(((ZincPlainFile) sourceFile).underlying().id());
-    } else if (sourceFile instanceof ZincVirtualFile) {
-      return Optional.of(((ZincVirtualFile) sourceFile).underlying().id());
-    } else {
-      return Optional.of(sourceFile.path());
-    }
+    return Optional.of(pathId);
   }
 
   @Override
@@ -116,4 +113,64 @@ public class PositionBridge implements Position {
       result.append(lineContent.charAt(i) == '\t' ? '\t' : ' ');
     return Optional.of(result.toString());
   }
+
+  @Override
+  public String toString() {
+    String path = sourcePath().orElse("");
+    Optional<Integer> l = line();
+    Integer column = pointer().orElse(1);
+    if (l.isPresent())
+      return String.format("%s:%d:%d", path, l.get(), column);
+    else
+      return path;
+  }
+
+  @Override
+  public Optional<Integer> startOffset() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.start());
+  }
+
+  @Override
+  public Optional<Integer> endOffset() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.end());
+  }
+
+  @Override
+  public Optional<Integer> startLine() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.startLine() + 1);
+  }
+
+  @Override
+  public Optional<Integer> endLine() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.endLine() + 1);
+  }
+
+  @Override
+  public Optional<Integer> startColumn() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.startColumn());
+  }
+
+  @Override
+  public Optional<Integer> endColumn() {
+    if (src.content().length == 0)
+      return Optional.empty();
+    else
+      return Optional.of(pos.endColumn());
+  }
+
 }

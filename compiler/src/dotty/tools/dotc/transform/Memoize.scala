@@ -1,27 +1,29 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import DenotTransformers._
-import Contexts._
-import Phases.phaseOf
+import core.*
+import DenotTransformers.*
+import Contexts.*
+import Phases.*
 import SymDenotations.SymDenotation
-import Denotations._
-import Symbols._
-import SymUtils._
-import Constants._
-import ast.Trees._
-import MegaPhase._
-import NameKinds.TraitSetterName
-import NameOps._
-import Flags._
-import Decorators._
+import Denotations.*
+import Symbols.*
+
+import Constants.*
+import MegaPhase.*
+import NameOps.*
+import Flags.*
+import Decorators.*
 import StdNames.nme
 
+import sjs.JSSymUtils.*
+
 import util.Store
+import scala.compiletime.uninitialized
 
 object Memoize {
   val name: String = "memoize"
+  val description: String = "add private fields to getters and setters"
 
   private final class MyState {
     val classesThatNeedReleaseFence = new util.HashSet[Symbol]
@@ -45,11 +47,13 @@ object Memoize {
  */
 class Memoize extends MiniPhase with IdentityDenotTransformer { thisPhase =>
   import Memoize.MyState
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = Memoize.name
 
-  private var MyState: Store.Location[MyState] = _
+  override def description: String = Memoize.description
+
+  private var MyState: Store.Location[MyState] = uninitialized
   private def myState(using Context): MyState = ctx.store(MyState)
 
   override def initContext(ctx: FreshContext): Unit =
@@ -109,25 +113,9 @@ class Memoize extends MiniPhase with IdentityDenotTransformer { thisPhase =>
         flags = Private | (if (sym.is(StableRealizable)) EmptyFlags else Mutable),
         info  = fieldType,
         coord = tree.span
-      ).withAnnotationsCarrying(sym, defn.FieldMetaAnnot)
+      ).withAnnotationsCarrying(sym, defn.FieldMetaAnnot, orNoneOf = defn.MetaAnnots)
        .enteredAfter(thisPhase)
     }
-
-    def addAnnotations(denot: Denotation): Unit =
-      denot match {
-        case fieldDenot: SymDenotation if sym.annotations.nonEmpty =>
-          val cpy = fieldDenot.copySymDenotation()
-          cpy.annotations = sym.annotations
-          cpy.installAfter(thisPhase)
-        case _ => ()
-      }
-
-    def removeUnwantedAnnotations(denot: SymDenotation, metaAnnotSym: ClassSymbol): Unit =
-      if (sym.annotations.nonEmpty) {
-        val cpy = sym.copySymDenotation()
-        cpy.filterAnnotations(_.symbol.hasAnnotation(metaAnnotSym))
-        cpy.installAfter(thisPhase)
-      }
 
     val NoFieldNeeded = Lazy | Deferred | JavaDefined | Inline
 
@@ -145,12 +133,13 @@ class Memoize extends MiniPhase with IdentityDenotTransformer { thisPhase =>
         if (tree.isEmpty) tree else tree.ensureConforms(field.info.widen)
 
       def isErasableBottomField(field: Symbol, cls: Symbol): Boolean =
-        !field.isVolatile && ((cls eq defn.NothingClass) || (cls eq defn.NullClass) || (cls eq defn.BoxedUnitClass))
+        !field.isVolatile
+          && ((cls eq defn.NothingClass) || (cls eq defn.NullClass) || (cls eq defn.BoxedUnitClass))
+          && !sym.sjsNeedsField
 
       if sym.isGetter then
-        val constantFinalVal = sym.isAllOf(Accessor | Final, butNot = Mutable) && tree.rhs.isInstanceOf[Literal]
-        if constantFinalVal then
-          // constant final vals do not need to be transformed at all, and do not need a field
+        if sym.isConstExprFinalVal then
+          // const-expr final vals do not need to be transformed at all, and do not need a field
           tree
         else
           val field = newField.asTerm
@@ -162,11 +151,10 @@ class Memoize extends MiniPhase with IdentityDenotTransformer { thisPhase =>
             if isErasableBottomField(field, rhsClass) then erasedBottomTree(rhsClass)
             else transformFollowingDeep(ref(field))(using ctx.withOwner(sym))
           val getterDef = cpy.DefDef(tree)(rhs = getterRhs)
-          addAnnotations(fieldDef.denot)
-          removeUnwantedAnnotations(sym, defn.GetterMetaAnnot)
+          sym.keepAnnotationsCarrying(thisPhase, Set(defn.GetterMetaAnnot))
           Thicket(fieldDef, getterDef)
       else if sym.isSetter then
-        if (!sym.is(ParamAccessor)) { val Literal(Constant(())) = tree.rhs } // This is intended as an assertion
+        if (!sym.is(ParamAccessor)) { val Literal(Constant(())) = tree.rhs: @unchecked } // This is intended as an assertion
         val field = sym.field
         if !field.exists then
           // When transforming the getter, we determined that no field was needed.
@@ -186,10 +174,10 @@ class Memoize extends MiniPhase with IdentityDenotTransformer { thisPhase =>
             myState.classesThatNeedReleaseFence += sym.owner
           val initializer =
             if isErasableBottomField(field, tree.termParamss.head.head.tpt.tpe.classSymbol)
-            then Literal(Constant(()))
+            then unitLiteral
             else Assign(ref(field), adaptToField(field, ref(tree.termParamss.head.head.symbol)))
           val setterDef = cpy.DefDef(tree)(rhs = transformFollowingDeep(initializer)(using ctx.withOwner(sym)))
-          removeUnwantedAnnotations(sym, defn.SetterMetaAnnot)
+          sym.keepAnnotationsCarrying(thisPhase, Set(defn.SetterMetaAnnot))
           setterDef
       else
         // Curiously, some accessors from Scala2 have ' ' suffixes.

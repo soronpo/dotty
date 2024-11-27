@@ -1,13 +1,30 @@
 package dotty.tools.dotc.semanticdb.internal
 
-import java.io.InputStream
 
 object LiteParser {
 
-  def readMessage[A](input: SemanticdbInputStream, message: SemanticdbMessage[A]): A = {
-    val length    = input.readRawVarint32()
-    val oldLimit  = input.pushLimit(length)
-    val result: A = message.mergeFrom(input)
+  def readMessage[A <: SemanticdbGeneratedMessage](
+      input: SemanticdbInputStream,
+      message: A
+  )(implicit
+      cmp: SemanticdbGeneratedMessageCompanion[A]
+  ): A = {
+    val length = input.readRawVarint32()
+    val oldLimit = input.pushLimit(length)
+    val result: A = cmp.merge(message, input)
+    input.checkLastTagWas(0)
+    input.popLimit(oldLimit)
+    result
+  }
+
+  def readMessage[A <: SemanticdbGeneratedMessage](
+      input: SemanticdbInputStream
+  )(implicit
+      cmp: SemanticdbGeneratedMessageCompanion[A]
+  ): A = {
+    val length = input.readRawVarint32()
+    val oldLimit = input.pushLimit(length)
+    val result: A = cmp.parseFrom(input)
     input.checkLastTagWas(0)
     input.popLimit(oldLimit)
     result

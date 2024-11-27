@@ -1,7 +1,5 @@
 package dotty.tools.backend.sjs
 
-import language.implicitConversions
-
 class ScopedVar[A](init: A) {
   import ScopedVar.Assignment
 
@@ -30,7 +28,7 @@ object ScopedVar {
 
   implicit def toValue[T](scVar: ScopedVar[T]): T = scVar.get
 
-  def withScopedVars[T](ass: Assignment[_]*)(body: => T): T = {
+  def withScopedVars[T](ass: Assignment[?]*)(body: => T): T = {
     val stack = ass.map(_.push())
     try body
     finally stack.reverse.foreach(_.pop())

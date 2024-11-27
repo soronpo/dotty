@@ -1,6 +1,7 @@
 package dotty.tools.tasty
 
 import util.Util.dble
+import java.nio.charset.StandardCharsets
 
 object TastyBuffer {
 
@@ -115,6 +116,16 @@ class TastyBuffer(initialSize: Int) {
     writeBytes(bytes, 8)
   }
 
+  /** Write a UTF8 string encoded as `Nat UTF8-CodePoint*`,
+   *  where the `Nat` is the length of the code-points bytes.
+   */
+  def writeUtf8(x: String): Unit = {
+    val bytes = x.getBytes(StandardCharsets.UTF_8)
+    val length = bytes.length
+    writeNat(length)
+    writeBytes(bytes, length)
+  }
+
   // -- Address handling --------------------------------------------
 
   /** Write natural number `x` right-adjusted in a field of `width` bytes
@@ -193,4 +204,9 @@ class TastyBuffer(initialSize: Int) {
    *  After `assemble` no more output actions to this buffer are permitted.
    */
   def assemble(): Unit = ()
+
+  def reset(): Unit = {
+    java.util.Arrays.fill(bytes, 0, length, 0.toByte)
+    length = 0
+  }
 }

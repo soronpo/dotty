@@ -5,6 +5,8 @@
 
 package dotty.tools.io
 
+import scala.language.unsafeNulls
+
 import java.io.{
   IOException, InputStream, OutputStream, BufferedOutputStream,
   ByteArrayOutputStream
@@ -96,8 +98,15 @@ abstract class AbstractFile extends Iterable[AbstractFile] {
   def canonicalPath: String = if (jpath == null) path else jpath.normalize.toString
 
   /** Checks extension case insensitively. */
-  def hasExtension(other: String): Boolean = extension == other.toLowerCase
-  val extension: String = Path.extension(name)
+  @deprecated("prefer queries on ext")
+  def hasExtension(other: String): Boolean = ext.toLowerCase.equalsIgnoreCase(other)
+
+  /** Returns the extension of this abstract file. */
+  val ext: FileExtension = Path.fileExtension(name)
+
+  /** Returns the extension of this abstract file as a String. */
+  @deprecated("use ext instead.")
+  def extension: String = ext.toLowerCase
 
   /** The absolute file, if this is a relative file. */
   def absolute: AbstractFile
@@ -125,13 +134,7 @@ abstract class AbstractFile extends Iterable[AbstractFile] {
   }
 
   /** Does this abstract file represent something which can contain classfiles? */
-  def isClassContainer: Boolean = isDirectory || (jpath != null && (extension == "jar" || extension == "zip"))
-
-  /** Create a file on disk, if one does not exist already. */
-  def create(): Unit
-
-  /** Delete the underlying file or directory (recursively). */
-  def delete(): Unit
+  def isClassContainer: Boolean = isDirectory || (jpath != null && ext.isJarOrZip)
 
   /** Is this abstract file a directory? */
   def isDirectory: Boolean
@@ -248,6 +251,15 @@ abstract class AbstractFile extends Iterable[AbstractFile] {
     file
   }
 
+  /** Returns the sibling abstract file in the parent of this abstract file or directory.
+   *  If there is no such file, returns `null`.
+   */
+  final def resolveSibling(name: String): AbstractFile | Null =
+    container.lookupName(name, directory = false)
+
+  final def resolveSiblingWithExtension(extension: FileExtension): AbstractFile | Null =
+    resolveSibling(Path.fileName(name) + "." + extension)
+
   private def fileOrSubdirectoryNamed(name: String, isDir: Boolean): AbstractFile =
     lookupName(name, isDir) match {
       case null =>
@@ -258,8 +270,10 @@ abstract class AbstractFile extends Iterable[AbstractFile] {
 
         // a race condition in creating the entry after the failed lookup may throw
         val path = jpath.resolve(name)
-        if (isDir) Files.createDirectory(path)
-        else Files.createFile(path)
+        try
+          if (isDir) Files.createDirectory(path)
+          else Files.createFile(path)
+        catch case _: FileAlreadyExistsException => ()
         new PlainFile(new File(path))
       case lookup => lookup
     }

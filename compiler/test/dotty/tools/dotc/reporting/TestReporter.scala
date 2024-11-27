@@ -2,25 +2,29 @@ package dotty.tools
 package dotc
 package reporting
 
-import java.io.{ PrintStream, PrintWriter, File => JFile, FileOutputStream, StringWriter }
+import scala.language.unsafeNulls
+import java.io.{BufferedReader, FileInputStream, FileOutputStream, FileReader, PrintStream, PrintWriter, StringReader, StringWriter, File as JFile}
 import java.text.SimpleDateFormat
 import java.util.Date
-import core.Decorators._
+import core.Decorators.*
 
 import scala.collection.mutable
-
+import scala.jdk.CollectionConverters.*
 import util.SourcePosition
-import core.Contexts._
-import Reporter._
-import Diagnostic._
-import interfaces.Diagnostic.{ ERROR, WARNING, INFO }
+import core.Contexts.*
+import Diagnostic.*
+import dotty.Properties
+import interfaces.Diagnostic.{ERROR, WARNING}
 
-class TestReporter protected (outWriter: PrintWriter, filePrintln: String => Unit, logLevel: Int)
+import scala.io.Codec
+import scala.compiletime.uninitialized
+
+class TestReporter protected (outWriter: PrintWriter, logLevel: Int)
 extends Reporter with UniqueMessagePositions with HideNonSensicalMessages with MessageRendering {
-  import Diagnostic._
 
-  protected final val _errorBuf = mutable.ArrayBuffer.empty[Diagnostic]
-  final def errors: Iterator[Diagnostic] = _errorBuf.iterator
+  protected final val _diagnosticBuf = mutable.ArrayBuffer.empty[Diagnostic]
+  final def diagnostics: Iterator[Diagnostic] = _diagnosticBuf.iterator
+  final def errors: Iterator[Diagnostic] = diagnostics.filter(_.level >= ERROR)
 
   protected final val _messageBuf = mutable.ArrayBuffer.empty[String]
   final def messages: Iterator[String] = _messageBuf.iterator
@@ -29,8 +33,9 @@ extends Reporter with UniqueMessagePositions with HideNonSensicalMessages with M
   protected final val _consoleReporter = new ConsoleReporter(null, new PrintWriter(_consoleBuf))
   final def consoleOutput: String = _consoleBuf.toString
 
-  private var _didCrash = false
-  final def compilerCrashed: Boolean = _didCrash
+  private var _skip: Boolean = false
+  final def setSkip(): Unit = _skip = true
+  final def skipped: Boolean = _skip
 
   protected final def inlineInfo(pos: SourcePosition)(using Context): String =
     if (pos.exists) {
@@ -43,17 +48,9 @@ extends Reporter with UniqueMessagePositions with HideNonSensicalMessages with M
   def log(msg: String) =
     _messageBuf.append(msg)
 
-  def logStackTrace(thrown: Throwable): Unit = {
-    _didCrash = true
-    val sw = new java.io.StringWriter
-    val pw = new java.io.PrintWriter(sw)
-    thrown.printStackTrace(pw)
-    log(sw.toString)
-  }
-
   /** Prints the message with the given position indication. */
   def printMessageAndPos(dia: Diagnostic, extra: String)(using Context): Unit = {
-    val msg = messageAndPos(dia.msg, dia.pos, diagnosticLevel(dia))
+    val msg = messageAndPos(dia)
     val extraInfo = inlineInfo(dia.pos)
 
     if (dia.level >= logLevel) {
@@ -73,30 +70,33 @@ extends Reporter with UniqueMessagePositions with HideNonSensicalMessages with M
       case _ => ""
     }
 
-    dia match {
-      case dia: Error => {
-        _errorBuf.append(dia)
-        _consoleReporter.doReport(dia)
-        printMessageAndPos(dia, extra)
-      }
-      case dia =>
-        printMessageAndPos(dia, extra)
-    }
+    if dia.level >= WARNING then
+      _consoleReporter.doReport(dia)
+      _diagnosticBuf.append(dia)
+    printMessageAndPos(dia, extra)
   }
+
+  override def printSummary()(using Context): Unit = ()
 }
 
 object TestReporter {
-  private var outFile: JFile = _
-  private var logWriter: PrintWriter = _
+  private val testLogsDirName: String = "testlogs"
+  private val failedTestsFileName: String = "last-failed.log"
+  private val failedTestsFile: JFile = new JFile(s"$testLogsDirName/$failedTestsFileName")
+
+  private var outFile: JFile = uninitialized
+  private var logWriter: PrintWriter = uninitialized
+  private var failedTestsWriter: PrintWriter = uninitialized
 
   private def initLog() = if (logWriter eq null) {
     val date = new Date
     val df0 = new SimpleDateFormat("yyyy-MM-dd")
     val df1 = new SimpleDateFormat("yyyy-MM-dd-'T'HH-mm-ss")
-    val folder = s"testlogs/tests-${df0.format(date)}"
+    val folder = s"$testLogsDirName/tests-${df0.format(date)}"
     new JFile(folder).mkdirs()
     outFile = new JFile(s"$folder/tests-${df1.format(date)}.log")
     logWriter = new PrintWriter(new FileOutputStream(outFile, true))
+    failedTestsWriter = new PrintWriter(new FileOutputStream(failedTestsFile, false))
   }
 
   def logPrintln(str: String) = {
@@ -119,14 +119,14 @@ object TestReporter {
   }
 
   def reporter(ps: PrintStream, logLevel: Int): TestReporter =
-    new TestReporter(new PrintWriter(ps, true), logPrintln, logLevel)
+    new TestReporter(new PrintWriter(ps, true), logLevel)
 
   def simplifiedReporter(writer: PrintWriter): TestReporter = {
-    val rep = new TestReporter(writer, logPrintln, WARNING) {
+    val rep = new TestReporter(writer, WARNING) {
       /** Prints the message with the given position indication in a simplified manner */
       override def printMessageAndPos(dia: Diagnostic, extra: String)(using Context): Unit = {
         def report() = {
-          val msg = s"${dia.pos.line + 1}: " + dia.msg.kind + extra
+          val msg = s"${dia.pos.line + 1}: " + dia.msg.kind.message + extra
           val extraInfo = inlineInfo(dia.pos)
 
           writer.println(msg)
@@ -146,4 +146,16 @@ object TestReporter {
     }
     rep
   }
+
+  def lastRunFailedTests: Option[List[String]] =
+    Option.when(
+      Properties.rerunFailed &&
+        failedTestsFile.exists() &&
+        failedTestsFile.isFile
+    )(java.nio.file.Files.readAllLines(failedTestsFile.toPath).asScala.toList)
+
+  def writeFailedTests(tests: List[String]): Unit =
+    initLog()
+    tests.foreach(failed => failedTestsWriter.println(failed))
+    failedTestsWriter.flush()
 }

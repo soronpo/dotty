@@ -18,7 +18,7 @@ charts:
           label: bootstrapped
 
     - name: re2
-      url: https://github.com/lampepfl/bench/blob/master/tests/re2s
+      url: https://github.com/lampepfl/bench/blob/main/tests/re2s
       lines:
         - key: re2s
           label: bootstrapped
@@ -26,7 +26,7 @@ charts:
 
 scripts:
     dotty:
-        - measure -with-compiler $(find $PROG_HOME/dotty/compiler/src/dotty -name *.scala -o -name *.java)
+        - measure -feature -deprecation -unchecked -Xfatal-warnings -encoding UTF8 -language:implicitConversions -Yexplicit-nulls -with-compiler $(find $PROG_HOME/dotty/compiler/src/dotty -name *.scala -o -name *.java)
 
     re2s:
         - measure $(find $PROG_HOME/tests/re2s/src -name *.scala)
@@ -41,4 +41,4 @@ scripts:
         - source $PROG_HOME/dotty/bench/scripts/stdlib213
 
 config:
-    pr_base_url: "https://github.com/lampepfl/dotty/pull/"
+    pr_base_url: "https://github.com/scala/scala3/pull/"

@@ -1,20 +1,17 @@
 package dotty.tools.dotc
 package transform
 
-import MegaPhase._
+import MegaPhase.*
 import core.DenotTransformers.{IdentityDenotTransformer}
-import core.Symbols._
-import core.Contexts._
-import core.Types._
-import core.Flags._
-import core.StdNames.nme
-import core.Constants.Constant
-import core.Decorators._
-import core.TypeErasure.erasure
+import core.Symbols.*
+import core.Contexts.*
+import core.Types.*
+import core.Flags.*
 import ast.tpd
 
 object UncacheGivenAliases:
   val name: String = "uncacheGivenAliases"
+  val description: String = "avoid caching RHS of simple parameterless given aliases"
 
 /** This phase optimizes alias givens represented as lazy vals to be uncached
  *  if that does not change runtime behavior. A definition does not need to be
@@ -26,9 +23,11 @@ object UncacheGivenAliases:
  */
 class UncacheGivenAliases extends MiniPhase with IdentityDenotTransformer:
   thisPhase =>
-  import tpd._
+  import tpd.*
 
   override def phaseName: String = UncacheGivenAliases.name
+
+  override def description: String = UncacheGivenAliases.description
 
   private def needsCache(sym: Symbol, rhs: Tree)(using Context): Boolean = rhs.tpe match
     case rhsTpe @ TermRef(NoPrefix, _)
@@ -54,7 +53,7 @@ class UncacheGivenAliases extends MiniPhase with IdentityDenotTransformer:
    */
   override def transformValDef(tree: ValDef)(using Context): Tree =
     val sym = tree.symbol
-    if sym.isAllOf(Given, Lazy) && !needsCache(sym, tree.rhs) then
+    if sym.isAllOf(LazyGiven) && !needsCache(sym, tree.rhs) then
       sym.copySymDenotation(
         initFlags = sym.flags &~ Lazy | Method,
         info = ExprType(sym.info))

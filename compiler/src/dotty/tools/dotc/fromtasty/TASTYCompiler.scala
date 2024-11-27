@@ -2,10 +2,9 @@ package dotty.tools
 package dotc
 package fromtasty
 
-import core._
-import Contexts._
+import core.*
+import Contexts.*
 import Phases.Phase
-import dotty.tools.dotc.transform._
 
 class TASTYCompiler extends Compiler {
 

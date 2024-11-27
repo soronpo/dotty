@@ -2,10 +2,12 @@ package dotty.tools
 package dotc
 package decompiler
 
-import dotty.tools.dotc.core.Contexts._
-import dotty.tools.dotc.core._
+import scala.language.unsafeNulls
+
+import dotty.tools.dotc.core.Contexts.*
+import dotty.tools.dotc.core.*
 import dotty.tools.dotc.core.tasty.TastyHTMLPrinter
-import dotty.tools.dotc.reporting._
+import dotty.tools.dotc.reporting.*
 import dotty.tools.io.AbstractFile
 
 import scala.quoted.runtime.impl.QuotesImpl
@@ -16,7 +18,8 @@ import scala.quoted.runtime.impl.QuotesImpl
 class IDEDecompilerDriver(val settings: List[String]) extends dotc.Driver {
 
   private val myInitCtx: Context = {
-    val rootCtx = initCtx.fresh.addMode(Mode.Interactive | Mode.ReadPositions | Mode.ReadComments)
+    val rootCtx = initCtx.fresh.addMode(Mode.Interactive | Mode.ReadPositions)
+    rootCtx.setSetting(rootCtx.settings.XreadComments, true)
     rootCtx.setSetting(rootCtx.settings.YretainTrees, true)
     rootCtx.setSetting(rootCtx.settings.fromTasty, true)
     val ctx = setup(settings.toArray :+ "dummy.scala", rootCtx).get._2
@@ -34,7 +37,7 @@ class IDEDecompilerDriver(val settings: List[String]) extends dotc.Driver {
     inContext(run.runContext) {
       run.compile(List(tastyFile))
       run.printSummary()
-      val unit = ctx.run.units.head
+      val unit = ctx.run.nn.units.head
 
       val decompiled = QuotesImpl.showDecompiledTree(unit.tpdTree)
       val tree = new TastyHTMLPrinter(unit.pickled.head._2()).showContents()

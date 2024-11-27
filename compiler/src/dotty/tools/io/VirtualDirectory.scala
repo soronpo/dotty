@@ -4,6 +4,8 @@
 
 package dotty.tools.io
 
+import scala.language.unsafeNulls
+
 import scala.collection.mutable
 import java.io.{InputStream, OutputStream}
 /**
@@ -32,12 +34,6 @@ extends AbstractFile {
   override def input: InputStream = sys.error("directories cannot be read")
   override def output: OutputStream = sys.error("directories cannot be written")
 
-  /** Does this abstract file denote an existing file? */
-  def create(): Unit = { unsupported() }
-
-  /** Delete the underlying file or directory (recursively). */
-  def delete(): Unit = { unsupported() }
-
   /** Returns an abstract file with the given name. It does not
    *  check that it exists.
    */
@@ -54,7 +50,7 @@ extends AbstractFile {
 
   override def fileNamed(name: String): AbstractFile =
     Option(lookupName(name, directory = false)) getOrElse {
-      val newFile = new VirtualFile(name, path + '/' + name)
+      val newFile = new VirtualFile(name, s"$path/$name")
       files(name) = newFile
       newFile
     }

@@ -3,25 +3,21 @@ package dotc
 package core
 package tasty
 
+import scala.language.unsafeNulls
+
 import dotty.tools.tasty.{TastyBuffer, TastyFormat, TastyHash}
-import TastyFormat._
-import TastyBuffer._
+import dotty.tools.tasty.besteffort.BestEffortTastyFormat
+import TastyFormat.*
+import TastyBuffer.*
 
 import collection.mutable
-import core.Symbols.{Symbol, ClassSymbol}
-import ast.tpd
-import Decorators._
+import core.Symbols.ClassSymbol
+import Decorators.*
 
-object TastyPickler {
+object TastyPickler:
+  private val versionString = s"Scala ${config.Properties.simpleVersionString}"
 
-  private val versionStringBytes = {
-    val compilerString = s"Scala ${config.Properties.simpleVersionString}"
-    compilerString.getBytes(java.nio.charset.StandardCharsets.UTF_8)
-  }
-
-}
-
-class TastyPickler(val rootCls: ClassSymbol) {
+class TastyPickler(val rootCls: ClassSymbol, isBestEffortTasty: Boolean) {
 
   private val sections = new mutable.ArrayBuffer[(NameRef, TastyBuffer)]
 
@@ -37,8 +33,9 @@ class TastyPickler(val rootCls: ClassSymbol) {
     nameBuffer.assemble()
     sections.foreach(_._2.assemble())
 
-    val nameBufferHash = TastyHash.pjwHash64(nameBuffer.bytes)
-    val treeSectionHash +: otherSectionHashes = sections.map(x => TastyHash.pjwHash64(x._2.bytes))
+    val nameBufferHash = TastyHash.pjwHash64(nameBuffer.bytes, nameBuffer.length)
+    val treeSectionHash +: otherSectionHashes =
+      sections.map(x => TastyHash.pjwHash64(x._2.bytes, x._2.length)): @unchecked
 
     // Hash of name table and tree
     val uuidLow: Long = nameBufferHash ^ treeSectionHash
@@ -46,13 +43,14 @@ class TastyPickler(val rootCls: ClassSymbol) {
     val uuidHi: Long = otherSectionHashes.fold(0L)(_ ^ _)
 
     val headerBuffer = {
-      val buf = new TastyBuffer(header.length + TastyPickler.versionStringBytes.length + 32)
-      for (ch <- header) buf.writeByte(ch.toByte)
+      val fileHeader = if isBestEffortTasty then BestEffortTastyFormat.bestEffortHeader else header
+      val buf = new TastyBuffer(fileHeader.length + TastyPickler.versionString.length + 32)
+      for (ch <- fileHeader) buf.writeByte(ch.toByte)
       buf.writeNat(MajorVersion)
       buf.writeNat(MinorVersion)
+      if isBestEffortTasty then buf.writeNat(BestEffortTastyFormat.PatchVersion)
       buf.writeNat(ExperimentalVersion)
-      buf.writeNat(TastyPickler.versionStringBytes.length)
-      buf.writeBytes(TastyPickler.versionStringBytes, TastyPickler.versionStringBytes.length)
+      buf.writeUtf8(TastyPickler.versionString)
       buf.writeUncompressedLong(uuidLow)
       buf.writeUncompressedLong(uuidHi)
       buf
@@ -76,6 +74,4 @@ class TastyPickler(val rootCls: ClassSymbol) {
     assert(all.length == totalSize && all.bytes.length == totalSize, s"totalSize = $totalSize, all.length = ${all.length}, all.bytes.length = ${all.bytes.length}")
     all.bytes
   }
-
-  val treePkl: TreePickler = new TreePickler(this)
 }

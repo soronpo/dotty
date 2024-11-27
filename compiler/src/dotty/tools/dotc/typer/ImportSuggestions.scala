@@ -3,19 +3,18 @@ package dotc
 package typer
 
 import backend.sjs.JSDefinitions
-import core._
-import Contexts._, Types._, Symbols._, Names._, Decorators._, ProtoTypes._
-import Flags._, SymDenotations._
+import core.*
+import Contexts.*, Types.*, Symbols.*, Names.*, Decorators.*, ProtoTypes.*
+import Flags.*, SymDenotations.*
 import NameKinds.FlatName
-import NameOps._
-import StdNames._
+import StdNames.*
 import config.Printers.{implicits, implicitsDetailed}
-import util.Spans.Span
 import ast.{untpd, tpd}
 import Implicits.{hasExtMethod, Candidate}
 import java.util.{Timer, TimerTask}
 import collection.mutable
 import scala.util.control.NonFatal
+import cc.isCaptureChecking
 
 /** This trait defines the method `importSuggestionAddendum` that adds an addendum
  *  to error messages suggesting additional imports.
@@ -26,7 +25,7 @@ trait ImportSuggestions:
   /** The maximal number of suggested imports to make */
   inline val MaxSuggestions = 10
 
-  import tpd._
+  import tpd.*
 
   /** Timeout to test a single implicit value as a suggestion, in ms */
   private inline val testOneImplicitTimeOut = 500
@@ -125,8 +124,8 @@ trait ImportSuggestions:
               .filter(lookInside(_))
               .flatMap(sym => rootsIn(sym.termRef))
         val imported =
-          if ctx.importInfo eq ctx.outer.importInfo then Nil
-          else ctx.importInfo.importSym.info match
+          if ctx.importInfo eqn ctx.outer.importInfo then Nil
+          else ctx.importInfo.nn.importSym.info match
             case ImportType(expr) => rootsOnPath(expr.tpe)
             case _ => Nil
         defined ++ imported ++ recur(using ctx.outer)
@@ -149,9 +148,9 @@ trait ImportSuggestions:
    *   `name` that are applicable to `T`.
    */
   private def importSuggestions(pt: Type)(using Context): (List[TermRef], List[TermRef]) =
-    val timer = new Timer()
-    val allotted = ctx.run.importSuggestionBudget
+    val allotted = ctx.run.nn.importSuggestionBudget
     if allotted <= 1 then return (Nil, Nil)
+    val timer = new Timer()
     implicits.println(i"looking for import suggestions, timeout = ${allotted}ms")
     val start = System.currentTimeMillis()
     val deadLine = start + allotted
@@ -159,10 +158,10 @@ trait ImportSuggestions:
     // Candidates that are already available without explicit import because they
     // are already provided by the context (imported or inherited) or because they
     // are in the implicit scope of `pt`.
-    val alreadyAvailableCandidates: Set[Symbol] = {
+    lazy val alreadyAvailableCandidates: Set[Symbol] = {
       val wildProto = wildApprox(pt)
       val contextualCandidates = ctx.implicits.eligible(wildProto)
-      val implicitScopeCandidates = ctx.run.implicitScope(wildProto).eligible
+      val implicitScopeCandidates = ctx.run.nn.implicitScope(wildProto).eligible
       val allCandidates = contextualCandidates ++ implicitScopeCandidates
       allCandidates.map(_.implicitRef.underlyingRef.symbol).toSet
     }
@@ -197,8 +196,8 @@ trait ImportSuggestions:
       && {
         val task = new TimerTask:
           def run() =
-            println(i"Cancelling test of $ref when making suggestions for error in ${ctx.source}")
-            ctx.run.isCancelled = true
+            implicits.println(i"Cancelling test of $ref when making suggestions for error in ${ctx.source}")
+            ctx.run.nn.isCancelled = true
         val span = ctx.owner.srcPos.span
         val (expectedType, argument, kind) = pt match
           case ViewProto(argType, resType) =>
@@ -214,11 +213,12 @@ trait ImportSuggestions:
           typedImplicit(candidate, expectedType, argument, span)(
             using testContext()).isSuccess
         finally
+          val run = ctx.run.nn
           if task.cancel() then // timer task has not run yet
-            assert(!ctx.run.isCancelled)
+            assert(!run.isCancelled)
           else
-            while !ctx.run.isCancelled do () // wait until timer task has run to completion
-            ctx.run.isCancelled = false
+            while !run.isCancelled do () // wait until timer task has run to completion
+            run.isCancelled = false
       }
     end deepTest
 
@@ -238,7 +238,7 @@ trait ImportSuggestions:
           // don't suggest things that are imported by default
 
       def extensionImports = pt match
-        case ViewProto(argType, SelectionProto(name: TermName, _, _, _)) =>
+        case ViewProto(argType, SelectionProto(name: TermName, _, _, _, _)) =>
           roots.flatMap(extensionMethod(_, name, argType))
         case _ =>
           Nil
@@ -264,20 +264,24 @@ trait ImportSuggestions:
   end importSuggestions
 
   /** Reduce next timeout for import suggestions by the amount of time it took
-   *  for current search, but but never less than to half of the previous budget.
+   *  for current search, but never less than to half of the previous budget.
    */
   private def reduceTimeBudget(used: Int)(using Context) =
-    ctx.run.importSuggestionBudget =
-      (ctx.run.importSuggestionBudget - used) max (ctx.run.importSuggestionBudget / 2)
+    val run = ctx.run.nn
+    run.importSuggestionBudget =
+      (run.importSuggestionBudget - used) max (run.importSuggestionBudget / 2)
 
   /** The `ref` parts of this list of pairs, discarding subsequent elements that
    *  have the same String part. Elements are sorted by their String parts.
    */
-  extension (refs: List[(TermRef, String)]) def distinctRefs(using Context): List[TermRef] = refs match
-    case (ref, str) :: refs1 =>
-      ref :: refs1.dropWhile(_._2 == str).distinctRefs
-    case Nil =>
-      Nil
+  extension (refs: List[(TermRef, String)]) def distinctRefs(using Context): List[TermRef] =
+    val buf = new mutable.ListBuffer[TermRef]
+    var last = ""
+    for (ref, str) <- refs do
+      if last != str then
+        buf += ref
+        last = str
+    buf.toList
 
   /** The best `n` references in `refs`, according to `compare`
    *  `compare` is a partial order. If there's a tie, we take elements
@@ -292,7 +296,7 @@ trait ImportSuggestions:
       var i = 0
       var diff = 0
       while i < filled && diff == 0 do
-        diff = compare(ref, top(i))(using noImplicitsCtx)
+        diff = compare(ref, top(i), preferGeneral = true)(using noImplicitsCtx)
         if diff > 0 then
           rest += top(i)
           top(i) = ref
@@ -316,6 +320,8 @@ trait ImportSuggestions:
    *  If there's nothing to suggest, an empty string is returned.
    */
   override def importSuggestionAddendum(pt: Type)(using Context): String =
+    if isCaptureChecking then
+      return "" // it's too late then to look for implicits
     val (fullMatches, headMatches) =
       importSuggestions(pt)(using ctx.fresh.setExploreTyperState())
     implicits.println(i"suggestions for $pt in ${ctx.owner} = ($fullMatches%, %, $headMatches%, %)")
@@ -325,7 +331,7 @@ trait ImportSuggestions:
     def importString(ref: TermRef): String =
       val imported =
         if ref.symbol.is(ExtensionMethod) then
-          s"${ctx.printer.toTextPrefix(ref.prefix).show}${ref.symbol.name}"
+          s"${ctx.printer.toTextPrefixOf(ref).show}${ref.symbol.name}"
         else
           ctx.printer.toTextRef(ref).show
       s"  import $imported"

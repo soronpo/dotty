@@ -1,30 +1,30 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Flags._
-import Contexts._
-import Symbols._
-import Decorators._
+import core.*
+import Flags.*
+import Contexts.*
+import Symbols.*
 import DenotTransformers.SymTransformer
 import Types.MethodType
 import Annotations.Annotation
 import SymDenotations.SymDenotation
 import Names.Name
 import StdNames.nme
-import NameOps._
+import NameOps.*
 
-import reporting._
-import ast._
+import ast.*
 
-import SymUtils._
-import MegaPhase._
+
+import MegaPhase.*
 
 /** Move static methods from companion to the class itself */
 class MoveStatics extends MiniPhase with SymTransformer {
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = MoveStatics.name
+
+  override def description: String = MoveStatics.description
 
   def transformSym(sym: SymDenotation)(using Context): SymDenotation =
     if (sym.hasAnnotation(defn.ScalaStaticAnnot) && sym.owner.is(Flags.Module) && sym.owner.companionClass.exists &&
@@ -46,7 +46,7 @@ class MoveStatics extends MiniPhase with SymTransformer {
           if (staticFields.nonEmpty) {
             /* do NOT put Flags.JavaStatic here. It breaks .enclosingClass */
             val staticCostructor = newSymbol(orig.symbol, nme.STATIC_CONSTRUCTOR, Flags.Synthetic | Flags.Method | Flags.Private, MethodType(Nil, defn.UnitType))
-            staticCostructor.addAnnotation(Annotation(defn.ScalaStaticAnnot))
+            staticCostructor.addAnnotation(Annotation(defn.ScalaStaticAnnot, staticCostructor.span))
             staticCostructor.entered
 
             val staticAssigns = staticFields.map(x => Assign(ref(x.symbol), x.rhs.changeOwner(x.symbol, staticCostructor)))
@@ -88,4 +88,5 @@ class MoveStatics extends MiniPhase with SymTransformer {
 
 object MoveStatics {
   val name: String = "moveStatic"
+  val description: String = "move static methods from companion to the class itself"
 }

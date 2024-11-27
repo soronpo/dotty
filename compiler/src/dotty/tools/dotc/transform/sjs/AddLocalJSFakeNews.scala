@@ -3,16 +3,12 @@ package dotc
 package transform
 package sjs
 
-import MegaPhase._
+import MegaPhase.*
 import core.Constants
-import core.Contexts._
-import core.Decorators._
+import core.Contexts.*
+import core.Decorators.*
 import core.StdNames.nme
-import core.Phases._
-import core.Symbols._
-import core.Types._
-import ast.Trees._
-import dotty.tools.dotc.ast.tpd
+import core.Symbols.*
 
 import dotty.tools.backend.sjs.JSDefinitions.jsdefn
 
@@ -50,9 +46,11 @@ import dotty.tools.backend.sjs.JSDefinitions.jsdefn
  */
 class AddLocalJSFakeNews extends MiniPhase { thisPhase =>
   import ExplicitOuter.outer
-  import ast.tpd._
+  import ast.tpd.*
 
   override def phaseName: String = AddLocalJSFakeNews.name
+
+  override def description: String = AddLocalJSFakeNews.description
 
   override def isEnabled(using Context): Boolean =
     ctx.settings.scalajs.value
@@ -61,13 +59,13 @@ class AddLocalJSFakeNews extends MiniPhase { thisPhase =>
 
   override def transformApply(tree: Apply)(using Context): Tree = {
     if (tree.symbol == jsdefn.Runtime_createLocalJSClass) {
-      val classValueArg :: superClassValueArg :: _ :: Nil = tree.args
+      val classValueArg :: superClassValueArg :: _ :: Nil = tree.args: @unchecked
       val cls = classValueArg match {
         case Literal(constant) if constant.tag == Constants.ClazzTag =>
           constant.typeValue.typeSymbol.asClass
         case _ =>
           // this shouldn't happen
-          report.error(i"unexpected $classValueArg for the first argument to `createLocalJSClass`", classValueArg)
+          report.error(em"unexpected $classValueArg for the first argument to `createLocalJSClass`", classValueArg)
           jsdefn.JSObjectClass
       }
 
@@ -96,4 +94,5 @@ class AddLocalJSFakeNews extends MiniPhase { thisPhase =>
 
 object AddLocalJSFakeNews {
   val name: String = "addLocalJSFakeNews"
+  val description: String = "adds fake new invocations to local JS classes in calls to `createLocalJSClass`"
 }

@@ -2,12 +2,16 @@ package dotty
 package tools
 package vulpix
 
+import scala.language.unsafeNulls
+
 import java.io.File
 
 object TestConfiguration {
 
+  val pageWidth = 120
+
   val noCheckOptions = Array(
-    "-pagewidth", "120",
+    "-pagewidth", pageWidth.toString,
     "-color:never",
     "-Xtarget", defaultTarget
   )
@@ -21,12 +25,14 @@ object TestConfiguration {
     "-Xverify-signatures"
   )
 
-  val basicClasspath = mkClasspath(List(
+  val basicClasspath = mkClasspath(
+    Properties.scalaLibraryTasty.toList ::: List(
     Properties.scalaLibrary,
     Properties.dottyLibrary
   ))
 
-  val withCompilerClasspath = mkClasspath(List(
+  val withCompilerClasspath = mkClasspath(
+    Properties.scalaLibraryTasty.toList ::: List(
     Properties.scalaLibrary,
     Properties.scalaAsm,
     Properties.jlineTerminal,
@@ -45,6 +51,8 @@ object TestConfiguration {
     withCompilerClasspath + File.pathSeparator + mkClasspath(List(Properties.dottyTastyInspector))
 
   lazy val scalaJSClasspath = mkClasspath(List(
+    Properties.scalaJSJavalib,
+    Properties.scalaJSScalalib,
     Properties.scalaJSLibrary,
     Properties.dottyLibraryJS
   ))
@@ -58,8 +66,12 @@ object TestConfiguration {
 
   val yCheckOptions = Array("-Ycheck:all")
 
-  val commonOptions = Array("-indent", "-language:postfixOps") ++ checkOptions ++ noCheckOptions ++ yCheckOptions
+  val commonOptions = Array("-indent") ++ checkOptions ++ noCheckOptions ++ yCheckOptions
+  val noYcheckCommonOptions = Array("-indent") ++ checkOptions ++ noCheckOptions
   val defaultOptions = TestFlags(basicClasspath, commonOptions)
+  val noYcheckOptions = TestFlags(basicClasspath, noYcheckCommonOptions)
+  val bestEffortBaselineOptions = TestFlags(basicClasspath, noCheckOptions)
+  val unindentOptions = TestFlags(basicClasspath, Array("-no-indent") ++ checkOptions ++ noCheckOptions ++ yCheckOptions)
   val withCompilerOptions =
     defaultOptions.withClasspath(withCompilerClasspath).withRunClasspath(withCompilerClasspath)
   lazy val withStagingOptions =
@@ -67,7 +79,7 @@ object TestConfiguration {
   lazy val withTastyInspectorOptions =
     defaultOptions.withClasspath(withTastyInspectorClasspath).withRunClasspath(withTastyInspectorClasspath)
   lazy val scalaJSOptions =
-    defaultOptions.and("-scalajs").withClasspath(scalaJSClasspath)
+    defaultOptions.and("-scalajs").withClasspath(scalaJSClasspath).withRunClasspath(scalaJSClasspath)
   val allowDeepSubtypes = defaultOptions without "-Yno-deep-subtypes"
   val allowDoubleBindings = defaultOptions without "-Yno-double-bindings"
   val picklingOptions = defaultOptions and (
@@ -78,11 +90,7 @@ object TestConfiguration {
   )
   val picklingWithCompilerOptions =
     picklingOptions.withClasspath(withCompilerClasspath).withRunClasspath(withCompilerClasspath)
-  val scala2CompatMode = defaultOptions.and("-source", "3.0-migration")
-  val explicitUTF8 = defaultOptions and ("-encoding", "UTF8")
-  val explicitUTF16 = defaultOptions and ("-encoding", "UTF16")
 
-  /** Enables explicit nulls */
   val explicitNullsOptions = defaultOptions and "-Yexplicit-nulls"
 
   /** Default target of the generated class files */

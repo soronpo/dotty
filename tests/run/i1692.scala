@@ -1,3 +1,5 @@
+// scalajs: --skip
+
 class VCInt(val x: Int) extends AnyVal
 class VCString(val x: String) extends AnyVal
 
@@ -20,7 +22,7 @@ class LazyNullable(a: => Int) {
   lazy val l4Inf = eInf
 
   private[this] val i = "I"
-  // null out i even though the try ends up lifted, because the LazyVals phase runs before the LiftTry phase
+  // null out i even though the try needs stack stashing
   lazy val l5 = try i catch { case e: Exception => () }
 }
 

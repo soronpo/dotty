@@ -3,9 +3,9 @@ package core
 
 import scala.annotation.tailrec
 
-import Names._, Types._, Contexts._, StdNames._, Decorators._
+import Names.*, Types.*, Contexts.*, StdNames.*, Decorators.*
 import TypeErasure.sigName
-import Signature._
+import Signature.*
 
 /** The signature of a denotation.
  *
@@ -71,9 +71,7 @@ case class Signature(paramsSig: List[ParamSig], resSig: TypeName) {
     else if (!this.paramsSig.hasSameLengthAs(that.paramsSig)) that
     else {
       val mapped = Signature(
-          // DOTTY: we shouldn't have to explicitly pass a type argument to `update`,
-          // see https://github.com/lampepfl/dotty/issues/4867
-          this.paramsSig.zipWithConserve(that.paramsSig)(update[ParamSig]),
+          this.paramsSig.zipWithConserve(that.paramsSig)(update),
           update(this.resSig, that.resSig))
       if (mapped == this) this else mapped
     }

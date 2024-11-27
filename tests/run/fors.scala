@@ -4,6 +4,9 @@
 
 //############################################################################
 
+import annotation.tailrec
+
+@scala.annotation.experimental
 object Test extends App {
   val xs = List(1, 2, 3)
   val ys = List(Symbol("a"), Symbol("b"), Symbol("c"))
@@ -14,7 +17,7 @@ object Test extends App {
 
   /////////////////// old syntax ///////////////////
 
-  def testOld: Unit = {
+  def testOld(): Unit = {
     println("\ntestOld")
 
     // lists
@@ -46,7 +49,7 @@ object Test extends App {
 
   /////////////////// new syntax ///////////////////
 
-  def testNew: Unit = {
+  def testNew(): Unit = {
     println("\ntestNew")
 
     // lists
@@ -74,11 +77,86 @@ object Test extends App {
 
     // arrays
     for (x <- ar) print(x + " "); println()
+  }
 
+  /////////////////// filtering with case ///////////////////
+
+  def testFiltering(): Unit = {
+    println("\ntestFiltering")
+
+    val xs: List[Any] = List((1, 2), "hello", (3, 4), "", "world")
+
+    for (case x: String <- xs) do print(s"$x "); println()
+    for (case (x: String) <- xs) do print(s"$x "); println()
+    for (case y@ (x: String) <- xs) do print(s"$y "); println()
+
+    for (case (x, y) <- xs) do print(s"$x~$y "); println()
+
+    for (case (x: String) <- xs if x.isEmpty) do print("(empty)"); println()
+    for (case (x: String) <- xs; y = x) do print(s"$y "); println()
+    for (case (x: String) <- xs; case (y, z) <- xs) do print(s"$x/$y~$z "); println()
+
+    for (case (x, y) <- xs) do print(s"${(y, x)} "); println()
+
+    for case x: String <- xs do print(s"$x "); println()
+    for case (x: String) <- xs do print(s"$x "); println()
+    for case y@ (x: String) <- xs do print(s"$y "); println()
+
+    for case (x, y) <- xs do print(s"$x~$y "); println()
+
+    for case (x: String) <- xs if x.isEmpty do print("(empty)"); println()
+    for case (x: String) <- xs; y = x do print(s"$y "); println()
+    for case (x: String) <- xs; case (y, z) <- xs do print(s"$x/$y~$z "); println()
+
+    for case (x, y) <- xs do print(s"${(y, x)} "); println()
+  }
+
+  /////////////////// elimination of map ///////////////////
+
+  import scala.language.experimental.betterFors
+
+  @tailrec
+  def pair[B](xs: List[Int], ys: List[B], n: Int): List[(Int, B)] =
+    if n == 0 then xs.zip(ys)
+    else for (x, y) <- pair(xs.map(_ + 1), ys, n - 1) yield (x, y)
+
+  def testTailrec() =
+    println("\ntestTailrec")
+    println(pair(xs, ys, 3))
+
+  def testGivens(): Unit = {
+    println("\ntestGivens")
+
+    // bound given that is summoned in subsequent bind
+    for
+      a <- List(123)
+      given Int = a
+      b = summon[Int]
+    do
+      println(b)
+
+    // generated given that is summoned in subsequent bind
+    for
+      given Int <- List(456)
+      x = summon[Int]
+    do
+      println(x)
+
+    // pick the correct given
+    for
+      a <- List(789)
+      given Int = a
+      given Int <- List(0)
+      x = summon[Int]
+    do
+      println(x)
   }
 
   ////////////////////////////////////////////////////
 
-  testOld
-  testNew
+  testOld()
+  testNew()
+  testFiltering()
+  testTailrec()
+  testGivens()
 }

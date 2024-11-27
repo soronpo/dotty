@@ -2,8 +2,10 @@ package dotty.tools
 package dotc
 package parsing
 
+import scala.language.unsafeNulls
+
 import collection.immutable.BitSet
-import core.Decorators._
+import core.Decorators.*
 import core.StdNames.nme
 
 abstract class TokensCommon {
@@ -12,14 +14,7 @@ abstract class TokensCommon {
   type Token = Int
   type TokenSet = BitSet
 
-  def tokenRange(lo: Int, hi: Int): TokenSet = BitSet(lo to hi: _*)
-
-  def showTokenDetailed(token: Int): String = debugString(token)
-
-  def showToken(token: Int): String = {
-    val str = tokenString(token)
-    if (isKeyword(token)) s"'$str'" else str
-  }
+  def tokenRange(lo: Int, hi: Int): TokenSet = BitSet(lo to hi *)
 
   val tokenString, debugString: Array[String] = new Array[String](maxToken + 1)
 
@@ -30,107 +25,107 @@ abstract class TokensCommon {
   }
 
   /** special tokens */
-  final val EMPTY = 0;             enter(EMPTY, "<empty>") // a missing token, used in lookahead
-  final val ERROR = 1;             enter(ERROR, "erroneous token") // an erroneous token
-  final val EOF = 2;               enter(EOF, "eof")
+  inline val EMPTY = 0;             enter(EMPTY, "<empty>") // a missing token, used in lookahead
+  inline val ERROR = 1;             enter(ERROR, "erroneous token") // an erroneous token
+  inline val EOF = 2;               enter(EOF, "eof")
 
   /** literals */
-  final val CHARLIT = 3;           enter(CHARLIT, "character literal")
-  final val INTLIT = 4;            enter(INTLIT, "integer literal")
-  final val DECILIT = 5;           enter(DECILIT, "number literal")  // with decimal point
-  final val EXPOLIT = 6;           enter(EXPOLIT, "number literal with exponent")
-  final val LONGLIT = 7;           enter(LONGLIT, "long literal")
-  final val FLOATLIT = 8;          enter(FLOATLIT, "float literal")
-  final val DOUBLELIT = 9;         enter(DOUBLELIT, "double literal")
-  final val STRINGLIT = 10;         enter(STRINGLIT, "string literal")
-  final val STRINGPART = 11;       enter(STRINGPART, "string literal", "string literal part")
-  //final val INTERPOLATIONID = 12;  enter(INTERPOLATIONID, "string interpolator")
-  //final val QUOTEID = 13;        enter(QUOTEID, "quoted identifier") // TODO: deprecate
+  inline val CHARLIT = 3;           enter(CHARLIT, "character literal")
+  inline val INTLIT = 4;            enter(INTLIT, "integer literal")
+  inline val DECILIT = 5;           enter(DECILIT, "number literal")  // with decimal point
+  inline val EXPOLIT = 6;           enter(EXPOLIT, "number literal with exponent")
+  inline val LONGLIT = 7;           enter(LONGLIT, "long literal")
+  inline val FLOATLIT = 8;          enter(FLOATLIT, "float literal")
+  inline val DOUBLELIT = 9;         enter(DOUBLELIT, "double literal")
+  inline val STRINGLIT = 10;         enter(STRINGLIT, "string literal")
+  inline val STRINGPART = 11;       enter(STRINGPART, "string literal", "string literal part")
+  //inline val INTERPOLATIONID = 12;  enter(INTERPOLATIONID, "string interpolator")
+  //inline val QUOTEID = 13;        enter(QUOTEID, "quoted identifier") // TODO: deprecate
 
   /** identifiers */
-  final val IDENTIFIER = 14;       enter(IDENTIFIER, "identifier")
-  //final val BACKQUOTED_IDENT = 15; enter(BACKQUOTED_IDENT, "identifier", "backquoted ident")
+  inline val IDENTIFIER = 14;       enter(IDENTIFIER, "identifier")
+  //inline val BACKQUOTED_IDENT = 15; enter(BACKQUOTED_IDENT, "identifier", "backquoted ident")
 
   /** alphabetic keywords */
-  final val IF = 20;               enter(IF, "if")
-  final val FOR = 21;              enter(FOR, "for")
-  final val ELSE = 22;             enter(ELSE, "else")
-  final val THIS = 23;             enter(THIS, "this")
-  final val NULL = 24;             enter(NULL, "null")
-  final val NEW = 25;              enter(NEW, "new")
-  //final val WITH = 26;             enter(WITH, "with")
-  final val SUPER = 27;            enter(SUPER, "super")
-  //final val CASE = 28;             enter(CASE, "case")
-  //final val CASECLASS = 29;        enter(CASECLASS, "case class")
-  //final val CASEOBJECT = 30;       enter(CASEOBJECT, "case object")
-  //final val VAL = 31;              enter(VAL, "val")
-  final val ABSTRACT = 32;         enter(ABSTRACT, "abstract")
-  final val FINAL = 33;            enter(FINAL, "final")
-  final val PRIVATE = 34;          enter(PRIVATE, "private")
-  final val PROTECTED = 35;        enter(PROTECTED, "protected")
-  final val OVERRIDE = 36;         enter(OVERRIDE, "override")
-  //final val IMPLICIT = 37;         enter(IMPLICIT, "implicit")
-  //final val VAR = 38;              enter(VAR, "var")
-  //final val DEF = 39;              enter(DEF, "def")
-  //final val TYPE = 40;             enter(TYPE, "type")
-  final val EXTENDS = 41;          enter(EXTENDS, "extends")
-  final val TRUE = 42;             enter(TRUE, "true")
-  final val FALSE = 43;            enter(FALSE, "false")
-  //final val OBJECT = 44;           enter(OBJECT, "object")
-  final val CLASS = 45;            enter(CLASS, "class")
-  final val IMPORT = 46;           enter(IMPORT, "import")
-  final val PACKAGE = 47;          enter(PACKAGE, "package")
-  //final val YIELD = 48;            enter(YIELD, "yield")
-  final val DO = 49;               enter(DO, "do")
-  //final val TRAIT = 50;            enter(TRAIT, "trait")
-  //final val SEALED = 51;           enter(SEALED, "sealed")
-  final val THROW = 52;            enter(THROW, "throw")
-  final val TRY = 53;              enter(TRY, "try")
-  final val CATCH = 54;            enter(CATCH, "catch")
-  final val FINALLY = 55;          enter(FINALLY, "finally")
-  final val WHILE = 56;            enter(WHILE, "while")
-  final val RETURN = 57;           enter(RETURN, "return")
-  //final val MATCH = 58;            enter(MATCH, "match")
-  //final val LAZY = 59;             enter(LAZY, "lazy")
-  //final val THEN = 60;             enter(THEN, "then")
-  //final val FORSOME = 61;          enter(FORSOME, "forSome") // TODO: deprecate
-  //final val ENUM = 62;             enter(ENUM, "enum")
+  inline val IF = 20;               enter(IF, "if")
+  inline val FOR = 21;              enter(FOR, "for")
+  inline val ELSE = 22;             enter(ELSE, "else")
+  inline val THIS = 23;             enter(THIS, "this")
+  inline val NULL = 24;             enter(NULL, "null")
+  inline val NEW = 25;              enter(NEW, "new")
+  //inline val WITH = 26;             enter(WITH, "with")
+  inline val SUPER = 27;            enter(SUPER, "super")
+  //inline val CASE = 28;             enter(CASE, "case")
+  //inline val CASECLASS = 29;        enter(CASECLASS, "case class")
+  //inline val CASEOBJECT = 30;       enter(CASEOBJECT, "case object")
+  //inline val VAL = 31;              enter(VAL, "val")
+  inline val ABSTRACT = 32;         enter(ABSTRACT, "abstract")
+  inline val FINAL = 33;            enter(FINAL, "final")
+  inline val PRIVATE = 34;          enter(PRIVATE, "private")
+  inline val PROTECTED = 35;        enter(PROTECTED, "protected")
+  inline val OVERRIDE = 36;         enter(OVERRIDE, "override")
+  //inline val IMPLICIT = 37;         enter(IMPLICIT, "implicit")
+  //inline val VAR = 38;              enter(VAR, "var")
+  //inline val DEF = 39;              enter(DEF, "def")
+  //inline val TYPE = 40;             enter(TYPE, "type")
+  inline val EXTENDS = 41;          enter(EXTENDS, "extends")
+  inline val TRUE = 42;             enter(TRUE, "true")
+  inline val FALSE = 43;            enter(FALSE, "false")
+  //inline val OBJECT = 44;           enter(OBJECT, "object")
+  inline val CLASS = 45;            enter(CLASS, "class")
+  inline val IMPORT = 46;           enter(IMPORT, "import")
+  inline val PACKAGE = 47;          enter(PACKAGE, "package")
+  //inline val YIELD = 48;            enter(YIELD, "yield")
+  inline val DO = 49;               enter(DO, "do")
+  //inline val TRAIT = 50;            enter(TRAIT, "trait")
+  inline val SEALED = 51;           enter(SEALED, "sealed")
+  inline val THROW = 52;            enter(THROW, "throw")
+  inline val TRY = 53;              enter(TRY, "try")
+  inline val CATCH = 54;            enter(CATCH, "catch")
+  inline val FINALLY = 55;          enter(FINALLY, "finally")
+  inline val WHILE = 56;            enter(WHILE, "while")
+  inline val RETURN = 57;           enter(RETURN, "return")
+  //inline val MATCH = 58;            enter(MATCH, "match")
+  //inline val LAZY = 59;             enter(LAZY, "lazy")
+  //inline val THEN = 60;             enter(THEN, "then")
+  //inline val FORSOME = 61;          enter(FORSOME, "forSome") // TODO: deprecate
+  //inline val ENUM = 62;             enter(ENUM, "enum")
 
   /** special symbols */
-  final val COMMA = 70;            enter(COMMA, "','")
-  final val SEMI = 71;             enter(SEMI, "';'")
-  final val DOT = 72;              enter(DOT, "'.'")
-  //final val NEWLINE = 78;          enter(NEWLINE, "end of statement", "new line")
-  //final val NEWLINES = 79;         enter(NEWLINES, "end of statement", "new lines")
+  inline val COMMA = 70;            enter(COMMA, "','")
+  inline val SEMI = 71;             enter(SEMI, "';'")
+  inline val DOT = 72;              enter(DOT, "'.'")
+  //inline val NEWLINE = 78;          enter(NEWLINE, "end of statement", "new line")
+  //inline val NEWLINES = 79;         enter(NEWLINES, "end of statement", "new lines")
 
   /** special keywords */
-  //final val USCORE = 73;           enter(USCORE, "_")
-  final val COLON = 74;            enter(COLON, ":")
-  final val EQUALS = 75;           enter(EQUALS, "=")
-  //final val LARROW = 76;           enter(LARROW, "<-")
-  //final val ARROW = 77;            enter(ARROW, "=>")
-  //final val SUBTYPE = 80;          enter(SUBTYPE, "<:")
-  //final val SUPERTYPE = 81;        enter(SUPERTYPE, ">:")
-  //final val HASH = 82;             enter(HASH, "#")
-  final val AT = 83;               enter(AT, "@")
-  //final val VIEWBOUND = 84;        enter(VIEWBOUND, "<%")
+  //inline val USCORE = 73;           enter(USCORE, "_")
+  inline val COLONop = 74;          enter(COLONop, ":")  // a stand-alone `:`, see also COLONfollow
+  inline val EQUALS = 75;           enter(EQUALS, "=")
+  //inline val LARROW = 76;           enter(LARROW, "<-")
+  //inline val ARROW = 77;            enter(ARROW, "=>")
+  //inline val SUBTYPE = 80;          enter(SUBTYPE, "<:")
+  //inline val SUPERTYPE = 81;        enter(SUPERTYPE, ">:")
+  //inline val HASH = 82;             enter(HASH, "#")
+  inline val AT = 83;               enter(AT, "@")
+  //inline val VIEWBOUND = 84;        enter(VIEWBOUND, "<%")
 
   val keywords: TokenSet
 
   def isKeyword(token: Token): Boolean = keywords contains token
 
   /** parentheses */
-  final val LPAREN = 91;           enter(LPAREN, "'('")
-  final val RPAREN = 92;           enter(RPAREN, "')'")
-  final val LBRACKET = 93;         enter(LBRACKET, "'['")
-  final val RBRACKET = 94;         enter(RBRACKET, "']'")
-  final val LBRACE = 95;           enter(LBRACE, "'{'")
-  final val RBRACE = 96;           enter(RBRACE, "'}'")
-  final val INDENT = 97;           enter(INDENT, "indent")
-  final val OUTDENT = 98;          enter(OUTDENT, "unindent")
+  inline val LPAREN = 91;           enter(LPAREN, "'('")
+  inline val RPAREN = 92;           enter(RPAREN, "')'")
+  inline val LBRACKET = 93;         enter(LBRACKET, "'['")
+  inline val RBRACKET = 94;         enter(RBRACKET, "']'")
+  inline val LBRACE = 95;           enter(LBRACE, "'{'")
+  inline val RBRACE = 96;           enter(RBRACE, "'}'")
+  inline val INDENT = 97;           enter(INDENT, "indent")
+  inline val OUTDENT = 98;          enter(OUTDENT, "unindent")
 
-  final val firstParen = LPAREN
-  final val lastParen = OUTDENT
+  inline val firstParen = LPAREN
+  inline val lastParen = OUTDENT
 
   def buildKeywordArray(keywords: TokenSet): (Int, Array[Int]) = {
     def start(tok: Token) = tokenString(tok).toTermName.asSimpleName.start
@@ -148,13 +143,13 @@ abstract class TokensCommon {
 }
 
 object Tokens extends TokensCommon {
-  final val minToken = EMPTY
+  inline val minToken = EMPTY
   final def maxToken: Int = XMLSTART
 
-  final val INTERPOLATIONID = 12;  enter(INTERPOLATIONID, "string interpolator")
-  final val QUOTEID = 13;          enter(QUOTEID, "quoted identifier") // TODO: deprecate
+  inline val INTERPOLATIONID = 12;  enter(INTERPOLATIONID, "string interpolator")
+  inline val QUOTEID = 13;          enter(QUOTEID, "quoted identifier") // TODO: deprecate
 
-  final val BACKQUOTED_IDENT = 15; enter(BACKQUOTED_IDENT, "identifier", "backquoted ident")
+  inline val BACKQUOTED_IDENT = 15; enter(BACKQUOTED_IDENT, "identifier", "backquoted ident")
 
   final val identifierTokens: TokenSet = BitSet(IDENTIFIER, BACKQUOTED_IDENT)
 
@@ -162,51 +157,54 @@ object Tokens extends TokensCommon {
     token >= IDENTIFIER && token <= BACKQUOTED_IDENT
 
   /** alphabetic keywords */
-  final val WITH = 26;             enter(WITH, "with")
-  final val CASE = 28;             enter(CASE, "case")
-  final val CASECLASS = 29;        enter(CASECLASS, "case class")
-  final val CASEOBJECT = 30;       enter(CASEOBJECT, "case object")
-  final val VAL = 31;              enter(VAL, "val")
-  final val IMPLICIT = 37;         enter(IMPLICIT, "implicit")
-  final val VAR = 38;              enter(VAR, "var")
-  final val DEF = 39;              enter(DEF, "def")
-  final val TYPE = 40;             enter(TYPE, "type")
-  final val OBJECT = 44;           enter(OBJECT, "object")
-  final val YIELD = 48;            enter(YIELD, "yield")
-  final val TRAIT = 50;            enter(TRAIT, "trait")
-  final val SEALED = 51;           enter(SEALED, "sealed")
-  final val MATCH = 58;            enter(MATCH, "match")
-  final val LAZY = 59;             enter(LAZY, "lazy")
-  final val THEN = 60;             enter(THEN, "then")
-  final val FORSOME = 61;          enter(FORSOME, "forSome") // TODO: deprecate
-  final val ENUM = 62;             enter(ENUM, "enum")
-  final val GIVEN = 63;            enter(GIVEN, "given")
-  final val EXPORT = 64;           enter(EXPORT, "export")
-  final val MACRO = 65;            enter(MACRO, "macro") // TODO: remove
-  final val END = 66;              enter(END, "end")
+  inline val WITH = 26;             enter(WITH, "with")
+  inline val CASE = 28;             enter(CASE, "case")
+  inline val CASECLASS = 29;        enter(CASECLASS, "case class")
+  inline val CASEOBJECT = 30;       enter(CASEOBJECT, "case object")
+  inline val VAL = 31;              enter(VAL, "val")
+  inline val IMPLICIT = 37;         enter(IMPLICIT, "implicit")
+  inline val VAR = 38;              enter(VAR, "var")
+  inline val DEF = 39;              enter(DEF, "def")
+  inline val TYPE = 40;             enter(TYPE, "type")
+  inline val OBJECT = 44;           enter(OBJECT, "object")
+  inline val YIELD = 48;            enter(YIELD, "yield")
+  inline val TRAIT = 50;            enter(TRAIT, "trait")
+  //inline val SEALED = 51;           enter(SEALED, "sealed")
+  inline val MATCH = 58;            enter(MATCH, "match")
+  inline val LAZY = 59;             enter(LAZY, "lazy")
+  inline val THEN = 60;             enter(THEN, "then")
+  inline val FORSOME = 61;          enter(FORSOME, "forSome") // TODO: deprecate
+  inline val ENUM = 62;             enter(ENUM, "enum")
+  inline val GIVEN = 63;            enter(GIVEN, "given")
+  inline val EXPORT = 64;           enter(EXPORT, "export")
+  inline val MACRO = 65;            enter(MACRO, "macro") // TODO: remove
+  inline val END = 66;              enter(END, "end")
 
   /** special symbols */
-  final val NEWLINE = 78;          enter(NEWLINE, "end of statement", "new line")
-  final val NEWLINES = 79;         enter(NEWLINES, "end of statement", "new lines")
+  inline val NEWLINE = 78;          enter(NEWLINE, "end of statement", "new line")
+  inline val NEWLINES = 79;         enter(NEWLINES, "end of statement", "new lines")
 
   /** special keywords */
-  final val USCORE = 73;           enter(USCORE, "_")
-  final val LARROW = 76;           enter(LARROW, "<-")
-  final val ARROW = 77;            enter(ARROW, "=>")
-  final val SUBTYPE = 80;          enter(SUBTYPE, "<:")
-  final val SUPERTYPE = 81;        enter(SUPERTYPE, ">:")
-  final val HASH = 82;             enter(HASH, "#")
-  final val VIEWBOUND = 84;        enter(VIEWBOUND, "<%")
-  final val TLARROW = 85;          enter(TLARROW, "=>>")
-  final val CTXARROW = 86;         enter(CTXARROW, "?=>")
+  inline val USCORE = 73;           enter(USCORE, "_")
+  inline val LARROW = 76;           enter(LARROW, "<-")
+  inline val ARROW = 77;            enter(ARROW, "=>")
+  inline val SUBTYPE = 80;          enter(SUBTYPE, "<:")
+  inline val SUPERTYPE = 81;        enter(SUPERTYPE, ">:")
+  inline val HASH = 82;             enter(HASH, "#")
+  inline val VIEWBOUND = 84;        enter(VIEWBOUND, "<%")
+  inline val TLARROW = 85;          enter(TLARROW, "=>>")
+  inline val CTXARROW = 86;         enter(CTXARROW, "?=>")
 
-  final val QUOTE = 87;            enter(QUOTE, "'")
+  inline val QUOTE = 87;            enter(QUOTE, "'")
 
-  final val COLONEOL = 88;         enter(COLONEOL, ":", ": at eol")
-  final val SELFARROW = 89;        enter(SELFARROW, "=>") // reclassified ARROW following self-type
+  inline val COLONfollow = 88;      enter(COLONfollow, ":")
+    // A `:` following an alphanumeric identifier or one of the tokens in colonEOLPredecessors
+  inline val COLONeol = 89;         enter(COLONeol, ":", ": at eol")
+    // A `:` recognized as starting an indentation block
+  inline val SELFARROW = 90;        enter(SELFARROW, "=>") // reclassified ARROW following self-type
 
   /** XML mode */
-  final val XMLSTART = 99;         enter(XMLSTART, "$XMLSTART$<") // TODO: deprecate
+  inline val XMLSTART = 99;         enter(XMLSTART, "$XMLSTART$<") // TODO: deprecate
 
   final val alphaKeywords: TokenSet = tokenRange(IF, END)
   final val symbolicKeywords: TokenSet = tokenRange(USCORE, CTXARROW)
@@ -223,15 +221,25 @@ object Tokens extends TokensCommon {
 
   final val openParensTokens = BitSet(LBRACE, LPAREN, LBRACKET)
 
-  final val canStartExprTokens3: TokenSet =
-      atomicExprTokens
+  final val canStartInfixExprTokens =
+    atomicExprTokens
     | openParensTokens
-    | BitSet(INDENT, QUOTE, IF, WHILE, FOR, NEW, TRY, THROW)
+    | BitSet(QUOTE, NEW)
+
+  final val canStartExprTokens3: TokenSet =
+    canStartInfixExprTokens | BitSet(INDENT, IF, WHILE, FOR, TRY, THROW)
 
   final val canStartExprTokens2: TokenSet = canStartExprTokens3 | BitSet(DO)
 
-  final val canStartTypeTokens: TokenSet = literalTokens | identifierTokens | BitSet(
-    THIS, SUPER, USCORE, LPAREN, AT)
+  final val canStartInfixTypeTokens: TokenSet = literalTokens | identifierTokens | BitSet(
+    THIS, SUPER, USCORE, LPAREN, LBRACE, AT)
+
+  final val canStartTypeTokens: TokenSet = canStartInfixTypeTokens | BitSet(LBRACE)
+
+  final val canStartPatternTokens = atomicExprTokens | openParensTokens | BitSet(USCORE, QUOTE)
+
+  val canFollowSimpleTypeTokens =
+    BitSet(AT, WITH, COLONop, COLONfollow, COLONeol, LBRACE, IDENTIFIER, BACKQUOTED_IDENT, ARROW, CTXARROW, MATCH, FORSOME)
 
   final val templateIntroTokens: TokenSet = BitSet(CLASS, TRAIT, OBJECT, ENUM, CASECLASS, CASEOBJECT)
 
@@ -249,7 +257,7 @@ object Tokens extends TokensCommon {
 
   final val modifierTokensOrCase: TokenSet = modifierTokens | BitSet(CASE)
 
-  final val modifierFollowers = modifierTokensOrCase | defIntroTokens
+  final val modifierFollowers = modifierTokens | defIntroTokens
 
   /** Is token only legal as start of statement (eof also included)? */
   final val mustStartStatTokens: TokenSet = defIntroTokens | modifierTokens | BitSet(IMPORT, EXPORT, PACKAGE)
@@ -274,7 +282,7 @@ object Tokens extends TokensCommon {
   final val closingRegionTokens = BitSet(RBRACE, RPAREN, RBRACKET, CASE) | statCtdTokens
 
   final val canStartIndentTokens: BitSet =
-    statCtdTokens | BitSet(COLONEOL, WITH, EQUALS, ARROW, CTXARROW, LARROW, WHILE, TRY, FOR, IF, THROW, RETURN)
+    statCtdTokens | BitSet(COLONeol, WITH, EQUALS, ARROW, CTXARROW, LARROW, WHILE, TRY, FOR, IF, THROW, RETURN)
 
   /** Faced with the choice between a type and a formal parameter, the following
    *  tokens determine it's a formal parameter.
@@ -285,7 +293,16 @@ object Tokens extends TokensCommon {
 
   final val endMarkerTokens = identifierTokens | BitSet(IF, WHILE, FOR, MATCH, TRY, NEW, THROW, GIVEN, VAL, THIS)
 
-  final val skipStopTokens = BitSet(SEMI, NEWLINE, NEWLINES, RBRACE, RPAREN, RBRACKET, OUTDENT)
+  final val colonEOLPredecessors = BitSet(RPAREN, RBRACKET, BACKQUOTED_IDENT, THIS, SUPER, NEW)
+
+  final val closingParens = BitSet(RPAREN, RBRACKET, RBRACE)
 
   final val softModifierNames = Set(nme.inline, nme.opaque, nme.open, nme.transparent, nme.infix)
+
+  def showTokenDetailed(token: Int): String = debugString(token)
+
+  def showToken(token: Int): String = {
+    val str = tokenString(token)
+    if isKeyword(token) || token == COLONfollow || token == COLONeol then s"'$str'" else str
+  }
 }

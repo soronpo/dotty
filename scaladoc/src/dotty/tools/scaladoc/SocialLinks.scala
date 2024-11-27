@@ -1,23 +1,20 @@
 package dotty.tools.scaladoc
 
-import java.nio.file.Path
-import java.nio.file.Paths
-import dotty.tools.dotc.core.Contexts.Context
-
-enum SocialLinks(val url: String, val whiteIconName: String, val blackIconName: String):
-  case Github(ghUrl: String) extends SocialLinks(ghUrl, "github-icon-white.png", "github-icon-black.png")
-  case Twitter(tUrl: String) extends SocialLinks(tUrl, "twitter-icon-white.png", "twitter-icon-black.png")
-  case Gitter(gUrl: String) extends SocialLinks(gUrl, "gitter-icon-white.png", "gitter-icon-black.png")
-  case Discord(dUrl: String) extends SocialLinks(dUrl, "discord-icon-white.png", "discord-icon-black.png")
-  case Custom(cUrl: String, cWhiteIconName: String, cBlackIconName: String) extends SocialLinks(cUrl, cWhiteIconName, cBlackIconName)
+enum SocialLinks(val url: String, val className: String):
+  case Github(ghUrl: String) extends SocialLinks(ghUrl, "gh")
+  case Twitter(tUrl: String) extends SocialLinks(tUrl, "twitter")
+  case Gitter(gUrl: String) extends SocialLinks(gUrl, "gitter")
+  case Discord(dUrl: String) extends SocialLinks(dUrl, "discord")
+  case Custom(cUrl: String, lightIcon: String, darkIcon: String) extends SocialLinks(cUrl, "custom")
 
 object SocialLinks:
+  val LowercaseNamePattern = "^[a-z]+$".r
+
   def parse(s: String): Either[String, SocialLinks] =
     val errorPrefix = s"Social links arg $s is invalid: "
     val splitted = s.split("::")
-    splitted.head match {
-      case "custom" if splitted.size == 4 => Right(Custom(splitted(1), splitted(2), splitted(3)))
-      case "custom" => Left(errorPrefix + "For 'custom' arg expected three arguments: url, white icon name and black icon name")
+
+    splitted.head.toLowerCase match {
       case "github" if splitted.size == 2 => Right(Github(splitted(1)))
       case "github" => Left(errorPrefix + "For 'github' arg expected one argument: url")
       case "twitter" if splitted.size == 2 => Right(Twitter(splitted(1)))
@@ -26,5 +23,8 @@ object SocialLinks:
       case "gitter" => Left(errorPrefix + "For 'gitter' arg expected one argument: url")
       case "discord" if splitted.size == 2 => Right(Discord(splitted(1)))
       case "discord" => Left(errorPrefix + "For 'discord' arg expected one argument: url")
+      case LowercaseNamePattern() if splitted.size == 4 => Right(Custom(splitted(1), splitted(2), splitted(3)))
+      case LowercaseNamePattern() if splitted.size == 3 => Right(Custom(splitted(1), splitted(2), splitted(2)))
+      case LowercaseNamePattern() => Left(errorPrefix + "For the 'custom' link, a minimum of two arguments is expected: URL, light icon file name, [dark icon file name]")
       case _ => Left(errorPrefix)
     }

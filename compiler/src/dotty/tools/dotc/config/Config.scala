@@ -1,5 +1,4 @@
 package dotty.tools.dotc.config
-import annotation.internal.sharable
 
 object Config {
 
@@ -23,8 +22,16 @@ object Config {
    */
   inline val checkConstraintsNonCyclic = false
 
+  /** Check that reverse dependencies in constraints are correct and complete.
+   *  Can also be enabled using -Ycheck-constraint-deps.
+   */
+  inline val checkConstraintDeps = false
+
   /** Check that each constraint resulting from a subtype test
-   *  is satisfiable.
+   *  is satisfiable. Also check that a type variable instantiation
+   *  satisfies its constraints.
+   *  Note that this can fail when bad bounds are in scope, like in
+   *  tests/neg/i4721a.scala.
    */
   inline val checkConstraintsSatisfiable = false
 
@@ -33,6 +40,9 @@ object Config {
    *  and the lower bound of Q is a subtype of the lower bound of P.
    */
   inline val checkConstraintsPropagated = false
+
+  /** Check that constraint bounds do not contain wildcard types */
+  inline val checkNoWildcardsInConstraint = false
 
   /** If a constraint is over a type lambda `tl` and `tvar` is one of
    *  the type variables associated with `tl` in the constraint, check
@@ -72,13 +82,6 @@ object Config {
    *  is not an error condition.
    */
   inline val failOnInstantiationToNothing = false
-
-  /** Enable noDoubleDef checking if option "-YnoDoubleDefs" is set.
-    * The reason to have an option as well as the present global switch is
-    * that the noDoubleDef checking is done in a hotspot, and we do not
-    * want to incur the overhead of checking an option each time.
-    */
-  inline val checkNoDoubleBindings = true
 
   /** Check positions for consistency after parsing */
   inline val checkPositions = true
@@ -179,6 +182,9 @@ object Config {
   /** If set, prints a trace of all symbol completions */
   inline val showCompletions = false
 
+  /** If set, show variable/variable reverse dependencies when printing constraints. */
+  inline val showConstraintDeps = true
+
   /** If set, method results that are context functions are flattened by adding
    *  the parameters of the context function results to the methods themselves.
    *  This is an optimization that reduces closure allocations.
@@ -221,4 +227,20 @@ object Config {
    *  reduces the number of allocated denotations by ~50%.
    */
   inline val reuseSymDenotations = true
+
+  /** If `checkLevelsOnConstraints` is true, check levels of type variables
+   *  and create fresh ones as needed when bounds are first entered into the constraint.
+   *  If `checkLevelsOnInstantiation` is true, allow level-incorrect constraints but
+   *  fix levels on type variable instantiation.
+   */
+  inline val checkLevelsOnConstraints = false
+  inline val checkLevelsOnInstantiation = true
+
+  /** Under x.modularity:
+   *  If a type parameter `X` has a single context bound `X: C`, should the
+   *  witness parameter be named `X`? This would prevent the creation of a
+   *  context bound companion.
+   */
+  inline val nameSingleContextBounds = false
 }
+

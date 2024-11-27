@@ -2,24 +2,23 @@ package dotty.tools
 package dotc
 package transform
 
-import core._
-import Names._
-import StdNames.{nme, tpnme}
-import Types._
-import dotty.tools.dotc.transform.MegaPhase._
-import Flags._
-import Contexts._
-import Symbols._
-import Constants._
-import Decorators._
-import DenotTransformers._
-import dotty.tools.dotc.ast.Trees._
-import SymUtils._
+import core.*
+import Names.*
+import StdNames.nme
+import Types.*
+import dotty.tools.dotc.transform.MegaPhase.*
+import Flags.*
+import Contexts.*
+import Symbols.*
+import Constants.*
+import Decorators.*
+import DenotTransformers.*
 
-import annotation.threadUnsafe
+
 
 object CompleteJavaEnums {
   val name: String = "completeJavaEnums"
+  val description: String = "fill in constructors for Java enums"
 
   private val nameParamName: TermName = "_$name".toTermName
   private val ordinalParamName: TermName = "_$ordinal".toTermName
@@ -30,10 +29,12 @@ object CompleteJavaEnums {
  *  case to the java.lang.Enum class.
  */
 class CompleteJavaEnums extends MiniPhase with InfoTransformer { thisPhase =>
-  import CompleteJavaEnums._
-  import ast.tpd._
+  import CompleteJavaEnums.*
+  import ast.tpd.*
 
   override def phaseName: String = CompleteJavaEnums.name
+
+  override def description: String = CompleteJavaEnums.description
 
   override def relaxedTypingInGroup: Boolean = true
     // Because it adds additional parameters to some constructors
@@ -79,7 +80,7 @@ class CompleteJavaEnums extends MiniPhase with InfoTransformer { thisPhase =>
     parents.map {
       case app @ Apply(fn, args0) if fn.symbol.owner == targetCls =>
         if args0.nonEmpty && targetCls == defn.JavaEnumClass then
-          report.error("the constructor of java.lang.Enum cannot be called explicitly", app.sourcePos)
+          report.error(em"the constructor of java.lang.Enum cannot be called explicitly", app.sourcePos)
         cpy.Apply(app)(fn, args0 ++ args)
       case p => p
     }
@@ -109,7 +110,7 @@ class CompleteJavaEnums extends MiniPhase with InfoTransformer { thisPhase =>
     yield {
       def forwarderSym(flags: FlagSet, info: Type): Symbol { type ThisName = TermName } =
         val sym = newSymbol(clazz, enumValue.name.asTermName, flags, info)
-        sym.addAnnotation(Annotations.Annotation(defn.ScalaStaticAnnot))
+        sym.addAnnotation(Annotations.Annotation(defn.ScalaStaticAnnot, sym.span))
         sym
       val body = moduleRef.select(enumValue)
       if ctx.settings.scalajs.value then

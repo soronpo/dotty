@@ -1,98 +1,100 @@
 package dotty.tools.scaladoc
 package translators
 
-case class InlineSignatureBuilder(names: Signature = Nil, preName: Signature = Nil) extends SignatureBuilder:
-  override def text(str: String): SignatureBuilder = copy(names = str +: names)
-  override def name(str: String, dri: DRI): SignatureBuilder = copy(names = Nil, preName = names)
-  override def driLink(text: String, dri: DRI): SignatureBuilder = copy(names = Link(text, dri) +: names)
-  override def signature(s: Signature): SignatureBuilder = copy(names = s.reverse ++ names)
-
-object InlineSignatureBuilder:
-  def typeSignatureFor(d: Member): Signature =
-      ScalaSignatureProvider.rawSignature(d, InlineSignatureBuilder()).asInstanceOf[InlineSignatureBuilder].names.reverse
-
-trait SignatureBuilder extends ScalaSignatureUtils {
-  def text(str: String): SignatureBuilder
-  def name(str: String, dri: DRI) = driLink(str, dri)
-  def driLink(text: String, dri: DRI): SignatureBuilder
-  def signature(s: Signature): SignatureBuilder = s.foldLeft(this){
-    case (bld, s: String) => bld.text(s)
-    case (bld, Link(text: String, dri: DRI)) => bld.driLink(text, dri)
-  }
-
-  // Support properly once we rewrite signature builder
-  def memberName(name: String, dri: DRI) = text(name)
+case class SignatureBuilder(content: Signature = Nil) extends ScalaSignatureUtils:
+  def plain(str: String): SignatureBuilder = copy(content = content :+ Plain(str))
+  def name(str: String, dri: DRI): SignatureBuilder = copy(content = content :+ Name(str, dri))
+  def tpe(text: String, dri: Option[DRI]): SignatureBuilder = copy(content = content :+ Type(text, dri))
+  def keyword(str: String): SignatureBuilder = copy(content = content :+ Keyword(str))
+  def tpe(text: String, dri: DRI): SignatureBuilder = copy(content = content :+ Type(text, Some(dri)))
+  def signature(s: Signature): SignatureBuilder = copy(content = content ++ s)
 
   def list[E](
-      elements: Seq[E],
-      prefix: String = "",
-      suffix: String = "",
-      separator: String = ", ",
-    )(
-      elemOp: (SignatureBuilder, E) => SignatureBuilder
-    ): SignatureBuilder = elements match {
-      case Nil => this
-      case head :: tail =>
-        tail.foldLeft(elemOp(text(prefix), head))((b, e) => elemOp(b.text(separator), e)).text(suffix)
-    }
+    elements: Seq[E],
+    prefix: Signature = List(Plain("")),
+    suffix: Signature = List(Plain("")),
+    separator: Signature = List(Plain(", ")),
+    forcePrefixAndSuffix: Boolean = false
+  )(
+    elemOp: (SignatureBuilder, E) => SignatureBuilder
+  ): SignatureBuilder = elements match {
+    case Nil => if forcePrefixAndSuffix then signature(prefix).signature(suffix) else this
+    case head :: tail =>
+      tail.foldLeft(elemOp(signature(prefix), head))((b, e) => elemOp(b.signature(separator), e)).signature(suffix)
+  }
 
   def annotationsBlock(d: Member): SignatureBuilder =
-      d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation)}
+    d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation)}
 
-    def annotationsInline(d: Parameter): SignatureBuilder =
-        d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation) }
+  def annotationsInline(d: TermParameter): SignatureBuilder =
+    d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation) }
 
-    def annotationsInline(t: TypeParameter): SignatureBuilder =
-        t.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation) }
+  def annotationsInline(t: TypeParameter): SignatureBuilder =
+    t.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation) }
 
-    private def buildAnnotation(a: Annotation): SignatureBuilder =
-       text("@").driLink(a.dri.location.split('.').last, a.dri).buildAnnotationParams(a).text(" ")
+  private def buildAnnotation(a: Annotation): SignatureBuilder =
+    tpe(s"@${a.dri.location.split('.').last}", Some(a.dri)).buildAnnotationParams(a).plain(" ")
 
-    private def buildAnnotationParams(a: Annotation): SignatureBuilder =
-      if !a.params.isEmpty then
-        val params = a.params.filterNot {
-          case Annotation.LinkParameter(_, _, text) => text == "_"
-          case _ => false
-        }
-        list(params, "(", ")", ", "){ (bdr, param) => bdr.buildAnnotationParameter(param)}
-      else this
-
-    private def addParameterName(txt: Option[String]): SignatureBuilder = txt match {
-        case Some(name) => this.text(s"$name = ")
-        case _ => this
+  private def buildAnnotationParams(a: Annotation): SignatureBuilder =
+    if !a.params.isEmpty then
+      val params = a.params.filterNot {
+        case Annotation.LinkParameter(_, _, text) => text == "_"
+        case _ => false
       }
+      list(params, List(Plain("(")), List(Plain(")")), List(Plain(", "))){ (bdr, param) => bdr.buildAnnotationParameter(param)}
+    else this
 
-    private def buildAnnotationParameter(a: Annotation.AnnotationParameter): SignatureBuilder = a match {
-      case Annotation.PrimitiveParameter(name, value) =>
-        addParameterName(name).text(value)
-      case Annotation.LinkParameter(name, dri, text) =>
-        addParameterName(name).driLink(text, dri)
-      case Annotation.UnresolvedParameter(name, value) =>
-        addParameterName(name).text(value)
+  private def addParameterName(txt: Option[String]): SignatureBuilder = txt match {
+    case Some(name) => this.plain(s"$name = ")
+    case _ => this
+  }
+
+  private def buildAnnotationParameter(a: Annotation.AnnotationParameter): SignatureBuilder = a match {
+    case Annotation.PrimitiveParameter(name, value) =>
+      addParameterName(name).plain(value)
+    case Annotation.LinkParameter(name, dri, text) =>
+      addParameterName(name).tpe(text, Some(dri))
+    case Annotation.UnresolvedParameter(name, value) =>
+      addParameterName(name).plain(value)
+  }
+
+  def parentsSignature(member: Member): SignatureBuilder =
+    member.directParents match
+      case Nil => this
+      case extendType :: withTypes =>
+        val extendPart = keyword(" extends ").signature(extendType.signature)
+        withTypes.foldLeft(extendPart)((bdr2, tpe) => bdr2.keyword(", ").signature(tpe.signature))
+
+  def modifiersAndVisibility(t: Member) =
+    val (prefixMods, suffixMods) = t.modifiers.partition(_.prefix)
+    val all = prefixMods.map(_.name) ++ Seq(t.visibility.asSignature) ++ suffixMods.map(_.name)
+    val filtered = all.filter(_.trim.nonEmpty)
+    if filtered.nonEmpty then keyword(filtered.toSignatureString()) else this
+
+  def kind(k: Kind) =
+    keyword(k.name + " ")
+
+
+  def functionParameters(paramss: Seq[ Either[TermParameterList,TypeParameterList] ]) =
+    this.list(paramss, separator = List(Plain(""))) {
+      case (bld, Left(params: TermParameterList))  => bld.termParamList(params)
+      case (bld, Right(params: TypeParameterList)) => bld.typeParamList(params)
     }
 
-    def modifiersAndVisibility(t: Member, kind: String) =
-      val (prefixMods, suffixMods) = t.modifiers.partition(_.prefix)
-      val all = prefixMods.map(_.name) ++ Seq(t.visibility.asSignature) ++ suffixMods.map(_.name)
-
-      text(all.toSignatureString()).text(kind + " ")
-
-    def generics(on: Seq[TypeParameter]) = list(on.toList, "[", "]"){ (bdr, e) =>
-      bdr.annotationsInline(e).text(e.variance).memberName(e.name, e.dri).signature(e.signature)
+  def termParamList(params: TermParameterList) =
+    this.list(params.parameters, prefix = List(Plain("("), Keyword(params.modifiers)), suffix = List(Plain(")")), forcePrefixAndSuffix = true) { (bld, p) =>
+      val annotationsAndModifiers = bld.annotationsInline(p)
+        .keyword(p.modifiers)
+      val name = p.name.fold(annotationsAndModifiers)(annotationsAndModifiers.name(_, p.dri).plain(": "))
+      name.signature(p.signature)
     }
 
-    def functionParameters(params: Seq[ParametersList]) =
-      if params.isEmpty then this.text("")
-      else if params.size == 1 && params(0).parameters == Nil then this.text("()")
-      else this.list(params, separator = ""){ (bld, pList) =>
-        bld.list(pList.parameters, s"(${pList.modifiers}", ")"){ (bld, p) =>
-            val annotationsAndModifiers = bld.annotationsInline(p)
-              .text(p.modifiers)
-            val name = p.name.fold(annotationsAndModifiers)(annotationsAndModifiers.memberName(_, p.dri).text(": "))
-            name.signature(p.signature)
-        }
-      }
-}
+  def typeParamList(on: TypeParameterList) = list(on.toList, List(Plain("[")), List(Plain("]"))){ (bdr, e) =>
+    bdr.annotationsInline(e).keyword(e.variance).tpe(e.name, Some(e.dri)).signature(e.signature)
+  }
+
+  def functionTermParameters(paramss: Seq[TermParameterList]) =
+    this.list(paramss, separator = List(Plain(""))) { (bld, pList) => bld.termParamList(pList) }
 
 trait ScalaSignatureUtils:
   extension (tokens: Seq[String]) def toSignatureString(): String =

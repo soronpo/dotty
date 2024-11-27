@@ -1,42 +1,46 @@
 package dotty.tools.dotc
 package core
 
-import Types._
+import Types.*
 import scala.util.hashing.{ MurmurHash3 => hashing }
 import annotation.tailrec
 
 object Hashable {
 
   /** A null terminated list of BindingTypes. We use `null` here for efficiency */
-  class Binders(val tp: BindingType, val next: Binders)
+  class SomeBinders(val tp: BindingType, val next: Binders)
+
+  type Binders = SomeBinders | Null
 
   /** A null terminated list of pairs of BindingTypes. Used for isomorphism tests. */
-  class BinderPairs(tp1: BindingType, tp2: BindingType, next: BinderPairs) {
+  class SomeBinderPairs(tp1: BindingType, tp2: BindingType, next: BinderPairs) {
     @tailrec final def matches(t1: Type, t2: Type): Boolean =
       (t1 `eq` tp1) && (t2 `eq` tp2) || next != null && next.matches(t1, t2)
   }
 
+  type BinderPairs = SomeBinderPairs | Null
+
   /** A hash value indicating that the underlying type is not
    *  cached in uniques.
    */
-  final val NotCached = 0
+  inline val NotCached = 0
 
   /** An alternative value returned from `hash` if the
    *  computed hashCode would be `NotCached`.
    */
-  private[core] final val NotCachedAlt = Int.MinValue
+  private[core] inline val NotCachedAlt = Int.MinValue
 
   /** A value that indicates that the hash code is unknown
    */
-  private[core] final val HashUnknown = 1234
+  private[core] inline val HashUnknown = 1234
 
   /** An alternative value if computeHash would otherwise yield HashUnknown
    */
-  private[core] final val HashUnknownAlt = 4321
+  private[core] inline val HashUnknownAlt = 4321
 }
 
 trait Hashable {
-  import Hashable._
+  import Hashable.*
 
   protected def hashSeed: Int = getClass.hashCode
 

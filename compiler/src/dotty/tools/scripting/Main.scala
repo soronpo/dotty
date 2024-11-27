@@ -1,8 +1,10 @@
 package dotty.tools.scripting
 
+import scala.language.unsafeNulls
+
 import java.io.File
 import java.nio.file.{Path, Paths}
-import dotty.tools.dotc.config.Properties.isWin 
+import dotty.tools.dotc.config.Properties.isWin
 
 /** Main entry point to the Scripting execution engine */
 object Main:
@@ -13,6 +15,8 @@ object Main:
     assert(rest.size >= 2, s"internal error: rest == Array(${rest.mkString(",")})")
 
     val file = File(rest(1))
+    // write script path to script.path property, so called script can see it
+    sys.props("script.path") = file.toPath.toAbsolutePath.toString
     val scriptArgs = rest.drop(2)
     var saveJar = false
     var invokeFlag = true // by default, script main method is invoked
@@ -29,10 +33,10 @@ object Main:
     (compilerArgs, file, scriptArgs, saveJar, invokeFlag)
   end distinguishArgs
 
-  def main(args: Array[String]): Unit =
+  def process(args: Array[String]): Option[Throwable] =
     val (compilerArgs, scriptFile, scriptArgs, saveJar, invokeFlag) = distinguishArgs(args)
     val driver = ScriptingDriver(compilerArgs, scriptFile, scriptArgs)
-    try driver.compileAndRun { (outDir:Path, classpathEntries:Seq[Path], mainClass: String) =>
+    driver.compileAndRun { (outDir:Path, classpathEntries:Seq[Path], mainClass: String) =>
       // write expanded classpath to java.class.path property, so called script can see it
       sys.props("java.class.path") = classpathEntries.map(_.toString).mkString(pathsep)
       if saveJar then
@@ -40,13 +44,12 @@ object Main:
         writeJarfile(outDir, scriptFile, scriptArgs, classpathEntries, mainClass)
       invokeFlag
     }
-    catch
-      case ScriptingException(msg) =>
-        println(s"Error: $msg")
-        sys.exit(1)
 
-      case e: java.lang.reflect.InvocationTargetException =>
-        throw e.getCause
+  def main(args: Array[String]): Unit =
+   process(args).map {
+      case ScriptingException(msg) => println(msg)
+      case ex => ex.printStackTrace
+   }.foreach(_ => System.exit(1))
 
   private def writeJarfile(outDir: Path, scriptFile: File, scriptArgs:Array[String],
       classpathEntries:Seq[Path], mainClassName: String): Unit =
@@ -70,7 +73,7 @@ object Main:
     )
     import dotty.tools.io.{Jar, Directory}
     val jar = new Jar(jarPath)
-    val writer = jar.jarWriter(manifestAttributes:_*)
+    val writer = jar.jarWriter(manifestAttributes*)
     try
       writer.writeAllFrom(Directory(outDir))
     finally
@@ -87,7 +90,7 @@ object Main:
         case s if s.startsWith("./") => s.drop(2)
         case s => s
       }
-   
+
     // convert to absolute path relative to cwd.
     def absPath: String = norm match
       case str if str.isAbsolute => norm

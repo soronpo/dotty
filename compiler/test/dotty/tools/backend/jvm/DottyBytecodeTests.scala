@@ -1,5 +1,7 @@
 package dotty.tools.backend.jvm
 
+import scala.language.unsafeNulls
+
 import org.junit.Assert._
 import org.junit.Test
 
@@ -11,7 +13,7 @@ import scala.tools.asm.Opcodes
 import scala.jdk.CollectionConverters._
 import Opcodes._
 
-class TestBCode extends DottyBytecodeTest {
+class DottyBytecodeTests extends DottyBytecodeTest {
   import ASMConverters._
   @Test def nullChecks = {
     val source = """
@@ -29,6 +31,22 @@ class TestBCode extends DottyBytecodeTest {
       val clsNode    = loadClassNode(clsIn)
       val methodNode = getMethod(clsNode, "foo")
       correctNumberOfNullChecks(2, methodNode.instructions)
+    }
+  }
+
+  @Test def byNameParameters = {
+    val source = """
+                   |class Foo {
+                   |  def byNameParam(str: => String): Unit = {}
+                   |}
+                 """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Foo.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      val methodNode: MethodNode = getMethod(clsNode, "byNameParam")
+
+      assert(methodNode.signature == "(Lscala/Function0<Ljava/lang/String;>;)V")
     }
   }
 
@@ -106,6 +124,148 @@ class TestBCode extends DottyBytecodeTest {
         |    case 1 if b => println(2)
         |    case 1 => println(1)
         |    case 0 => println(0)
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnStrings = {
+    val source =
+      """
+        |object Foo {
+        |  import scala.annotation.switch
+        |  def foo(s: String) = s match {
+        |    case "AaAa" => println(3)
+        |    case "BBBB" | "c" => println(2)
+        |    case "D" | "E" => println(1)
+        |    case _ => println(0)
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnUnionOfInts = {
+    val source =
+      """
+        |object Foo {
+        |  def foo(x: 1 | 2 | 3 | 4 | 5) = x match {
+        |    case 1 => println(3)
+        |    case 2 | 3 => println(2)
+        |    case 4 => println(1)
+        |    case 5 => println(0)
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnUnionOfStrings = {
+    val source =
+      """
+        |object Foo {
+        |  def foo(s: "one" | "two" | "three" | "four" | "five") = s match {
+        |    case "one" => println(3)
+        |    case "two" | "three" => println(2)
+        |    case "four" | "five" => println(1)
+        |    case _ => println(0)
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnUnionOfChars = {
+    val source =
+      """
+        |object Foo {
+        |  def foo(ch: 'a' | 'b' | 'c' | 'd' | 'e'): Int = ch match {
+        |    case 'a' => 1
+        |    case 'b' => 2
+        |    case 'c' => 3
+        |    case 'd' => 4
+        |    case 'e' => 5
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnUnionOfIntSingletons = {
+    val source =
+      """
+        |object Foo {
+        |  final val One = 1
+        |  final val Two = 2
+        |  final val Three = 3
+        |  final val Four = 4
+        |  final val Five = 5
+        |  type Values = One.type | Two.type | Three.type | Four.type | Five.type
+        |
+        |  def foo(s: Values) = s match {
+        |    case One => println(3)
+        |    case Two | Three => println(2)
+        |    case Four => println(1)
+        |    case Five => println(0)
+        |  }
+        |}
+      """.stripMargin
+
+    checkBCode(source) { dir =>
+      val moduleIn   = dir.lookupName("Foo$.class", directory = false)
+      val moduleNode = loadClassNode(moduleIn.input)
+      val methodNode = getMethod(moduleNode, "foo")
+      assert(verifySwitch(methodNode))
+    }
+  }
+
+  @Test def switchOnUnionOfStringSingletons = {
+    val source =
+      """
+        |object Foo {
+        |  final val One = "one"
+        |  final val Two = "two"
+        |  final val Three = "three"
+        |  final val Four = "four"
+        |  final val Five = "five"
+        |  type Values = One.type | Two.type | Three.type | Four.type | Five.type
+        |
+        |  def foo(s: Values) = s match {
+        |    case One => println(3)
+        |    case Two | Three => println(2)
+        |    case Four => println(1)
+        |    case Five => println(0)
         |  }
         |}
       """.stripMargin
@@ -268,7 +428,7 @@ class TestBCode extends DottyBytecodeTest {
         |import java.nio.file._
         |class Test {
         |  def test(xs: Array[String]) = {
-        |     val p4 = Paths.get("Hello", xs: _*)
+        |     val p4 = Paths.get("Hello", xs*)
         |  }
         |}
       """.stripMargin
@@ -557,7 +717,7 @@ class TestBCode extends DottyBytecodeTest {
       val clsIn   = dir.lookupName("Test.class", directory = false).input
       val clsNode = loadClassNode(clsIn)
       val method  = getMethod(clsNode, "test")
-      assertEquals(94, instructionsFromMethod(method).size)
+      assertEquals(23, instructionsFromMethod(method).size)
     }
   }
 
@@ -677,7 +837,7 @@ class TestBCode extends DottyBytecodeTest {
       """.stripMargin)
 
   @Test def objectsInObjDefAreFinal =
-    checkFinalClass("Test$Foo$1$.class",
+    checkFinalClass("Test$Foo$2$.class",
       """
         |object Test {
         |  def bar() = {
@@ -687,7 +847,7 @@ class TestBCode extends DottyBytecodeTest {
       """.stripMargin)
 
   @Test def objectsInClassDefAreFinal =
-    checkFinalClass("Test$Foo$1$.class",
+    checkFinalClass("Test$Foo$2$.class",
       """
         |class Test {
         |  def bar() = {
@@ -697,7 +857,7 @@ class TestBCode extends DottyBytecodeTest {
       """.stripMargin)
 
   @Test def objectsInObjValAreFinal =
-    checkFinalClass("Test$Foo$1$.class",
+    checkFinalClass("Test$Foo$2$.class",
       """
         |class Test {
         |  val bar = {
@@ -759,17 +919,14 @@ class TestBCode extends DottyBytecodeTest {
         FrameEntry(1, List(1), List()),
         VarOp(Opcodes.ILOAD, 1),
         Op(Opcodes.ICONST_5),
-        Jump(Opcodes.IF_ICMPGT, Label(16)),
+        Jump(Opcodes.IF_ICMPGT, Label(13)),
         Field(Opcodes.GETSTATIC, "scala/Predef$", "MODULE$", "Lscala/Predef$;"),
         VarOp(Opcodes.ILOAD, 1),
         Invoke(Opcodes.INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;", false),
         Invoke(Opcodes.INVOKEVIRTUAL, "scala/Predef$", "println", "(Ljava/lang/Object;)V", false),
-        VarOp(Opcodes.ILOAD, 1),
-        Op(Opcodes.ICONST_1),
-        Op(Opcodes.IADD),
-        VarOp(Opcodes.ISTORE, 1),
+        Incr(Opcodes.IINC, 1, 1),
         Jump(Opcodes.GOTO, Label(2)),
-        Label(16),
+        Label(13),
         FrameEntry(3, List(), List()),
         Op(Opcodes.RETURN))
 
@@ -837,7 +994,7 @@ class TestBCode extends DottyBytecodeTest {
     }
   }
 
-  @Test def freshNames = {
+  @Test def stableNames = {
     val sourceA =
       """|class A {
          |  def a1[T: Ordering]: Unit = {}
@@ -865,11 +1022,11 @@ class TestBCode extends DottyBytecodeTest {
           s"Method ${mn.name} has parameter $actualName but expected $expectedName")
       }
 
-      // The fresh name counter should be reset for every compilation unit
+      // Each definition should get the same names since there's no possible clashes.
       assertParamName(a1, "evidence$1")
-      assertParamName(a2, "evidence$2")
+      assertParamName(a2, "evidence$1")
       assertParamName(b1, "evidence$1")
-      assertParamName(b2, "evidence$2")
+      assertParamName(b2, "evidence$1")
     }
   }
 
@@ -901,11 +1058,426 @@ class TestBCode extends DottyBytecodeTest {
         Label(0), Ldc(LDC, ""), VarOp(ASTORE, 1),
         Label(5), VarOp(ALOAD, 1), Jump(IFNULL, Label(19)),
         Label(10), VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C", "foo", "()V", false), Label(14), Op(ACONST_NULL), VarOp(ASTORE, 1), Jump(GOTO, Label(5)),
-        Label(19), VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C", "bar", "()V", false), Label(24), Op(RETURN), Label(26)))
+        Label(19), VarOp(ALOAD, 0), Invoke(INVOKEVIRTUAL, "C", "bar", "()V", false), Op(RETURN), Label(25)))
       val labels = instructions collect { case l: Label => l }
       val x = convertMethod(t).localVars.find(_.name == "x").get
       assertEquals(x.start, labels(1))
       assertEquals(x.end, labels(5))
+    }
+  }
+
+  @Test def i14773TailRecReuseParamSlots(): Unit = {
+    val source =
+      s"""class Foo {
+         |  @scala.annotation.tailrec // explicit @tailrec here
+         |  final def fact(n: Int, acc: Int): Int =
+         |    if n == 0 then acc
+         |    else fact(n - 1, acc * n)
+         |}
+         |
+         |class IntList(head: Int, tail: IntList | Null) {
+         |  // implicit @tailrec
+         |  final def sum(acc: Int): Int =
+         |    val t = tail
+         |    if t == null then acc + head
+         |    else t.sum(acc + head)
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      // The mutable local vars for n and acc reuse the slots of the params n and acc
+
+      val fooClass = loadClassNode(dir.lookupName("Foo.class", directory = false).input)
+      val factMeth = getMethod(fooClass, "fact")
+
+      assertSameCode(factMeth, List(
+        Label(0),
+        VarOp(ILOAD, 1),
+        Op(ICONST_0),
+        Jump(IF_ICMPNE, Label(7)),
+        VarOp(ILOAD, 2),
+        Op(IRETURN),
+        Label(7),
+        VarOp(ILOAD, 1),
+        Op(ICONST_1),
+        Op(ISUB),
+        VarOp(ISTORE, 3),
+        VarOp(ILOAD, 2),
+        VarOp(ILOAD, 1),
+        Op(IMUL),
+        VarOp(ISTORE, 4),
+        VarOp(ILOAD, 3),
+        VarOp(ISTORE, 1),
+        VarOp(ILOAD, 4),
+        VarOp(ISTORE, 2),
+        Jump(GOTO, Label(0)),
+      ))
+
+      // The mutable local vars for this and acc reuse the slots of `this` and of the param acc
+
+      val intListClass = loadClassNode(dir.lookupName("IntList.class", directory = false).input)
+      val sumMeth = getMethod(intListClass, "sum")
+
+      assertSameCode(sumMeth, List(
+        Label(0),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "IntList", "tail", "LIntList;"),
+        VarOp(ASTORE, 2),
+        VarOp(ALOAD, 2),
+        Jump(IFNONNULL, Label(12)),
+        VarOp(ILOAD, 1),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "IntList", "head", "I"),
+        Op(IADD),
+        Op(IRETURN),
+        Label(12),
+        VarOp(ALOAD, 2),
+        VarOp(ASTORE, 3),
+        VarOp(ILOAD, 1),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "IntList", "head", "I"),
+        Op(IADD),
+        VarOp(ISTORE, 4),
+        VarOp(ALOAD, 3),
+        VarOp(ASTORE, 0),
+        VarOp(ILOAD, 4),
+        VarOp(ISTORE, 1),
+        Jump(GOTO, Label(0)),
+      ))
+    }
+  }
+
+  @Test def patmatControlFlow(): Unit = {
+    val source =
+      s"""class Foo {
+         |  def m1(xs: List[Int]): Int = xs match
+         |    case x :: xr => x
+         |    case Nil     => 20
+         |
+         |  def m2(xs: List[Int]): Int = xs match
+         |    case (1 | 2) :: xr => 10
+         |    case x :: xr => x
+         |    case _ => 20
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val fooClass = loadClassNode(dir.lookupName("Foo.class", directory = false).input)
+
+      // ---------------
+
+      val m1Meth = getMethod(fooClass, "m1")
+
+      assertSameCode(m1Meth, List(
+        VarOp(ALOAD, 1),
+        VarOp(ASTORE, 2),
+        VarOp(ALOAD, 2),
+        TypeOp(INSTANCEOF, "scala/collection/immutable/$colon$colon"),
+        Jump(IFEQ, Label(19)),
+        VarOp(ALOAD, 2),
+        TypeOp(CHECKCAST, "scala/collection/immutable/$colon$colon"),
+        VarOp(ASTORE, 3),
+        VarOp(ALOAD, 3),
+        Invoke(INVOKEVIRTUAL, "scala/collection/immutable/$colon$colon", "next", "()Lscala/collection/immutable/List;", false),
+        VarOp(ASTORE, 4),
+        VarOp(ALOAD, 3),
+        Invoke(INVOKEVIRTUAL, "scala/collection/immutable/$colon$colon", "head", "()Ljava/lang/Object;", false),
+        Invoke(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I", false),
+        VarOp(ISTORE, 5),
+        VarOp(ALOAD, 4),
+        VarOp(ASTORE, 6),
+        VarOp(ILOAD, 5),
+        Op(IRETURN),
+        Label(19),
+        Field(GETSTATIC, "scala/package$", "MODULE$", "Lscala/package$;"),
+        Invoke(INVOKEVIRTUAL, "scala/package$", "Nil", "()Lscala/collection/immutable/Nil$;", false),
+        VarOp(ALOAD, 2),
+        VarOp(ASTORE, 7),
+        Op(DUP),
+        Jump(IFNONNULL, Label(31)),
+        Op(POP),
+        VarOp(ALOAD, 7),
+        Jump(IFNULL, Label(36)),
+        Jump(GOTO, Label(40)),
+        Label(31),
+        VarOp(ALOAD, 7),
+        Invoke(INVOKEVIRTUAL, "java/lang/Object", "equals", "(Ljava/lang/Object;)Z", false),
+        Jump(IFEQ, Label(40)),
+        Label(36),
+        IntOp(BIPUSH, 20),
+        Op(IRETURN),
+        Label(40),
+        TypeOp(NEW, "scala/MatchError"),
+        Op(DUP),
+        VarOp(ALOAD, 2),
+        Invoke(INVOKESPECIAL, "scala/MatchError", "<init>", "(Ljava/lang/Object;)V", false),
+        Op(ATHROW),
+      ))
+
+      // ---------------
+
+      val m2Meth = getMethod(fooClass, "m2")
+
+      assertSameCode(m2Meth, List(
+        VarOp(ALOAD, 1),
+        VarOp(ASTORE, 2),
+        VarOp(ALOAD, 2),
+        TypeOp(INSTANCEOF, "scala/collection/immutable/$colon$colon"),
+        Jump(IFEQ, Label(42)),
+        VarOp(ALOAD, 2),
+        TypeOp(CHECKCAST, "scala/collection/immutable/$colon$colon"),
+        VarOp(ASTORE, 3),
+        VarOp(ALOAD, 3),
+        Invoke(INVOKEVIRTUAL, "scala/collection/immutable/$colon$colon", "head", "()Ljava/lang/Object;", false),
+        Invoke(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I", false),
+        VarOp(ISTORE, 4),
+        VarOp(ALOAD, 3),
+        Invoke(INVOKEVIRTUAL, "scala/collection/immutable/$colon$colon", "next", "()Lscala/collection/immutable/List;", false),
+        VarOp(ASTORE, 5),
+        Op(ICONST_1),
+        VarOp(ILOAD, 4),
+        Jump(IF_ICMPNE, Label(19)),
+        Jump(GOTO, Label(28)),
+        Label(19),
+        Op(ICONST_2),
+        VarOp(ILOAD, 4),
+        Jump(IF_ICMPNE, Label(25)),
+        Jump(GOTO, Label(28)),
+        Label(25),
+        Jump(GOTO, Label(34)),
+        Label(28),
+        VarOp(ALOAD, 5),
+        VarOp(ASTORE, 6),
+        IntOp(BIPUSH, 10),
+        Op(IRETURN),
+        Label(34),
+        VarOp(ILOAD, 4),
+        VarOp(ISTORE, 7),
+        VarOp(ALOAD, 5),
+        VarOp(ASTORE, 8),
+        VarOp(ILOAD, 7),
+        Op(IRETURN),
+        Label(42),
+        IntOp(BIPUSH, 20),
+        Op(IRETURN),
+      ))
+    }
+  }
+
+  @Test def switchControlFlow(): Unit = {
+    val source =
+      s"""import scala.annotation.switch
+         |
+         |class Foo {
+         |  def m1(x: Int): Int = (x: @switch) match
+         |    case 1 => 10
+         |    case 7 => 20
+         |    case 8 => 30
+         |    case 9 => 40
+         |    case _ => x
+         |
+         |  def m2(x: Int): Int = (x: @switch) match
+         |    case (1 | 2) => 10
+         |    case 7       => 20
+         |    case 8       => 30
+         |    case c if c > 100 => 20
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val fooClass = loadClassNode(dir.lookupName("Foo.class", directory = false).input)
+
+      // ---------------
+
+      val m1Meth = getMethod(fooClass, "m1")
+
+      assertSameCode(m1Meth, List(
+        VarOp(ILOAD, 1),
+        VarOp(ISTORE, 2),
+        VarOp(ILOAD, 2),
+        LookupSwitch(LOOKUPSWITCH, Label(20), List(1, 7, 8, 9), List(Label(4), Label(8), Label(12), Label(16))),
+        Label(4),
+        IntOp(BIPUSH, 10),
+        Op(IRETURN),
+        Label(8),
+        IntOp(BIPUSH, 20),
+        Op(IRETURN),
+        Label(12),
+        IntOp(BIPUSH, 30),
+        Op(IRETURN),
+        Label(16),
+        IntOp(BIPUSH, 40),
+        Op(IRETURN),
+        Label(20),
+        VarOp(ILOAD, 1),
+        Op(IRETURN),
+      ))
+
+      // ---------------
+
+      val m2Meth = getMethod(fooClass, "m2")
+
+      assertSameCode(m2Meth, List(
+        VarOp(ILOAD, 1),
+        VarOp(ISTORE, 2),
+        VarOp(ILOAD, 2),
+        LookupSwitch(LOOKUPSWITCH, Label(16), List(1, 2, 7, 8), List(Label(4), Label(4), Label(8), Label(12))),
+        Label(4),
+        IntOp(BIPUSH, 10),
+        Op(IRETURN),
+        Label(8),
+        IntOp(BIPUSH, 20),
+        Op(IRETURN),
+        Label(12),
+        IntOp(BIPUSH, 30),
+        Op(IRETURN),
+        Label(16),
+        VarOp(ILOAD, 2),
+        VarOp(ISTORE, 3),
+        VarOp(ILOAD, 3),
+        IntOp(BIPUSH, 100),
+        Jump(IF_ICMPLE, Label(25)),
+        IntOp(BIPUSH, 20),
+        Op(IRETURN),
+        Label(25),
+        TypeOp(NEW, "scala/MatchError"),
+        Op(DUP),
+        VarOp(ILOAD, 2),
+        Invoke(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;", false),
+        Invoke(INVOKESPECIAL, "scala/MatchError", "<init>", "(Ljava/lang/Object;)V", false),
+        Op(ATHROW),
+      ))
+    }
+  }
+
+  @Test def ifThenElseControlFlow(): Unit = {
+    /* This is a test case coming from the Scala.js linker, where in Scala 2 we
+     * had to introduce a "useless" `return` to make the bytecode size smaller,
+     * measurably increasing performance (!).
+     * In dotc, with or without the explicit `return`, the generated code is the same.
+     */
+
+    val source =
+      s"""import java.io.Writer
+         |
+         |final class SourceMapWriter(out: Writer) {
+         |  private val Base64Map =
+         |      "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+         |      "abcdefghijklmnopqrstuvwxyz" +
+         |      "0123456789+/"
+         |
+         |  private final val VLQBaseShift = 5
+         |  private final val VLQBase = 1 << VLQBaseShift
+         |  private final val VLQBaseMask = VLQBase - 1
+         |  private final val VLQContinuationBit = VLQBase
+         |
+         |  def entryPoint(value: Int): Unit = writeBase64VLQ(value)
+         |
+         |  private def writeBase64VLQ(value0: Int): Unit = {
+         |    val signExtended = value0 >> 31
+         |    val value = (((value0 ^ signExtended) - signExtended) << 1) | (signExtended & 1)
+         |    if (value < 26) {
+         |      out.write('A' + value) // was `return out...`
+         |    } else {
+         |      def writeBase64VLQSlowPath(value0: Int): Unit = {
+         |        var value = value0
+         |        while ({
+         |        // do {
+         |          var digit = value & VLQBaseMask
+         |          value = value >>> VLQBaseShift
+         |          if (value != 0)
+         |            digit |= VLQContinuationBit
+         |          out.write(Base64Map.charAt(digit))
+         |        // } while (
+         |          value != 0
+         |        // )
+         |        }) ()
+         |      }
+         |      writeBase64VLQSlowPath(value)
+         |    }
+         |  }
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val sourceMapWriterClass = loadClassNode(dir.lookupName("SourceMapWriter.class", directory = false).input)
+
+      // ---------------
+
+      val writeBase64VLQMeth = getMethod(sourceMapWriterClass, "writeBase64VLQ")
+
+      assertSameCode(writeBase64VLQMeth, List(
+        VarOp(ILOAD, 1),
+        IntOp(BIPUSH, 31),
+        Op(ISHR),
+        VarOp(ISTORE, 2),
+        VarOp(ILOAD, 1),
+        VarOp(ILOAD, 2),
+        Op(IXOR),
+        VarOp(ILOAD, 2),
+        Op(ISUB),
+        Op(ICONST_1),
+        Op(ISHL),
+        VarOp(ILOAD, 2),
+        Op(ICONST_1),
+        Op(IAND),
+        Op(IOR),
+        VarOp(ISTORE, 3),
+        VarOp(ILOAD, 3),
+        IntOp(BIPUSH, 26),
+        Jump(IF_ICMPGE, Label(26)),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "SourceMapWriter", "out", "Ljava/io/Writer;"),
+        IntOp(BIPUSH, 65),
+        VarOp(ILOAD, 3),
+        Op(IADD),
+        Invoke(INVOKEVIRTUAL, "java/io/Writer", "write", "(I)V", false),
+        Op(RETURN),
+        Label(26),
+        VarOp(ALOAD, 0),
+        VarOp(ILOAD, 3),
+        Invoke(INVOKESPECIAL, "SourceMapWriter", "writeBase64VLQSlowPath$1", "(I)V", false),
+        Op(RETURN),
+      ))
+
+      // ---------------
+
+      val writeBase64VLQSlowPathMeth = getMethod(sourceMapWriterClass, "writeBase64VLQSlowPath$1")
+
+      assertSameCode(writeBase64VLQSlowPathMeth, List(
+        VarOp(ILOAD, 1),
+        VarOp(ISTORE, 2),
+        Label(2),
+        VarOp(ILOAD, 2),
+        IntOp(BIPUSH, 31),
+        Op(IAND),
+        VarOp(ISTORE, 3),
+        VarOp(ILOAD, 2),
+        Op(ICONST_5),
+        Op(IUSHR),
+        VarOp(ISTORE, 2),
+        VarOp(ILOAD, 2),
+        Op(ICONST_0),
+        Jump(IF_ICMPEQ, Label(19)),
+        VarOp(ILOAD, 3),
+        IntOp(BIPUSH, 32),
+        Op(IOR),
+        VarOp(ISTORE, 3),
+        Label(19),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "SourceMapWriter", "out", "Ljava/io/Writer;"),
+        Field(GETSTATIC, "scala/Char$", "MODULE$", "Lscala/Char$;"),
+        VarOp(ALOAD, 0),
+        Field(GETFIELD, "SourceMapWriter", "Base64Map", "Ljava/lang/String;"),
+        VarOp(ILOAD, 3),
+        Invoke(INVOKEVIRTUAL, "java/lang/String", "charAt", "(I)C", false),
+        Invoke(INVOKEVIRTUAL, "scala/Char$", "char2int", "(C)I", false),
+        Invoke(INVOKEVIRTUAL, "java/io/Writer", "write", "(I)V", false),
+        VarOp(ILOAD, 2),
+        Op(ICONST_0),
+        Jump(IF_ICMPNE, Label(2)),
+        Op(RETURN),
+      ))
     }
   }
 
@@ -938,7 +1510,7 @@ class TestBCode extends DottyBytecodeTest {
 
   @Test
   def invocationReceivers(): Unit = {
-    import Opcodes._
+    import Opcodes.*
 
     checkBCode(List(invocationReceiversTestCode.definitions("Object"))) { dir =>
       val c1 = loadClassNode(dir.lookupName("C1.class", directory = false).input)
@@ -1102,6 +1674,317 @@ class TestBCode extends DottyBytecodeTest {
         Jump(GOTO, Label(9)),
         Label(6), Op(ICONST_0),
         Label(9), Op(IRETURN)))
+    }
+  }
+
+  /** Check that final mutable var accessors are final */
+  @Test def i10835 = {
+    val source =
+      s"""class A {
+        |  final var x = 1
+        |}
+        |""".stripMargin
+    checkBCode(source){dir =>
+      val clsIn      = dir.lookupName("A.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      def isFinal(access: Int) = (access & Opcodes.ACC_FINAL) != 0
+
+      val field = clsNode.fields.asScala.find(_.name == "x").map(_.access)
+      assertTrue("field is not final", field.exists(!isFinal(_)))
+      assertTrue("field is private", field.exists(acc => (acc & Opcodes.ACC_PRIVATE) != 0))
+
+      val methods = clsNode.methods.asScala
+      def methodAccess(name: String) = methods.find(_.name == name).map(_.access)
+      assertTrue("getter is final", methodAccess("x").exists(isFinal))
+      assertTrue("setter is final", methodAccess("x_$eq").exists(isFinal))
+    }
+  }
+
+  /** Check that erasure if `Int | Nothing` is `int` */
+  @Test def i14970 = {
+    val source =
+      s"""class Foo {
+         |  def foo: Int | Nothing = 1
+         |  def bar: Nothing | Int = 1
+         |}
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Foo.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      def testSig(methodName: String, expectedSignature: String) = {
+        val signature = clsNode.methods.asScala.filter(_.name == methodName).map(_.signature)
+        assertEquals(List(expectedSignature), signature)
+      }
+      testSig("foo", "()I")
+      testSig("bar", "()I")
+    }
+  }
+
+  @Test def i15535 = {
+    // primary goal of this test is to check that `LineNumber` have correct numbers
+    val source =
+      """object Main {
+        |  def m(x: Int): Unit = {
+        |    x match {
+        |      case y =>
+        |        println(y)
+        |        println(y)
+        |    }
+        |  }
+        |}
+        """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("Main$.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method  = getMethod(clsNode, "m")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+
+      val expected = List(
+        LineNumber(3, Label(0)),
+        LineNumber(4, Label(5)), // case y =>
+        LineNumber(5, Label(9)),
+        LineNumber(6, Label(15)),
+      )
+
+      assertSameCode(instructions, expected)
+    }
+  }
+
+  @Test def i15535_2 = {
+    // primary goal of this test is to check that `LineNumber` have correct numbers
+    val source =
+      """object Main {
+        |  def m(x: Matchable): Unit = {
+        |    x match {
+        |      case a if a == 3 =>
+        |        println(a)
+        |        println(a)
+        |      case b: Int =>
+        |        println(b)
+        |        println(b)
+        |      case c @ Left(l) =>
+        |        println(l)
+        |        println(c)
+        |      case d =>
+        |        println(d)
+        |        println(d)
+        |        println(d)
+        |    }
+        |  }
+        |}
+        """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("Main$.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method  = getMethod(clsNode, "m")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+
+      val expected = List(
+        LineNumber(3, Label(0)),
+        LineNumber(4, Label(5)), // case a if a == 3 =>
+        LineNumber(5, Label(15)),
+        LineNumber(6, Label(20)),
+        LineNumber(7, Label(26)), // case b: Int =>
+        LineNumber(8, Label(35)),
+        LineNumber(9, Label(41)),
+        LineNumber(10, Label(48)), // case c @ Left(l) =>
+        LineNumber(11, Label(63)),
+        LineNumber(12, Label(68)),
+        LineNumber(13, Label(74)), // case d =>
+        LineNumber(14, Label(79)),
+        LineNumber(15, Label(84)),
+        LineNumber(16, Label(89)),
+      )
+
+      assertSameCode(instructions, expected)
+    }
+  }
+
+  @Test def i18320(): Unit = {
+    val c1 =
+      """class C {
+        |  def m: Unit = {
+        |    val x = 1
+        |  }
+        |}
+        |""".stripMargin
+    checkBCode(c1) {dir =>
+      val clsIn = dir.lookupName("C.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method = getMethod(clsNode, "m")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+      val expected = List(LineNumber(3, Label(0)))
+      assertSameCode(instructions, expected)
+
+    }
+  }
+
+  @Test def i18816 = {
+    // The primary goal of this test is to check that `LineNumber` have correct numbers
+    val source =
+      """trait Context
+        |
+        |class A(x: Context) extends AnyVal:
+        |  given [T]: Context = x
+        |
+        |  def m1 =
+        |    println(m3)
+        |    def m2 =
+        |      m3 // line 9
+        |    println(m2)
+        |
+        |  def m3(using Context): String = ""
+        """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("A$.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method  = getMethod(clsNode, "m2$1")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+
+      // There used to be references to line 7 here
+      val expected = List(
+        LineNumber(9, Label(0)),
+      )
+
+      assertSameCode(instructions, expected)
+    }
+  }
+
+  @Test def newInPrefixesOfDefaultParam = {
+    val source =
+      s"""class A:
+         |  def f(x: Int = 1): Int = x
+         |
+         |class Test:
+         | def meth1() = (new A).f()
+         | def meth2() = { val a = new A; a.f() }
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Test.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      val meth1      = getMethod(clsNode, "meth1")
+      val meth2      = getMethod(clsNode, "meth2")
+
+      val instructions1 = instructionsFromMethod(meth1)
+      val instructions2 = instructionsFromMethod(meth2)
+
+      assert(instructions1 == instructions2,
+        "`assert` was not properly inlined in `meth1`\n" +
+        diffInstructions(instructions1, instructions2))
+    }
+  }
+
+  @Test def newInDependentOfDefaultParam = {
+    val source =
+      s"""class A:
+         |  def i: Int = 1
+         |
+         |class Test:
+         |  def f(a: A)(x: Int = a.i): Int = x
+         |  def meth1() = f(new A)()
+         |  def meth2() = { val a = new A; f(a)() }
+         """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn      = dir.lookupName("Test.class", directory = false).input
+      val clsNode    = loadClassNode(clsIn)
+      val meth1      = getMethod(clsNode, "meth1")
+      val meth2      = getMethod(clsNode, "meth2")
+
+      val instructions1 = instructionsFromMethod(meth1)
+      val instructions2 = instructionsFromMethod(meth2)
+
+      assert(instructions1 == instructions2,
+        "`assert` was not properly inlined in `meth1`\n" +
+        diffInstructions(instructions1, instructions2))
+    }
+  }
+
+
+  @Test def i15098 = {
+    val source =
+      """object Main {
+        |  def main(args: Array[String]): Unit = {
+        |    Array(1).foreach { n =>
+        |      val x = 123
+        |      println(n)
+        |    }
+        |  }
+        |}
+        """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("Main$.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method  = getMethod(clsNode, "main")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+
+      val expected = List(
+        LineNumber(3, Label(0)),
+      )
+
+      assertSameCode(instructions, expected)
+    }
+  }
+
+  @Test def i15098_2 = {
+    val source =
+      """object Main {
+        |  def main(args: Array[String]): Unit = {
+        |    Array(1).map { n =>
+        |      val x = 123
+        |      x + n
+        |    }.foreach { n =>
+        |      println(n)
+        |      println(n)
+        |    }
+        |  }
+        |}
+        """.stripMargin
+
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("Main$.class", directory = false).input
+      val clsNode = loadClassNode(clsIn, skipDebugInfo = false)
+      val method  = getMethod(clsNode, "main")
+      val instructions = instructionsFromMethod(method).filter(_.isInstanceOf[LineNumber])
+
+      val expected = List(
+        LineNumber(3, Label(0)),
+        LineNumber(6, Label(15)),
+        LineNumber(3, Label(24)),
+        LineNumber(6, Label(27)),
+      )
+
+      assertSameCode(instructions, expected)
+    }
+  }
+
+  /**
+   * Test 'additional' imports are generated in deterministic order
+   * https://github.com/scala/scala3/issues/20496
+   */
+  @Test def deterministicAdditionalImports = {
+    val source =
+    """trait Actor:
+        |  def receive() = ()
+        |trait Timers:
+        |  def timers() = ()
+        |abstract class ShardCoordinator extends Actor with Timers
+        |class PersistentShardCoordinator extends ShardCoordinator:
+        |  def foo =
+        |    super.receive()
+        |    super.timers()""".stripMargin
+    checkBCode(source) { dir =>
+      val clsIn   = dir.lookupName("PersistentShardCoordinator.class", directory = false).input
+      val clsNode = loadClassNode(clsIn)
+
+      val expected = List("Actor", "Timers")
+      assertEquals(expected, clsNode.interfaces.asScala)
     }
   }
 }

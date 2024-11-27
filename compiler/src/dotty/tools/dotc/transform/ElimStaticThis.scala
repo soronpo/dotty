@@ -1,9 +1,9 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Contexts._
-import Flags._
+import core.*
+import Contexts.*
+import Flags.*
 import dotty.tools.dotc.ast.tpd
 import MegaPhase.MiniPhase
 import dotty.tools.dotc.core.Types.{ThisType, TermRef}
@@ -12,8 +12,11 @@ import dotty.tools.dotc.core.Types.{ThisType, TermRef}
  *  corresponding modules.
  */
 class ElimStaticThis extends MiniPhase {
-  import ast.tpd._
-  def phaseName: String = "elimStaticThis"
+  import ast.tpd.*
+
+  override def phaseName: String = ElimStaticThis.name
+
+  override def description: String = ElimStaticThis.description
 
   override def transformThis(tree: This)(using Context): Tree =
     if (!tree.symbol.is(Package) && ctx.owner.enclosingMethod.is(JavaStatic)) {
@@ -34,3 +37,7 @@ class ElimStaticThis extends MiniPhase {
       }
     else tree
 }
+
+object ElimStaticThis:
+  val name: String = "elimStaticThis"
+  val description: String = "replace This references to static objects by global identifiers"

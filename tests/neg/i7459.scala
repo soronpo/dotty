@@ -2,7 +2,7 @@ object Foo {
   inline def summon[T](x: T): T =  x match {
     case t: T => t
   }
-  println(summon)  // error
+  println(summon)
 }
 
 import scala.deriving.*
@@ -22,7 +22,7 @@ trait Eq[T] {
 }
 
 object Eq {
-  given Eq[Int] with {
+  given Eq[Int] {
     def eqv(x: Int, y: Int) = x == y
   }
 

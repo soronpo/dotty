@@ -86,9 +86,9 @@ trait MemberLookup {
       res
     catch
       case e: Exception =>
-        // TODO (https://github.com/lampepfl/scala3doc/issues/238): proper reporting
-        val msg = s"Unable to find a link for ${query} ${ownerOpt.fold("")(o => "in " + o.name)}"
-        report.warn(msg, e)
+        if (!summon[DocContext].args.noLinkWarnings) then
+          val msg = s"Unable to find a link for ${query} ${ownerOpt.fold("")(o => "in " + o.name)}"
+          report.warn(msg, e)
         None
 
   private def hackMembersOf(using Quotes)(rsym: reflect.Symbol) = {
@@ -151,10 +151,7 @@ trait MemberLookup {
     }
 
     if owner.isPackageDef then
-      findMatch(hackMembersOf(owner).flatMap {
-        s =>
-          (if s.name.endsWith("package$") then hackMembersOf(s) else Iterator.empty) ++ Iterator(s)
-      })
+      findMatch(hackMembersOf(owner))
     else
       owner.tree match {
         case tree: TypeDef =>
@@ -196,7 +193,7 @@ trait MemberLookup {
           case Some(sym) =>
             val externalOwner: Option[reflect.Symbol] =
               if owner eq sym.owner then None
-              else if owner.flags.is(Flags.Module) then Some(owner.moduleClass)
+              else if owner.flags.is(Flags.Module) && !owner.flags.is(Flags.Package) then Some(owner.moduleClass)
               else if owner.isClassDef then Some(owner)
               else None
             Some(sym -> externalOwner)
@@ -239,9 +236,9 @@ object MemberLookup extends MemberLookup {
       // Scaladoc overloading support allows terminal * (and they're meaningless)
       val cleanStr = str.stripSuffix("*")
 
-      if cleanStr endsWith "$" then
+      if cleanStr.endsWith("$") then
         Selector(cleanStr.init, SelectorKind.ForceTerm)
-      else if cleanStr endsWith "!" then
+      else if cleanStr.endsWith("!") then
         Selector(cleanStr.init, SelectorKind.ForceType)
       else
         Selector(cleanStr, SelectorKind.NoForce)

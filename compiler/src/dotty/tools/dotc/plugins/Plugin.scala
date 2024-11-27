@@ -1,17 +1,19 @@
 package dotty.tools.dotc
 package plugins
 
-import core._
-import Contexts._
-import Phases._
-import dotty.tools.io._
+import scala.language.unsafeNulls
+
+import core.*
+import Contexts.*
+import Phases.*
+import dotty.tools.io.*
 import transform.MegaPhase.MiniPhase
 
 import java.io.InputStream
 import java.util.Properties
 
-import scala.collection.mutable
 import scala.util.{ Try, Success, Failure }
+import scala.annotation.nowarn
 
 trait PluginPhase extends MiniPhase {
   def runsBefore: Set[String] = Set.empty
@@ -43,10 +45,26 @@ sealed trait Plugin {
 trait StandardPlugin extends Plugin {
   /** Non-research plugins should override this method to return the phases
    *
-   *  @param options: commandline options to the plugin, `-P:plugname:opt1,opt2` becomes List(opt1, opt2)
+   *  The phases returned must be freshly constructed (not reused
+   *  and returned again on subsequent calls).
+   *
+   *  @param options commandline options to the plugin.
    *  @return a list of phases to be added to the phase plan
    */
-  def init(options: List[String]): List[PluginPhase]
+  @deprecatedOverriding("Method 'init' does not allow to access 'Context', use 'initialize' instead.", since = "Scala 3.5.0")
+  @deprecated("Use 'initialize' instead.", since = "Scala 3.5.0")
+  def init(options: List[String]): List[PluginPhase] = Nil
+
+  /** Non-research plugins should override this method to return the phases
+   *
+   *  The phases returned must be freshly constructed (not reused
+   *  and returned again on subsequent calls).
+   *
+   *  @param options commandline options to the plugin.
+   *  @return a list of phases to be added to the phase plan
+   */
+  @nowarn("cat=deprecation")
+  def initialize(options: List[String])(using Context): List[PluginPhase] = init(options)
 }
 
 /** A research plugin may customize the compilation pipeline freely
@@ -56,8 +74,11 @@ trait StandardPlugin extends Plugin {
 trait ResearchPlugin extends Plugin {
   /** Research plugins should override this method to return the new phase plan
    *
-   *  @param options: commandline options to the plugin, `-P:plugname:opt1,opt2` becomes List(opt1, opt2)
-   *  @param plan: the given phase plan
+   *  Any plugin phases included in the plan must be freshly constructed (not reused
+   *  and returned again on subsequent calls).
+   *
+   *  @param options commandline options to the plugin, `-P:plugname:opt1,opt2` becomes List(opt1, opt2)
+   *  @param plan the given phase plan
    *  @return the new phase plan
    */
   def init(options: List[String], plan: List[List[Phase]])(using Context): List[List[Phase]]

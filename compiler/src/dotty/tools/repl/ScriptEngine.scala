@@ -1,6 +1,8 @@
 package dotty.tools
 package repl
 
+import scala.language.unsafeNulls
+
 import java.io.{Reader, StringWriter}
 import javax.script.{AbstractScriptEngine, Bindings, ScriptContext, ScriptEngine => JScriptEngine, ScriptEngineFactory, ScriptException, SimpleBindings}
 import dotc.core.StdNames.str
@@ -35,9 +37,9 @@ class ScriptEngine extends AbstractScriptEngine {
   @throws[ScriptException]
   def eval(script: String, context: ScriptContext): Object = {
     val vid = state.valIndex
-    state = driver.run(script)(state)
+    state = driver.run(script)(using state)
     val oid = state.objectIndex
-    Class.forName(s"${str.REPL_SESSION_LINE}$oid", true, rendering.classLoader()(using state.context))
+    Class.forName(s"${Rendering.REPL_WRAPPER_NAME_PREFIX}$oid", true, rendering.classLoader()(using state.context))
       .getDeclaredMethods.find(_.getName == s"${str.REPL_RES_PREFIX}$vid")
       .map(_.invoke(null))
       .getOrElse(null)

@@ -4,20 +4,18 @@ package sjs
 
 import scala.annotation.tailrec
 
-import dotty.tools.dotc.core._
-import Constants._
-import Contexts._
-import Decorators._
-import Flags._
-import Names._
-import NameOps._
-import Phases._
-import Scopes._
-import Symbols._
-import StdNames._
-import Types._
+import dotty.tools.dotc.core.*
+import Constants.*
+import Contexts.*
+import Flags.*
+import Names.*
+import Scopes.*
+import Symbols.*
+import StdNames.*
+import Types.*
+import Decorators.em
 
-import dotty.tools.dotc.transform.MegaPhase._
+import dotty.tools.dotc.transform.MegaPhase.*
 
 import dotty.tools.backend.sjs.JSDefinitions.jsdefn
 
@@ -108,10 +106,12 @@ import dotty.tools.backend.sjs.JSDefinitions.jsdefn
  *  some point in the future.
  */
 class JUnitBootstrappers extends MiniPhase {
-  import JUnitBootstrappers._
-  import ast.tpd._
+  import JUnitBootstrappers.*
+  import ast.tpd.*
 
-  def phaseName: String = "junitBootstrappers"
+  override def phaseName: String = JUnitBootstrappers.name
+
+  override def description: String = JUnitBootstrappers.description
 
   override def isEnabled(using Context): Boolean =
     super.isEnabled && ctx.settings.scalajs.value
@@ -156,7 +156,7 @@ class JUnitBootstrappers extends MiniPhase {
     val moduleSym = newCompleteModuleSymbol(owner, bootstrapperName,
       Synthetic, Synthetic,
       List(defn.ObjectType, junitdefn.BootstrapperType), newScope,
-      coord = testClass.span, assocFile = testClass.assocFile).entered
+      coord = testClass.span, compUnitInfo = testClass.compUnitInfo).entered
     val classSym = moduleSym.moduleClass.asClass
 
     val constr = genConstructor(classSym)
@@ -223,7 +223,7 @@ class JUnitBootstrappers extends MiniPhase {
 
     DefDef(sym, {
       val metadata = for (test <- tests) yield {
-        val name = Literal(Constant(test.name.toString))
+        val name = Literal(Constant(test.name.mangledString))
         val ignored = Literal(Constant(test.hasAnnotation(junitdefn.IgnoreAnnotClass)))
         val testAnnot = test.getAnnotation(junitdefn.TestAnnotClass).get
 
@@ -239,7 +239,7 @@ class JUnitBootstrappers extends MiniPhase {
               case NamedArg(name, _) => name.show(using ctx)
               case other => other.show(using ctx)
             }
-            report.error(s"$shownName is an unsupported argument for the JUnit @Test annotation in this position", other.sourcePos)
+            report.error(em"$shownName is an unsupported argument for the JUnit @Test annotation in this position", other.sourcePos)
             None
           }
         }
@@ -266,7 +266,7 @@ class JUnitBootstrappers extends MiniPhase {
           val tp = junitdefn.NoSuchMethodExceptionType
           Throw(resolveConstructor(tp, nameParamRef :: Nil))
         } { (test, next) =>
-          If(Literal(Constant(test.name.toString)).select(defn.Any_equals).appliedTo(nameParamRef),
+          If(Literal(Constant(test.name.mangledString)).select(defn.Any_equals).appliedTo(nameParamRef),
             genTestInvocation(testClass, test, ref(castInstanceSym)),
             next)
         }
@@ -312,6 +312,8 @@ class JUnitBootstrappers extends MiniPhase {
 }
 
 object JUnitBootstrappers {
+  val name: String = "junitBootstrappers"
+  val description: String = "generate JUnit-specific bootstrapper classes for Scala.js"
 
   private object junitNme {
     val beforeClass: TermName = termName("beforeClass")

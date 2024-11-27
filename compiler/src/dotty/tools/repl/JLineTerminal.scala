@@ -1,34 +1,42 @@
 package dotty.tools.repl
 
-import dotty.tools.dotc.core.Contexts._
+import scala.language.unsafeNulls
+
+import dotty.tools.dotc.core.Contexts.*
 import dotty.tools.dotc.parsing.Scanners.Scanner
-import dotty.tools.dotc.parsing.Tokens._
+import dotty.tools.dotc.parsing.Tokens.*
 import dotty.tools.dotc.printing.SyntaxHighlighting
 import dotty.tools.dotc.reporting.Reporter
 import dotty.tools.dotc.util.SourceFile
 import org.jline.reader
 import org.jline.reader.Parser.ParseContext
-import org.jline.reader._
+import org.jline.reader.*
 import org.jline.reader.impl.LineReaderImpl
 import org.jline.reader.impl.history.DefaultHistory
 import org.jline.terminal.TerminalBuilder
 import org.jline.utils.AttributedString
 
-final class JLineTerminal extends java.io.Closeable {
+class JLineTerminal extends java.io.Closeable {
   // import java.util.logging.{Logger, Level}
   // Logger.getLogger("org.jline").setLevel(Level.FINEST)
 
   private val terminal =
-    TerminalBuilder.builder()
-    .dumb(dumbTerminal) // fail early if not able to create a terminal
-    .build()
+    var builder = TerminalBuilder.builder()
+    if System.getenv("TERM") == "dumb" then
+      // Force dumb terminal if `TERM` is `"dumb"`.
+      // Note: the default value for the `dumb` option is `null`, which allows
+      // JLine to fall back to a dumb terminal. This is different than `true` or
+      // `false` and can't be set using the `dumb` setter.
+      // This option is used at https://github.com/jline/jline3/blob/894b5e72cde28a551079402add4caea7f5527806/terminal/src/main/java/org/jline/terminal/TerminalBuilder.java#L528.
+      builder.dumb(true)
+    builder.build()
   private val history = new DefaultHistory
-  def dumbTerminal = Option(System.getenv("TERM")) == Some("dumb")
 
   private def blue(str: String)(using Context) =
     if (ctx.settings.color.value != "never") Console.BLUE + str + Console.RESET
     else str
-  private def prompt(using Context)        = blue("scala> ")
+  protected def promptStr = "scala"
+  private def prompt(using Context)        = blue(s"\n$promptStr> ")
   private def newLinePrompt(using Context) = blue("     | ")
 
   /** Blockingly read line from `System.in`
@@ -47,8 +55,8 @@ final class JLineTerminal extends java.io.Closeable {
   def readLine(
     completer: Completer // provide auto-completions
   )(using Context): String = {
-    import LineReader.Option._
-    import LineReader._
+    import LineReader.Option.*
+    import LineReader.*
     val userHome = System.getProperty("user.home")
     val lineReader = LineReaderBuilder
       .builder()
@@ -118,6 +126,8 @@ final class JLineTerminal extends java.io.Closeable {
       def currentToken: TokenData /* | Null */ = {
         val source = SourceFile.virtual("<completions>", input)
         val scanner = new Scanner(source)(using ctx.fresh.setReporter(Reporter.NoReporter))
+        var lastBacktickErrorStart: Option[Int] = None
+
         while (scanner.token != EOF) {
           val start = scanner.offset
           val token = scanner.token
@@ -126,7 +136,14 @@ final class JLineTerminal extends java.io.Closeable {
 
           val isCurrentToken = cursor >= start && cursor <= end
           if (isCurrentToken)
-            return TokenData(token, start, end)
+            return TokenData(token, lastBacktickErrorStart.getOrElse(start), end)
+
+
+          // we need to enclose the last backtick, which unclosed produces ERROR token
+          if (token == ERROR && input(start) == '`') then
+            lastBacktickErrorStart = Some(start)
+          else
+            lastBacktickErrorStart = None
         }
         null
       }
@@ -140,6 +157,14 @@ final class JLineTerminal extends java.io.Closeable {
         case ParseContext.ACCEPT_LINE if acceptLine =>
           // using dummy values, resulting parsed input is probably unused
           defaultParsedLine
+
+        // In the situation where we have a partial command that we want to
+        // complete we need to ensure that the :<partial-word> isn't split into
+        // 2 tokens, but rather the entire thing is treated as the "word", in
+        //   order to insure the : is replaced in the completion.
+        case ParseContext.COMPLETE if
+          ParseResult.commands.exists(command => command._1.startsWith(input)) =>
+            parsedLine(input, cursor)
 
         case ParseContext.COMPLETE =>
           // Parse to find completions (typically after a Tab).

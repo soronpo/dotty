@@ -1,3 +1,4 @@
+//> using options -Ycheck-all-patmat
 def foo(x: Int): Unit =
     x match {
       case 1 =>

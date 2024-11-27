@@ -2,16 +2,15 @@ package dotty.tools
 package dotc
 package core
 
-import Types._
-import Contexts._
-import Symbols._
+import Types.*
+import Contexts.*
+import Symbols.*
 import SymDenotations.LazyType
-import Decorators._
-import util.Stats._
-import Names._
-import NameOps._
-import Flags.Module
-import Variances.variancesConform
+import Decorators.*
+import util.Stats.*
+import Names.*
+import StdNames.nme
+import Flags.{Module, Provisional}
 import dotty.tools.dotc.config.Config
 
 object TypeApplications {
@@ -34,15 +33,11 @@ object TypeApplications {
    */
   object EtaExpansion:
 
-    def apply(tycon: Type)(using Context): Type =
-      assert(tycon.typeParams.nonEmpty, tycon)
-      tycon.EtaExpand(tycon.typeParamSymbols)
-
     /** Test that the parameter bounds in a hk type lambda `[X1,...,Xn] => C[X1, ..., Xn]`
      *  contain the bounds of the type parameters of `C`. This is necessary to be able to
      *  contract the hk lambda to `C`.
      */
-    private def weakerBounds(tp: HKTypeLambda, tparams: List[ParamInfo])(using Context): Boolean =
+    private def weakerBounds(tp: HKTypeLambda, fn: Type)(using Context): Boolean =
       val onlyEmptyBounds = tp.typeParams.forall(_.paramInfo == TypeBounds.empty)
       onlyEmptyBounds
         // Note: this pre-test helps efficiency. It is also necessary to workaround  #9965 since in some cases
@@ -51,18 +46,24 @@ object TypeApplications {
         // In this case, we can still return true if we know that the hk lambda bounds
         // are empty anyway.
       || {
+        val tparams = fn.typeParams
         val paramRefs = tparams.map(_.paramRef)
+        val prefix = fn.normalizedPrefix
+        val owner = fn.typeSymbol.maybeOwner
         tp.typeParams.corresponds(tparams) { (param1, param2) =>
-          param2.paramInfo <:< param1.paramInfo.substParams(tp, paramRefs)
+          // see tests/neg/variances-constr.scala
+          // its B parameter should have info <: Any, using class C as the owner
+          // rather than info <: A, using class Inner2 as the owner
+          param2.paramInfo.asSeenFrom(prefix, owner) frozen_<:< param1.paramInfo.substParams(tp, paramRefs)
         }
       }
 
     def unapply(tp: Type)(using Context): Option[Type] = tp match
-      case tp @ HKTypeLambda(tparams, AppliedType(fn: Type, args))
+      case tp @ HKTypeLambda(tparams, AppliedType(fn, args))
       if fn.typeSymbol.isClass
          && tparams.hasSameLengthAs(args)
          && args.lazyZip(tparams).forall((arg, tparam) => arg == tparam.paramRef)
-         && weakerBounds(tp, fn.typeParams) => Some(fn)
+         && weakerBounds(tp, fn) => Some(fn)
       case _ => None
 
   end EtaExpansion
@@ -71,7 +72,7 @@ object TypeApplications {
    */
   def EtaExpandIfHK(tparams: List[TypeParamInfo], args: List[Type])(using Context): List[Type] =
     if (tparams.isEmpty) args
-    else args.zipWithConserve(tparams)((arg, tparam) => arg.EtaExpandIfHK(tparam.paramInfoOrCompleter))
+    else args.zipWithConserve(tparams)((arg, tparam) => arg.etaExpandIfHK(tparam.paramInfoOrCompleter))
 
   /** A type map that tries to reduce (part of) the result type of the type lambda `tycon`
    *  with the given `args`(some of which are wildcard arguments represented by type bounds).
@@ -154,7 +155,7 @@ object TypeApplications {
   }
 }
 
-import TypeApplications._
+import TypeApplications.*
 
 /** A decorator that provides methods for modeling type application */
 class TypeApplications(val self: Type) extends AnyVal {
@@ -181,7 +182,17 @@ class TypeApplications(val self: Type) extends AnyVal {
         val tsym = self.symbol
         if (tsym.isClass) tsym.typeParams
         else tsym.infoOrCompleter match {
-          case info: LazyType if isTrivial(self.prefix, tsym) => info.completerTypeParams(tsym)
+          case info: LazyType if isTrivial(self.prefix, tsym) =>
+            val tparams = info.completerTypeParams(tsym)
+            if tsym.isCompleted then tsym.info.typeParams
+              // Completers sometimes represent parameters as symbols where
+              // the completed type represents them as paramrefs. Make sure we get
+              // a stable result by calling `typeParams` recursively. Test case
+              // is pos/i19942.scala, where parameter F0 has initially a Namer#TypeDefCompleter.
+              // After calling its completerTypeParams, we get a list of parameter symbols
+              // and as a side effect F0 is completed. Calling typeParams on the completed
+              // type gives a list of paramrefs.
+            else tparams
           case _ => self.info.typeParams
         }
       case self: AppliedType =>
@@ -204,6 +215,12 @@ class TypeApplications(val self: Type) extends AnyVal {
       case ex: Throwable => handleRecursive("type parameters of", self.show, ex)
     }
   }
+
+  /** Substitute in `self` the type parameters of `tycon` by some other types. */
+  final def substTypeParams(tycon: Type, to: List[Type])(using Context): Type =
+    (tycon.typeParams: @unchecked) match
+      case LambdaParam(lam, _) :: _ => self.substParams(lam, to)
+      case params: List[Symbol @unchecked] => self.subst(params, to)
 
   /** If `self` is a higher-kinded type, its type parameters, otherwise Nil */
   final def hkTypeParams(using Context): List[TypeParamInfo] =
@@ -231,12 +248,28 @@ class TypeApplications(val self: Type) extends AnyVal {
       (alias ne self) && alias.hasSimpleKind
     }
 
+  /** The top type with the same kind as `self`. This is largest type capturing
+   *  the parameter shape of a type without looking at precise bounds.
+   *    - The top-type of simple-kinded types is Any
+   *    - A kind like (* -> *) -> * is represented by the top type [X1 <: [X2] =>> Any] =>> Any
+   */
+  def topType(using Context): Type =
+    if self.hasSimpleKind then
+      defn.AnyType
+    else self.etaExpand match
+      case tp: HKTypeLambda =>
+        tp.derivedLambdaType(resType = tp.resultType.topType)
+      case _ =>
+        defn.AnyKindType
+
   /** If self type is higher-kinded, its result type, otherwise NoType.
    *  Note: The hkResult of an any-kinded type is again AnyKind.
    */
   def hkResult(using Context): Type = self.dealias match {
     case self: TypeRef =>
-      if (self.symbol == defn.AnyKindClass) self else self.info.hkResult
+      if self.symbol == defn.AnyKindClass then self
+      else if self.symbol.isClass then NoType // avoid forcing symbol if it's a class, not an alias to a HK type lambda
+      else self.info.hkResult
     case self: AppliedType =>
       if (self.tycon.typeSymbol.isClass) NoType else self.superType.hkResult
     case self: HKTypeLambda => self.resultType
@@ -272,7 +305,8 @@ class TypeApplications(val self: Type) extends AnyVal {
 
   /** Dealias type if it can be done without forcing the TypeRef's info */
   def safeDealias(using Context): Type = self match {
-    case self: TypeRef if self.denot.exists && self.symbol.isAliasType =>
+    case self: TypeRef
+    if self.denot.exists && self.symbol.isAliasType && !self.symbol.isProvisional =>
       self.superType.stripTypeVar.safeDealias
     case _ =>
       self
@@ -281,24 +315,52 @@ class TypeApplications(val self: Type) extends AnyVal {
   /** Convert a type constructor `TC` which has type parameters `X1, ..., Xn`
    *  to `[X1, ..., Xn] -> TC[X1, ..., Xn]`.
    */
-  def EtaExpand(tparams: List[TypeParamInfo])(using Context): Type =
-    HKTypeLambda.fromParams(tparams, self.appliedTo(tparams.map(_.paramRef)))
-      //.ensuring(res => res.EtaReduce =:= self, s"res = $res, core = ${res.EtaReduce}, self = $self, hc = ${res.hashCode}")
+  def etaExpand(using Context): Type =
+    val tparams = self.typeParams
+    val resType = self.appliedTo(tparams.map(_.paramRef))
+    self.dealias match
+      case self: TypeRef if tparams.nonEmpty && self.symbol.isClass =>
+        val owner = self.symbol.owner
+        // Calling asSeenFrom on the type parameter infos is important
+        // so that class type references within another prefix have
+        // their type parameters' info fixed.
+        // e.g. from pos/i18569:
+        //    trait M1:
+        //      trait A
+        //      trait F[T <: A]
+        //    object M2 extends M1
+        // Type parameter T in M1.F has an upper bound of M1#A
+        // But eta-expanding M2.F should have type parameters with an upper-bound of M2.A.
+        // So we take the prefix M2.type and the F symbol's owner, M1,
+        // to call asSeenFrom on T's info.
+        HKTypeLambda(tparams.map(_.paramName))(
+          tl => tparams.map(p => HKTypeLambda.toPInfo(tl.integrate(tparams, p.paramInfo.asSeenFrom(self.prefix, owner)))),
+          tl => tl.integrate(tparams, resType))
+      case _ =>
+        HKTypeLambda.fromParams(tparams, resType)
 
   /** If self is not lambda-bound, eta expand it. */
   def ensureLambdaSub(using Context): Type =
-    if (isLambdaSub) self else EtaExpansion(self)
+    if isLambdaSub then self
+    else
+      assert(self.typeParams.nonEmpty, self)
+      self.etaExpand
 
   /** Eta expand if `self` is a (non-lambda) class reference and `bound` is a higher-kinded type */
-  def EtaExpandIfHK(bound: Type)(using Context): Type = {
+  def etaExpandIfHK(bound: Type)(using Context): Type = {
     val hkParams = bound.hkTypeParams
     if (hkParams.isEmpty) self
     else self match {
-      case self: TypeRef if self.symbol.isClass && self.typeParams.length == hkParams.length =>
-        EtaExpansion(self)
+      case self: TypeRef if self.symbol.isClass && self.typeParams.hasSameLengthAs(hkParams) =>
+        etaExpand
       case _ => self
     }
   }
+
+  /** Maps [Ts] => C[Ts] to C */
+  def etaCollapse(using Context): Type = self match
+    case EtaExpansion(classType) => classType
+    case _ => self
 
   /** The type representing
    *
@@ -331,11 +393,15 @@ class TypeApplications(val self: Type) extends AnyVal {
               }
             }
             if ((dealiased eq stripped) || followAlias)
-              try {
+              try
                 val instantiated = dealiased.instantiate(args)
                 if (followAlias) instantiated.normalized else instantiated
-              }
-              catch { case ex: IndexOutOfBoundsException => AppliedType(self, args) }
+              catch
+                case ex: IndexOutOfBoundsException =>
+                  AppliedType(self, args)
+                case ex: Throwable =>
+                  handleRecursive("try to instantiate", i"$dealiased[$args%, %]", ex)
+
             else AppliedType(self, args)
           }
           else dealiased.resType match {
@@ -380,7 +446,7 @@ class TypeApplications(val self: Type) extends AnyVal {
     if (typeParams.nonEmpty) appliedTo(args) else self
 
   /** A cycle-safe version of `appliedTo` where computing type parameters do not force
-   *  the typeconstructor. Instead, if the type constructor is completing, we make
+   *  the type constructor. Instead, if the type constructor is completing, we make
    *  up hk type parameters matching the arguments. This is needed when unpickling
    *  Scala2 files such as `scala.collection.generic.Mapfactory`.
    */
@@ -397,7 +463,7 @@ class TypeApplications(val self: Type) extends AnyVal {
    */
   final def toBounds(using Context): TypeBounds = self match {
     case self: TypeBounds => self // this can happen for wildcard args
-    case _ => if (self.isMatch) MatchAlias(self) else TypeAlias(self)
+    case _ => AliasingBounds(self)
   }
 
   /** Translate a type of the form From[T] to either To[T] or To[? <: T] (if `wildcardArg` is set). Keep other types as they are.
@@ -466,7 +532,8 @@ class TypeApplications(val self: Type) extends AnyVal {
   def translateJavaArrayElementType(using Context): Type =
     // A type parameter upper-bounded solely by `FromJavaObject` has `ObjectClass` as its classSymbol
     if self.typeSymbol.isAbstractOrParamType && (self.classSymbol eq defn.ObjectClass) then
-      AndType(self, defn.ObjectType)
+      // The order is important here since Java intersections erase to their first operand
+      AndType(defn.ObjectType, self)
     else
       self
 
@@ -474,10 +541,17 @@ class TypeApplications(val self: Type) extends AnyVal {
    *  otherwise return Nil.
    *  Existential types in arguments are returned as TypeBounds instances.
    */
-  final def argInfos(using Context): List[Type] = self.stripped match {
+  final def argInfos(using Context): List[Type] = self.stripped match
     case AppliedType(tycon, args) => args
+    case tp: FlexibleType => tp.underlying.argInfos
     case _ => Nil
-  }
+
+  /** If this is an encoding of a function type, return its arguments, otherwise return Nil.
+   *  Handles poly functions gracefully.
+   */
+  final def functionArgInfos(using Context): List[Type] = self.dealias match
+    case defn.PolyFunctionOf(mt: MethodType) => (mt.paramInfos :+ mt.resultType)
+    case _ => self.dropDependentRefinement.dealias.argInfos
 
   /** Argument types where existential types in arguments are disallowed */
   def argTypes(using Context): List[Type] = argInfos mapConserve noBounds
@@ -509,6 +583,9 @@ class TypeApplications(val self: Type) extends AnyVal {
     case JavaArrayType(elemtp) => elemtp
     case tp: OrType if tp.tp1.isBottomType => tp.tp2.elemType
     case tp: OrType if tp.tp2.isBottomType => tp.tp1.elemType
-    case _ => self.baseType(defn.SeqClass).argInfos.headOption.getOrElse(NoType)
+    case _ =>
+      self.baseType(defn.SeqClass)
+      .orElse(self.baseType(defn.ArrayClass))
+      .argInfos.headOption.getOrElse(NoType)
   }
 }

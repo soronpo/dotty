@@ -1,15 +1,20 @@
 package dotty.tools.dotc
 package transform
 
-import core._
-import Contexts._, Symbols._, Types._, Flags._, StdNames._
-import MegaPhase._
+import core.*
+import Contexts.*, Symbols.*, Types.*, Flags.*, StdNames.*
+import MegaPhase.*
 import NameKinds.NonLocalReturnKeyName
-import config.Feature.sourceVersion
-import config.SourceVersion._
+import config.SourceVersion.*
+import Decorators.em
+import dotty.tools.dotc.config.MigrationVersion
 
 object NonLocalReturns {
-  import ast.tpd._
+  import ast.tpd.*
+
+  val name: String = "nonLocalReturns"
+  val description: String = "expand non-local returns"
+
   def isNonLocalReturn(ret: Return)(using Context): Boolean =
     !ret.from.symbol.is(Label) && (ret.from.symbol != ctx.owner.enclosingMethod || ctx.owner.is(Lazy))
 }
@@ -17,10 +22,13 @@ object NonLocalReturns {
 /** Implement non-local returns using NonLocalReturnControl exceptions.
  */
 class NonLocalReturns extends MiniPhase {
-  override def phaseName: String = "nonLocalReturns"
 
-  import NonLocalReturns._
-  import ast.tpd._
+  override def phaseName: String = NonLocalReturns.name
+
+  override def description: String = NonLocalReturns.description
+
+  import NonLocalReturns.*
+  import ast.tpd.*
 
   override def runsAfter: Set[String] = Set(ElimByName.name)
 
@@ -90,9 +98,9 @@ class NonLocalReturns extends MiniPhase {
   override def transformReturn(tree: Return)(using Context): Tree =
     if isNonLocalReturn(tree) then
       report.errorOrMigrationWarning(
-          "Non local returns are no longer supported; use scala.util.control.NonLocalReturns instead",
+          em"Non local returns are no longer supported; use `boundary` and `boundary.break` in `scala.util` instead",
           tree.srcPos,
-          from = future)
+          MigrationVersion.NonLocalReturns)
       nonLocalReturnThrow(tree.expr, tree.from.symbol).withSpan(tree.span)
     else tree
 }

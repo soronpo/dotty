@@ -1,5 +1,7 @@
 package dotty.tools.dotc.util
 
+import scala.language.unsafeNulls
+
 import collection.mutable
 
 /** A simple linked set with `eq` as the comparison, optimized for small sets.
@@ -7,28 +9,54 @@ import collection.mutable
  */
 abstract class SimpleIdentitySet[+Elem <: AnyRef] {
   def size: Int
-  final def isEmpty: Boolean = size == 0
   def + [E >: Elem <: AnyRef](x: E): SimpleIdentitySet[E]
   def - [E >: Elem <: AnyRef](x: E): SimpleIdentitySet[Elem]
   def contains[E >: Elem <: AnyRef](x: E): Boolean
   def foreach(f: Elem => Unit): Unit
   def exists[E >: Elem <: AnyRef](p: E => Boolean): Boolean
+  def map[B <: AnyRef](f: Elem => B): SimpleIdentitySet[B] =
+    var acc: SimpleIdentitySet[B] = SimpleIdentitySet.empty
+    foreach(x => acc += f(x))
+    acc
   def /: [A, E >: Elem <: AnyRef](z: A)(f: (A, E) => A): A
   def toList: List[Elem]
+  def iterator: Iterator[Elem]
+
+  final def isEmpty: Boolean = size == 0
+
+  def forall[E >: Elem <: AnyRef](p: E => Boolean): Boolean = !exists(!p(_))
+
+  def filter(p: Elem => Boolean): SimpleIdentitySet[Elem] =
+    val z: SimpleIdentitySet[Elem] = SimpleIdentitySet.empty
+    (z /: this)((s, x) => if p(x) then s + x else s)
+
   def ++ [E >: Elem <: AnyRef](that: SimpleIdentitySet[E]): SimpleIdentitySet[E] =
     if (this.size == 0) that
     else if (that.size == 0) this
     else ((this: SimpleIdentitySet[E]) /: that)(_ + _)
+
   def -- [E >: Elem <: AnyRef](that: SimpleIdentitySet[E]): SimpleIdentitySet[E] =
     if (that.size == 0) this
     else
       ((SimpleIdentitySet.empty: SimpleIdentitySet[E]) /: this) { (s, x) =>
         if (that.contains(x)) s else s + x
       }
-  override def toString: String = toList.mkString("(", ", ", ")")
+
+  def == [E >: Elem <: AnyRef](that: SimpleIdentitySet[E]): Boolean =
+    this.size == that.size && forall(that.contains)
+
+  override def toString: String = toList.mkString("{", ", ", "}")
 }
 
 object SimpleIdentitySet {
+
+  def apply[Elem <: AnyRef](elems: Elem*): SimpleIdentitySet[Elem] =
+    elems.foldLeft(empty: SimpleIdentitySet[Elem])(_ + _)
+
+  extension [E <: AnyRef](xs: SimpleIdentitySet[E])
+    def intersect(ys: SimpleIdentitySet[E]): SimpleIdentitySet[E] =
+      xs.filter(ys.contains)
+
   object empty extends SimpleIdentitySet[Nothing] {
     def size: Int = 0
     def + [E <: AnyRef](x: E): SimpleIdentitySet[E] =
@@ -38,8 +66,10 @@ object SimpleIdentitySet {
     def contains[E <: AnyRef](x: E): Boolean = false
     def foreach(f: Nothing => Unit): Unit = ()
     def exists[E <: AnyRef](p: E => Boolean): Boolean = false
+    override def map[B <: AnyRef](f: Nothing => B): SimpleIdentitySet[B] = empty
     def /: [A, E <: AnyRef](z: A)(f: (A, E) => A): A = z
     def toList = Nil
+    def iterator = Iterator.empty
   }
 
   private class Set1[+Elem <: AnyRef](x0: AnyRef) extends SimpleIdentitySet[Elem] {
@@ -52,9 +82,12 @@ object SimpleIdentitySet {
     def foreach(f: Elem => Unit): Unit = f(x0.asInstanceOf[Elem])
     def exists[E >: Elem <: AnyRef](p: E => Boolean): Boolean =
       p(x0.asInstanceOf[E])
+    override def map[B <: AnyRef](f: Elem => B): SimpleIdentitySet[B] =
+      Set1(f(x0.asInstanceOf[Elem]))
     def /: [A, E >: Elem <: AnyRef](z: A)(f: (A, E) => A): A =
       f(z, x0.asInstanceOf[E])
     def toList = x0.asInstanceOf[Elem] :: Nil
+    def iterator = Iterator.single(x0.asInstanceOf[Elem])
   }
 
   private class Set2[+Elem <: AnyRef](x0: AnyRef, x1: AnyRef) extends SimpleIdentitySet[Elem] {
@@ -69,9 +102,17 @@ object SimpleIdentitySet {
     def foreach(f: Elem => Unit): Unit = { f(x0.asInstanceOf[Elem]); f(x1.asInstanceOf[Elem]) }
     def exists[E >: Elem <: AnyRef](p: E => Boolean): Boolean =
       p(x0.asInstanceOf[E]) || p(x1.asInstanceOf[E])
+    override def map[B <: AnyRef](f: Elem => B): SimpleIdentitySet[B] =
+      val y0 = f(x0.asInstanceOf[Elem])
+      val y1 = f(x1.asInstanceOf[Elem])
+      if y0 eq y1 then Set1(y0) else Set2(y0, y1)
     def /: [A, E >: Elem <: AnyRef](z: A)(f: (A, E) => A): A =
       f(f(z, x0.asInstanceOf[E]), x1.asInstanceOf[E])
     def toList = x0.asInstanceOf[Elem] :: x1.asInstanceOf[Elem] :: Nil
+    def iterator = Iterator.tabulate(2) {
+      case 0 => x0.asInstanceOf[Elem]
+      case 1 => x1.asInstanceOf[Elem]
+    }
   }
 
   private class Set3[+Elem <: AnyRef](x0: AnyRef, x1: AnyRef, x2: AnyRef) extends SimpleIdentitySet[Elem] {
@@ -97,9 +138,22 @@ object SimpleIdentitySet {
     }
     def exists[E >: Elem <: AnyRef](p: E => Boolean): Boolean =
       p(x0.asInstanceOf[E]) || p(x1.asInstanceOf[E]) || p(x2.asInstanceOf[E])
+    override def map[B <: AnyRef](f: Elem => B): SimpleIdentitySet[B] =
+      val y0 = f(x0.asInstanceOf[Elem])
+      val y1 = f(x1.asInstanceOf[Elem])
+      val y2 = f(x2.asInstanceOf[Elem])
+      if y1 eq y0 then
+        if y2 eq y0 then Set1(y0) else Set2(y0, y2)
+      else if (y2 eq y0) || (y2 eq y1) then Set2(y0, y1)
+      else Set3(y0, y1, y2)
     def /: [A, E >: Elem <: AnyRef](z: A)(f: (A, E) => A): A =
       f(f(f(z, x0.asInstanceOf[E]), x1.asInstanceOf[E]), x2.asInstanceOf[E])
     def toList = x0.asInstanceOf[Elem] :: x1.asInstanceOf[Elem] :: x2.asInstanceOf[Elem] :: Nil
+    def iterator = Iterator.tabulate(3) {
+      case 0 => x0.asInstanceOf[Elem]
+      case 1 => x1.asInstanceOf[Elem]
+      case 2 => x2.asInstanceOf[Elem]
+    }
   }
 
   private class SetN[+Elem <: AnyRef](val xs: Array[AnyRef]) extends SimpleIdentitySet[Elem] {
@@ -146,6 +200,7 @@ object SimpleIdentitySet {
       foreach(buf += _)
       buf.toList
     }
+    def iterator = xs.iterator.asInstanceOf[Iterator[Elem]]
     override def ++ [E >: Elem <: AnyRef](that: SimpleIdentitySet[E]): SimpleIdentitySet[E] =
       that match {
         case that: SetN[?] =>

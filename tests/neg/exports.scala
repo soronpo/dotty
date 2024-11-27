@@ -5,7 +5,7 @@
     type PrinterType
     def print(bits: BitMap): Unit = ???
     def status: List[String] = ???
-    given bitmap: BitMap with {}
+    given bitmap: BitMap()
   }
 
   class Scanner {
@@ -49,3 +49,9 @@
     val baz: Baz = new Baz
     export baz._
   }
+
+  object No:
+    def printer =
+      println("new Printer")
+      new Printer
+    export printer.*  // error: not stable

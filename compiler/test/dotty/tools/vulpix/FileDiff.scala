@@ -1,5 +1,7 @@
 package dotty.tools.vulpix
 
+import scala.language.unsafeNulls
+
 import scala.io.Source
 import scala.util.Using
 
@@ -10,10 +12,13 @@ import java.nio.charset.StandardCharsets
 
 
 object FileDiff {
+  def diffCommand(expectFile: String, actualFile: String): String =
+    s"git diff --no-index -- $expectFile $actualFile"
+
   def diffMessage(expectFile: String, actualFile: String): String =
       s"""Test output dumped in: $actualFile
-          |  See diff of the checkfile (`brew install icdiff` for colored diff)
-          |    > diff $expectFile $actualFile
+          |  See diff of the checkfile (`--color=always` for colored diff)
+          |    > ${FileDiff.diffCommand(expectFile, actualFile)}
           |  Replace checkfile with current output
           |    > mv $actualFile $expectFile
       """.stripMargin
@@ -48,19 +53,24 @@ object FileDiff {
     outFile.writeAll(content.mkString("", EOL, EOL))
   }
 
-  def checkAndDump(sourceTitle: String, actualLines: Seq[String], checkFilePath: String): Boolean = {
+  def checkAndDumpOrUpdate(sourceTitle: String, actualLines: Seq[String], checkFilePath: String): Boolean = {
     val outFilePath = checkFilePath + ".out"
     FileDiff.check(sourceTitle, actualLines, checkFilePath) match {
+      case Some(msg) if dotty.Properties.testsUpdateCheckfile =>
+        Files.deleteIfExists(Paths.get(outFilePath))
+        if actualLines.isEmpty
+          then Files.deleteIfExists(Paths.get(checkFilePath))
+          else FileDiff.dump(checkFilePath, actualLines)
+        println("Updated checkfile: " + checkFilePath)
+        true
       case Some(msg) =>
         FileDiff.dump(outFilePath, actualLines)
         println(msg)
         println(FileDiff.diffMessage(checkFilePath, outFilePath))
         false
       case _ =>
-        val jOutFilePath = Paths.get(outFilePath)
-        Files.deleteIfExists(jOutFilePath)
+        Files.deleteIfExists(Paths.get(outFilePath))
         true
     }
   }
-
 }
